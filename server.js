@@ -12,7 +12,7 @@ firebase.initializeApp({
 });
 
 var db = firebase.database();
-global.rootRef = db.ref("server");
+global.rootRef = db.ref("firebase_test");
 app.set("view engine", "ejs");
 
 var serverLogging = function(req, res, next){
@@ -36,7 +36,7 @@ app.set("view engine", "ejs");
 static(app);
 
 app.get('/', function(req, res){
-    res.send("Hi from Cheryl");
+    res.send("Hi from Cheryl; go to /about & /advertisements");
     //var usersRef = global.rootRef.child("users");
     //got try-throw-catch this so app doesn't crash; but connected to DB
     // usersRef.set({

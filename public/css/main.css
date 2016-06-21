@@ -558,3 +558,11 @@ table.ads-table tr {
 table.ads-table tr:first-child {
 	border-top: none;
 }
+
+/*Cheryl added these*/
+
+img[src*="menu"] {
+    position: absolute;
+    top: 0;
+    left: 30vw;
+}
