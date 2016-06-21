@@ -5,6 +5,7 @@ var firebase = require('firebase');
 var sassMiddleware = require('node-sass-middleware');
 var path = require('path');
 var static = require('./controllers/static.controller');
+var userRoutes = require('./routes/user.routes');
 
 firebase.initializeApp({
   serviceAccount: "./configs/firebase.json",
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set("view engine", "ejs");
 
 static(app);
+userRoutes(app);
 
 app.get('/', function(req, res){
     res.send("Hi from Cheryl; go to /about & /advertisements");
