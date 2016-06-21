@@ -1,0 +1,22 @@
+table.ads-table {
+  width: 100%;
+  text-align: left;
+  vertical-align: middle;
+  border-collapse: collapse;
+
+  thead {
+    border-bottom: 2px solid #CACACA;
+  }
+
+  td, th {
+    padding: 10px;
+  }
+
+  tr {
+    border-top: 1px solid #CACACA;
+
+    &:first-child {
+      border-top: none;
+    }
+  }
+}
