@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang=''>
+<head>
+   <meta charset='utf-8'>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>MenuMaker</title>
+
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+   <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="cssmenu">
+  <ul>
+     <li class="active"><a href="#" target="_blank"><span><i class="fa fa-fw fa-home"></i> Home</span></a></li>
+     <li><a href="#"><span><i class="fa fa-fw fa-bars"></i> Menus</span></a></li>
+     <li><a href="#"><span><i class="fa fa-fw fa-cog"></i> Settings</span></a></li>
+     <li><a href="#"><span><i class="fa fa-fw fa-phone"></i> Contact</span></a></li>
+  </ul>
+</div>
+
+<form align="center" method="post" action="index.html">
+    <p><input type="text" ng-model="dish" placeholder="Dish"></p>
+    <p><input type="text" ng-model="price" placeholder="Price"></p>
+    <p><input type="text" ng-model="price" placeholder="Phone"></p>
+    <p><input type="text" ng-model="price" placeholder="Location"></p>
+    <p><input type="text" ng-model="price" placeholder="Time"></p>
+    <p class="submit"><input type="submit" value="Submit Dish"></p>
+    
+  </form>
+</body>
+</html>
