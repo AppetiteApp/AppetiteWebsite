@@ -88,3 +88,8 @@ module.exports.createUser = function(data, req, res) {
 	}
 }
 
+
+//assume login with email
+module.exports.login = function(data, req, res){
+	
+}

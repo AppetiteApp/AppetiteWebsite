@@ -14,7 +14,9 @@ User.createUser = function(data){
         password: data.password,
         //rating: [undefined, undefined, undefined], //for value, taste, & timing
         postedMeals: [],
-        purchases: []
+        purchases: [],
+        suscribedUsers: [],
+        notifyUsers: []
     });
 }
     
@@ -22,7 +24,7 @@ User.findByEmail = function(email, callback){
     global.rootRef.child('users').orderByChild('email').equalTo(email).once('value', function(snap) {
         callback(snap.val());
     });
-},
+};
     
 
 User.findByUsername = function (username, callback) {
@@ -39,7 +41,9 @@ User.findByUsername = function (username, callback) {
 
   global.rootRef.child("users/"+username).once("value", onValueChange);
 }
-    
+ 
+
+//also needs to delete meals here   
 User.deleteUserByEmail = function(uname, callback){
     global.rootRef.child('users/' + uname).remove();
 }
