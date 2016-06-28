@@ -26,5 +26,11 @@ module.exports = function(app) {
 
     app.get('/index', function(req, res){
         res.render(__dirname + '/../views/signup');
-    })
-}
+    });
+    app.get('/browse', function(req, res){
+       	global.dishRef.orderByChild("dateAdded").once("value", function(snapshot){
+	        res.render(__dirname + '/../views/browse', {meals: snapshot.val()}); 			
+		});
+       
+    });
+};

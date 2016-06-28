@@ -5,12 +5,18 @@
 <form id="signup">
 	Email: <input type="email" name="email" id="email"/>
 	Password: <input type="password" name="password" id="password"/>
-	First Name: <input type="text" name="fname" id="fname" />
-	Last Name: <input type="text" name="lname" id="lname" />
-	Phone: <input type="text" name="phone" id="phone" />
 	<input type="submit" value="Sign Up!" />
 </form>
 
+<hr>
+<form id="update">
+	First Name: <input type="text" name="fname" id="fname" />
+	Last Name: <input type="text" name="lname" id="lname" />
+	Phone: <input type="text" name="phone" id="phone" />
+	<input type="submit" value="update your info!"/>
+</form>
+
+<hr>
 <form id="login">
 	Email: <input type="email" name="email" id="login-email"/>
 	Password: <input type="password" name="password" id="login-password" />
@@ -32,10 +38,8 @@
 
 
 
-<script   src="/lib/jquery-3.0.0.min.js"></script>
-<script src="/lib/firebase.js"></script>
 
-
+<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
 <script>
   // Initialize Firebase
   var config = {
@@ -46,6 +50,7 @@
   };
   firebase.initializeApp(config);
 </script>
+<script src="/lib/jquery-3.0.0.min.js"></script>
 <script src="/js/index.js"></script>
 
 <% include partials/footer %>

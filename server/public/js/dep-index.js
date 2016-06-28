@@ -20,11 +20,6 @@ $( document ).ready(function() {
     	logout();
     });
     
-    $('#update').submit(function(event){
-    	event.preventDefault();
-    	update();
-    });
-    
     
     
     //submit a dish
@@ -55,7 +50,9 @@ var getCurrentUser = function(){
 var signup = function(){
 	var email = $('#email').val();
   	var password = $('#password').val();
-
+  	var lastName = $('#lname').val();
+  	var firstName = $('#fname').val();
+  	var phone = $('#phone').val();
   	console.log(email + ": " + password);
   	
 	
@@ -65,26 +62,22 @@ var signup = function(){
   		var errorMessage = error.message;
   		console.log(errorCode + ": " + errorMessage);
   		var userid = firebase.auth().currentUser.uid;
+  		console.log(userid);
+  		console.log("where am I going wrong");
+  		firebase.database().ref('users/' + userid).set({
+    		firstName: firstName,
+    		email: email,
+    		phone: phone,
+    		lastName: lastName,
+    		mealsMade: [],
+    		mealsPurchased: []
+		});
 	});
-
 	$('#password').val("");
 	$('#lname').val("");
-};
-
-var update = function(){
-	var lastName = $('#lname').val();
-  	var firstName = $('#fname').val();
-  	var phone = $('#phone').val();
-  	if (getCurrentUser()) {
-  		firebase.database().ref('users/' + getCurrentUser().uid).set({
-  			firstName: firstName,
-  			email: getCurrentUser().email,
-  			lastName: lastName,
-  			phone: phone
-  		});
-  	} else {
-  		console.log("no one logged in");
-  	}
+	$('#fname').val("");
+	$('#phone').val("");
+	$('#email').val("");
 };
 
 var login = function() {
