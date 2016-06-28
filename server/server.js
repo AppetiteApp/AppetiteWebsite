@@ -4,8 +4,8 @@ var bodyParser = require('body-parser');
 var firebase = require('firebase');
 var sassMiddleware = require('node-sass-middleware');
 var path = require('path');
-var static = require('./controllers/static.controller');
-var userRoutes = require('./routes/user.routes');
+var staticController = require('./controllers/static.controller');
+var userController = require('./controllers/user.controller');
 
 firebase.initializeApp({
   serviceAccount: "./configs/firebase.json",
@@ -13,7 +13,8 @@ firebase.initializeApp({
 });
 
 var db = firebase.database();
-global.rootRef = db.ref("firebase_test");
+global.userRef = db.ref("users");
+global.dishRef = db.ref("dish");
 app.set("view engine", "ejs");
 
 var serverLogging = function(req, res, next){
@@ -34,8 +35,8 @@ app.use(serverLogging);
 app.use(express.static(path.join(__dirname, 'public')));
 app.set("view engine", "ejs");
 
-static(app);
-userRoutes(app);
+staticController(app);
+userController(app);
 
 app.get('/', function(req, res){
     res.send("Hi from Cheryl; go to /about & /advertisements");
