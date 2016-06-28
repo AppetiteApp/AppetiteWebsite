@@ -1,0 +1,26 @@
+body {
+  font-family: sans-serif;
+}
+h1 {
+  font-size: 300%;
+}
+h2.subtitle {
+  color: grey;
+}
+#tos {
+  h1 {
+    font-size: 250%;
+  }
+  h2 {
+    font-size: 175%;
+  }
+  h3 {
+    font-size: 125%;
+  }
+  p {
+    font-weight: bold;
+    &.small {
+      font-size: 75%;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+<% include partials/header%>
+<% include partials/topbar %>
+<div class="content">
+    <div class="window">
+        <h1 class="page-title">Browse Various Dishes</h1>
+
+        <!--will pass in a JSON object of dishes-->
+        <h2 class="subtitle">Most Recent Dishes</h2>
+        <table>
+            <thead>
+                <tr>Dish</tr>
+                <tr>Contact</tr>
+                <tr>Price</tr>
+                <tr>Location</tr>
+                <tr>Description</tr>
+            </thead>
+            <tbody>
+                <% for (var i=0; i<meals.length; i++){ %>
+                    <tr>
+                        <td><%= meals[i].dish %></td>
+                        <td><%= meals[i].contact %></td>
+                        <td><%= meals[i].price %></td>
+                        <td><%= meals[i].location %></td>
+                        <td><%= meals[i].description %></td>
+                    </tr>
+                <% } %>
+            </tbody>
+            
+        </table>
+    </div>
+</div>
+<% include partials/footer %>

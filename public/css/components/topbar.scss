@@ -1,0 +1,170 @@
+.topbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #92ecfa;
+  bottom-border: 1px solid #79201E;
+  box-shadow: 0px 3px 20px 0px rgba(50, 50, 60, 0.5);
+  height: 45px;
+  font-size: 16px;
+  font-weight: 900;
+  z-index: 10;
+  text-align: center;
+
+  ul {
+    list-style: none;
+    margin: 0 auto;
+    padding: 0px;
+    height: 100%;
+    display: inline-block;
+
+    li {
+      height: 100%;
+      float: left;
+      line-height: 20px;
+    }
+  }
+
+  a {
+    margin: 0.2em;
+    display: inline-block;
+    border-radius: 2em;
+    padding: 0.6em;
+    color: #fdfdfd;
+    @include transition(background 300ms ease 0s);
+    text-decoration: none;
+    text-shadow: 0 0 1px black;
+    box-sizing: border-box;
+
+    &:hover {
+      background-color: darken(#92ecfa, 10%);
+    }
+  }
+
+  #top-bar-logo {
+    display: inline-block;
+    position: relative;
+    margin: 0 0.5em;
+    padding: 0;
+    top: 50%;
+    @include transform(TranslateY(-50%));
+    width: auto;
+    height: 45px;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    img {
+      height: 45px;
+    }
+  }
+
+  .mobile-menu-button, .mobile-logo {
+    display: none;
+  }
+}
+
+@include mobile {
+  .topbar {
+    text-align: left;
+    height: 100px;
+
+    ul {
+      background-color: #222;
+      position: fixed;
+      top: 100px;
+      bottom: 0px;
+      left:-300px;
+      width: 300px;
+      @include transition(500ms all ease);
+
+      li {
+        display: block;
+        float: none;
+        height: 45px;
+      }
+
+      #logo-list-item {
+        text-align: center;
+        height: 85px;
+        margin: 10px 0;
+      }
+
+      &.open {
+        left: 0;
+      }
+    }
+
+    a {
+      margin: 0;
+      padding: 0 0 0 20px;
+      height: 100%;
+      width: 100%;
+      text-shadow: none;
+      border-radius: 0;
+      line-height: 45px;
+    }
+
+    #top-bar-logo {
+      @include transform(translateY(-50%));
+      border-radius: 2em;
+      height: 80px;
+      padding: 0 80px;
+      line-height: normal;
+
+      img {
+        height: 80px;
+      }
+    }
+
+    .mobile-menu-button {
+      display: block;
+      position: relative;
+      top: 30px;
+      left: 40px;
+      height: 35px;
+      width: 35px;
+      cursor: pointer;
+
+      .bar {
+        width: 30px;
+        height: 5px;
+        margin-bottom: 5px;
+        background-color: white;
+        border-radius: 2em;
+        margin-left: 2px;
+        @include transition(500ms all cubic-bezier(.87,-.41,.19,1.44));
+      }
+
+      #bar1 {
+        margin-top: 5px;
+      }
+
+      &.open {
+        #bar1 {
+          @include transform(rotate(-45deg) translate(-3px, 3px));
+          width: 15px;
+        }
+
+        #bar3 {
+          @include transform(rotate(45deg) translate(-3px, -3px));
+          width: 15px;
+        }
+      }
+    }
+
+    .mobile-logo {
+      display: inline-block;
+      position: absolute;
+      left: 50%;
+      top: 10px;
+      @include transform(translateX(-50%));
+      height: 80%;
+
+      img {
+        height: 100%;
+      }
+    }
+  }
+}
