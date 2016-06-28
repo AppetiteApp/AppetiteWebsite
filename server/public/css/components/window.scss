@@ -1,0 +1,21 @@
+.window {
+  width: 75%;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  padding: 20px;
+
+  img {
+    width: 90%;
+  }
+
+  &#tos {
+    background-color: white;
+  }
+}
+
+@include mobile {
+  .window {
+    width: 90%;
+  }
+}

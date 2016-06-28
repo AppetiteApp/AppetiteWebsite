@@ -1,0 +1,66 @@
+form {
+  box-sizing: border-box;
+  text-align: left;
+  width: 750px;
+  max-width: 95%;
+  margin: 0 auto;
+
+  label, input, textarea {
+    display: block;
+    width: 100%;
+  }
+
+  label {
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-size: 24px;
+  }
+
+  input, textarea {
+    box-sizing: border-box;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgb(85, 85, 85);
+    background-color: white;
+    border: 1px solid #92ecfa;
+    border-radius: 4px;
+    @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
+    @include transition(border-color ease-in-out .15s, box-shadow ease-in-out .15s);
+    margin-bottom: 15px;
+
+    &:focus {
+      outline: 0;
+      @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6));
+    }
+  }
+
+  input[type=text] {
+    height: 35px;
+  }
+
+  input[type=submit] {
+    height: 50px;
+    background-color: darken(#92ecfa, 10%);
+    color: white;
+    font-weight: 700;
+    margin-top: 45px;
+    box-shadow: none;
+
+    &:hover {
+      @include box-shadow(inset 0 0 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6));
+      background-color: darken(#92ecfa, 10%);
+      cursor: pointer;
+    }
+  }
+
+  textarea {
+    resize: none;
+    font-family: arial;
+  }
+}
+
+div.form_error {
+  font-size: 75%;
+  color: #ff6699;
+}

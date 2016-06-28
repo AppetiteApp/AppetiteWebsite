@@ -1,0 +1,27 @@
+html {
+  min-height: 100%;
+}
+
+body {
+  margin: 0px;
+  background-image: image-url('background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center bottom;
+}
+
+.content {
+  margin-top: 45px;
+  padding: 20px;
+}
+
+@include mobile {
+  .content {
+    top: 100px;
+    @include transition(500ms all ease);
+
+    &.open {
+      @include transform(translateX(300px));
+    }
+  }
+}
