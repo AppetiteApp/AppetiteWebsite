@@ -1,11 +1,11 @@
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-var firebase = require('firebase');
-var sassMiddleware = require('node-sass-middleware');
-var path = require('path');
-var staticController = require('./controllers/static.controller');
-var userController = require('./controllers/user.controller');
+var express     = require('express');
+var app         = express();
+var bodyParser  = require('body-parser');
+var firebase    = require('firebase');
+var session     = require('express-session');
+var path        = require('path');
+var staticController= require('./controllers/static.controller');
+var userController  = require('./controllers/user.controller');
 
 firebase.initializeApp({
   serviceAccount: "./configs/firebase.json",
@@ -22,12 +22,18 @@ var serverLogging = function(req, res, next){
 	next();
 };
 
-app.use(sassMiddleware({
-    src: __dirname + '/public/css',
-    dest: __dirname + '/public/css',
-    debug: true,
-    outputStyle: 'compressed'
-}));
+var sess   = {
+	name: "ohIkgFh3KKxSS57",
+	secret: "eulskdjvbcxnwekfjskzxq389yewqhajsdb",
+	cookie: {
+		secure: false,
+		maxAge: 24*60*60*1000
+	},
+	resave: true,
+    saveUninitialized: false
+};
+
+app.use(session(sess));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

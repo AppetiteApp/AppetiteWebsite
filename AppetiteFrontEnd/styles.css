@@ -1,12 +1,12 @@
+
 body{
   margin: 0;
   padding: 0;
-  font-family:serif;
+  font-family: europa;
 }
 
-
 .nav{
-  background-color: #4ad6f9;
+  background-color: #75d0f4;
   color: #ffffff;
   list-style: none;
   text-align: center;
@@ -16,6 +16,7 @@ body{
 
 
 .nav > a > li {
+  border-radius: 30px;
   display: inline-block;
   text-align: center;
   text-decoration: none;
@@ -23,8 +24,12 @@ body{
   padding: 15px 15px 15px 15px;
 }
 
-.nav > a > li:hover{
-  background-color: #ff00ee;
+.nav > a > li > img:hover{
+
+}
+
+.nav > a > li > div:hover{
+  background-color: #8e44ad;
   }
 
 * {
@@ -88,4 +93,38 @@ h1 {
 .Button:active {
 	position:relative;
 	top:1px;
+}
+
+.table > thead > tr {
+  border-bottom: 2pt solid black;
+}
+
+.table > thead > tr > th {
+  background-color: #75d0f4;
+  color: #ffffff;
+  padding: 15px 30px 15px 30px;
+  text-align: center;
+
+}
+
+.table > tbody > tr {
+  border-bottom: 1pt solid gray;
+
+}
+
+.table > tbody > tr:hover {
+
+  outline: thin solid black;
+  background-color: #e8e8e8;
+}
+
+.table > tbody > tr > td {
+  border-left: 0px;
+  border-right: 0px;
+  color: black;
+  text-align: center;
+}
+
+table {
+    border-collapse: collapse;
 }

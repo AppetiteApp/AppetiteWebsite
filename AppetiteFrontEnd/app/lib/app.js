@@ -10,14 +10,17 @@ $routeProvider
   .when('/home', {
     templateUrl: 'views/home.html'
   })
+  .when('/buydish', {
+    templateUrl: 'views/buydish.html'
+  })
   .when('/signup', {
     templateUrl: 'views/signup.html'
   })
   .when('/submitdish', {
     templateUrl: 'views/submitdish.html'
   })
-  .when('/login', {
-    templateUrl: 'views/login.html'
+  .when('/profile', {
+    templateUrl: 'views/profile.html'
   })
   .otherwise({
     redirectTo: '/home'

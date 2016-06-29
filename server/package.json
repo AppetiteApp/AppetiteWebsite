@@ -23,7 +23,6 @@
     "ejs": "^2.4.2",
     "express": "^4.14.0",
     "express-session": "^1.13.0",
-    "firebase": "^3.0.5",
-    "node-sass-middleware": "^0.9.8"
+    "firebase": "^3.0.5"
   }
 }

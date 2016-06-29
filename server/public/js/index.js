@@ -1,5 +1,10 @@
 /*global firebase*/
 /*global $*/
+/*
+BTW if the password isn't long and complex enough the signup doesn't work
+need to disable the buttons for a bit after they're pressed so user doesn't click on it mutliple times
+need to tell user if they successfully signed up or logged in or submitted a dish etc
+*/
 
 $( document ).ready(function() {
     //login
@@ -34,8 +39,7 @@ $( document ).ready(function() {
     });
     
     
-    
-    
+
     
 });
 
@@ -65,10 +69,15 @@ var signup = function(){
   		var errorMessage = error.message;
   		console.log(errorCode + ": " + errorMessage);
   		var userid = firebase.auth().currentUser.uid;
+  		$.post('/login', {uid: userid}, function(res){
+			console.log("started session");	
+		});
 	});
+	
+	
 
 	$('#password').val("");
-	$('#lname').val("");
+	$('#email').val("");
 };
 
 var update = function(){
@@ -85,6 +94,9 @@ var update = function(){
   	} else {
   		console.log("no one logged in");
   	}
+  	$('#lname').val("");
+  	$('#fname').val("");
+  	$('#phone').val("");
 };
 
 var login = function() {
@@ -96,6 +108,11 @@ var login = function() {
 	  	var errorMessage = error.message;
 	  	console.log(errorMessage);
 	  	// ...
+	});
+	$('#login-email').val("");
+	$('#login-password').val("");
+	$.post('/login', {uid: getCurrentUser().uid}, function(res){
+		console.log("started session");	
 	});
 };
 
