@@ -1,0 +1,104 @@
+<div class="allitems col-sm-4">
+    <div ng-repeat="dish in dishes">
+        <div class="accordion" id="listitem">
+            <div class="profile-header-img">
+                <img class="img-circle" src="/imgs/gordon.jpg" />
+                <!-- badge -->
+                <div class="rank-label-container">
+                    <span class="label label-default rank-label">{{dish.owner}}</span>
+                </div>
+            </div>
+
+            <div id="dishbanner">
+                <div id="dishtitle">{{dish.dishName}}</div>
+                <div id="dishprice">${{dish.price}}</div>
+            </div>
+        </div>  
+        <div class="panel" id="itemdetails">
+            <p>{{dish.description}}</p>
+            <div id="dishtime">{{dish.time}}</div>
+            <div id="dishphone">{{dish.phone}}</div>
+            <div id="dishlocation">{{dish.address}}</div>
+        </div>
+    </div>
+</div>
+
+<div id="map" class="col-sm-7">
+
+</div>
+
+
+
+
+<style>
+  button.accordion {
+      background-color: #eee;
+      color: #444;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 15px;
+      transition: 0.4s;
+  }
+
+  div.panel {
+      display: none;
+  }
+
+  div.panel.show {
+      display: block !important;
+  }
+</style>
+
+<!--the original one-->
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0&callback=initMap"-->
+<!--async defer>-->
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0"
+async defer>
+
+</script>
+
+
+<script>
+//Note to Paul:
+    // not working because this only adds eventlisteners to elements already on page
+    // but the dishes are actually added later
+    // maybe put this into Angular
+  var acc = document.getElementsByClassName("accordion");
+  var i;
+
+  for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener('click', function() { 
+          this.classList.toggle("active");
+          this.nextElementSibling.classList.toggle("show");          
+      }, false);
+      
+    //   acc[i].onclick = function(){
+    //       this.classList.toggle("active");
+    //       this.nextElementSibling.classList.toggle("show");
+    // }
+  }
+        
+    // function initMap() {
+    //     var mapDiv = document.getElementById('map');
+    //     var map = new google.maps.Map(mapDiv, {
+    //         center: {lat: 45.5017, lng: -73.5673},
+    //         zoom: 13,
+    //         streetViewControl: false,
+    //         mapTypeControl: false
+    //     });
+        
+    //     var marker = new google.maps.Marker({
+    //         position: {lat:45.5054445, lng:-73.5789828},
+    //         map: map,
+    //         title: 'Hello World!'
+    //     });
+
+    //  }
+
+  
+</script>

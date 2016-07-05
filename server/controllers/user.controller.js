@@ -9,7 +9,7 @@ module.exports = function(app) {
 	//when user submits a dish via a post request to "/submitdish"
 	//set a new dish key & store stuff in the dish/ ref in firebase
 	//and push that dish key into an array in that user's mealsMade array
-	app.post('/submitdish', function(req, res, next){
+	app.post('/newdish', function(req, res, next){
 		//go and make a new dish under "dish" in db
 		var newDishRef = global.dishRef.push();
 		var newDishKey = newDishRef.key;
@@ -50,7 +50,7 @@ module.exports = function(app) {
 	
 	//view a person's account
 	//if I set a session then it gives back the user's account info, in JSON form
-	app.post('/profile', function(req, res, next){
+	app.post('/account', function(req, res, next){
 		if (req.body.uid){
 			global.userRef.child(req.body.uid).once("value", function(snapshot){
 				console.log(snapshot.val());

@@ -14,14 +14,11 @@ module.exports = function(app) {
     });
     
     //when request url is '/browse', render the page in views call browse
-    //and pass it an object with all the meals, ordered by dateAdded
+    //and pass it an object with all the meals, ordered by dateAdded, somehow fix to make more suitable for Google Maps
     //although right now it's ordered by ascending order of the date...need to fix it
     //also need to fix it for '/browse:num' and limit the number of meals on one page
     app.get('/browse', function(req, res){
-       	global.dishRef.orderByChild("dateAdded").once("value", function(snapshot){
-	        res.render(__dirname + '/../views/browse', {meals: snapshot.val()}); 			
-		});
-       
+	   res.render(__dirname + '/../views/subviews/browse'); 			
     });
     
     app.get('/login', function(req, res){
@@ -29,19 +26,17 @@ module.exports = function(app) {
         res.render(__dirname + '/../views/subviews/login');
     });
     
-    app.get('/buydish', function(req, res){
-        global.dishRef.orderByChild("dateAdded").once("value", function(snapshot){
-	        res.render(__dirname + '/../views/browse', {meals: snapshot.val()}); 			
-		});
-    });
-    
     app.get('/home', function(req, res){
         console.log("got home");
         res.render(__dirname + '/../views/subviews/home');
     });
     
-    app.get('/profile', function(req, res){
+    app.get('/account', function(req, res){
         res.render(__dirname + '/../views/subviews/profile');
+    });
+    
+    app.get('/newdish', function(req, res){
+        res.render(__dirname + '/../views/subviews/addmeal'); 
     });
     
     app.get('/', function(req, res){

@@ -1,5 +1,5 @@
 .background{
-  background-image: url(imgs/Optimized-appetite.jpg);
+  background-image: url(/imgs/Optimized-appetite.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   margin: 0;
@@ -284,4 +284,9 @@ h1 {
   -webkit-box-sizing: border-box;
   border: 2px  solid #75d0f4;
 
+}
+
+#map{
+  height: 60vw;
+  width: 60vw;
 }
