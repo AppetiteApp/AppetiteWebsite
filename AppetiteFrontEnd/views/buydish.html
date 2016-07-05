@@ -1,10 +1,6 @@
-<ul class="nav">
-   <a align="center" href=""><li>Terms</li></a>
-   <a align="center" href=""><li>About</li></a>
-   <a align="center" href="#/home"><li><img height="35px" src="chefhat.png"></li></a>
-   <a align="center" href="#"><li>Contact</li></a>
-   <a align="center" href="#/profile"><li>Profile</li></a>
-</ul>
+
+
+
 
 <div id="map">
   <script>
@@ -12,51 +8,136 @@
           var mapDiv = document.getElementById('map');
           var map = new google.maps.Map(mapDiv, {
               center: {lat: 44.540, lng: -78.546},
-              zoom: 8
+              zoom: 8,
+              streetViewControl: false,
+              mapTypeControl: false
           });
+
         }
-    </script>
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
-    </script>
+  </script>
 </div>
 
+      <div class="allitems">
+            <div class="accordion" id="listitem">
+                  <div class="profile-header-img">
+                          <img class="img-circle" src="imgs/gordon.jpg" />
+                          <!-- badge -->
+                          <div class="rank-label-container">
+                              <span class="label label-default rank-label">Joe Peplowski</span>
+                          </div>
+                  </div>
 
-<table align="center" class="table">
-  <thead>
-    <tr>
-      <th>CHEF</th>
-      <th>DISH</th>
-      <th>CONTACT</th>
-      <th>LOCATION</th>
-      <th>DESCRIPTION</th>
-      <th>TIME</th>
-    </tr>
-  </thead>
+                  <div id="dishbanner">
+                    <div id="dishtitle">
+                    Spaghetti Carbonara
+                  </div>
+                  <div id="dishprice">
+                    $7
+                  </div>
+                  </div>
+            </div>
+            <div class="panel" id="itemdetails">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+              <div id="dishtime">12:00 - 1:00</div>
+              <div id="dishphone">617-344-5667</div>
+              <div id="dishlocation">30 Helene rd.</div>
 
-  <tbody>
-    <tr>
-      <td>Paul Bridi</td>
-      <td>Pasta</td>
-      <td>5133578998</td>
-      <td>30 helene rd newton</td>
-      <td>Delicaious and nutricious pasta carbonara</td>
-      <td>3:00-4:00</td>
-    </tr>
-    <tr>
-      <td>chef</td>
-      <td>dish</td>
-      <td>contact</td>
-      <td>location</td>
-      <td>description</td>
-      <td>time</td>
-    </tr><tr>
-      <td>chef</td>
-      <td>dish</td>
-      <td>contact</td>
-      <td>location</td>
-      <td>description</td>
-      <td>time</td>
-    </tr>
-  </tbody>
-</table>
+            </div>
+            <div class="accordion" id="listitem">
+
+
+                  <div class="profile-header-img">
+                          <img class="img-circle" src="imgs/gordon.jpg" />
+                          <!-- badge -->
+                          <div class="rank-label-container">
+                              <span class="label label-default rank-label">Paul Bridi</span>
+                          </div>
+                  </div>
+
+                  <div id="dishbanner">
+                    <div id="dishtitle">
+                    Lasagna
+                  </div>
+                  <div id="dishprice">
+                    $7
+                  </div>
+                  </div>
+            </div>
+            <div class="panel" id="itemdetails">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+              <div id="dishtime">12:00 - 1:00</div>
+              <div id="dishphone">617-344-5667</div>
+              <div id="dishlocation">30 Helene rd.</div>
+
+            </div>
+            <div class="accordion" id="listitem">
+
+
+                  <div class="profile-header-img">
+                          <img class="img-circle" src="imgs/gordon.jpg" />
+                          <!-- badge -->
+                          <div class="rank-label-container">
+                              <span class="label label-default rank-label">Sean Kaiser</span>
+                          </div>
+                  </div>
+
+                  <div id="dishbanner">
+                    <div id="dishtitle">
+                    Pacific Sockeyed Salmon
+                    </div>
+                    <div id="dishprice">
+                      $7
+                    </div>
+                  </div>
+            </div>
+            <div class="panel" id="itemdetails">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+              <div id="dishtime">12:00 - 1:00</div>
+              <div id="dishphone">617-344-5667</div>
+              <div id="dishlocation">30 Helene rd.</div>
+            </div>
+
+
+      </div>
+
+
+
+<style>
+  button.accordion {
+      background-color: #eee;
+      color: #444;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 15px;
+      transition: 0.4s;
+  }
+
+  div.panel {
+      display: none;
+  }
+
+  div.panel.show {
+      display: block !important;
+  }
+</style>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0&callback=initMap"
+async defer>
+</script>
+
+
+<script>
+  var acc = document.getElementsByClassName("accordion");
+  var i;
+
+  for (i = 0; i < acc.length; i++) {
+      acc[i].onclick = function(){
+          this.classList.toggle("active");
+          this.nextElementSibling.classList.toggle("show");
+    }
+  }
+</script>

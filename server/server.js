@@ -46,18 +46,7 @@ userController(app);
 
 app.get('/', function(req, res){
     res.send("Hi from Cheryl; go to /about & /advertisements");
-    //var usersRef = global.rootRef.child("users");
-    //got try-throw-catch this so app doesn't crash; but connected to DB
-    // usersRef.set({
-    //     alanisawesome: {
-    //         date_of_birth: "June 23, 1912",
-    //         full_name: "Alan Turing"
-    //         },
-    //     gracehop: {
-    //         date_of_birth: "December 9, 1906",
-    //         full_name: "Grace Hopper"
-    //     }
-    // });
+
 });
 
 

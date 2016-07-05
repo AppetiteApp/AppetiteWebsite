@@ -23,7 +23,7 @@ $routeProvider
     templateUrl: 'views/profile.html'
   })
   .otherwise({
-    redirectTo: '/home'
+    redirectTo: '/login'
   });
 
 }]);

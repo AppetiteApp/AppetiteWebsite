@@ -50,10 +50,11 @@ module.exports = function(app) {
 	
 	//view a person's account
 	//if I set a session then it gives back the user's account info, in JSON form
-	app.post('/myaccount', function(req, res, next){
+	app.post('/profile', function(req, res, next){
 		if (req.body.uid){
 			global.userRef.child(req.body.uid).once("value", function(snapshot){
-				res.JOSN(snapshot.val());
+				console.log(snapshot.val());
+				res.write(snapshot.val());
 			});	
 		} else {
 			//redirect to some login page, like amazon does it!

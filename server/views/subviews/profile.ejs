@@ -1,0 +1,29 @@
+<table>
+    <thead>{{user.fname}}</thead>
+    <tr>
+        <th>First Name:</th>
+        <td>{{user.fname}}</td>
+    </tr>
+    <tr>
+        <th>Last Name:</th>
+        <td>{{user.lname}}</td>
+    </tr>
+    <tr>
+        <th>Email:</th>
+        <td>{{user.email}}</td>
+    </tr>
+    <tr>
+        <th>Meals Made</th>
+    </tr>
+    <tr ng-repeat="meal in user.mealsMade">
+        <td>{{meal}}</td>
+    </tr>
+    
+
+        
+        
+        
+    </form>
+    
+    
+</table>

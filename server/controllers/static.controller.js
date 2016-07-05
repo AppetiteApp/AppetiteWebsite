@@ -25,11 +25,23 @@ module.exports = function(app) {
     });
     
     app.get('/login', function(req, res){
+        console.log("get login");
         res.render(__dirname + '/../views/subviews/login');
     });
     
+    app.get('/buydish', function(req, res){
+        global.dishRef.orderByChild("dateAdded").once("value", function(snapshot){
+	        res.render(__dirname + '/../views/browse', {meals: snapshot.val()}); 			
+		});
+    });
+    
     app.get('/home', function(req, res){
+        console.log("got home");
         res.render(__dirname + '/../views/subviews/home');
+    });
+    
+    app.get('/profile', function(req, res){
+        res.render(__dirname + '/../views/subviews/profile');
     });
     
     app.get('/', function(req, res){

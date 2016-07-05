@@ -1,19 +1,18 @@
 
 
-<ul class="nav">
-   <a align="center" href="#/home"><li>Home</li></a>
-   <a align="center" href="#"><li>About</li></a>
-   <a align="center" href="#"><li>Contact</li></a>
-</ul>
 
-
-<form align="center" method="post" action="index.html">
-    <p><input type="text" ng-model="email" placeholder="Email"></p>
-    <p><input type="password" ng-model="password" placeholder="Password"></p>
+<!-- Cheryl's stuff -->
+<div>
+    <form align="center" id="#login" ng-submit="submitForm(user)">
+    <p><input type="text" ng-model="user.email" placeholder="Email"></p>
+    <p><input type="password" ng-model="user.password" placeholder="Password"></p>
     <input type="submit" value="Login"></p>
-
-
-    <a href="#/signup">
-      <input type="submit" value="Create Account"></p>
-    </a>
+    
 </form>
+
+<button ng-click="getCurrentUser()">Click to see user: {{ user.uid }} {{user.email}} </button>
+
+<h1>$scope.email is: {{user.email}}</h1>
+    
+</div>
+
