@@ -37,17 +37,58 @@ $routeProvider
 
 }]);
 
+//stores stuff
 myApp.service('userService', function(){
     var self = this;
-    this.user = firebase.auth().currentUser;
-    this.getUser = function(){
-        return self.user;
-    };
+    
+    //stores the uid, email, and other stuff of user when user first gets to page
+    self.currentUser;
+    if (self.currentUser) {
+        
+    } else if (!firebase.auth().currentUser) {
+        self.currentUser.email = firebase.auth().currentUser.email;
+        self.currentUser.uid = firebase.auth().currentUser.uid;
+        
+    }
+    
+    
+    
+    // this.getUser = function(){
+    //     if (!firebase.auth().currentUser) {
+    //         return null;
+    //     } else {
+            
+    //     }
+    // };
 });
 
-myApp.controller('homeController', function($scope, $log, userService, $location) {
+//for controlling regex
+myApp.service('regexService', function(){
+    this.onlyIntsRegex    = /^[0-9]+$/;
+    this.phoneRegex       = /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/;
+    this.usernameRegex    = /^[a-zA-Z0-9]+$/;
+    this.passwordRegex    = /^[a-zA-Z0-9:.?!@#$%^&*\-=_+\'\";<>,\/]+$/;
+    this.individualNameRegex = /^[\w\d]+$/i;
+    this.commentRegex     = /^[\w\d.,:;"'-=_+!@#$%^&*0-9 ]+$/i;
+    this.mealRegex        = /^[\w\d.,:;"'-=_+!@#$%^&*0-9 ]+$/i;
+    this.addressRegex        = /^[\w\d.,:;"'-=_+!@#$%^&*0-9 ]+$/i;
+    this.latLngRegex      = /^-?[0-9]{1,3}\.?[0-9]{0,}$/;
+    this.priceRegex       = /^\$?[0-9]+\.?[0-9]{0,}$/;
+    this.emailRegex       = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+});
+
+myApp.controller('homeController', function($scope, $log, $location, regexService) {
     $scope.user = {};
     $log.log("Connected");
+    $scope.warnings = {};
+    
+    //set cookies: if there is uid in cookies.. if not then check if anyone is logged in
+    var self = this;
+    self.currentUser = firebase.auth().currentUser;
+    if (self.currentUser){
+        $scope.warnings.existingUser = "You're logged in with " + self.currentUser.email;
+    }
+
 
     //function for logging in, once successfully logged in, redirect to /browse
     $scope.login = function(user) {
@@ -63,6 +104,7 @@ myApp.controller('homeController', function($scope, $log, userService, $location
         });
         
         $log.log(firebase.auth().currentUser);
+        // $cookies.put('uid', firebase.auth().currentUser.uid);
         $location.path("/browse");
 
     };
@@ -109,7 +151,7 @@ myApp.controller('homeController', function($scope, $log, userService, $location
 
 
 //if user is logged in, make ajax request to fetch stuff
-myApp.controller('accountController', function($scope, $log, $location, $http, userService){
+myApp.controller('accountController', function($scope, $log, $location, $http){
     var firebaseUser = firebase.auth().currentUser;
     $scope.user = firebaseUser;
     
@@ -202,22 +244,20 @@ myApp.controller('browseController', function($scope, $log, $location, $window){
     }
     $log.log("hiii");
     
+
     $scope.dishes = [];
+    $scope.markers = [];
     
             	
     firebase.database().ref('dish/').orderByChild("dataAdded").once("value", function(snapshot){
         var allDishes = snapshot.val();
         $log.info(allDishes);
         for (var key in allDishes){
-            if (!allDishes[key]["deleted"]){
+            if (!allDishes[key]["deleted"] & allDishes[key]["uid"] !== firebase.auth().currentUser.uid){
                 $scope.$apply(function(){
                     $scope.dishes.unshift({
                         dishName    : allDishes[key]["dishName"],
                         description : allDishes[key]["description"],
-                        latlong     : {
-                                        lat : allDishes[key]["lat"],
-                                        long: allDishes [key]["long"]
-                                      },
                         phone       : allDishes[key]["phone"],
                         price       : allDishes[key]["price"],
                         quantity    : allDishes[key]["quantity"],
@@ -226,8 +266,27 @@ myApp.controller('browseController', function($scope, $log, $location, $window){
                         owner       : allDishes[key]["owner"]
                     });                     
                 });
-            }  
-        }
+                var marker = new google.maps.Marker({
+                    position: {
+                        lat: allDishes[key]["lat"],
+                        lng: allDishes[key]["long"]
+                    },
+                    title: allDishes[key]["dishName"]
+                }) ;
+                $scope.$apply(function(){
+                    $scope.markers.push(marker);   
+                });
+            } //end if  
+        } // end forEach loop
+        
+        $scope.markers.forEach(function(pin){
+            $scope.$apply(function(){
+                pin.setMap($window.map); 
+            });
+        });
+
+        
+        
     });
     
         //initialize map
@@ -239,36 +298,22 @@ myApp.controller('browseController', function($scope, $log, $location, $window){
             mapTypeControl: false
         });
     
-    // var markers = [];    
-    // $scope.dishes.forEach(function(dish){
-    //     var marker =
-    //     markers.push(marker);
-    // });
-    // var marker = new google.maps.Marker({
-    //     position: {lat: , lng: },
-    //     map: $window.map,
-    //     title: allDishes[key]["dishName"]
-    // });
+    $log.log($scope.dishes);
+
+
+//should be after loaded... hmmm; ok try to use the ng-model for map        
+        // $scope.markers.forEach(function(pin){
+        //     $scope.$apply(function(){
+        //         pin.setMap($window.map); 
+        //     });
+        // });
 
     
     
+
 });
 
-// myApp.controller('mapController', function($scope, $window){
-//     var mapDiv = document.getElementById('map');
-//     $window.map = new google.maps.Map(mapDiv, {
-//             center: {lat: 45.5017, lng: -73.5673},
-//             zoom: 13,
-//             streetViewControl: false,
-//             mapTypeControl: false
-//         });
-    
-    
-    
-//     var marker = new google.maps.Marker({
-//         position: {lat:45.5054445, lng:-73.5789828},
-//         map: $window.map,
-//         title: 'Hello World!'
-//     });
 
-// });
+myApp.controller('navbarController', function($scope, $log){
+    
+});

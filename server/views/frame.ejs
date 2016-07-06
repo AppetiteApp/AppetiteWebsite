@@ -7,7 +7,7 @@
     <script src="/lib/jquery-3.0.0.min.js"></script>
     <link href="/css/styles.css" rel="stylesheet" type="text/css" />
     <!--<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>-->
-    <link href="https://fonts.googleapis.com/css?family=Martel+Sans:300|Source+Sans+Pro:300" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300|Martel+Sans:300' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" type="text/css" href="/css/component.css" />
 		<link rel="stylesheet" type="text/css" href="/css/content.css" />
@@ -17,7 +17,9 @@
 		<script src="/js/modernizr.custom.js"></script>
 
     <script src="/lib/angular-route.min.js"></script>
-    <script src="/lib/angular-css.min.js"></script
+    <script src="/lib/angular-css.min.js"></script>
+    <!--<script src="/lib/angular-cookies.min.js"></script>-->
+
     
     <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-app.js"></script>
@@ -45,7 +47,7 @@
     <script src="/js/cheryl.js"></script>
   </head>
   <body ng-app="myApp">
-    <ul class="nav">
+    <ul class="nav" ng-controller="navbarController">
       <a align="center" href="#/home"><li>Home</li></a>
       <a align="center" href="#"><li>About</li></a>
       <a align="center" href="#"><li>Contact</li></a>

@@ -2,12 +2,12 @@
 @font-face {
 	font-weight: normal;
 	font-style: normal;
-	font-family: 'icomoon';
-	src:url('../fonts/icomoon/icomoon.eot?i64fx9');
-	src:url('../fonts/icomoon/icomoon.eot?#iefixi64fx9') format('embedded-opentype'),
-		url('../fonts/icomoon/icomoon.woff?i64fx9') format('woff'),
-		url('../fonts/icomoon/icomoon.ttf?i64fx9') format('truetype'),
-		url('../fonts/icomoon/icomoon.svg?i64fx9#icomoon') format('svg');
+	/*font-family: 'icomoon';*/
+	/*src:url('../fonts/icomoon/icomoon.eot?i64fx9');*/
+	/*src:url('../fonts/icomoon/icomoon.eot?#iefixi64fx9') format('embedded-opentype'),*/
+	/*	url('../fonts/icomoon/icomoon.woff?i64fx9') format('woff'),*/
+	/*	url('../fonts/icomoon/icomoon.ttf?i64fx9') format('truetype'),*/
+	/*	url('../fonts/icomoon/icomoon.svg?i64fx9#icomoon') format('svg');*/
 }
 
 .icon-close {
@@ -30,7 +30,7 @@
 	font-weight: normal;
 	font-style: normal;
 	font-variant: normal;
-	font-family: 'icomoon';
+	/*font-family: 'icomoon';*/
 	speak: none;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;

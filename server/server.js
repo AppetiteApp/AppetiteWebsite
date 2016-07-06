@@ -44,12 +44,6 @@ app.set("view engine", "ejs");
 staticController(app);
 userController(app);
 
-app.get('/', function(req, res){
-    res.send("Hi from Cheryl; go to /about & /advertisements");
-
-});
-
-
 process.env.PORT = process.env.PORT || 80;
 
 app.listen(process.env.PORT, function(){

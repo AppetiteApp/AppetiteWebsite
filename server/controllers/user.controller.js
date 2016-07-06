@@ -1,9 +1,5 @@
 module.exports = function(app) {
-	
-	app.post('/login', function(req, res, next){
-		req.session.uid = req.body.uid;
-		next();	
-	});
+
 	
 	//function to submit a dish
 	//when user submits a dish via a post request to "/submitdish"
@@ -18,14 +14,16 @@ module.exports = function(app) {
 		
 		console.log(data);
 		newDishRef.set({
-			dishName: req.body.dishName,
-			location: req.body.location,
-			uid: req.body.uid,
-			description: req.body.description,
-			price: req.body.price || "Please contact cook",
-			time: req.body.time || "Please contact cook",
-			portions: req.body.portions || 1,
-			dateAdded: Date()
+			dishName	: req.body.dishName,
+			location	: req.body.location,
+			uid			: req.body.uid,
+			description	: req.body.description,
+			price		: req.body.price || "Please contact cook",
+			time		: req.body.time || "Please contact cook",
+			portions	: req.body.portions || 1,
+			dateAdded	: Date(),
+			owner		: "",
+			ingredients	: req.body.ingredients || "Please ask cook"
 		});
 		
 		global.userRef.child(req.body.uid).once("value", function(snapshot){
@@ -41,6 +39,15 @@ module.exports = function(app) {
 			global.userRef.child(req.body.uid).update({
 				"mealsMade": meals
 			});
+
+			// global.dishRef.child(newDishKey).once("value", function(snapshot){
+			// 	console.log(snapshot.val().firstName);	
+			// });
+			
+			newDishRef.update({
+				"owner": snapshot.val().firstName + "" + snapshot.val().lastName
+			});
+			
 		});
 		res.send("success");
 		
@@ -48,28 +55,11 @@ module.exports = function(app) {
 	});
 	
 	
-	//view a person's account
-	//if I set a session then it gives back the user's account info, in JSON form
-	app.post('/account', function(req, res, next){
-		if (req.body.uid){
-			global.userRef.child(req.body.uid).once("value", function(snapshot){
-				console.log(snapshot.val());
-				res.write(snapshot.val());
-			});	
-		} else {
-			//redirect to some login page, like amazon does it!
-			res.send({
-				statusCode: 403,
-				errorMessage: "You're not logged in"
-			});
-		}
-		next();
-	});
 	
 	
 	//edit a user's account
 	//gonna work on this tmr...go sleep now
-	app.post('/myaccount/edit', function(req, res, next){
+	app.post('/account/edit', function(req, res, next){
 		var resp = [];
 		if (!global.individualNameRegex.test(req.body.fname) || !global.individualNameRegex.test(req.body.lname)){
 			resp.push({
