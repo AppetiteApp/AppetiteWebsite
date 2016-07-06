@@ -1,7 +1,7 @@
 /* global angular*/
 /* global firebase*/
 /* global google*/
-var myApp = angular.module('myApp', ['ngRoute']);
+var myApp = angular.module('myApp', ['ngRoute', 'ngCookies']);
 
 myApp.config(['$routeProvider', function($routeProvider){
 
@@ -46,8 +46,7 @@ myApp.service('userService', function(){
     if (self.currentUser) {
         
     } else if (!firebase.auth().currentUser) {
-        self.currentUser.email = firebase.auth().currentUser.email;
-        self.currentUser.uid = firebase.auth().currentUser.uid;
+         self.currentUser.uid = firebase.auth().currentUser.uid;
         
     }
     
@@ -77,7 +76,7 @@ myApp.service('regexService', function(){
     this.emailRegex       = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 });
 
-myApp.controller('homeController', function($scope, $log, $location, regexService) {
+myApp.controller('homeController', function($scope, $log, $location, regexService, $cookies) {
     $scope.user = {};
     $log.log("Connected");
     $scope.warnings = {};
@@ -187,6 +186,9 @@ myApp.controller('accountController', function($scope, $log, $location, $http){
         });
     });
     
+    
+    
+    
 
 });
 
@@ -242,14 +244,17 @@ myApp.controller('browseController', function($scope, $log, $location, $window){
         $location.path('/');
         return;
     }
-    $log.log("hiii");
+    
+
     
 
     $scope.dishes = [];
     $scope.markers = [];
     
+
+    
             	
-    firebase.database().ref('dish/').orderByChild("dataAdded").once("value", function(snapshot){
+    firebase.database().ref('dish/').orderByChild("dataAdded").on("value", function(snapshot){
         var allDishes = snapshot.val();
         $log.info(allDishes);
         for (var key in allDishes){
@@ -263,7 +268,8 @@ myApp.controller('browseController', function($scope, $log, $location, $window){
                         quantity    : allDishes[key]["quantity"],
                         time        : allDishes[key]["time"],
                         address     : allDishes[key]["location"],
-                        owner       : allDishes[key]["owner"]
+                        owner       : allDishes[key]["owner"],
+                        key         : key
                     });                     
                 });
                 var marker = new google.maps.Marker({
@@ -281,7 +287,7 @@ myApp.controller('browseController', function($scope, $log, $location, $window){
         
         $scope.markers.forEach(function(pin){
             $scope.$apply(function(){
-                pin.setMap($window.map); 
+                pin.setMap($scope.map); 
             });
         });
 
@@ -289,14 +295,10 @@ myApp.controller('browseController', function($scope, $log, $location, $window){
         
     });
     
-        //initialize map
-    var mapDiv = document.getElementById('map');
-    $window.map = new google.maps.Map(mapDiv, {
-            center: {lat: 45.5017, lng: -73.5673},
-            zoom: 13,
-            streetViewControl: false,
-            mapTypeControl: false
-        });
+
+    
+    
+
     
     $log.log($scope.dishes);
 

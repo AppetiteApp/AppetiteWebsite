@@ -1,4 +1,4 @@
-<div class="allitems col-sm-4">
+<div class="allitems col-xs-4">
     <div ng-repeat="dish in dishes">
         <div class="accordion" id="listitem">
             <div class="profile-header-img">
@@ -23,12 +23,9 @@
     </div>
 </div>
 
-<div id="map" class="col-sm-7">
+<div id="map" class="col-xs-8 right">
 
 </div>
-{{markers}}
-
-
 
 <style>
   button.accordion {
@@ -57,10 +54,8 @@
 <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0&callback=initMap"-->
 <!--async defer>-->
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0"
-async defer>
-
-</script>
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0&callback=initMap"
+async defer></script>
 
 
 <script>
@@ -82,23 +77,68 @@ async defer>
     //       this.nextElementSibling.classList.toggle("show");
     // }
   }
+    
+    var map;
+    
+    function initMap() {
+        var mapDiv = document.getElementById('map');
+        map = new google.maps.Map(mapDiv, {
+            center: {lat: 45.5017, lng: -73.5673},
+            zoom: 13,
+            streetViewControl: false,
+            mapTypeControl: false
+        });
         
-    // function initMap() {
-    //     var mapDiv = document.getElementById('map');
-    //     var map = new google.maps.Map(mapDiv, {
-    //         center: {lat: 45.5017, lng: -73.5673},
-    //         zoom: 13,
-    //         streetViewControl: false,
-    //         mapTypeControl: false
-    //     });
-        
-    //     var marker = new google.maps.Marker({
-    //         position: {lat:45.5054445, lng:-73.5789828},
-    //         map: map,
-    //         title: 'Hello World!'
-    //     });
+        var marker = new google.maps.Marker({
+            position: {lat:45.5054445, lng:-73.5789828},
+            map: map,
+            title: 'Hello World!'
+        });
+        mapHelper(map);
 
-    //  }
+     }
+     
+     
+    var mapHelper = function(map){
+        var dishes = [];
+        var markers = [];
+        firebase.database().ref('dish/').orderByChild("dataAdded").on("value", function(snapshot){
+            var allDishes = snapshot.val();
+            for (var key in allDishes){
+                if (!allDishes[key]["deleted"] & allDishes[key]["uid"] !== firebase.auth().currentUser.uid){
+
+                    dishes.unshift({
+                        dishName    : allDishes[key]["dishName"],
+                        description : allDishes[key]["description"],
+                        phone       : allDishes[key]["phone"],
+                        price       : allDishes[key]["price"],
+                        quantity    : allDishes[key]["quantity"],
+                        time        : allDishes[key]["time"],
+                        address     : allDishes[key]["location"],
+                        owner       : allDishes[key]["owner"],
+                        key         : key
+                    });                     
+
+                    var marker = new google.maps.Marker({
+                        position: {
+                            lat: allDishes[key]["lat"],
+                            lng: allDishes[key]["long"]
+                        },
+                        title: allDishes[key]["dishName"]
+                    });
+                
+                    markers.push(marker);   
+
+                } //end if  
+            } // end forEach loop
+        
+            markers.forEach(function(pin){
+                pin.setMap(map); 
+            });
+        });
+    }; //end mapHelper function
+    
+     
 
   
 </script>
