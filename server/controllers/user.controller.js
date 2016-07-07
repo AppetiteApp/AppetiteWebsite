@@ -58,50 +58,92 @@ module.exports = function(app) {
 	
 	
 	//edit a user's account
-	//gonna work on this tmr...go sleep now
+	//check if the a valid change is in req.body, if yes then update
 	app.post('/account/edit', function(req, res, next){
-		var resp = [];
-		if (!global.individualNameRegex.test(req.body.fname) || !global.individualNameRegex.test(req.body.lname)){
-			resp.push({
-				errorType: "name",
-				errorMessage: "invalid characters in first name or last name"
+
+		if (!req.body.uid) {
+			res.send({
+				errorType: "uid",
+				errorMessage: "No uid sent"
 			});
 		}
 		
-		if (!global.phoneRegex.test(req.body.phone)){
-			resp.push({
-				errorType: "phone",
-				errorMessage: "invalid characters in phone"
+		var update = {};
+		var error = [];
+		
+		if (!req.body.zip || !req.body.lat || !req.body.lng || !req.body.phone || !req.body.address) {
+			res.send({
+				errorType: 'content',
+				errorMessage: "There's nothintg to change"
 			});
 		}
 		
-		if(!global.addressRegex.test(req.body.location)){
-			resp.push({
-				errorType: "location",
-				errorMessage: "invalid characters in location"
-			});
+		//need to add a zipRegex	
+		if (req.body.zip) {
+			update.zip = req.body.zip;
 		}
 		
-		if (!req.body.uid){
-			resp.push({
-				errorType: "user",
-				errorMessage: "no user logged in"
-			});
-		}
-		
-		if (resp.length === 0) {
-			global.userRef.child(req.body.uid).update({
-				firstName: req.body.fname,
-				lastName: req.body.lname,
-				phone: req.body.phone,
-				location: req.body.location || ""
-			});	
-			resp = {
-				statusCode: 200,
-				errorMessage: "no errors"
+		//if there is lat and lng in the update object, 
+			//check regex, then either push an error or an update
+		//if not lat/lng present, do nothing
+		if (req.body.lat & req.body.lng) {
+			if (!global.latLngRegex.test(req.body.lat) || !global.latLngRegex.test(req.body.lng)){
+				error.push({
+					errorType: "latlng",
+					errorMessage: "Invalid characters in lat/lng"
+				});
+			}
+			update.latlng = {
+				lat: req.body.lat,
+				lng: req.body.lng
 			};
 		}
 		
-		res.JSON(resp);
+		//phone updates
+		if (req.body.phone) {
+			if (!global.phoneRegex.test(req.body.phone)){
+				error.push({
+					errorType: "phone",
+					errorMessage: "Invalid characters in phone"
+				});
+			} else {
+				update.phone = req.body.phone;
+			}	
+		}
+		
+		//address updates
+		if (req.body.address) {
+			if (!global.addressRegex.test(req.body.address)){
+				error.push({
+					errorType: "address",
+					errorMessage: "Invalid characters in address"
+				});
+			} else {
+				update.address = req.body.address;
+			}	
+		}
+		
+		//updates stuff and sends info regarding success and errors in to browser
+		if (error.length == 0 ) {
+			global.userRef.child(req.body.uid).update(update);
+			res.send({
+				status: 200,
+				message: "success"
+			});
+		} else if (update){
+			global.userRef.child(req.body.uid).update(update);
+			res.send({
+				status: 201,
+				message: "partially updated",
+				error: error
+			});
+		} else {
+			res.send({
+				status: 500,
+				message: "invalid user of api",
+				error: error
+			});
+		}
+		
 	});
 };

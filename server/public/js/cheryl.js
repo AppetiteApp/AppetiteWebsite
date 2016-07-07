@@ -278,16 +278,15 @@ myApp.controller('browseController', function($scope, $log, $location){
                         key         : key
                     });                     
                 
-                // var marker = new google.maps.Marker({
-                //     position: {
-                //         lat: allDishes[key]["lat"],
-                //         lng: allDishes[key]["long"]
-                //     },
-                //     title: allDishes[key]["dishName"]
-                // }) ;
-                // $scope.$apply(function(){
-                //     $scope.markers.push(marker);   
-                // });
+                var marker = new google.maps.Marker({
+                    position: {
+                        lat: allDishes[key]["lat"],
+                        lng: allDishes[key]["long"]
+                    },
+                    title: allDishes[key]["dishName"]
+                }) ;
+                    $scope.markers.push(marker);   
+
             } //end if  
         } // end forEach loop
         
