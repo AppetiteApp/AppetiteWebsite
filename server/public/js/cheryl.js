@@ -44,8 +44,12 @@ $routeProvider
 }]);
 
 //stores stuff
+//userService, once completed, should act like a cookie
+//READMEEE:
+    //you can inject this and set $scope = userService.signout to call the signout function
 myApp.service('userService', function(){
     var self = this;
+    self.signedIn = true;
     
     //stores the uid, email, and other stuff of user when user first gets to page
     self.currentUser;
@@ -56,15 +60,13 @@ myApp.service('userService', function(){
         
     }
     
+    self.signout = firebase.auth().signOut().then(function() {
+        self.signedIn = false;
+    }, function(error) {
+        console.log(error);
+    });
     
-    
-    // this.getUser = function(){
-    //     if (!firebase.auth().currentUser) {
-    //         return null;
-    //     } else {
-            
-    //     }
-    // };
+
 });
 
 //for controlling regex
@@ -82,7 +84,7 @@ myApp.service('regexService', function(){
     this.emailRegex       = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 });
 
-myApp.controller('homeController', function($scope, $log, $location, regexService) {
+myApp.controller('homeController', function($scope, $log, $location, regexService, userService) {
     $scope.user = {};
     $log.log("Connected");
     $scope.warnings = {};
