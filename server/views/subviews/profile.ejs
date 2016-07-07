@@ -30,7 +30,7 @@
 <hr>
 <h3>Cheryl's notes to Paul: this is what I envisioned (and assumed you did) with this page</h3>
 <p>The User's info is loaded and display. If you click on the 'inputs', you can modify them; once you do, the button below shows up to submit the form to edit the user's info. Will be working on the $scope.edit(user) function in the next hour.</p>
-<form ng-submit="edit(user)">
+<form ng-submit="editProfile(user)">
   <label for="firstName">First Name</label><input type='text' ng-model="user.firstName" name="firstName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="changed=true"/><br>
   <label for="lastName">Last Name</label><input type='text' ng-model="user.lastName" name="lastName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="changed=true"/><br>
   <label for="phone">Phone</label><input type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="changed=true"/><br>

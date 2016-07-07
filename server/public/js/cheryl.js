@@ -166,7 +166,7 @@ myApp.controller('accountController', function($scope, $log, $location, $http){
     $scope.user = firebaseUser;
     
     //if no one is logged in, then redirect to the login page
-    if (!firebase.auth().currentUser) {
+    if (!$scope.user) {
         $location.path('/login');
         return;
     }
@@ -198,6 +198,25 @@ myApp.controller('accountController', function($scope, $log, $location, $http){
 	        $scope.user.mealsMade = snapshot.val().mealsMade;                
         });
     });
+    
+    
+    //posts stuff to backend to edit profile
+    $scope.editProfile = function(user){
+        $http.post('/api/account/edit', {
+            fname: user.firstName,
+            lname: user.lastName,
+            phone: user.phone,
+            address: user.address,
+            uid: $scope.user.uid
+        })
+        .then(function(data){
+            //should use a ng-model to let user know success on success, maybe the ng-rules thingy
+            console.log(data);
+        },
+        function(err){
+           console.log(err); 
+        });
+    };
     
     
     

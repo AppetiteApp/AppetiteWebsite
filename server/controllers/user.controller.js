@@ -1,3 +1,5 @@
+var globals = require('../configs/globals');
+
 module.exports = function(app) {
 
 	
@@ -90,7 +92,7 @@ module.exports = function(app) {
 	
 	//edit a user's account
 	//check if the a valid change is in req.body, if yes then update
-	app.post('/account/edit', function(req, res, next){
+	app.post('/api/account/edit', function(req, res, next){
 
 		if (!req.body.uid) {
 			res.send({
@@ -102,11 +104,11 @@ module.exports = function(app) {
 		var update = {};
 		var error = [];
 		
-		if (!req.body.zip || !req.body.lat || !req.body.lng || !req.body.phone || !req.body.address || !req.body.fname 
-			|| !req.body.lname) {
+		if (!req.body.zip & !req.body.lat & !req.body.lng & !req.body.phone & !req.body.address & !req.body.fname 
+			& !req.body.lname) {
 			res.send({
 				errorType: 'content',
-				errorMessage: "There's nothintg to change"
+				errorMessage: "There's nothing to change"
 			});
 		}
 		
@@ -116,7 +118,7 @@ module.exports = function(app) {
 		}
 		
 		if (req.body.fname) {
-			if (!global.individualNameRegex.test(req.body.fname)){
+			if (!globals.individualNameRegex.test(req.body.fname)){
 				error.push({
 					errorType: "fname",
 					errorMessage: "invalid characters in fname"
@@ -127,7 +129,7 @@ module.exports = function(app) {
 		}
 		
 		if (req.body.lname) {
-			if (!global.individualNameRegex.test(req.body.lname)){
+			if (!globals.individualNameRegex.test(req.body.lname)){
 				error.push({
 					errorType: "lname",
 					errorMessage: "invalid characters in lname"
@@ -141,7 +143,7 @@ module.exports = function(app) {
 			//check regex, then either push an error or an update
 		//if not lat/lng present, do nothing
 		if (req.body.lat & req.body.lng) {
-			if (!global.latLngRegex.test(req.body.lat) || !global.latLngRegex.test(req.body.lng)){
+			if (!globals.latLngRegex.test(req.body.lat) || !globals.latLngRegex.test(req.body.lng)){
 				error.push({
 					errorType: "latlng",
 					errorMessage: "Invalid characters in lat/lng"
@@ -155,7 +157,7 @@ module.exports = function(app) {
 		
 		//phone updates
 		if (req.body.phone) {
-			if (!global.phoneRegex.test(req.body.phone)){
+			if (!globals.phoneRegex.test(req.body.phone)){
 				error.push({
 					errorType: "phone",
 					errorMessage: "Invalid characters in phone"
@@ -167,7 +169,7 @@ module.exports = function(app) {
 		
 		//address updates
 		if (req.body.address) {
-			if (!global.addressRegex.test(req.body.address)){
+			if (!globals.addressRegex.test(req.body.address)){
 				error.push({
 					errorType: "address",
 					errorMessage: "Invalid characters in address"
