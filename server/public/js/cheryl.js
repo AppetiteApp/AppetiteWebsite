@@ -87,7 +87,7 @@ myApp.service('regexService', function(){
     this.emailRegex       = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 });
 
-
+//login, signup
 myApp.controller('homeController', function($scope, $log, $location, regexService, userService) {
     $scope.user = {};
     $log.log("Connected");
@@ -98,8 +98,11 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
             $log.log("onAuthStateChanged: ");
             $log.log(user);
             $scope.currentUser = user;
+            userService.signedIn = true;
         } else {
             $log.log("onAuthStateChanged: no user");
+            userService.signedIn = false;
+
         }
     });
     
@@ -108,20 +111,21 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
 
         $log.log("login with email: " + user.email);
         
-        var newUser = firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(
+        firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(
             function(){
                 $log.log("login function resolved");
                 $log.log(firebase.auth().currentUser);
                 $location.path("/browse");
+                userService.signedIn = true;
+
             }
             ,function(error) {
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 $log.log(errorCode + ": " + errorMessage);
                 $scope.warnings.loginfail = true;
+                userService.signedIn = false;
             });
-
-
 
     };
     
@@ -129,37 +133,27 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
     $scope.signup = function(user){
         console.log("signup");
         
-        firebase.auth().createUserWithEmailAndPassword(user.email, user.password).catch(function(error) {
+        firebase.auth().createUserWithEmailAndPassword(user.email, user.password).then(
+            function(){
+                $log.log("signup resolved");
+                var user = firebase.auth().currentUser;
+                firebase.database().ref('users/' + user.uid).set({
+                    email: user.email 
+                });
+                $log.log(firebase.auth().currentUser);
+                $location.path('/account');
+                userService.signedIn = true;
+            },
+            function(error) {
   		// Handle Errors here. omg why isn't this code running...
   		    var errorCode = error.code;
   		    var errorMessage = error.message;
   		    console.log(errorCode + ": " + errorMessage);
-  		    $log.log("callback after creating user");
+  		    $scope.warnings.createfail = true;
+  		    userService.signedIn = false;
 	    });
 	    
-	    
-	    //if there is a new user created, then go and create a node in the realtime database
-  	    //if need be, can go and add firstname, lastname, etc
-	    var userid = $scope.currentUser.uid;
-            firebase.database().ref('users/' + userid).set({
-                email: user.email
-            });
-        $location.path('/account');
-            
-	
     };
-    
-    $scope.getCurrentUser = function(){
-	    var user = firebase.auth().currentUser;
-	    $scope.user.uid = user.uid;
-	    $scope.user.email = user.email;
-
-	    if (user) {
-		    return user;
-	    } else {
-		    return null;
-	    }
-};
 
 });
 
@@ -180,9 +174,11 @@ myApp.controller('accountController', function($scope, $log, $location, $http){
     firebase.database().ref('users/' + $scope.user.uid).once('value', function(snapshot){
         $log.log(snapshot.val());
         $scope.$apply(function(){
-          	$scope.user.fname = snapshot.val().firstName;
-	        $scope.user.lname = snapshot.val().lastName;
+          	$scope.user.firstName = snapshot.val().firstName;
+	        $scope.user.lastName = snapshot.val().lastName;
 	        $scope.user.email = snapshot.val().email;
+	        $scope.user.phone = snapshot.val().phone;
+	        $scope.user.address = snapshot.val().address;
 	        $scope.user.mealsMade = [];
 	        //should go and fetch meals
 	        if (snapshot.val().mealsMade){

@@ -1,12 +1,12 @@
 <table>
-    <thead>{{user.fname}}</thead>
+    <thead>{{user.firstName}}</thead>
     <tr>
         <th>First Name:</th>
-        <td>{{user.fname}}</td>
+        <td>{{user.firstName}}</td>
     </tr>
     <tr>
         <th>Last Name:</th>
-        <td>{{user.lname}}</td>
+        <td>{{user.lastName}}</td>
     </tr>
     <tr>
         <th>Email:</th>
@@ -27,7 +27,20 @@
 
     
 </table>
-    <h1>Cheryl's running tests on updating stuff and location stuff</h1>
+<hr>
+<h3>Cheryl's notes to Paul: this is what I envisioned (and assumed you did) with this page</h3>
+<p>The User's info is loaded and display. If you click on the 'inputs', you can modify them; once you do, the button below shows up to submit the form to edit the user's info. Will be working on the $scope.edit(user) function in the next hour.</p>
+<form ng-submit="edit(user)">
+  <label for="firstName">First Name</label><input type='text' ng-model="user.firstName" name="firstName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="changed=true"/><br>
+  <label for="lastName">Last Name</label><input type='text' ng-model="user.lastName" name="lastName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="changed=true"/><br>
+  <label for="phone">Phone</label><input type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="changed=true"/><br>
+  <label for="firstName">Address</label><input type='text' ng-model="user.address" name="adress" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="changed=true"/><br>
+  <input type="submit" value="Save Edits" ng-show="changed" ng-init="changed=false"/>
+</form>
+
+<br>
+
+    <h3>Cheryl's running tests on updating stuff and location stuff...not really in the next couple hours</h3>
     <form ng-click="changeProfile(details)">
         <input type="text" ng-model="details.address"/>
         <input type="submit" value="Update" />
@@ -69,6 +82,20 @@
     </table>
     
     
+    
+    
+    <style>
+      input.blur{
+        border-width: 0px;
+        border-left: 1px solid #ccc;
+      }
+      label {
+        display: inline-block;
+        width: 100px;
+      }
+      
+      
+    </style>
     
     
     <!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYuMVPGLB6a4BmDmUH8yAH61mbXiIjIsc&libraries=places"></script>-->
