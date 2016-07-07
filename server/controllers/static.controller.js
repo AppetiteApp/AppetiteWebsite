@@ -39,6 +39,14 @@ module.exports = function(app) {
         res.render(__dirname + '/../views/subviews/addmeal'); 
     });
     
+    app.get('/terms', function(req, res){
+        res.render(__dirname + '/../views/subviews/terms');
+    });
+
+    app.get('/aboutus', function(req, res){
+        res.render(__dirname + '/../views/subviews/aboutus');
+    });
+    
     app.get('/', function(req, res){
         res.render(__dirname + '/../views/frame');
     });

@@ -25,6 +25,8 @@ body{
   margin-bottom: 0;
   margin-top: 0;
   font-family: Source Sans Pro;
+  height: 65px;
+  top: 0;
 }
 
 
@@ -150,7 +152,115 @@ h1 {
   padding-bottom: 0;
 }
 
-.profile-header-img {
+.description {
+  font-size:25px;
+  color:#7f7f7f;
+  font-family:serif;
+}
+
+.appscreenshots {
+  display:inline;
+  padding-top: 0;
+}
+
+.appdescription {
+  font-size: 20px;
+  color:#7f7f7f;
+  font-family:serif;
+}
+
+.footer {
+  display:block;
+  color:#7f7f7f;
+  padding:0%;
+  width:100%;
+  height:50px;
+  font-family: serif;
+  font-size:20px;
+}
+
+.teamheadshots {
+  display:inline;
+  padding-top:0;
+  padding:5%;
+}
+
+/* Footer */
+
+#footer {
+	position: relative;
+	height: 50px;
+	background-color: #75d0f4;
+	clear: both;
+	font-family: Verdana, sans-serif;
+	font-size: 14px;
+	text-align: center;
+	color: #ffffff;
+}
+
+#footer p {
+	position: relative;
+	padding-top:15px;
+}
+
+/* Terms and Conditions */
+
+.smallterms {
+  font-size:18px;
+  color:#7f7f7f;
+  text-align: left;
+  padding-left:5%;
+  padding-right:5%;
+}
+
+.headingterms {
+  font-size:25px;
+  color:#7f7f7f;
+  text-align:center;
+  padding:5%;
+}
+
+.smallheadingterms {
+  font-size:20px;
+  color:#7f7f7f;
+  text-align:center;
+  padding:2%;
+}
+
+/* About Page */
+
+.awardsfont {
+  text-align: left;
+  color:#7f7f7f;
+  font-size:25px;
+  font-family:serif;
+  padding:20%
+  padding-bottom:200px;;
+  display:block;
+  padding-left:100px;
+  padding-top: 10px;
+}
+
+.awards {
+  float:right;
+  padding-right:100px;
+  display: inline-block;
+}
+
+.ourmissiontext {
+  font-family:serif;
+  font-size: 20px;
+  color: #a5a5a5;
+}
+
+.spacer {
+  display:block;
+  height:30px;
+  font-size:80px;
+  color:white;
+}
+
+/*.profile-header-img {
     margin: 0 auto;
     text-align: center;
     float: left;
@@ -171,10 +281,10 @@ h1 {
 
 /**
  * Ranking component
- */
+
 .rank-label-container {
     margin-top: -17px;
-    /* z-index: 1000; */
+    /* z-index: 1000;
     text-align: center;
 }
 
@@ -185,16 +295,16 @@ h1 {
     position: relative;
     z-index: 1;
 }
-
+*/
 
 .allitems {
   position: relative;
   width: 48%;
   margin-left: 20px;
-  top: 25px;
+  top: 10px;
 }
 
-#listitem {
+/*#listitem {
   overflow: visible;
   height: 65px;
   text-align: center;
@@ -289,4 +399,209 @@ h1 {
 #map{
   height: 60vw;
   width: 60vw;
+}*/
+
+/*#listitem {
+  overflow: visible;
+  height: 65px;
+  text-align: center;
+  border: 0;
+  margin: 0;
+  width: 100%;
+}*/
+
+#dishbanner {
+  overflow: visible;
+  position:relative;
+  width: auto;
+  margin: 0;
+  border:0;
+  height: 65px;
+  border-radius: 13px 13px 0 0;
+  z-index: 0;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border: 4px  solid #75d0f4;
+  min-height: 65px;
+  line-height:55px;
+  background-color: white;
+  text-align: left;
+  cursor: pointer;
+
+}
+
+#dishtitle {
+  margin-left: 10px;
+  color: black;
+  font-family: Source Sans Pro;
+  font-size: 30px;
+  background-color: white;
+  display: inline-block;
+  height: auto;
+}
+
+#dishtime {
+  color: white;
+  font-family: Source Sans Pro;
+  font-size: 1.5vw;
+  float: bottom;
+  text-align: center;
+  border: 1px solid white;
+  margin-bottom: 1px;
+  border-radius: 10px;
+  margin-left: 4px;
+}
+
+
+#dishphone {
+  color: white;
+  font-family: Source Sans Pro;
+  font-size: 1.5vw;
+  float: bottom;
+  text-align: center;
+  border: 1px solid white;
+  margin-bottom: 1px;
+  border-radius: 10px;
+  margin-left: 4px;
+}
+
+
+
+#dishlocation {
+  color: white;
+  font-family: Source Sans Pro;
+  font-size: 1.5vw;
+  float: bottom;
+  text-align: center;
+  border: 1px solid white;
+  border-radius: 10px;
+  margin-left: 4px;
+}
+
+
+
+#dishprice {
+  font-family: Source Sans Pro;
+  font-size: 3.0vw;
+  background-color: white;
+  display: inline-block;
+  float:right;
+  color: green;
+  margin-right: 10px;
+}
+
+#itemdetails {
+  background-color: #75d0f4;
+  color: white;
+  font-family: Source Sans Pro;
+  border-radius: 0 0 13px 13px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border: 4px  solid #75d0f4;
+  height: auto;
+  max-height: 100px;
+  margin: 0;
+
+
+}
+
+#map{
+  float:right;
+  position: absolute;
+  top: 65px;
+  left: 400px;
+  width: 100% !important;
+  flex: 1 1 auto;
+}
+
+.dishthumbnail {
+  display: inline-block;
+  float:left;
+  margin: 0;
+  padding: 0;
+}
+
+.dishthumbnail > img.img-thumbnail {
+    width: 57px;
+    height: 57px;
+    padding: 0;
+    margin: 0;
+    border-radius: 10px 0 0 0;
+}
+
+#itemscontainer {
+  position: absolute;
+  width: 400px;
+  overflow-y: scroll;
+  top: 65px;
+  bottom: 0;
+  padding:3px;
+  background-image: url(/imgs/wood.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  flex: 1 1 auto;
+
+}
+
+#repeateditem {
+  height: auto;
+  margin: 3px;
+
+}
+#fullpage {
+  height: 100%;
+  width: 100%;
+}
+
+@media (max-width:750px){
+
+  #dishbanner {
+    overflow: visible;
+    position:relative;
+    width: auto;
+    margin: 0;
+    border:0;
+    height: 65px;
+    border-radius: 13px 13px 0 0;
+    z-index: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 4px  solid #75d0f4;
+    min-height: 65px;
+    line-height:55px;
+    background-color: white;
+    text-align: center;
+    cursor: pointer;
+
+  }
+
+  #map{
+    float:right;
+    position: absolute;
+    top: 65px;
+    left: 0px;
+    width: 100% !important;
+    height: 300px;
+    flex: 1 1 auto;
+  }
+
+  #itemscontainer {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    overflow-y: scroll;
+    top: 365px;
+    bottom: 0;
+    padding:3px;
+    background-image: url(/imgs/wood.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    flex: 1 1 auto;
+
+  }
 }

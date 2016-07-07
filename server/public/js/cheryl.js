@@ -1,7 +1,7 @@
 /* global angular*/
 /* global firebase*/
 /* global google*/
-var myApp = angular.module('myApp', ['ngRoute', 'ngCookies']);
+var myApp = angular.module('myApp', ['ngRoute']);
 
 myApp.config(['$routeProvider', function($routeProvider){
 
@@ -30,6 +30,12 @@ $routeProvider
   .when('/newdish', {
       templateUrl: '/newdish',
       controller: 'newDishController'
+  })
+  .when('/aboutus', {
+      templateUrl: '/aboutus'
+  })
+  .when('/terms', {
+      templateUrl: '/terms'
   })
   .otherwise({
     redirectTo: '/'
@@ -76,7 +82,7 @@ myApp.service('regexService', function(){
     this.emailRegex       = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 });
 
-myApp.controller('homeController', function($scope, $log, $location, regexService, $cookies) {
+myApp.controller('homeController', function($scope, $log, $location, regexService) {
     $scope.user = {};
     $log.log("Connected");
     $scope.warnings = {};
@@ -236,7 +242,7 @@ myApp.controller('newDishController', function($scope, $log, $http, $location){
 });
 
 
-myApp.controller('browseController', function($scope, $log, $location, $window){
+myApp.controller('browseController', function($scope, $log, $location){
     
     //if user isn't logged in, then go to home
     //ask for a promise here, or use $cookie
@@ -254,12 +260,12 @@ myApp.controller('browseController', function($scope, $log, $location, $window){
 
     
             	
-    firebase.database().ref('dish/').orderByChild("dataAdded").on("value", function(snapshot){
+    firebase.database().ref('dish/').orderByChild("dataAdded").once("value", function(snapshot){
         var allDishes = snapshot.val();
         $log.info(allDishes);
         for (var key in allDishes){
             if (!allDishes[key]["deleted"] & allDishes[key]["uid"] !== firebase.auth().currentUser.uid){
-                $scope.$apply(function(){
+                
                     $scope.dishes.unshift({
                         dishName    : allDishes[key]["dishName"],
                         description : allDishes[key]["description"],
@@ -271,24 +277,24 @@ myApp.controller('browseController', function($scope, $log, $location, $window){
                         owner       : allDishes[key]["owner"],
                         key         : key
                     });                     
-                });
-                var marker = new google.maps.Marker({
-                    position: {
-                        lat: allDishes[key]["lat"],
-                        lng: allDishes[key]["long"]
-                    },
-                    title: allDishes[key]["dishName"]
-                }) ;
-                $scope.$apply(function(){
-                    $scope.markers.push(marker);   
-                });
+                
+                // var marker = new google.maps.Marker({
+                //     position: {
+                //         lat: allDishes[key]["lat"],
+                //         lng: allDishes[key]["long"]
+                //     },
+                //     title: allDishes[key]["dishName"]
+                // }) ;
+                // $scope.$apply(function(){
+                //     $scope.markers.push(marker);   
+                // });
             } //end if  
         } // end forEach loop
         
         $scope.markers.forEach(function(pin){
-            $scope.$apply(function(){
+
                 pin.setMap($scope.map); 
-            });
+
         });
 
         

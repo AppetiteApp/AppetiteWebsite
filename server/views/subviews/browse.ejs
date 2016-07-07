@@ -1,27 +1,25 @@
-<div class="allitems col-xs-4">
-    <div ng-repeat="dish in dishes">
-        <div class="accordion" id="listitem">
-            <div class="profile-header-img">
-                <img class="img-circle" src="/imgs/gordon.jpg" />
-                <!-- badge -->
-                <div class="rank-label-container">
-                    <span class="label label-default rank-label">{{dish.owner}}</span>
-                </div>
-            </div>
+<div id="itemscontainer">
+  <div ng-repeat="dish in dishes" id="repeateditem">
+      <div id="listitem" ng-click="showDetails = !showDetails">
 
-            <div id="dishbanner">
-                <div id="dishtitle">{{dish.dishName}}</div>
-                <div id="dishprice">${{dish.price}}</div>
-            </div>
-        </div>  
-        <div class="panel" id="itemdetails">
-            <p>{{dish.description}}</p>
-            <div id="dishtime">{{dish.time}}</div>
-            <div id="dishphone">{{dish.phone}}</div>
-            <div id="dishlocation">{{dish.address}}</div>
+        <div id="dishbanner">
+          <div class="dishthumbnail">
+            <img class="img-thumbnail" src="/imgs/gordon.jpg" />
+          </div>
+
+            <div id="dishtitle">{{dish.dishName}}</div>
+            <div id="dishprice">${{dish.price}}</div>
         </div>
     </div>
+    <div ng-show="showDetails" id="itemdetails">
+        <p>{{dish.description}}</p>
+        <div id="dishtime">{{dish.time}}</div>
+        <div id="dishphone">{{dish.phone}}</div>
+        <div id="dishlocation">{{dish.address}}</div>
+    </div>
+  </div>
 </div>
+
 
 <div id="map" class="col-xs-8 right">
 
@@ -51,11 +49,11 @@
 </style>
 
 <!--the original one-->
-<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0&callback=initMap"-->
-<!--async defer>-->
-
- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0&callback=initMap"
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYuMVPGLB6a4BmDmUH8yAH61mbXiIjIsc&callback=initMap"
 async defer></script>
+
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0&callback=initMap"
+async defer></script> -->
 
 
 <script>
@@ -88,12 +86,7 @@ async defer></script>
             streetViewControl: false,
             mapTypeControl: false
         });
-        
-        var marker = new google.maps.Marker({
-            position: {lat:45.5054445, lng:-73.5789828},
-            map: map,
-            title: 'Hello World!'
-        });
+
         mapHelper(map);
 
      }
@@ -124,7 +117,9 @@ async defer></script>
                             lat: allDishes[key]["lat"],
                             lng: allDishes[key]["long"]
                         },
-                        title: allDishes[key]["dishName"]
+                        title: allDishes[key]["dishName"],
+                        label: allDishes[key]["dishName"],
+                        map: map
                     });
                 
                     markers.push(marker);   
@@ -132,9 +127,9 @@ async defer></script>
                 } //end if  
             } // end forEach loop
         
-            markers.forEach(function(pin){
-                pin.setMap(map); 
-            });
+            // markers.forEach(function(pin){
+            //     pin.setMap(map); 
+            // });
         });
     }; //end mapHelper function
     
