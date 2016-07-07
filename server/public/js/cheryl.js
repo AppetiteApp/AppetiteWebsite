@@ -46,19 +46,22 @@ $routeProvider
 //stores stuff
 //userService, once completed, should act like a cookie
 //READMEEE:
-    //you can inject this and set $scope = userService.signout to call the signout function
+    //atm, you can inject this and set $scope = userService.signout to call the signout function
 myApp.service('userService', function(){
     var self = this;
     self.signedIn = true;
     
-    //stores the uid, email, and other stuff of user when user first gets to page
-    self.currentUser;
-    if (self.currentUser) {
+    // //stores the uid, email, and other stuff of user when user first gets to page
+    // self.currentUser;
+    // if (self.currentUser) {
         
-    } else if (!firebase.auth().currentUser) {
-         self.currentUser.uid = firebase.auth().currentUser.uid;
+    // } else if (firebase.auth().currentUser != null) {
+    //      self.currentUser.uid = firebase.auth().currentUser.uid;
         
-    }
+    // } else {
+    //     self.signedIn = false;
+    //     self.currentUser = undefined;
+    // }
     
     self.signout = firebase.auth().signOut().then(function() {
         self.signedIn = false;
@@ -69,7 +72,7 @@ myApp.service('userService', function(){
 
 });
 
-//for controlling regex
+//for controlling regex, to be addedS
 myApp.service('regexService', function(){
     this.onlyIntsRegex    = /^[0-9]+$/;
     this.phoneRegex       = /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/;
@@ -84,35 +87,41 @@ myApp.service('regexService', function(){
     this.emailRegex       = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 });
 
+
 myApp.controller('homeController', function($scope, $log, $location, regexService, userService) {
     $scope.user = {};
     $log.log("Connected");
     $scope.warnings = {};
     
-    //set cookies: if there is uid in cookies.. if not then check if anyone is logged in
-    var self = this;
-    self.currentUser = firebase.auth().currentUser;
-    if (self.currentUser){
-        $scope.warnings.existingUser = "You're logged in with " + self.currentUser.email;
-    }
-
-
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $log.log("onAuthStateChanged: ");
+            $log.log(user);
+            $scope.currentUser = user;
+        } else {
+            $log.log("onAuthStateChanged: no user");
+        }
+    });
+    
     //function for logging in, once successfully logged in, redirect to /browse
     $scope.login = function(user) {
 
         $log.log("login with email: " + user.email);
         
-        firebase.auth().signInWithEmailAndPassword(user.email, user.password).catch(function(error) {
-            // for some reason, stuff in here is not running, but the rest of the code is
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            $log.log(errorCode + ": " + errorMessage);
-            // ...
-        });
-        
-        $log.log(firebase.auth().currentUser);
-        // $cookies.put('uid', firebase.auth().currentUser.uid);
-        $location.path("/browse");
+        var newUser = firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(
+            function(){
+                $log.log("login function resolved");
+                $log.log(firebase.auth().currentUser);
+                $location.path("/browse");
+            }
+            ,function(error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                $log.log(errorCode + ": " + errorMessage);
+                $scope.warnings.loginfail = true;
+            });
+
+
 
     };
     
@@ -131,9 +140,9 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
 	    
 	    //if there is a new user created, then go and create a node in the realtime database
   	    //if need be, can go and add firstname, lastname, etc
-	    var userid = firebase.auth().currentUser.uid;
+	    var userid = $scope.currentUser.uid;
             firebase.database().ref('users/' + userid).set({
-                email: user.email 
+                email: user.email
             });
         $location.path('/account');
             
@@ -248,10 +257,10 @@ myApp.controller('browseController', function($scope, $log, $location){
     
     //if user isn't logged in, then go to home
     //ask for a promise here, or use $cookie
-    if(!firebase.auth().currentUser) {
-        $location.path('/');
-        return;
-    }
+    // if(!firebase.auth().currentUser) {
+    //     $location.path('/');
+    //     return;
+    // }
     
 
     

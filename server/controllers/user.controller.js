@@ -5,12 +5,22 @@ module.exports = function(app) {
 	//when user submits a dish via a post request to "/submitdish"
 	//set a new dish key & store stuff in the dish/ ref in firebase
 	//and push that dish key into an array in that user's mealsMade array
+	//check for latlng key in req.body, if there is, store it in the dish; if not, get latlng from user & store in dish
+	//TODO: add regex control
 	app.post('/newdish', function(req, res, next){
 		//go and make a new dish under "dish" in db
 		var newDishRef = global.dishRef.push();
 		var newDishKey = newDishRef.key;
 		//console.log(req);
 		var data = req.body;
+		var error = [];
+		
+		if (!req.body.uid) {
+			res.send({
+				errorType: "uid",
+				errorMessage: "You didn't send the userid"
+			});
+		}
 		
 		console.log(data);
 		newDishRef.set({
@@ -25,6 +35,27 @@ module.exports = function(app) {
 			owner		: "",
 			ingredients	: req.body.ingredients || "Please ask cook"
 		});
+		
+		if(req.body.lng & req.body.lat){
+			newDishRef.update ({
+				lat: req.body.lat,
+				lng: req.body.lng
+			});
+		} else {
+			global.userRef.child(req.body.uid).once('value', function(snapshot){
+				if (!snapshot.val().lat || !snapshot.val().lng){
+					error.push({
+						errorType: "latlng",
+						errorMessage: "User doesn't have a lat/lng and user didn't specify a lat/lng with dish"
+					});
+				} else {
+					newDishRef.update({
+						lat: snapshot.val().lat,
+						lng: snapshot.val().lng
+					});
+				}	
+			});
+		}
 		
 		global.userRef.child(req.body.uid).once("value", function(snapshot){
 			console.log(snapshot.val());
@@ -71,7 +102,8 @@ module.exports = function(app) {
 		var update = {};
 		var error = [];
 		
-		if (!req.body.zip || !req.body.lat || !req.body.lng || !req.body.phone || !req.body.address) {
+		if (!req.body.zip || !req.body.lat || !req.body.lng || !req.body.phone || !req.body.address || !req.body.fname 
+			|| !req.body.lname) {
 			res.send({
 				errorType: 'content',
 				errorMessage: "There's nothintg to change"
@@ -81,6 +113,28 @@ module.exports = function(app) {
 		//need to add a zipRegex	
 		if (req.body.zip) {
 			update.zip = req.body.zip;
+		}
+		
+		if (req.body.fname) {
+			if (!global.individualNameRegex.test(req.body.fname)){
+				error.push({
+					errorType: "fname",
+					errorMessage: "invalid characters in fname"
+				});
+			} else {
+				update.firstName = req.body.fname;
+			}
+		}
+		
+		if (req.body.lname) {
+			if (!global.individualNameRegex.test(req.body.lname)){
+				error.push({
+					errorType: "lname",
+					errorMessage: "invalid characters in lname"
+				});
+			} else {
+				update.lastName = req.body.lname;
+			}
 		}
 		
 		//if there is lat and lng in the update object, 
