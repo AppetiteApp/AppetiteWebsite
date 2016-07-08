@@ -43,34 +43,7 @@ $routeProvider
 
 }]);
 
-//stores stuff
-//userService, once completed, should act like a cookie
-//READMEEE:
-    //atm, you can inject this and set $scope = userService.signout to call the signout function
-myApp.service('userService', function(){
-    var self = this;
-    self.signedIn = true;
-    
-    // //stores the uid, email, and other stuff of user when user first gets to page
-    // self.currentUser;
-    // if (self.currentUser) {
-        
-    // } else if (firebase.auth().currentUser != null) {
-    //      self.currentUser.uid = firebase.auth().currentUser.uid;
-        
-    // } else {
-    //     self.signedIn = false;
-    //     self.currentUser = undefined;
-    // }
-    
-    self.signout = firebase.auth().signOut().then(function() {
-        self.signedIn = false;
-    }, function(error) {
-        console.log(error);
-    });
-    
 
-});
 
 //for controlling regex, to be addedS
 myApp.service('regexService', function(){
@@ -88,7 +61,7 @@ myApp.service('regexService', function(){
 });
 
 //login, signup
-myApp.controller('homeController', function($scope, $log, $location, regexService, userService) {
+myApp.controller('homeController', function($scope, $log, $location, regexService) {
     $scope.user = {};
     $log.log("Connected");
     $scope.warnings = {};
@@ -98,11 +71,8 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
             $log.log("onAuthStateChanged: ");
             $log.log(user);
             $scope.currentUser = user;
-            userService.signedIn = true;
         } else {
             $log.log("onAuthStateChanged: no user");
-            userService.signedIn = false;
-
         }
     });
     
@@ -116,15 +86,12 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
                 $log.log("login function resolved");
                 $log.log(firebase.auth().currentUser);
                 $location.path("/browse");
-                userService.signedIn = true;
-
             }
             ,function(error) {
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 $log.log(errorCode + ": " + errorMessage);
                 $scope.warnings.loginfail = true;
-                userService.signedIn = false;
             });
 
     };
@@ -142,7 +109,6 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
                 });
                 $log.log(firebase.auth().currentUser);
                 $location.path('/account');
-                userService.signedIn = true;
             },
             function(error) {
   		// Handle Errors here. omg why isn't this code running...
@@ -150,7 +116,6 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
   		    var errorMessage = error.message;
   		    console.log(errorCode + ": " + errorMessage);
   		    $scope.warnings.createfail = true;
-  		    userService.signedIn = false;
 	    });
 	    
     };
@@ -170,13 +135,12 @@ myApp.controller('accountController', function($scope, $log, $location, $http){
         $location.path('/login');
         return;
     }
-    $log.log(firebaseUser.uid);
     firebase.database().ref('users/' + $scope.user.uid).once('value', function(snapshot){
         $log.log(snapshot.val());
         $scope.$apply(function(){
           	$scope.user.firstName = snapshot.val().firstName;
 	        $scope.user.lastName = snapshot.val().lastName;
-	        $scope.user.email = snapshot.val().email;
+	        //$scope.user.email = snapshot.val().email;
 	        $scope.user.phone = snapshot.val().phone;
 	        $scope.user.address = snapshot.val().address;
 	        $scope.user.mealsMade = [];
@@ -184,18 +148,14 @@ myApp.controller('accountController', function($scope, $log, $location, $http){
 	        if (snapshot.val().mealsMade){
                 snapshot.val().mealsMade.forEach(function(mealId){
 	                firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
-	                    if (!snapshot.val().deleted){
-	                        $scope.$apply(function(){
-	                            $scope.user.mealsMade.push(snapshot.val()); 
-	                        });
-	                    }
+	                    $scope.user.mealsMade.push(snapshot.val()); 
 	                });
 	            });	            
 	        }
 
 
 	        
-	        $scope.user.mealsMade = snapshot.val().mealsMade;                
+	        //$scope.user.mealsMade = snapshot.val().mealsMade;                
         });
     });
     
@@ -272,7 +232,7 @@ myApp.controller('newDishController', function($scope, $log, $http, $location){
         })
         .then(function(res){
             $log.log(res);
-            if (res.data === "ok") {
+            if (res.data.message === "ok") {
                 $scope.submitSuccess = true;
                 dish.dishName = "";
                 dish.description = "";
@@ -296,25 +256,19 @@ myApp.controller('browseController', function($scope, $log, $location){
     
     //if user isn't logged in, then go to home
     //ask for a promise here, or use $cookie
-    // if(!firebase.auth().currentUser) {
-    //     $location.path('/');
-    //     return;
-    // }
-    
-
-    
+    if(!firebase.auth().currentUser) {
+        $location.path('/');
+        return;
+    }
 
     $scope.dishes = [];
     $scope.markers = [];
-    
-
-    
-            	
+   	
     firebase.database().ref('dish/').orderByChild("dataAdded").once("value", function(snapshot){
         var allDishes = snapshot.val();
         $log.info(allDishes);
         for (var key in allDishes){
-            if (!allDishes[key]["deleted"] & allDishes[key]["uid"] !== firebase.auth().currentUser.uid){
+            if (!allDishes[key]["deleted"] & allDishes[key]["ownerid"] !== firebase.auth().currentUser.uid){
                 
                     $scope.dishes.unshift({
                         dishName    : allDishes[key]["dishName"],
@@ -323,29 +277,30 @@ myApp.controller('browseController', function($scope, $log, $location){
                         price       : allDishes[key]["price"],
                         quantity    : allDishes[key]["quantity"],
                         time        : allDishes[key]["time"],
-                        address     : allDishes[key]["location"],
+                        address     : allDishes[key]["address"],
                         owner       : allDishes[key]["owner"],
                         key         : key
                     });                     
                 
-                var marker = new google.maps.Marker({
-                    position: {
-                        lat: allDishes[key]["lat"],
-                        lng: allDishes[key]["long"]
-                    },
-                    title: allDishes[key]["dishName"]
-                }) ;
-                    $scope.markers.push(marker);   
+                // var marker = new google.maps.Marker({
+                //     position: {
+                //         lat: allDishes[key]["lat"],
+                //         lng: allDishes[key]["long"]
+                //     },
+                //     title: allDishes[key]["dishName"]
+                // }) ;
+                //     $scope.markers.push(marker);   
 
             } //end if  
         } // end forEach loop
         
-        $scope.markers.forEach(function(pin){
+        
+        // $scope.$apply(function(){
+        //     $scope.markers.forEach(function(pin){
+        //         pin.setMap($scope.map); 
 
-                pin.setMap($scope.map); 
-
-        });
-
+        //     });
+        // });
         
         
     });

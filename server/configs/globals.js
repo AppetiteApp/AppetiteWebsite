@@ -7,10 +7,11 @@ module.exports = {
 	passwordRegex		: /^[a-zA-Z0-9:.?!@#$%^&*\-=_+\'\";<>,\/]+$/,
 	individualNameRegex : /^[\w\d]+$/i,
 	commentRegex		: /^[\w\d.,:;"'-=_+!@#$%^&*0-9 ]+$/i,
-	dishNameRegex		: /^[\w\d ()0-9]+$/,
+	dishNameRegex		: /^[\w\d -()0-9]+$/,
 	addressRegex		: /^[\w\d.,:;"'-=_+!@#$%^&*0-9 ]+$/i,
 	emailRegex			: /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-	priceRegex			: /^\$?[0-9]+\.?[0-9]{0,}$/
+	priceRegex			: /^\$?[0-9]+\.?[0-9]{0,}$/,
+	latLngRegex         : /^-?[0-9]{1,3}\.?[0-9]{0,}$/
 
 };
 // global.onlyIntsRegex    = /^[0-9]+$/;

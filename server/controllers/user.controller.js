@@ -1,8 +1,6 @@
 var globals = require('../configs/globals');
 
 module.exports = function(app) {
-
-	
 	//function to submit a dish
 	//when user submits a dish via a post request to "/submitdish"
 	//set a new dish key & store stuff in the dish/ ref in firebase
@@ -10,15 +8,10 @@ module.exports = function(app) {
 	//check for latlng key in req.body, if there is, store it in the dish; if not, get latlng from user & store in dish
 	//TODO: add regex control
 	app.post('/newdish', function(req, res, next){
-
-		//console.log(req);
 		var data = req.body;
 		var error = [];
 		var warnings = [];
-		var dishObject = {
-			date: Date()
-		};
-		
+
 		if (!data.uid) {
 			res.end({
 				errorType	: "uid",
@@ -26,6 +19,11 @@ module.exports = function(app) {
 			});
 			return;
 		}
+		
+		var dishObject = {
+			dateAdded	: Date(),
+			ownerid		: data.uid
+		};
 		
 		//check if dishName is present and valid
 		if (!data.dishName) {
@@ -54,7 +52,7 @@ module.exports = function(app) {
 				errorMessage: "Invalid characters in location"
 			});
 		} else {
-			dishObject.location = data.location;
+			dishObject.address = data.location;
 		}
 		
 		//check if description is present and valid
@@ -99,7 +97,6 @@ module.exports = function(app) {
 			dishObject.time = data.time;
 		}
 		
-		
 		//check if portions is entered, if not, set at 1
 		if (!data.portions) {
 			warnings.push({
@@ -128,6 +125,15 @@ module.exports = function(app) {
 			dishObject.ingredients = data.ingredients;
 		}
 		
+		//if no errors, then continue
+		if (error.length > 0 ){
+			res.end({
+				error: error,
+				message: "not updated because of error"
+			});
+			return;
+		}
+		
 		//go and make a new dish under "dish" in db
 		var newDishRef = global.dishRef.push();
 		var newDishKey = newDishRef.key;
@@ -135,7 +141,7 @@ module.exports = function(app) {
 		console.log(dishObject);
 		newDishRef.set(dishObject);
 		
-		if(req.body.lng & req.body.lat){
+		if(req.body.lng && req.body.lat){
 			newDishRef.update ({
 				lat: req.body.lat,
 				lng: req.body.lng
@@ -143,9 +149,9 @@ module.exports = function(app) {
 		} else {
 			global.userRef.child(req.body.uid).once('value', function(snapshot){
 				if (!snapshot.val().lat || !snapshot.val().lng){
-					error.push({
-						errorType: "latlng",
-						errorMessage: "User doesn't have a lat/lng and user didn't specify a lat/lng with dish"
+					warnings.push({
+						warningType: "latlng",
+						warningMessage: "User doesn't have a lat/lng and user didn't specify a lat/lng with dish"
 					});
 				} else {
 					newDishRef.update({
@@ -175,7 +181,8 @@ module.exports = function(app) {
 			// });
 			
 			newDishRef.update({
-				"owner": snapshot.val().firstName
+				"owner": snapshot.val().firstName,
+				"phone": snapshot.val().phone
 			});
 			
 		});
@@ -188,19 +195,7 @@ module.exports = function(app) {
 		//update user's mealsMade
 	});
 	
-	
-	//to edit a dish....will complete first thing tmr but I'm dozing offf
-	       // $http.post('/api/dish/edit', {
-        //     key         : dish.key,
-        //     delete      : dish.delete,
-        //     dishName    : dish.dishName,
-        //     address     : dish.address,
-        //     uid         : $scope.user.uid,
-        //     description : dish.description,
-        //     price       : dish.price,
-        //     time        : dish.time,
-        //     portions    : dish.portions
-        // })
+	//to edit a dish; checks for invalid characters and not present info
 	app.post('/api/dish/edit', function(req, res){
 		//if no uid sent, return error
 		if (!req.body.uid) {
@@ -211,22 +206,17 @@ module.exports = function(app) {
 			return;
 		}
 
-		//Promises are bomb, don't get stuck in callback hell!		
-		// global.userRef.child(req.body.uid).once("value", function(snapshot){
-			
-		// });
-		
 		//if no uid sent, return error
 		if (!req.body.key) {
 			res.end({
-				errorType: "uid",
-				errorMessage: "No uid sent"
+				errorType: "key",
+				errorMessage: "No dishkey sent"
 			});
 			return;
 		}
 		
-		if (!req.body.zip & !req.body.lat & !req.body.lng & !req.body.phone & !req.body.address & !req.body.fname 
-			& !req.body.lname) {
+		if (!req.body.delete && !req.body.dishName && !req.body.address && !req.body.phone && !req.body.description && 
+			!req.body.price  && !req.body.time	   && !req.body.portion && req.body.lng	   && !req.body.lat) {
 			res.end({
 				errorType: 'content',
 				errorMessage: "There's nothing to change"
@@ -234,12 +224,118 @@ module.exports = function(app) {
 			return;
 		}
 		
+		var data = req.body;
 		var update = {};
 		var error = [];
+		var warnings = [];
+		
+		if (data.delete === true || data.delete === false) {
+			update.delete = data.delete;
+		}
+		
+		if (data.dishName) {
+			if (globals.dishNameRegex.test(data.dishName)){
+				update.dishName = data.dishName;
+			} else {
+				error.push({
+					errorType: "dishName",
+					errorMessage: "invalid characters in dishName"
+				});
+			}
+		}
+		
+		if (data.address) {
+			if (globals.addressRegex.test(data.address)){
+				update.address = data.address;
+			} else {
+				error.push({
+					errorType: "address",
+					errorMessage: "invalid characters in address"
+				});
+			}
+		}
+
+		if (data.phone) {
+			if (globals.phoneRegex.test(data.phone)){
+				update.phone = data.phone;
+			} else {
+				error.push({
+					errorType: "phone",
+					errorMessage: "invalid characters in phone"
+				});
+			}
+		}
+		
+		if (data.description) {
+			if (globals.commentRegex.test(data.description)){
+				update.description = data.description;
+			} else {
+				warnings.push({
+					warningType	: "description",
+					warningMessage: "invalid characters in description"
+				});
+				update.description = "";
+			}
+		}
+		
+		if (data.price) {
+			if (globals.priceRegex.test(data.price)){
+				update.price = data.price;
+			} else {
+				error.push({
+					errorType: "price",
+					errorMessage: "invalid characters in price"
+				});
+			}
+		}
+		
+		if (data.time) {
+			update.time = data.time;
+		}
+		
+		if (data.portion) {
+			if (globals.onlyIntsRegex.test(data.portion)){
+				update.portion = data.portion;
+			} else {
+				error.push({
+					warningType: "portion",
+					warningMessage: "invalid characters in portion"
+				});
+				update.portion = 1;
+			}
+		}
+		
+		if (data.lng & data.lat) {
+			if (globals.latLngRegex.test(data.lng) && globals.latLngRegex.test(data.lat)){
+				update.lng = data.lng;
+				update.lat = data.lat;
+			} else {
+				error.push({
+					errorType: "latlng",
+					errorMessage: "invalid characters in latlng"
+				});
+			}
+		}
+		
+		global.dishRef.child(data.key).once("value", function(snapshot){
+			if (snapshot.val().ownerid !== data.uid) {
+				res.end({
+					errorType: "dishkey",
+					errorMessage: "dish in question does not belong to you"
+				});
+				return;
+			} else {
+				global.dishRef.child(data.key).update(update);
+				res.send({
+					error: error,
+					warnings: warnings,
+					message: "updated"
+				});
+			} 	
+		});
+		
+		
 	});
-	
-	
-	
 	
 	//edit a user's account
 	//check if the a valid change is in req.body, if yes then update
@@ -350,10 +446,13 @@ module.exports = function(app) {
 		} else {
 			res.send({
 				status: 500,
-				message: "invalid user of api",
+				message: "invalid use of api",
 				error: error
 			});
 		}
 		
 	});
+
+	
+	
 };
