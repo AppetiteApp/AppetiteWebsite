@@ -219,6 +219,28 @@ myApp.controller('accountController', function($scope, $log, $location, $http){
     };
     
     
+    //note: must have these things when injecting
+    $scope.editDish = function(dish){
+        $http.post('/api/dish/edit', {
+            key         : dish.key,
+            delete      : dish.delete,
+            dishName    : dish.dishName,
+            address     : dish.address,
+            uid         : $scope.user.uid,
+            description : dish.description,
+            price       : dish.price,
+            time        : dish.time,
+            portions    : dish.portions
+        })
+        .then(function(data){
+            console.log(data);
+        },
+        function(err){
+            console.log(err);
+        });
+    };
+    
+    
     
     
 
@@ -245,18 +267,20 @@ myApp.controller('newDishController', function($scope, $log, $http, $location){
             description : dish.description,
             price       : dish.price,
             time        : dish.time,
-            portions    : dish.portions || 1
+            portions    : dish.portions || 1,
+            ingredients : dish.ingredients || ""
         })
         .then(function(res){
             $log.log(res);
-            if (res.data === "success") {
+            if (res.data === "ok") {
                 $scope.submitSuccess = true;
                 dish.dishName = "";
-                dish.location = "";
                 dish.description = "";
                 dish.price = "";
                 dish.time = "";
                 dish.portions = "";
+                dish.location = "";
+                dish.ingredients = "";
             }
         }, function(err){
             console.log(err);
