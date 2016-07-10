@@ -1,0 +1,166 @@
+
+
+
+<div class="background">
+  <!--<form align="center" method="post" action="index.html">
+    <input type="text" ng-model="email" placeholder="Email">
+    <p><input type="password" ng-model="password" placeholder="Password"></p>
+    <p><input type="submit" value="Login"></p>
+    <a href="#/signup">
+      <input type="submit" value="Create Account">
+    </a>
+  </form>-->
+    <!-- <div align="center" class="quotes">
+        <p>"Appetite saved my life"</p>
+        <p>-Monica</p>
+    </div> -->
+
+    <div align="center" class="homebuttons">
+
+        <div class="morph-button morph-button-modal morph-button-modal-2 morph-button-fixed" id="buttonpadding">
+            <button type="button">Login</button>
+  	        <div class="morph-content">
+  	            <div>
+  			        <div class="content-style-form content-style-form-1">
+  			            <span class="icon icon-close">Close the dialog</span>
+  			            <h2>Login</h2>
+  			            <div align="center" class="alert-warning" ng-show="warnings.existingUser">{{warnings.existingUser}}</div>
+  			            <form ng-submit="login(user)" align="center">
+  				            <p><label>Email</label><input type="text" ng-model="user.email" /></p>
+  				            <p><label>Password</label><input type="password" ng-model="user.password" /></p>
+  				            <p align="center"><button>Login</button></p>
+  				        </form>
+  			        </div>
+  	        </div>
+          </div>
+	    </div><!-- morph-button -->
+
+        <div class="morph-button morph-button-modal morph-button-modal-2 morph-button-fixed" id="buttonpadding">
+            <button type="button">Join appetite</button>
+                <div class="morph-content">
+                    <div>
+                        <div class="content-style-form content-style-form-1">
+                            <span class="icon icon-close">Close the dialog</span>
+                            <div class="alert-warning" ng-show="warnings.existingUser">{{warnings.existingUser}}</div>
+                            <form ng-submit="signup(user)"align="center">
+                                <p><label>Email</label><input type="text" ng-model="user.email"/></p>
+                                <p><label>Password</label><input type="password" ng-model="user.password"/></p>
+                                <p><label>Confirm Password</label><input type="password" /></p>
+                                <p align="center"><button>Join Appetite</button></p>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div><!-- morph-button -->
+     </div>
+</div> <!-- background  --->
+
+<div>
+    <!-- main logo -->
+    <div align="center" class="mainlogo">
+        <img src="/imgs/AppetiteLogo2.jpg" height="200px" width="450px">
+    </div>
+    <div class="description" align="center">
+        <p>Appetite is a social platform for people to buy and sell the meals that they prepare in their own kitchens</p>
+    </div>
+    <!-- youtube video -->
+    <div class="video" align="center">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/BEcIlPAScPU" frameborder="0" allowfullscreen></iframe>
+    </div>
+</div>
+
+<!-- Chef hat & the app -->
+<div class="logo" align="center">
+    <img src="/imgs/FadedLogo.jpg" height="150px" width="120px">
+</div>
+    <p class="ourmission">The App</p>
+    <div align="center">
+        <div class="appscreenshotcontainer">
+          <img class="appscreenshots" src="/imgs/WebsitePhoto2.png" height="500" width="250">
+          See what's cooking near you.
+          <br></br>
+        </div>
+        <div class="appscreenshotcontainer">
+          <img class="appscreenshots" src="/imgs/WebsitePhoto1.png" height="500" width="250">
+          Select a dish for more info and click to order.
+        </div>
+        <div class="appscreenshotcontainer">
+          <img class="appscreenshots" src="/imgs/WebsitePhoto3.png" height="500" width="250">
+          Posting a meal is a breeze.
+          <br></br>
+        </div>
+    </div>
+
+  <!-- Chef hat & our team -->
+
+<script src="/js/classie.js"></script>
+<script src="/js/uiMorphingButton_fixed.js"></script>
+<script>
+  (function() {
+    var docElem = window.document.documentElement, didScroll, scrollPosition;
+
+    // trick to prevent scrolling when opening/closing button
+    function noScrollFn() {
+      window.scrollTo( scrollPosition ? scrollPosition.x : 0, scrollPosition ? scrollPosition.y : 0 );
+    }
+
+    function noScroll() {
+      window.removeEventListener( 'scroll', scrollHandler );
+      window.addEventListener( 'scroll', noScrollFn );
+    }
+
+    function scrollFn() {
+      window.addEventListener( 'scroll', scrollHandler );
+    }
+
+    function canScroll() {
+      window.removeEventListener( 'scroll', noScrollFn );
+      scrollFn();
+    }
+
+    function scrollHandler() {
+      if( !didScroll ) {
+        didScroll = true;
+        setTimeout( function() { scrollPage(); }, 60 );
+      }
+    };
+
+    function scrollPage() {
+      scrollPosition = { x : window.pageXOffset || docElem.scrollLeft, y : window.pageYOffset || docElem.scrollTop };
+      didScroll = false;
+    };
+
+    scrollFn();
+
+    [].slice.call( document.querySelectorAll( '.morph-button' ) ).forEach( function( bttn ) {
+      new UIMorphingButton( bttn, {
+        closeEl : '.icon-close',
+        onBeforeOpen : function() {
+          // don't allow to scroll
+          noScroll();
+        },
+        onAfterOpen : function() {
+          // can scroll again
+          canScroll();
+        },
+        onBeforeClose : function() {
+          // don't allow to scroll
+          noScroll();
+        },
+        onAfterClose : function() {
+          // can scroll again
+          canScroll();
+        }
+      } );
+    } );
+
+    // for demo purposes only
+    [].slice.call( document.querySelectorAll( 'form button' ) ).forEach( function( bttn ) {
+      bttn.addEventListener( 'click', function( ev ) {
+          //ev.preventDefault();
+          console.log("default prevented?");
+
+      } );
+    } );
+  })();
+</script>

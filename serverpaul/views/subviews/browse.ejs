@@ -1,0 +1,252 @@
+<ul class="nav" ng-controller="navbarController">
+  <a align="center" href="#/home"><li>Home</li></a>
+  <a align="center" href="#/aboutus"><li>About Us</li></a>
+  <a align="center" href="#/home"><li><img height="35px" src="/imgs/chefhat.png"></li></a>
+  <a align="center" href="#/browse"><li>Browse</li></a>
+  <a align="center" href="#/account"><li>My Account</li></a>
+
+</ul>
+
+
+
+<div id="itemscontainer">
+  <div id="innercontainer">
+  <div ng-repeat="dish in dishes" id="repeateditem">
+      <div id="listitem" ng-click="showDetails = !showDetails">
+
+        <div id="dishbanner">
+          <div class="dishthumbnail">
+            <img class="img-thumbnail" src="/imgs/gordon.jpg" />
+          </div>
+
+            <div id="dishtitle">{{dish.dishName}}</div>
+            <div id="dishprice">${{dish.price}}</div>
+        </div>
+    </div>
+    <div ng-show="showDetails" id="itemdetails">
+        <p align="center">{{dish.description}}</p>
+        <div id="dishtime">{{dish.time}}</div>
+        <div id="dishphone">{{dish.phone}}</div>
+        <div id="dishlocation">{{dish.address}}</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="instruction">
+  Browse for dishes near you and click for more info.  Call or text the cook to arrange a rendezvous!
+</div>
+
+
+
+<div class="morph-button morph-button-modal1 morph-button-modal-2 morph-button-fixed" id="submitdishbutton">
+    <button type="button">Sell A Dish!</button>
+    <div class="morph-content">
+        <div>
+        <div class="content-style-form content-style-form-1">
+            <span class="icon icon-close">Close the dialog</span>
+            <h2>Sell a Dish</h2>
+            <div class="alert-warning" ng-show="warnings.existingUser">{{warnings.existingUser}}</div>
+            <form ng-submit="login(user)" align="center">
+              <p align="center"><label>Dish</label><input type="text" ng-model="dish." /></p>
+              <p align="center"><label>Description</label><input type="text" ng-model="dish." /></p>
+              <p align="center"><label>Price</label><input type="text" ng-model="dish." /></p>
+              <p align="center"><label>Phone</label><input type="text" ng-model="dish." /></p>
+              <p align="center"><label>Location</label><input type="text" ng-model="dish." /></p>
+              <p align="center"><label>Time</label><input type="text" ng-model="dish." /></p>
+              <p align="center"><button>Post Dish</button></p>
+          </form>
+        </div>
+      </div>
+    </div>
+</div><!-- morph-button -->
+
+<div id="map">
+
+</div>
+
+
+
+<style>
+  button.accordion {
+      background-color: #eee;
+      color: #444;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 15px;
+      transition: 0.4s;
+  }
+
+  div.panel {
+      display: none;
+  }
+
+  div.panel.show {
+      display: block !important;
+  }
+</style>
+
+<!--the original one-->
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0&callback="-->
+<!--async defer>-->
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0&callback=initMap"
+async defer></script>
+
+
+<script>
+//Note to Paul:
+    // not working because this only adds eventlisteners to elements already on page
+    // but the dishes are actually added later
+    // maybe put this into Angular
+  var acc = document.getElementsByClassName("accordion");
+  var i;
+
+  for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener('click', function() {
+          this.classList.toggle("active");
+          this.nextElementSibling.classList.toggle("show");
+      }, false);
+
+    //   acc[i].onclick = function(){
+    //       this.classList.toggle("active");
+    //       this.nextElementSibling.classList.toggle("show");
+    // }
+  }
+
+    var map;
+
+    function initMap() {
+        var mapDiv = document.getElementById('map');
+        map = new google.maps.Map(mapDiv, {
+            center: {lat: 45.5017, lng: -73.5673},
+            zoom: 13,
+            streetViewControl: false,
+            mapTypeControl: false
+        });
+
+        var marker = new google.maps.Marker({
+            position: {lat:45.5054445, lng:-73.5789828},
+            map: map,
+            title: 'Hello World!'
+        });
+        mapHelper(map);
+
+     }
+
+
+    var mapHelper = function(map){
+        var dishes = [];
+        var markers = [];
+        firebase.database().ref('dish/').orderByChild("dataAdded").on("value", function(snapshot){
+            var allDishes = snapshot.val();
+            for (var key in allDishes){
+                if (!allDishes[key]["deleted"] & allDishes[key]["uid"] !== firebase.auth().currentUser.uid){
+
+                    dishes.unshift({
+                        dishName    : allDishes[key]["dishName"],
+                        description : allDishes[key]["description"],
+                        phone       : allDishes[key]["phone"],
+                        price       : allDishes[key]["price"],
+                        quantity    : allDishes[key]["quantity"],
+                        time        : allDishes[key]["time"],
+                        address     : allDishes[key]["location"],
+                        owner       : allDishes[key]["owner"],
+                        key         : key
+                    });
+
+                    var marker = new google.maps.Marker({
+                        position: {
+                            lat: allDishes[key]["lat"],
+                            lng: allDishes[key]["long"]
+                        },
+                        title: allDishes[key]["dishName"]
+                    });
+
+                    markers.push(marker);
+
+                } //end if
+            } // end forEach loop
+
+            markers.forEach(function(pin){
+                pin.setMap(map);
+            });
+        });
+    }; //end mapHelper function
+
+</script>
+
+<script src="/js/classie.js"></script>
+<script src="/js/uiMorphingButton_fixed.js"></script>
+<script>
+  (function() {
+    var docElem = window.document.documentElement, didScroll, scrollPosition;
+
+    // trick to prevent scrolling when opening/closing button
+    function noScrollFn() {
+      window.scrollTo( scrollPosition ? scrollPosition.x : 0, scrollPosition ? scrollPosition.y : 0 );
+    }
+
+    function noScroll() {
+      window.removeEventListener( 'scroll', scrollHandler );
+      window.addEventListener( 'scroll', noScrollFn );
+    }
+
+    function scrollFn() {
+      window.addEventListener( 'scroll', scrollHandler );
+    }
+
+    function canScroll() {
+      window.removeEventListener( 'scroll', noScrollFn );
+      scrollFn();
+    }
+
+    function scrollHandler() {
+      if( !didScroll ) {
+        didScroll = true;
+        setTimeout( function() { scrollPage(); }, 60 );
+      }
+    };
+
+    function scrollPage() {
+      scrollPosition = { x : window.pageXOffset || docElem.scrollLeft, y : window.pageYOffset || docElem.scrollTop };
+      didScroll = false;
+    };
+
+    scrollFn();
+
+    [].slice.call( document.querySelectorAll( '.morph-button' ) ).forEach( function( bttn ) {
+      new UIMorphingButton( bttn, {
+        closeEl : '.icon-close',
+        onBeforeOpen : function() {
+          // don't allow to scroll
+          noScroll();
+        },
+        onAfterOpen : function() {
+          // can scroll again
+          canScroll();
+        },
+        onBeforeClose : function() {
+          // don't allow to scroll
+          noScroll();
+        },
+        onAfterClose : function() {
+          // can scroll again
+          canScroll();
+        }
+      } );
+    } );
+
+    // for demo purposes only
+    [].slice.call( document.querySelectorAll( 'form button' ) ).forEach( function( bttn ) {
+      bttn.addEventListener( 'click', function( ev ) {
+          //ev.preventDefault();
+          console.log("default prevented?");
+
+      } );
+    } );
+  })();
+</script>
