@@ -15,43 +15,42 @@
         <p>-Monica</p>
     </div>
 
-    <div align="center" class="homebuttons" >
-        <div class="morph-button morph-button-modal morph-button-modal-2 morph-button-fixed">
+    <div align="center" class="homebuttons">
+
+        <div class="morph-button morph-button-modal morph-button-modal-2 morph-button-fixed" id="buttonpadding">
             <button type="button">Login</button>
   	        <div class="morph-content">
   	            <div>
   			        <div class="content-style-form content-style-form-1">
   			            <span class="icon icon-close">Close the dialog</span>
   			            <h2>Login</h2>
-  			            <div class="alert-warning" ng-show="warnings.existingUser">{{warnings.existingUser}}</div>
+  			            <div align="center" class="alert-warning" ng-show="warnings.existingUser">{{warnings.existingUser}}</div>
   			            <form ng-submit="login(user)">
   				            <p><label>Email</label><input type="text" ng-model="user.email" /></p>
   				            <p><label>Password</label><input type="password" ng-model="user.password" /></p>
   				            <p><button>Login</button></p>
   				        </form>
   			        </div>
-  		        </div>
   	        </div>
+          </div>
 	    </div><!-- morph-button -->
 
-        <div class="morph-button morph-button-modal morph-button-modal-2 morph-button-fixed">
+        <div class="morph-button morph-button-modal morph-button-modal-2 morph-button-fixed" id="buttonpadding">
             <button type="button">Join appetite</button>
                 <div class="morph-content">
                     <div>
                         <div class="content-style-form content-style-form-1">
                             <span class="icon icon-close">Close the dialog</span>
-                            <h2>Sign Up</h2>
                             <div class="alert-warning" ng-show="warnings.existingUser">{{warnings.existingUser}}</div>
-
                             <form ng-submit="signup(user)">
                                 <p><label>Email</label><input type="text" ng-model="user.email"/></p>
                                 <p><label>Password</label><input type="password" ng-model="user.password"/></p>
                                 <p><label>Confirm Password</label><input type="password" /></p>
-                                <p><button>Sign Up</button></p>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                                <p><button>Join Appetite</button></p>
+                          </form>
+                      </div>
+                  </div>
+              </div>
           </div><!-- morph-button -->
      </div>
 </div> <!-- background  --->
@@ -88,15 +87,6 @@
 </div>
 
   <!-- Chef hat & our team -->
-<div class="logo" align="center">
-    <img src="/imgs/FadedLogo.jpg" height="150px" width="120px">
-        <p class="ourmission">Our Team</p>
-    <div>
-        <img class="appscreenshots" src="/imgs/WebsiteKristina.png" height="500" width="250">
-        <img class="appscreenshots" src="/imgs/WebsiteSean.png" height="500" width="250">
-        <img class="appscreenshots" src="/imgs/WebsitePaul.png" height="500" width="300">
-    </div>
-</div>
 
 <script src="/js/classie.js"></script>
 <script src="/js/uiMorphingButton_fixed.js"></script>
@@ -161,10 +151,10 @@
 
     // for demo purposes only
     [].slice.call( document.querySelectorAll( 'form button' ) ).forEach( function( bttn ) {
-      bttn.addEventListener( 'click', function( ev ) { 
-          //ev.preventDefault(); 
+      bttn.addEventListener( 'click', function( ev ) {
+          //ev.preventDefault();
           console.log("default prevented?");
-          
+
       } );
     } );
   })();

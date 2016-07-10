@@ -8,16 +8,9 @@ myApp.config(['$routeProvider', function($routeProvider){
 //testing to see if this works
 $routeProvider
 
-  .when('/buydish', {
-    templateUrl: '/buydish',
-    controller: 'buydishController'
-  })
   .when('/', {
     templateUrl: '/home',
     controller: 'homeController'
-  })
-  .when('/submitdish', {
-    templateUrl: '/submitdish'
   })
   .when('/account', {
       templateUrl: '/account',
@@ -26,10 +19,6 @@ $routeProvider
   .when('/browse', {
       templateUrl: '/browse',
       controller: 'browseController'
-  })
-  .when('/newdish', {
-      templateUrl: '/newdish',
-      controller: 'newDishController'
   })
   .when('/aboutus', {
       templateUrl: '/aboutus'
@@ -148,7 +137,11 @@ myApp.controller('accountController', function($scope, $log, $location, $http){
 	        if (snapshot.val().mealsMade){
                 snapshot.val().mealsMade.forEach(function(mealId){
 	                firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
-	                    $scope.user.mealsMade.push(snapshot.val()); 
+	                    snapshot.val().mealId = mealId;
+	                    $scope.$apply(function(){
+	                        $scope.user.mealsMade.push(snapshot.val());
+	                    });
+	                         
 	                });
 	            });	            
 	        }
@@ -207,52 +200,8 @@ myApp.controller('accountController', function($scope, $log, $location, $http){
 });
 
 
-//for submitting a dish, if not logged in, then go to home page
-myApp.controller('newDishController', function($scope, $log, $http, $location){
-    $scope.dish = {};
-    
-    //submits a dish
-    //on success, clear stuff and show div that says submitSuccess and go to manage
-    //on fail, show div that warns that submission failed
-    $scope.submit = function(dish){
-        if (!firebase.auth().currentUser){
-            $location.path('/');
-            return;
-        }
-        var uid = firebase.auth().currentUser.uid;
-        $http.post('/newdish', {
-            dishName    : dish.dishName,
-            location    : dish.location,
-            uid         : uid,
-            description : dish.description,
-            price       : dish.price,
-            time        : dish.time,
-            portions    : dish.portions || 1,
-            ingredients : dish.ingredients || ""
-        })
-        .then(function(res){
-            $log.log(res);
-            if (res.data.message === "ok") {
-                $scope.submitSuccess = true;
-                dish.dishName = "";
-                dish.description = "";
-                dish.price = "";
-                dish.time = "";
-                dish.portions = "";
-                dish.location = "";
-                dish.ingredients = "";
-            }
-        }, function(err){
-            console.log(err);
-            $scope.error = "Failed to load data, please refresh page";
-        });
-    };
-    
-     
-});
 
-
-myApp.controller('browseController', function($scope, $log, $location){
+myApp.controller('browseController', function($scope, $log, $location, $http){
     
     //if user isn't logged in, then go to home
     //ask for a promise here, or use $cookie
@@ -269,7 +218,7 @@ myApp.controller('browseController', function($scope, $log, $location){
         $log.info(allDishes);
         for (var key in allDishes){
             if (!allDishes[key]["deleted"] & allDishes[key]["ownerid"] !== firebase.auth().currentUser.uid){
-                
+               $scope.$apply(function(){
                     $scope.dishes.unshift({
                         dishName    : allDishes[key]["dishName"],
                         description : allDishes[key]["description"],
@@ -280,7 +229,8 @@ myApp.controller('browseController', function($scope, $log, $location){
                         address     : allDishes[key]["address"],
                         owner       : allDishes[key]["owner"],
                         key         : key
-                    });                     
+                    });  
+               }); 
                 
                 // var marker = new google.maps.Marker({
                 //     position: {
@@ -294,35 +244,65 @@ myApp.controller('browseController', function($scope, $log, $location){
             } //end if  
         } // end forEach loop
         
-        
-        // $scope.$apply(function(){
-        //     $scope.markers.forEach(function(pin){
-        //         pin.setMap($scope.map); 
-
-        //     });
-        // });
-        
-        
     });
     
-
+    $scope.dish = {};
     
+    //submits a dish
+    //on success, clear stuff and show div that says submitSuccess and go to manage
+    //on fail, show div that warns that submission failed
+    $scope.submitDish = function(dish){
+        if (!firebase.auth().currentUser){
+            $location.path('/');
+            return;
+        }
+        var uid = firebase.auth().currentUser.uid;
+        $http.post('/newdish', {
+            dishName    : dish.dishName,
+            location    : dish.location,
+            uid         : uid,
+            description : dish.description,
+            price       : dish.price,
+            time        : {
+                    year    : dish.year,
+                    month   : dish.month,
+                    day     : dish.day,
+                    start   : dish.starttime,
+                    end     : dish.endtime
+                },
+            portions    : dish.portions || 1,
+            ingredients : dish.ingredients || ""
+        })
+        .then(function(res){
+            $log.log(res);
+            if (res.status === 200) {
+                $scope.submitSuccess = true;
+                dish.dishName = "";
+                dish.description = "";
+                dish.price = "";
+                dish.month = "";
+                dish.year = "";
+                dish.day = "";
+                dish.starttime = "";
+                dish.endtime = "";
+                dish.portions = "";
+                dish.location = "";
+                dish.ingredients = "";
+                    $scope.error = res.data.error;
+                    $scope.warnings = res.data.warnings;
+                    $scope.message = res.data.message;    
+                $log.log($scope.error);
+                $log.log(res.data);
+                
+            } else {
+                $log.log(res.status);
+            }
+        }, function(err){
+            console.log(err);
+            $scope.error = "Failed to load data, please refresh page";
+        });
+    };
     
-
-    
-    $log.log($scope.dishes);
-
-
-//should be after loaded... hmmm; ok try to use the ng-model for map        
-        // $scope.markers.forEach(function(pin){
-        //     $scope.$apply(function(){
-        //         pin.setMap($window.map); 
-        //     });
-        // });
-
-    
-    
-
 });
 
 

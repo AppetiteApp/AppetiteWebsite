@@ -13,9 +13,11 @@ module.exports = function(app) {
 		var warnings = [];
 
 		if (!data.uid) {
-			res.end({
-				errorType	: "uid",
-				errorMessage: "You didn't send the userid."
+			res.send({
+				error: {
+					errorType	: "uid",
+					errorMessage: "You didn't send the userid."
+					}	
 			});
 			return;
 		}
@@ -127,7 +129,7 @@ module.exports = function(app) {
 		
 		//if no errors, then continue
 		if (error.length > 0 ){
-			res.end({
+			res.send({
 				error: error,
 				message: "not updated because of error"
 			});
@@ -199,7 +201,7 @@ module.exports = function(app) {
 	app.post('/api/dish/edit', function(req, res){
 		//if no uid sent, return error
 		if (!req.body.uid) {
-			res.end({
+			res.send({
 				errorType: "uid",
 				errorMessage: "No uid sent"
 			});
@@ -208,7 +210,7 @@ module.exports = function(app) {
 
 		//if no uid sent, return error
 		if (!req.body.key) {
-			res.end({
+			res.send({
 				errorType: "key",
 				errorMessage: "No dishkey sent"
 			});
@@ -217,7 +219,7 @@ module.exports = function(app) {
 		
 		if (!req.body.delete && !req.body.dishName && !req.body.address && !req.body.phone && !req.body.description && 
 			!req.body.price  && !req.body.time	   && !req.body.portion && req.body.lng	   && !req.body.lat) {
-			res.end({
+			res.send({
 				errorType: 'content',
 				errorMessage: "There's nothing to change"
 			});
@@ -319,7 +321,7 @@ module.exports = function(app) {
 		
 		global.dishRef.child(data.key).once("value", function(snapshot){
 			if (snapshot.val().ownerid !== data.uid) {
-				res.end({
+				res.send({
 					errorType: "dishkey",
 					errorMessage: "dish in question does not belong to you"
 				});
@@ -340,10 +342,10 @@ module.exports = function(app) {
 	//edit a user's account
 	//check if the a valid change is in req.body, if yes then update
 	app.post('/api/account/edit', function(req, res, next){
-
+		console.log(req.body);
 		//if frontend didn't send uid, return error
 		if (!req.body.uid) {
-			res.end({
+			res.send({
 				errorType: "uid",
 				errorMessage: "No uid sent"
 			});
@@ -355,7 +357,7 @@ module.exports = function(app) {
 		
 		if (!req.body.zip & !req.body.lat & !req.body.lng & !req.body.phone & !req.body.address & !req.body.fname 
 			& !req.body.lname) {
-			res.end({
+			res.send({
 				errorType: 'content',
 				errorMessage: "There's nothing to change"
 			});

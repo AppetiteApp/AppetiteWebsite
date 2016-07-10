@@ -4,12 +4,14 @@
   background-size: cover;
   margin: 0;
   padding: 0;
-  height: 450px;
+  height: 650px;
   background-position:center;
   padding: 7.5% 0;
-
 }
 
+.homebuttons {
+  padding: 10% 0;
+}
 
 body{
   margin: 0;
@@ -18,6 +20,7 @@ body{
 }
 
 .nav{
+  position: fixed;
   background-color: #75d0f4;
   color: #ffffff;
   list-style: none;
@@ -27,6 +30,8 @@ body{
   font-family: Source Sans Pro;
   height: 65px;
   top: 0;
+  width: 100%;
+  z-index: 98;
 }
 
 
@@ -49,9 +54,7 @@ body{
 section {
   color: #fff;
 }
-div {
-  height: 100%;
-}
+
 article {
   position: absolute;
   top: 50%;
@@ -69,21 +72,10 @@ h1 {
   display: table;
   width: 100%;
 }
-.left-half {
-  background-color: #ff9e2c;
-  position: absolute;
-  left: 0px;
-  width: 50%;
-}
-.right-half {
-  background-color: #b6701e;
-  position: absolute;
-  right: 0px;
-  width: 50%;
-}
 
 
 .Button {
+
 	background-color:#44c767;
 	-moz-border-radius:28px;
 	-webkit-border-radius:28px;
@@ -112,23 +104,19 @@ h1 {
 
 }
 
-.homebuttons {
-  padding: 15% 0;
-}
-
-
 .dishselect:hover {
   background-color: #FFFCD1;
 }
-
 
 .quotes {
   text-align:center;
   font-size:25px;
   color:#7f7f7f;
   font-style:italic;
+  padding-top: 20px;
   padding-bottom:1px;
-  height:75px;
+  height:50px;
+  font-family: Source Sans Pro;
 }
 
 .ourmission {
@@ -260,155 +248,12 @@ h1 {
   color:white;
 }
 
-/*.profile-header-img {
-    margin: 0 auto;
-    text-align: center;
-    float: left;
-}
-
-.profile-header-img > img.img-circle {
-    width: 65px;
-    height: 65px;
-    border: 3px solid #75d0f4;
-    position: relative;
-    z-index: 1;
-
-}
-
-.profile-header {
-    margin-top: 43px;
-}
-
-/**
- * Ranking component
-
-.rank-label-container {
-    margin-top: -17px;
-    /* z-index: 1000;
-    text-align: center;
-}
-
-.label.label-default.rank-label {
-    background-color: #75d0f4;
-    padding: 0px 2px 0px 2px;
-    border-radius: 2px;
-    position: relative;
-    z-index: 1;
-}
-*/
-
 .allitems {
   position: relative;
   width: 48%;
   margin-left: 20px;
   top: 10px;
 }
-
-/*#listitem {
-  overflow: visible;
-  height: 65px;
-  text-align: center;
-
-}
-
-#dishbanner {
-
-  position:relative;
-  width: auto;
-  margin-left: 35px;
-  height: 65px;
-  border-radius: 6px;
-  z-index: 0;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  border: 2px  solid #75d0f4;
-  min-height: 65px;
-  line-height:55px;
-  background-color: white;
-}
-
-#dishtitle {
-  color: black;
-  font-family: Source Sans Pro;
-  font-size: 3.0vw;
-  background-color: white;
-  display: inline-block;
-}
-
-#dishtime {
-  color: white;
-  font-family: Source Sans Pro;
-  font-size: 2.0vw;
-  float: bottom;
-  text-align: center;
-  border: 1px solid white;
-  margin-bottom: 1px;
-}
-
-
-#dishphone {
-  color: white;
-  font-family: Source Sans Pro;
-  font-size: 2.0vw;
-  float: bottom;
-  text-align: center;
-  border: 1px solid white;
-  margin-bottom: 1px;
-}
-
-
-
-#dishlocation {
-  color: white;
-  font-family: Source Sans Pro;
-  font-size: 2.0vw;
-  float: bottom;
-  text-align: center;
-  border: 1px solid white;
-}
-
-
-
-#dishprice {
-  color: black;
-  font-family: Source Sans Pro;
-  font-size: 3.0vw;
-  background-color: white;
-  display: inline-block;
-  float:right;
-  color: green;
-  margin-right: 5px;
-
-}
-
-
-
-#itemdetails {
-  background-color: #75d0f4;
-  color: white;
-  font-family: Source Sans Pro;
-  border-radius: 6px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  border: 2px  solid #75d0f4;
-
-}
-
-#map{
-  height: 60vw;
-  width: 60vw;
-}*/
-
-/*#listitem {
-  overflow: visible;
-  height: 65px;
-  text-align: center;
-  border: 0;
-  margin: 0;
-  width: 100%;
-}*/
 
 #dishbanner {
   overflow: visible;
@@ -483,7 +328,7 @@ h1 {
 
 #dishprice {
   font-family: Source Sans Pro;
-  font-size: 3.0vw;
+  font-size: 30px;
   background-color: white;
   display: inline-block;
   float:right;
@@ -512,8 +357,9 @@ h1 {
   position: absolute;
   top: 65px;
   left: 400px;
-  width: 100% !important;
-  flex: 1 1 auto;
+  bottom: 0;
+  right: 0;
+  height: auto;
 }
 
 .dishthumbnail {
@@ -532,18 +378,20 @@ h1 {
 }
 
 #itemscontainer {
-  position: absolute;
+  position: fixed;
   width: 400px;
-  overflow-y: scroll;
   top: 65px;
-  bottom: 0;
+  bottom: 0 ;
   padding:3px;
-  background-image: url(/imgs/wood.jpg);
+  background-image: url(/imgs/food2.jpg);
   background-repeat: no-repeat;
   background-size: cover;
+  overflow-y: scroll;
+  padding-bottom: 80px;
+}
 
-  flex: 1 1 auto;
-
+#innercontainer {
+  bottom: 80px;
 }
 
 #repeateditem {
@@ -552,11 +400,48 @@ h1 {
 
 }
 #fullpage {
+  position: absolute;
   height: 100%;
   width: 100%;
 }
 
+#selldish {
+  float: bottom;
+  z-index: 100;
+  overflow-y: scroll;
+}
+
+#submitdishbutton {
+  position: absolute;
+  z-index: 200;
+  width: 400px;
+  margin: 0;
+  padding: 0;
+  bottom: 0;
+  border: 1px solid black;
+  background-color: white;
+}
+
+#buttonpadding {
+  margin-left: 120px;
+  margin-right: 120px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+
 @media (max-width:750px){
+
+  #submitdishbutton {
+    position: absolute;
+    z-index: 200;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    bottom: 0;
+    border: 4px solid black;
+    background-color: white;
+  }
 
   #dishbanner {
     overflow: visible;
@@ -597,11 +482,17 @@ h1 {
     top: 365px;
     bottom: 0;
     padding:3px;
-    background-image: url(/imgs/wood.jpg);
+    background-image: url(/imgs/food2.jpg);
     background-repeat: no-repeat;
     background-size: cover;
-
+    padding-bottom: 80px;
     flex: 1 1 auto;
+  }
+  #dishtitle {
+    font-size: 3.0vw;
+  }
 
+  #dishprice {
+    font-size: 3.0vw;
   }
 }
