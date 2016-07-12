@@ -24,8 +24,8 @@
   			        <div class="content-style-form content-style-form-1">
   			            <span class="icon icon-close">Close the dialog</span>
   			            <h2>Login</h2>
-  			            <div align="center" class="alert-warning" ng-show="warnings.existingUser">{{warnings.existingUser}}</div>
   			            <form ng-submit="login(user)">
+  			                <div class="alert-warning" ng-show="warnings" ng-repeat="warning in warnings">{{warning.errorMessage}}</div>
   				            <p><label>Email</label><input type="text" ng-model="user.email" /></p>
   				            <p><label>Password</label><input type="password" ng-model="user.password" /></p>
   				            <p><button>Login</button></p>
@@ -41,12 +41,13 @@
                     <div>
                         <div class="content-style-form content-style-form-1">
                             <span class="icon icon-close">Close the dialog</span>
-                            <div class="alert-warning" ng-show="warnings.existingUser">{{warnings.existingUser}}</div>
+                            
                             <form ng-submit="signup(user)">
-                                <p><label>Email</label><input type="text" ng-model="user.email"/></p>
-                                <p><label>Password</label><input type="password" ng-model="user.password"/></p>
-                                <p><label>Confirm Password</label><input type="password" /></p>
-                                <p><button>Join Appetite</button></p>
+                                <div class="alert-warning" ng-show="warnings" ng-repeat="warning in warnings">{{warning.errorMessage}}</div>
+                                <p><label>Email</label><input type="text" ng-model="user.signupemail"/></p>
+                                <p><label>Password</label><input type="password" ng-model="user.signuppassword"/></p>
+                                <p><label>Confirm Password</label><input type="password" ng-model="user.confirmpassword" /></p>
+                                <p><button ng-disabled=" (user.signuppassword!==user.confirmpassword) || (!user.signuppassword)">Join Appetite</button></p>
                           </form>
                       </div>
                   </div>
@@ -91,6 +92,9 @@
 <script src="/js/classie.js"></script>
 <script src="/js/uiMorphingButton_fixed.js"></script>
 <script>
+
+
+
   (function() {
     var docElem = window.document.documentElement, didScroll, scrollPosition;
 

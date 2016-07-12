@@ -41,22 +41,20 @@
             <span class="icon icon-close">Close the dialog</span>
             <h2>Sell a Dish</h2>
             {{message}}
-            <p class="warning" ng-repeat="warning in warnings">{{warning.warningMessage}}</p>
-            <p class="warning" ng-repeat="err in error">{{err.errorMessage}}</p>
+            <div class="warning" ng-repeat="warning in dish.warnings">{{warning.warningMessage}}</div>
+            <div class="warning" ng-repeat="error in dish.errors">{{error.errorMessage}}</div>
             <form ng-submit="submitDish(dish)">
               <p align="center"><label>Dish</label><input type="text" ng-model="dish.dishName" /></p>
               <p align="center"><label>Description</label><input type="text" ng-model="dish.description" /></p>
               <p align="center"><label>Price</label><input type="text" ng-model="dish.price" /></p>
-              <p align="center"><label>Phone</label><input type="text" ng-model="dish.phone" /></p>
+              <p align="center" ng-hide="!dish.phone"><label>Phone</label><input type="text" ng-model="dish.phone" ></p>
               <p align="center"><label>Location</label><input type="text" ng-model="dish.location" /></p>
               <p align="center"><label>Time</label>
-                  <input type="text" ng-model="dish.year" placeholder="yyyy"/>
-                  <input type="text" ng-model="dish.month" placeholder="mm" />
                   <input type="text" ng-model="dish.day" placeholder="dd" />
                   <input type="text" ng-model="dish.starthour" placeholder="hh"/>
                   :<input type="text" ng-model="dish.endhour" placeholder="hh" />
               </p>
-              <p align="center"><button>Post Dish</button></p>
+              <p align="center"><button ng-disabled="dish.errors">Post Dish</button></p>
           </form>
         </div>
       </div>
@@ -128,8 +126,8 @@ async defer></script>
     function initMap() {
         var mapDiv = document.getElementById('map');
         map = new google.maps.Map(mapDiv, {
-            center: {lat: 45.5017, lng: -73.5673},
-            zoom: 13,
+            center: {lat: 45.5116861, lng: -73.5773356},
+            zoom: 15,
             streetViewControl: false,
             mapTypeControl: false
         });

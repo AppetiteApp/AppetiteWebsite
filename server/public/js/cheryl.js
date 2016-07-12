@@ -50,18 +50,33 @@ myApp.service('regexService', function(){
 });
 
 //login, signup
-myApp.controller('homeController', function($scope, $log, $location, regexService) {
+myApp.controller('homeController', function($scope, $log, $location, regexService, $route) {
     $scope.user = {};
     $log.log("Connected");
-    $scope.warnings = {};
+    $scope.warnings = [];
     
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             $log.log("onAuthStateChanged: ");
             $log.log(user);
             $scope.currentUser = user;
+            $scope.warnings.push({
+                errorType: "user",
+                errorMessage: "Already logged in with " + user.email
+            });
         } else {
             $log.log("onAuthStateChanged: no user");
+        }
+    });
+    
+    $scope.$watch('user.password', function(newValue, oldValue){
+        if (newValue.keyCode == 13) $scope.login($scope.user);
+    });
+    
+    //user can submit signup form by typing ENTER into the confim password box, but only if the two passwords match
+    $scope.$watch('user.confirmpassword', function(newValue, oldValue){
+        if (oldValue.keyCode == 13 && $scope.user.signuppassword === $scope.user.confirmpassword) {
+            $scope.signup($scope.user);
         }
     });
     
@@ -74,13 +89,14 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
             function(){
                 $log.log("login function resolved");
                 $log.log(firebase.auth().currentUser);
+                $route.reload();
                 $location.path("/browse");
             }
             ,function(error) {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                $log.log(errorCode + ": " + errorMessage);
-                $scope.warnings.loginfail = true;
+                $scope.warnings.push({
+                    errorType   : "login",
+                    errorMessage: error.message
+                });
             });
 
     };
@@ -89,24 +105,27 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
     $scope.signup = function(user){
         console.log("signup");
         
-        firebase.auth().createUserWithEmailAndPassword(user.email, user.password).then(
+        firebase.auth().createUserWithEmailAndPassword(user.signupemail, user.signuppassword).then(
             function(){
                 $log.log("signup resolved");
                 var user = firebase.auth().currentUser;
                 firebase.database().ref('users/' + user.uid).set({
-                    email: user.email 
+                    email: user.signupemail 
                 });
                 $log.log(firebase.auth().currentUser);
                 $location.path('/account');
             },
             function(error) {
-  		// Handle Errors here. omg why isn't this code running...
-  		    var errorCode = error.code;
-  		    var errorMessage = error.message;
-  		    console.log(errorCode + ": " + errorMessage);
-  		    $scope.warnings.createfail = true;
-	    });
-	    
+        // Handle Errors here. omg why isn't this code running...
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorCode + ": " + errorMessage);
+            $scope.warnings.push({
+                errorType   : "signup",
+                errorMessage: error.message
+            });
+        });
+      
     };
 
 });
@@ -121,35 +140,35 @@ myApp.controller('accountController', function($scope, $log, $location, $http){
     
     //if no one is logged in, then redirect to the login page
     if (!$scope.user) {
-        $location.path('/login');
+        $location.path('/');
         return;
     }
+    
+    //getting the user's info and the user's dishes info
     firebase.database().ref('users/' + $scope.user.uid).once('value', function(snapshot){
         $log.log(snapshot.val());
         $scope.$apply(function(){
-          	$scope.user.firstName = snapshot.val().firstName;
-	        $scope.user.lastName = snapshot.val().lastName;
-	        //$scope.user.email = snapshot.val().email;
-	        $scope.user.phone = snapshot.val().phone;
-	        $scope.user.address = snapshot.val().address;
-	        $scope.user.mealsMade = [];
-	        //should go and fetch meals
-	        if (snapshot.val().mealsMade){
+            $scope.user.firstName = snapshot.val().firstName;
+          $scope.user.lastName = snapshot.val().lastName;
+          //$scope.user.email = snapshot.val().email;
+          $scope.user.phone = snapshot.val().phone;
+          $scope.user.address = snapshot.val().address;
+          $scope.user.mealsMade = [];
+          //should go and fetch meals
+          if (snapshot.val().mealsMade){
                 snapshot.val().mealsMade.forEach(function(mealId){
-	                firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
-	                    snapshot.val().mealId = mealId;
-	                    $scope.$apply(function(){
-	                        $scope.user.mealsMade.push(snapshot.val());
-	                    });
-	                         
-	                });
-	            });	            
-	        }
+                  firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
+                      snapshot.val().mealId = mealId;
+                      
+                          $scope.user.mealsMade.push(snapshot.val());
+                      
+                           
+                  });
+              });             
+          }
 
 
-	        
-	        //$scope.user.mealsMade = snapshot.val().mealsMade;                
-        });
+                  });
     });
     
     
@@ -212,14 +231,14 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
 
     $scope.dishes = [];
     $scope.markers = [];
-   	
+    
     firebase.database().ref('dish/').orderByChild("dataAdded").once("value", function(snapshot){
         var allDishes = snapshot.val();
         $log.info(allDishes);
         for (var key in allDishes){
             if (!allDishes[key]["deleted"] & allDishes[key]["ownerid"] !== firebase.auth().currentUser.uid){
-                console.log("ownerid if");
-                console.log(allDishes[key]);
+                //console.log("ownerid if");
+                //console.log(allDishes[key]);
                 //go find the owner's phone & address
                 //firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function(snapshot){
                 //    console.log("before scope.apply");
@@ -233,7 +252,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
                             quantity    : allDishes[key]["quantity"],
                             time        : allDishes[key]["time"],
                             address     : allDishes[key]["address"],
-                            owner       : snapshot.val().firstName,
+                            owner       : allDishes[key]["owner"],
                             key         : key,
                             phone       : snapshot.val().phone
                         });
@@ -246,7 +265,42 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
         
     });
     
-    $scope.dish = {};
+    
+    //create a dish object and put the user's info into it
+    $scope.dish = {
+        warnings: [],
+        errors  : []
+    };
+    firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function(snapshot){
+        //if user has phone num, then use that as the dish's phone num
+        //else, error and cannot submit dish
+        if (snapshot.val().phone) {
+            $scope.dish.phone = snapshot.val().phone;
+        } else {
+            $scope.dish.errors.push({
+                errorType: "userinfo",
+                errorMessage: "User info incomplete: missing phone number"
+            });
+        }
+        
+        //if user has valid address & lnglat, then use that as the dish's address & lnglat
+        //else, error and cannot submit dish
+        if (snapshot.val().address && snapshot.val().lng && snapshot.val().lat) {
+            $scope.dish.address = snapshot.val().address;
+            $scope.dish.lat     = snapshot.val().lat;
+            $scope.dish.lng     = snapshot.val().lng;
+        } else {
+            $scope.dish.errors.push({
+                errorType: "userinfo",
+                errorMessage: "User info incomplete: missing address, lat & lng"
+            });
+        }
+        
+        
+        
+    });
+    
+    
     
     //submits a dish
     //on success, clear stuff and show div that says submitSuccess and go to manage
@@ -257,6 +311,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
             return;
         }
         var uid = firebase.auth().currentUser.uid;
+        var date = new Date();
         $http.post('/newdish', {
             dishName    : dish.dishName,
             location    : dish.location,
@@ -264,9 +319,9 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
             description : dish.description,
             price       : dish.price,
             time        : {
-                    year    : dish.year,
-                    month   : dish.month,
-                    day     : dish.day,
+                    year    : date.getFullYear(),
+                    month   : date.getMonth(),
+                    day     : dish.day || date.getDate(),
                     start   : dish.starttime,
                     end     : dish.endtime
                 },
