@@ -1,0 +1,56 @@
+<% include partials/header%>
+<% include partials/topbar %>
+
+
+<form id="signup">
+	Email: <input type="email" name="email" id="email"/>
+	Password: <input type="password" name="password" id="password"/>
+	<input type="submit" value="Sign Up!" />
+</form>
+
+<hr>
+<form id="update">
+	First Name: <input type="text" name="fname" id="fname" />
+	Last Name: <input type="text" name="lname" id="lname" />
+	Phone: <input type="text" name="phone" id="phone" />
+	<input type="submit" value="update your info!"/>
+</form>
+
+<hr>
+<form id="login">
+	Email: <input type="email" name="email" id="login-email"/>
+	Password: <input type="password" name="password" id="login-password" />
+	<input type="submit" value="Login!" />
+</form>
+
+<input type="submit" value="logout" id="logout" />
+
+<form id="submit-dish">
+	Dish Name: <input type="text" name="dish-name" id="dishName" />
+	Dish Description: <input type="text" name="description" id="description" />
+	Location: <input type="text" name="location" id="location" />
+	Pickup Time: <input type="date" name="time" id="time" />
+	Price: <input type="text" name="price" id="price" />
+	<input type="submit" value="Submit a Dish!" />
+	
+	
+</form>
+
+
+
+
+<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAFeKB5L3QbetPlLDFhuftMqTUTuUhkKhM",
+    authDomain: "angular-project-31b5c.firebaseapp.com",
+    databaseURL: "https://angular-project-31b5c.firebaseio.com",
+    storageBucket: "angular-project-31b5c.appspot.com",
+  };
+  firebase.initializeApp(config);
+</script>
+<script src="/lib/jquery-3.0.0.min.js"></script>
+<script src="/js/index.js"></script>
+
+<% include partials/footer %>

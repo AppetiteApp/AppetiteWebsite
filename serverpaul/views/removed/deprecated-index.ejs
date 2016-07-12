@@ -1,0 +1,31 @@
+<% include partials/header%>
+<% include partials/topbar %>
+
+<div class="window">
+    <img src="/Img/logo.png" alt="Appetite Logo">
+    <h1 id="home-intro">Welcome to Appetite!</h1>
+
+    <h2 class="subtitle">Latest Dishes Yo</h2>
+        <table>
+            <thead>
+                <tr>Dish</tr>
+                <tr>Contact</tr>
+                <tr>Price</tr>
+                <tr>Location</tr>
+                <tr>Description</tr>
+            </thead>
+            <tbody>
+                <% for (var i=0; i<meals.length; i++){ %>
+                    <tr>
+                        <td><%= meals[i].dish %></td>
+                        <td><%= meals[i].contact %></td>
+                        <td><%= meals[i].price %></td>
+                        <td><%= meals[i].location %></td>
+                        <td><%= meals[i].description %></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+</div>
+
+<% include partials/footer %>

@@ -1,0 +1,36 @@
+.spacer {
+  display:block;
+  height:30px;
+  font-size:80px;
+  color:white;
+}
+
+.awards {
+  float:right;
+  padding-right:100px;
+  display: inline-block;
+}
+
+.ourmissiontext {
+  font-family:serif;
+  font-size: 20px;
+  color: #a5a5a5;
+}
+
+.awardsfont {
+  text-align: left;
+  color:#7f7f7f;
+  font-size:25px;
+  font-family:serif;
+  padding:20%
+  padding-bottom:200px;;
+  display:block;
+  padding-left:100px;
+  padding-top: 10px;
+}
+
+.teamheadshots {
+  display:inline;
+  padding-top:0;
+  padding:5%;
+}
