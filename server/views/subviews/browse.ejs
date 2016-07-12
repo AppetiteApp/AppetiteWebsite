@@ -54,7 +54,7 @@
                   <input type="text" ng-model="dish.starthour" placeholder="hh"/>
                   :<input type="text" ng-model="dish.endhour" placeholder="hh" />
               </p>
-              <p align="center"><button ng-disabled="dish.errors">Post Dish</button></p>
+              <p align="center"><button>Post Dish</button></p>
           </form>
         </div>
       </div>
@@ -143,8 +143,9 @@ async defer></script>
         firebase.database().ref('dish/').orderByChild("dataAdded").on("value", function(snapshot){
             var allDishes = snapshot.val();
             for (var key in allDishes){
-                if (!allDishes[key]["deleted"] & allDishes[key]["uid"] !== firebase.auth().currentUser.uid){
-
+                // if (!allDishes[key]["deleted"] && allDishes[key]["uid"] !== firebase.auth().currentUser.uid){
+                if (!allDishes[key]["deleted"]){
+                    console.log(allDishes[key]);
                     dishes.unshift({
                         dishName    : allDishes[key]["dishName"],
                         description : allDishes[key]["description"],
@@ -166,6 +167,7 @@ async defer></script>
                     });
 
                     markers.push(marker);
+                    console.log(marker);
 
                 } //end if
             } // end forEach loop

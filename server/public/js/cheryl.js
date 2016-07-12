@@ -224,6 +224,12 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
     
     //if user isn't logged in, then go to home
     //ask for a promise here, or use $cookie
+    var currentUser = firebase.auth().currentUser;
+    
+    
+    
+    
+    
     if(!firebase.auth().currentUser) {
         $location.path('/');
         return;
@@ -236,7 +242,8 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
         var allDishes = snapshot.val();
         $log.info(allDishes);
         for (var key in allDishes){
-            if (!allDishes[key]["deleted"] & allDishes[key]["ownerid"] !== firebase.auth().currentUser.uid){
+            // if (!allDishes[key]["deleted"] && allDishes[key]["ownerid"] !== firebase.auth().currentUser.uid){
+            if (!allDishes[key]["deleted"]){
                 //console.log("ownerid if");
                 //console.log(allDishes[key]);
                 //go find the owner's phone & address
@@ -277,9 +284,9 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
         if (snapshot.val().phone) {
             $scope.dish.phone = snapshot.val().phone;
         } else {
-            $scope.dish.errors.push({
-                errorType: "userinfo",
-                errorMessage: "User info incomplete: missing phone number"
+            $scope.dish.warnings.push({
+                warningType: "userinfo",
+                warningMessage: "User info incomplete: missing phone number"
             });
         }
         
