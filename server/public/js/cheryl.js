@@ -218,29 +218,29 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
         $log.info(allDishes);
         for (var key in allDishes){
             if (!allDishes[key]["deleted"] & allDishes[key]["ownerid"] !== firebase.auth().currentUser.uid){
-               $scope.$apply(function(){
-                    $scope.dishes.unshift({
-                        dishName    : allDishes[key]["dishName"],
-                        description : allDishes[key]["description"],
-                        phone       : allDishes[key]["phone"],
-                        price       : allDishes[key]["price"],
-                        quantity    : allDishes[key]["quantity"],
-                        time        : allDishes[key]["time"],
-                        address     : allDishes[key]["address"],
-                        owner       : allDishes[key]["owner"],
-                        key         : key
-                    });  
-               }); 
-                
-                // var marker = new google.maps.Marker({
-                //     position: {
-                //         lat: allDishes[key]["lat"],
-                //         lng: allDishes[key]["long"]
-                //     },
-                //     title: allDishes[key]["dishName"]
-                // }) ;
-                //     $scope.markers.push(marker);   
-
+                console.log("ownerid if");
+                console.log(allDishes[key]);
+                //go find the owner's phone & address
+                //firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function(snapshot){
+                //    console.log("before scope.apply");
+                //    console.log(allDishes[key]);
+                //    console.log(snapshot.val());
+                    $scope.$apply(function(){
+                        $scope.dishes.unshift({
+                            dishName    : allDishes[key]["dishName"],
+                            description : allDishes[key]["description"],
+                            price       : allDishes[key]["price"],
+                            quantity    : allDishes[key]["quantity"],
+                            time        : allDishes[key]["time"],
+                            address     : allDishes[key]["address"],
+                            owner       : snapshot.val().firstName,
+                            key         : key,
+                            phone       : snapshot.val().phone
+                        });
+                    });
+                    
+                    
+                //}); //end $scope.$apply
             } //end if  
         } // end forEach loop
         
@@ -302,10 +302,5 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
             $scope.error = "Failed to load data, please refresh page";
         });
     };
-    
-});
-
-
-myApp.controller('navbarController', function($scope, $log){
     
 });

@@ -1,4 +1,4 @@
-<ul class="nav" ng-controller="navbarController">
+<ul class="nav">
   <a align="center" href="#/home"><li>Home</li></a>
   <a align="center" href="#/aboutus"><li>About Us</li></a>
   <a align="center" href="#/home"><li><img height="35px" src="/imgs/chefhat.png"></li></a>
@@ -134,11 +134,6 @@ async defer></script>
             mapTypeControl: false
         });
 
-        var marker = new google.maps.Marker({
-            position: {lat:45.5054445, lng:-73.5789828},
-            map: map,
-            title: 'Hello World!'
-        });
         mapHelper(map);
 
      }
@@ -167,7 +162,7 @@ async defer></script>
                     var marker = new google.maps.Marker({
                         position: {
                             lat: allDishes[key]["lat"],
-                            lng: allDishes[key]["long"]
+                            lng: allDishes[key]["lng"]
                         },
                         title: allDishes[key]["dishName"]
                     });

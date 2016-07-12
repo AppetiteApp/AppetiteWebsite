@@ -44,7 +44,7 @@ app.set("view engine", "ejs");
 staticController(app);
 userController(app);
 
-process.env.PORT = process.env.PORT || 80;
+process.env.PORT = process.env.PORT || 8080;
 
 app.listen(process.env.PORT, function(){
     console.log("running on " + process.env.PORT);
