@@ -1,0 +1,146 @@
+#profilepage{
+  top: 65px !important;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+
+#thumbnailbackground {
+  width: 154px;
+  position: relative;
+  display:block;
+  margin:auto;
+  height: 100%;
+  background-color: white;
+  z-index: 600;
+  top:0px;
+  border-left: 2px solid #75d0f4;
+  border-right: 2px solid #75d0f4;
+  background-color: rgba(250, 250, 250, 0.5)
+}
+
+
+input.blur{
+  border-width: 0px;
+  color: black;
+  background-color: #ebd3bd;
+  outline-width: 0;
+  outline: none;
+}
+label {
+  display: inline-block;
+  width: 100px;
+  }
+
+
+*::-webkit-input-placeholder {
+    color: red;
+}
+*:-moz-placeholder {
+    /* FF 4-18 */
+    color: red;
+}
+*::-moz-placeholder {
+    /* FF 19+ */
+    color: red;
+}
+*:-ms-input-placeholder {
+    /* IE 10+ */
+    color: red;
+}
+
+#profileedit{
+  background-color: #75d0f4;
+  color: white;
+  display:block;
+  margin-left: auto;
+  margin-right: auto;
+  border:none;
+  margin-top:4px;
+}
+
+#profilebanner{
+  background-image: url(/imgs/foodwall.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  height: 250px;
+  width: 100%;
+  background-position:center;
+  overflow-x: hidden;
+  position: fixed;
+}
+
+#profilebanner:hover{
+  opacity: .8;
+}
+
+#profilethumbnail {
+  width: 160px;
+  height: 160px;
+  left: 100px;
+  position: fixed;
+  display:block;
+  margin:auto;
+  border: 5px solid #75d0f4;
+  top:165px;
+  border-radius: 5px;
+}
+
+#profileinfo{
+  top:0;
+  left:0;
+  height: auto;
+  position:relative;
+  width:360px;
+  padding-top: 100px;
+  clear: both;
+  padding-left: 15px;
+  font-family: Source Sans Pro;
+  font-size: 16px;
+}
+
+#profileinfo form{
+  width: 100%;
+}
+
+#profilebox{
+  position: relative;
+  left: 80px;
+  width:auto;
+  display:flex;
+}
+
+.profileinput {
+  width:100px;
+  outline: none;
+  border: none;
+  padding: none;
+  background-color: #75d0f4;
+  color: black;
+  padding: 5px;
+  margin: 5px;
+}
+
+.nameinput {
+  min-width:50px;
+  width: 130px;
+  text-align: center;
+  outline: none;
+  border: none;
+  padding: none;
+  background-color: #75d0f4;
+  color: black;
+  padding: 5px;
+  margin: 5px;
+}
+
+#profilename{
+  position: absolute;
+  top:260px;
+  left: 275px;
+  font-family: Source Sans Pro;
+  font-size: 40px;
+}
