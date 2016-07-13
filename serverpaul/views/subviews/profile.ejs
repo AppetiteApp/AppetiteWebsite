@@ -1,4 +1,4 @@
-<ul class="nav" ng-controller="navbarController">
+<ul class="nav">
   <a align="center" href="#/home"><li>Home</li></a>
   <a align="center" href="#/aboutus"><li>About Us</li></a>
   <a align="center" href="#/home"><li><img height="35px" src="/imgs/chefhat.png"></li></a>
@@ -22,7 +22,7 @@
       <form ng-submit="editProfile(user)">
 
         <div id="profilename">
-          <input class="nameinput"placeholder="{{user.firstName}}" type='text' onkeypress="this.style.width = ((this.value.length + 1) * 20) + 'px';" ng-model="user.firstName" name="firstName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/>
+          <input class="nameinput" type='text' onkeypress="this.style.width = ((this.value.length + 1) * 20) + 'px';" ng-model="user.firstName" name="firstName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/>
           <input class="nameinput" type='text' onkeypress="this.style.width = ((this.value.length + 1) * 20) + 'px';" ng-model="user.lastName" name="lastName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>
         </div>
         <div id="profileinfo">
@@ -42,7 +42,30 @@
 
 <div id="profilecontainer">
   <div id="profileinnercontainer">
-    <div id="repeateditem">
+    
+    
+    
+  <!--  <div id="repeateditem">-->
+  <!--    <div id="listitem" ng-click="showDetails = !showDetails">-->
+
+  <!--      <div id="dishbanner">-->
+  <!--        <div class="dishthumbnail">-->
+  <!--          <img class="img-thumbnail" src="/imgs/gordon.jpg" />-->
+  <!--        </div>-->
+
+  <!--          <div id="dishtitle">Bridi Panini</div>-->
+  <!--          <div id="dishprice">$7</div>-->
+  <!--      </div>-->
+  <!--  </div>-->
+  <!--  <div ng-show="showDetails" id="itemdetails">-->
+  <!--      <p align="center">Delicious and nutricious sammy with chicken, peppers, and avocado</p>-->
+  <!--      <div id="dishtime">Thursday 9:00</div>-->
+  <!--      <div id="dishphone">514-433-4555</div>-->
+  <!--      <div id="dishlocation">4235 Rue St. Urbain</div>-->
+  <!--  </div>-->
+  <!--</div>-->
+  
+      <div id="repeateditem" ng-repeat="dish in user.mealsMade">
       <div id="listitem" ng-click="showDetails = !showDetails">
 
         <div id="dishbanner">
@@ -50,17 +73,19 @@
             <img class="img-thumbnail" src="/imgs/gordon.jpg" />
           </div>
 
-            <div id="dishtitle">Bridi Panini</div>
-            <div id="dishprice">$7</div>
+            <div id="dishtitle" ng-model="dish.dishName"></div>
+            <div id="dish.price"></div>
         </div>
     </div>
     <div ng-show="showDetails" id="itemdetails">
-        <p align="center">Delicious and nutricious sammy with chicken, peppers, and avocado</p>
-        <div id="dishtime">Thursday 9:00</div>
-        <div id="dishphone">514-433-45555</div>
-        <div id="dishlocation">4235 Rue St. Urbain</div>
+        <p align="center" ng-model="dish.description"></p>
+        <div id="dish.time"></div>
+        <div id="dish.phone"></div>
+        <div id="dish.address"></div>
     </div>
   </div>
+  
+  
 </div>
 
 <div id="profileinstruction" text-align="center">

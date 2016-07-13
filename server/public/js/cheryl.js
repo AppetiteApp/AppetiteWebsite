@@ -269,7 +269,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
                             address     : allDishes[key]["address"],
                             owner       : allDishes[key]["owner"],
                             key         : key,
-                            phone       : snapshot.val().phone
+                            phone       : allDishes[key]["phone"]
                         });
                     });
                     

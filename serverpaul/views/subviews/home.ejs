@@ -10,10 +10,10 @@
       <input type="submit" value="Create Account">
     </a>
   </form>-->
-    <!-- <div align="center" class="quotes">
+    <div align="center" class="quotes">
         <p>"Appetite saved my life"</p>
         <p>-Monica</p>
-    </div> -->
+    </div>
 
     <div align="center" class="homebuttons">
 
@@ -24,11 +24,11 @@
   			        <div class="content-style-form content-style-form-1">
   			            <span class="icon icon-close">Close the dialog</span>
   			            <h2>Login</h2>
-  			            <div align="center" class="alert-warning" ng-show="warnings.existingUser">{{warnings.existingUser}}</div>
-  			            <form ng-submit="login(user)" align="center">
+  			            <form ng-submit="login(user)">
+  			                <div class="alert-warning" ng-show="warnings" ng-repeat="warning in warnings">{{warning.errorMessage}}</div>
   				            <p><label>Email</label><input type="text" ng-model="user.email" /></p>
   				            <p><label>Password</label><input type="password" ng-model="user.password" /></p>
-  				            <p align="center"><button>Login</button></p>
+  				            <p><button>Login</button></p>
   				        </form>
   			        </div>
   	        </div>
@@ -41,12 +41,13 @@
                     <div>
                         <div class="content-style-form content-style-form-1">
                             <span class="icon icon-close">Close the dialog</span>
-                            <div class="alert-warning" ng-show="warnings.existingUser">{{warnings.existingUser}}</div>
-                            <form ng-submit="signup(user)"align="center">
-                                <p><label>Email</label><input type="text" ng-model="user.email"/></p>
-                                <p><label>Password</label><input type="password" ng-model="user.password"/></p>
-                                <p><label>Confirm Password</label><input type="password" /></p>
-                                <p align="center"><button>Join Appetite</button></p>
+                            
+                            <form ng-submit="signup(user)">
+                                <div class="alert-warning" ng-show="warnings" ng-repeat="warning in warnings">{{warning.errorMessage}}</div>
+                                <p><label>Email</label><input type="text" ng-model="user.signupemail"/></p>
+                                <p><label>Password</label><input type="password" ng-model="user.signuppassword"/></p>
+                                <p><label>Confirm Password</label><input type="password" ng-model="user.confirmpassword" /></p>
+                                <p><button ng-disabled=" (user.signuppassword!==user.confirmpassword) || (!user.signuppassword)">Join Appetite</button></p>
                           </form>
                       </div>
                   </div>
@@ -72,30 +73,28 @@
 <!-- Chef hat & the app -->
 <div class="logo" align="center">
     <img src="/imgs/FadedLogo.jpg" height="150px" width="120px">
-</div>
     <p class="ourmission">The App</p>
-    <div align="center">
-        <div class="appscreenshotcontainer">
-          <img class="appscreenshots" src="/imgs/WebsitePhoto2.png" height="500" width="250">
-          See what's cooking near you.
-          <br></br>
-        </div>
-        <div class="appscreenshotcontainer">
-          <img class="appscreenshots" src="/imgs/WebsitePhoto1.png" height="500" width="250">
-          Select a dish for more info and click to order.
-        </div>
-        <div class="appscreenshotcontainer">
-          <img class="appscreenshots" src="/imgs/WebsitePhoto3.png" height="500" width="250">
-          Posting a meal is a breeze.
-          <br></br>
-        </div>
+    <div>
+        <img class="appscreenshots" src="/imgs/WebsitePhoto2.png" height="500" width="250">
+        <img class="appscreenshots" src="/imgs/WebsitePhoto1.png" height="500" width="250">
+        <img class="appscreenshots" src="/imgs/WebsitePhoto3.png" height="500" width="250">
     </div>
+    <div>
+        <p class="appdescription">Browse by location for a meal that sounds good to you.
+          Select one that sounds good and you will be brought to a page detailing price, ingredients, and the time it is ready.
+          Click order when you're ready to purchase your dish!</p>
+        <p class="appdescription">If you are selling a meal, simply fill in the form, wait for someone to order, and get cooking!</p>
+    </div>
+</div>
 
   <!-- Chef hat & our team -->
 
 <script src="/js/classie.js"></script>
 <script src="/js/uiMorphingButton_fixed.js"></script>
 <script>
+
+
+
   (function() {
     var docElem = window.document.documentElement, didScroll, scrollPosition;
 
