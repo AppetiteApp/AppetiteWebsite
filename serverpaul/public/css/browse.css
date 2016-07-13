@@ -89,7 +89,7 @@
   -webkit-box-sizing: border-box;
   border: 4px  solid #75d0f4;
   height: auto;
-  max-height: 100px;
+  max-height: 200px;
   margin: 0;
 
 
@@ -147,7 +147,7 @@
 
 }
 #fullpage {
-  position: fixed;
+  position: absolute;
   height: 100%;
   width: 100%;
 }
@@ -169,7 +169,7 @@
   border: 1px solid black;
   background: rgba(255, 255, 255, 0.9);
   font-family: Source Sans Pro;
-  color: red;
+  color: orange;
 }
 
 #submitdishbutton {

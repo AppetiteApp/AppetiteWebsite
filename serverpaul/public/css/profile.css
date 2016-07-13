@@ -6,20 +6,6 @@
 }
 
 
-#thumbnailbackground {
-  width: 154px;
-  position: relative;
-  display:block;
-  margin:auto;
-  height: 100%;
-  background-color: white;
-  z-index: 600;
-  top:0px;
-  border-left: 2px solid #75d0f4;
-  border-right: 2px solid #75d0f4;
-  background-color: rgba(250, 250, 250, 0.5)
-}
-
 
 input.blur{
   border-width: 0px;
@@ -27,7 +13,18 @@ input.blur{
   background-color: #ebd3bd;
   outline-width: 0;
   outline: none;
+
 }
+
+textarea.blur{
+  border-width: 0px;
+  color: black;
+  background-color: #75d0f4;
+  outline-width: 0;
+  outline: none;
+
+}
+
 label {
   display: inline-block;
   width: 100px;
@@ -35,19 +32,19 @@ label {
 
 
 *::-webkit-input-placeholder {
-    color: red;
+    color: grey;
 }
 *:-moz-placeholder {
     /* FF 4-18 */
-    color: red;
+    color: grey;
 }
 *::-moz-placeholder {
     /* FF 19+ */
-    color: red;
+    color: grey;
 }
 *:-ms-input-placeholder {
     /* IE 10+ */
-    color: red;
+    color: grey;
 }
 
 #profileedit{
@@ -57,7 +54,6 @@ label {
   margin-left: auto;
   margin-right: auto;
   border:none;
-  margin-top:4px;
 }
 
 #profilebanner{
@@ -87,6 +83,7 @@ label {
   border: 5px solid #75d0f4;
   top:165px;
   border-radius: 5px;
+  z-index: 200;
 }
 
 #profileinfo{
@@ -114,14 +111,36 @@ label {
 }
 
 .profileinput {
-  width:100px;
+  width: 430px;
   outline: none;
   border: none;
   padding: none;
   background-color: #75d0f4;
+  color: white;
+  padding: 5px;
+  margin: 10px;
+  font-size: 25px;
+  font-family: Source Sans Pro;
+  text-align: center;
+}
+
+.descriptioninput{
+  width: 542px;
+  height: 125px;
+  outline: none;
+  border: none;
+  background-color: #ebd3bd;
   color: black;
   padding: 5px;
-  margin: 5px;
+  margin-left: 0;
+  margin-right: 5px;
+  margin-top: 0px;
+  margin-bottom: 5px;
+  font-size: 20px;
+  font-family: Source Sans Pro;
+  text-align: left;
+  left: 10px;
+
 }
 
 .nameinput {
@@ -138,9 +157,70 @@ label {
 }
 
 #profilename{
-  position: absolute;
-  top:260px;
-  left: 275px;
+  position: relative;
+  top:10px;
+  left: 270px;
   font-family: Source Sans Pro;
   font-size: 40px;
+}
+
+#profilesection{
+
+  position: fixed;
+  top: 250px;
+  left: 0;
+  min-width: 600px;
+  background-color: white;
+  height: 100%;
+  border: 2px solid #75d0f4;
+}
+
+.profilelabel{
+  font-family: Source Sans Pro;
+  font-size: 25px;
+
+}
+
+#profileinfo{
+  position: absolute;
+  bottom: 0;
+  padding-top:0;
+  padding-left: 10px;
+  padding-right: 0;
+  padding-bottom: 0px;
+  height: auto;
+  top: 100px;
+  width: 100%;
+}
+
+
+#profilecontainer {
+  position: fixed;
+  top: 250px;
+  left: 600px;
+  width: 680px;
+  height: 100%;
+  overflow-y: scroll;
+  bottom: 0;
+  padding:3px;
+  background-image: url(/imgs/board.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  flex: 1 1 auto;
+  padding-top: 30px;
+  border: 2px solid #75d0f4;
+}
+
+#profileinstruction{
+  position: absolute;
+  z-index: 200;
+  width: 100%;
+  margin: 0;
+  padding: 4px;
+  top: 0px;
+  left:0;
+  border: 1px solid black;
+  background: rgba(255, 255, 255, 0.9);
+  font-family: Source Sans Pro;
+  color: orange;
 }

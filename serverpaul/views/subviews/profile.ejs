@@ -16,24 +16,56 @@
 
   <img id="profilethumbnail" border-radius="10px" src="/imgs/gordon.jpg" />
 
-<!--
-        <label for="firstName">Name:</label>
-        <label for="phone">Phone:</label>
-        <label for="firstName">Address:</label>
 
- -->
+
+    <div id="profilesection">
       <form ng-submit="editProfile(user)">
 
         <div id="profilename">
           <input class="nameinput"placeholder="{{user.firstName}}" type='text' onkeypress="this.style.width = ((this.value.length + 1) * 20) + 'px';" ng-model="user.firstName" name="firstName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/>
           <input class="nameinput" type='text' onkeypress="this.style.width = ((this.value.length + 1) * 20) + 'px';" ng-model="user.lastName" name="lastName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>
         </div>
+        <div id="profileinfo">
 
+          <textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/></textarea><br>
+
+          <label for="phone" class="profilelabel">Phone:</label>
           <input class="profileinput" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>
+
+          <label class="profilelabel" for="firstName">Address:</label>
           <input class="profileinput" type='text' ng-model="user.address" name="adress" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>
           <input id='profileedit' type="submit" value="Save Edits" ng-show="user.changed" ng-init="user.changed=false"/>
       </form>
+    </div>
+</div>
 
+
+<div id="profilecontainer">
+  <div id="profileinnercontainer">
+    <div id="repeateditem">
+      <div id="listitem" ng-click="showDetails = !showDetails">
+
+        <div id="dishbanner">
+          <div class="dishthumbnail">
+            <img class="img-thumbnail" src="/imgs/gordon.jpg" />
+          </div>
+
+            <div id="dishtitle">Bridi Panini</div>
+            <div id="dishprice">$7</div>
+        </div>
+    </div>
+    <div ng-show="showDetails" id="itemdetails">
+        <p align="center">Delicious and nutricious sammy with chicken, peppers, and avocado</p>
+        <div id="dishtime">Thursday 9:00</div>
+        <div id="dishphone">514-433-45555</div>
+        <div id="dishlocation">4235 Rue St. Urbain</div>
+    </div>
+  </div>
+</div>
+
+<div id="profileinstruction">
+  Browse for dishes near you and click for more info.  Call or text the cook to arrange a rendezvous!
+</div>
 
   <!-- </div> -->
 
