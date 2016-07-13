@@ -113,6 +113,7 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
                     email: user.signupemail 
                 });
                 $log.log(firebase.auth().currentUser);
+                $route.reload();
                 $location.path('/account');
             },
             function(error) {
@@ -226,10 +227,6 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
     //ask for a promise here, or use $cookie
     var currentUser = firebase.auth().currentUser;
     
-    
-    
-    
-    
     if(!firebase.auth().currentUser) {
         $location.path('/');
         return;
@@ -251,13 +248,24 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
                 //    console.log("before scope.apply");
                 //    console.log(allDishes[key]);
                 //    console.log(snapshot.val());
+                //sets the time
+                var timeString;
+                if (allDishes[key]["time"]["day"] == new Date().getDate()) {
+                    timeString = "Today ";
+                } else {
+                    var monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
+                    
+                    timeString =  monthNames[allDishes[key]["time"]["month"]].toString() +  " " + allDishes[key]["time"]["day"].toString() + " at ";
+                }
+                
+                timeString += allDishes[key]["time"]['starthour'].toString() +  ":00 - " + allDishes[key]["time"]['endhour'].toString() + ":00";
                     $scope.$apply(function(){
                         $scope.dishes.unshift({
                             dishName    : allDishes[key]["dishName"],
                             description : allDishes[key]["description"],
                             price       : allDishes[key]["price"],
                             quantity    : allDishes[key]["quantity"],
-                            time        : allDishes[key]["time"],
+                            time        : timeString,
                             address     : allDishes[key]["address"],
                             owner       : allDishes[key]["owner"],
                             key         : key,
@@ -329,8 +337,8 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
                     year    : date.getFullYear(),
                     month   : date.getMonth(),
                     day     : dish.day || date.getDate(),
-                    start   : dish.starttime,
-                    end     : dish.endtime
+                    start   : dish.starthour,
+                    end     : dish.endhour
                 },
             portions    : dish.portions || 1,
             ingredients : dish.ingredients || ""
@@ -348,6 +356,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
                 dish.starttime = "";
                 dish.endtime = "";
                 dish.portions = "";
+                dish.phone = "";
                 dish.location = "";
                 dish.ingredients = "";
                     $scope.error = res.data.error;
