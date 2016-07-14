@@ -42,69 +42,30 @@
 
 <div id="profilecontainer">
   <div id="profileinnercontainer">
-    
-    
-    
-  <!--  <div id="repeateditem">-->
-  <!--    <div id="listitem" ng-click="showDetails = !showDetails">-->
+    <div id="repeateditem" ng-repeat="dish in user.dishes">
+        <div id="listitem" ng-click="showDetails = !showDetails">
 
-  <!--      <div id="dishbanner">-->
-  <!--        <div class="dishthumbnail">-->
-  <!--          <img class="img-thumbnail" src="/imgs/gordon.jpg" />-->
-  <!--        </div>-->
+          <div id="dishbanner">
+            <div class="dishthumbnail">
+              <img class="img-thumbnail" src="/imgs/gordon.jpg" />
+            </div>
 
-  <!--          <div id="dishtitle">Bridi Panini</div>-->
-  <!--          <div id="dishprice">$7</div>-->
-  <!--      </div>-->
-  <!--  </div>-->
-  <!--  <div ng-show="showDetails" id="itemdetails">-->
-  <!--      <p align="center">Delicious and nutricious sammy with chicken, peppers, and avocado</p>-->
-  <!--      <div id="dishtime">Thursday 9:00</div>-->
-  <!--      <div id="dishphone">514-433-4555</div>-->
-  <!--      <div id="dishlocation">4235 Rue St. Urbain</div>-->
-  <!--  </div>-->
-  <!--</div>-->
-  
-      <div id="repeateditem" ng-repeat="dish in user.mealsMade">
-      <div id="listitem" ng-click="showDetails = !showDetails">
-
-        <div id="dishbanner">
-          <div class="dishthumbnail">
-            <img class="img-thumbnail" src="/imgs/gordon.jpg" />
+            <div id="dishtitle">{{dish.dishName}}</div>
+            <div id="dish.price">{{dish.price}}</div>
           </div>
-
-            <div id="dishtitle" ng-model="dish.dishName"></div>
-            <div id="dish.price"></div>
+        </div>
+        <div ng-show="showDetails" id="itemdetails">
+          <p align="center">{{dish.description}}</p>
+          <div id="dish.time">{{dish.time}}</div>
+          <div id="dish.phone">{{dish.phone}}</div>
+          <div id="dish.address">{{dish.address}}</div>
         </div>
     </div>
-    <div ng-show="showDetails" id="itemdetails">
-        <p align="center" ng-model="dish.description"></p>
-        <div id="dish.time"></div>
-        <div id="dish.phone"></div>
-        <div id="dish.address"></div>
-    </div>
+  
+  
   </div>
-  
-  
-</div>
 
 <div id="profileinstruction" text-align="center">
   Here's a list of the dishes you bought or sold this week!
 </div>
 
-  <!-- </div> -->
-
-  <!-- <div ng-repeat="dish in user.mealsMade">
-    <h3>{{dish.dishName}}</h3>
-    <form ng-submit="editDish(dish)">
-          <label for="dishName">Dish Name</label><input type='text' ng-model="dish.dishName" name="dishName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="dish.changed=true"/><br>
-          <label for="delete">Show or Hide</label><input type='checkbox' ng-model="dish.delete" name="delete" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="dish.changed=true"/>{{dish.delete}}<br>
-          <label for="description">Description</label><input type='textarea' ng-model="dish.description" name="description" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="dish.changed=true"/><br>
-          <label for="address">Location</label><input type='text' ng-model="dish.address" name="address" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="dish.changed=true"/><br>
-          <label for="price">Price</label><input type='text' ng-model="dish.price" name="price" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="dish.changed=true"/><br>
-          <label for="time">Pickup Time</label><input type='date' ng-model="dish.time" name="time" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="dish.changed=true"/><br>
-          <label for="portion">Portions left</label><input type='text' ng-model="dish.portion" name="portion" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="dish.changed=true"/><br>
-          <input type='hidden' ng-model="dish.key"/><br>
-          <input type="submit" value="Save Edits" ng-show="dish.changed" ng-init="dish.changed=false"/>
-    </form>
-  </div> -->

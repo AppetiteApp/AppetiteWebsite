@@ -9,16 +9,16 @@ myApp.config(['$routeProvider', function($routeProvider){
 $routeProvider
 
   .when('/', {
-    templateUrl: '/home',
-    controller: 'homeController'
+    templateUrl: '/browse',
+    controller: 'browseController'
   })
   .when('/account', {
       templateUrl: '/account',
       controller: 'accountController'
   })
-  .when('/browse', {
-      templateUrl: '/browse',
-      controller: 'browseController'
+  .when('/login', {
+      templateUrl: '/home',
+      controller: 'homeController'
   })
   .when('/aboutus', {
       templateUrl: '/aboutus'
@@ -135,41 +135,44 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
 
 
 //if user is logged in, make ajax request to fetch stuff
-myApp.controller('accountController', function($scope, $log, $location, $http){
+myApp.controller('accountController', function($scope, $log, $location, $http, $timeout){
     var firebaseUser = firebase.auth().currentUser;
-    $scope.user = firebaseUser;
+    $scope.user = {};
     
     //if no one is logged in, then redirect to the login page
-    if (!$scope.user) {
+    if (!firebaseUser) {
         $location.path('/');
         return;
     }
     
     //getting the user's info and the user's dishes info
-    firebase.database().ref('users/' + $scope.user.uid).once('value', function(snapshot){
+    firebase.database().ref('users/' + firebaseUser.uid).once('value', function(snapshot){
         $log.log(snapshot.val());
-        $scope.$apply(function(){
+        $timeout(function(){
             $scope.user.firstName = snapshot.val().firstName;
-          $scope.user.lastName = snapshot.val().lastName;
-          //$scope.user.email = snapshot.val().email;
-          $scope.user.phone = snapshot.val().phone;
-          $scope.user.address = snapshot.val().address;
-          $scope.user.mealsMade = [];
-          //should go and fetch meals
-          if (snapshot.val().mealsMade){
+            $scope.user.lastName = snapshot.val().lastName;
+            //$scope.user.email = snapshot.val().email;
+            $scope.user.phone = snapshot.val().phone;
+            $scope.user.address = snapshot.val().address;
+            $scope.user.dishes = [];
+            //should go and fetch meals
+            if (snapshot.val().mealsMade){
                 snapshot.val().mealsMade.forEach(function(mealId){
-                  firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
-                      snapshot.val().mealId = mealId;
+                    firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
+                        snapshot.val().mealId = mealId;
+                        $timeout(function(){
+                            $scope.user.dishes.push(snapshot.val());    
+                        });
+                        
                       
-                          $scope.user.mealsMade.push(snapshot.val());
-                      
-                           
-                  });
-              });             
-          }
+                        console.log($scope.user.dishes);      
+                  });//end firebase fetch dish info
+              });//end foreach meal
+
+            }
 
 
-                  });
+        }); //end $timeout
     });
     
     
@@ -180,7 +183,7 @@ myApp.controller('accountController', function($scope, $log, $location, $http){
             lname: user.lastName,
             phone: user.phone,
             address: user.address,
-            uid: $scope.user.uid
+            uid: firebaseUser.uid
         })
         .then(function(data){
             //should use a ng-model to let user know success on success, maybe the ng-rules thingy
@@ -282,11 +285,11 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
                 //}); //end $scope.$apply
             } //end if  
         } // end forEach loop
-                            $timeout(function(){
-                        $scope.dishes = dishes;
-                        console.log("changed dishes");
-                        console.log($scope.dishes);
-                    });
+        $timeout(function(){
+            $scope.dishes = dishes;
+            console.log("changed dishes");
+            console.log($scope.dishes);
+        });
     });
     
     
@@ -338,7 +341,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         var date = new Date();
         $http.post('/newdish', {
             dishName    : dish.dishName,
-            location    : dish.location,
+            address     : dish.address,
             uid         : uid,
             description : dish.description,
             price       : dish.price,
@@ -366,7 +369,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
                 dish.endtime = "";
                 dish.portions = "";
                 dish.phone = "";
-                dish.location = "";
+                dish.address= "";
                 dish.ingredients = "";
                     $scope.error = res.data.error;
                     $scope.warnings = res.data.warnings;

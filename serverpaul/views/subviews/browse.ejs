@@ -48,7 +48,7 @@
               <p align="center"><label>Description</label><input type="text" ng-model="dish.description" /></p>
               <p align="center"><label>Price</label><input type="text" ng-model="dish.price" /></p>
               <p align="center" ng-hide="!dish.phone"><label>Phone</label><input type="text" ng-model="dish.phone" ></p>
-              <p align="center"><label>Location</label><input type="text" ng-model="dish.location" /></p>
+              <p align="center"><label>Location</label><input type="text" ng-model="dish.address" /></p>
               <p align="center"><label>Time</label>
                   <input type="text" ng-model="dish.day" placeholder="dd" />
                   <input type="text" ng-model="dish.starthour" placeholder="hh"/>
@@ -153,7 +153,7 @@ async defer></script>
                         price       : allDishes[key]["price"],
                         quantity    : allDishes[key]["quantity"],
                         time        : allDishes[key]["time"],
-                        address     : allDishes[key]["location"],
+                        address     : allDishes[key]["address"],
                         owner       : allDishes[key]["owner"],
                         key         : key
                     });

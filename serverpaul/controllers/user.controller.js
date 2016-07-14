@@ -44,18 +44,18 @@ module.exports = function(app) {
 		}
 		
 		//check if location is present and valid
-		if (!data.location) {
+		if (!data.address) {
 			errors.push({
 				errorType	: "location",
 				errorMessage: "You didn't send the location"
 			});
-		} else if (!globals.addressRegex.test(data.location)){
+		} else if (!globals.addressRegex.test(data.address)){
 			errors.push({
 				errorType	: "location",
 				errorMessage: "Invalid characters in location"
 			});
 		} else {
-			dishObject.address = data.location;
+			dishObject.address = data.address;
 		}
 		
 		//check if description is present and valid
