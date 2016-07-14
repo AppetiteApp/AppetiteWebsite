@@ -53,6 +53,17 @@ myApp.service('regexService', function(){
     this.emailRegex       = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 });
 
+myApp.service('sessionService', function(){
+    var self = this;
+    self.signout = function(){
+        firebase.auth().signOut().then(function(){
+            self.signOut = true;
+        }, function(err){
+            console.log(err);
+        });
+    };
+});
+
 //login, signup
 myApp.controller('homeController', function($scope, $log, $location, regexService, $route) {
     $scope.user = {};
@@ -94,7 +105,7 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
                 $log.log("login function resolved");
                 $log.log(firebase.auth().currentUser);
                 $route.reload();
-                $location.path("/browse");
+                $location.path("/");
             }
             ,function(error) {
                 $scope.warnings.push({
@@ -139,13 +150,14 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
 
 
 //if user is logged in, make ajax request to fetch stuff
-myApp.controller('accountController', function($scope, $log, $location, $http, $timeout){
+myApp.controller('accountController', function($scope, $log, $location, $http, $timeout, $route){
     var firebaseUser = firebase.auth().currentUser;
     $scope.user = {};
     
     //if no one is logged in, then redirect to the login page
     if (!firebaseUser) {
-        $location.path('/');
+        $route.reload();
+        $location.path('/login');
         return;
     }
     
@@ -220,7 +232,7 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
         });
     };
     
-    
+
     
     
 
@@ -228,36 +240,38 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
 
 
 
-myApp.controller('browseController', function($scope, $log, $location, $http, $timeout){
+myApp.controller('browseController', function($scope, $log, $location, $http, $timeout, $route){
     
     //if user isn't logged in, then go to home
-    //ask for a promise here, or use $cookie
+    //haha this assignment thing is synchronous
     var currentUser = firebase.auth().currentUser;
     
     if(!currentUser) {
-        $location.path('/');
+        $route.reload();
+        $location.path('/login');
         return;
     }
-
+    
+    //dishes and markers are arrays
+    //user is an object
     $scope.dishes = [];
     $scope.markers = [];
+    $scope.user = {};
+    const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
     
-    firebase.database().ref('dish/').orderByChild("dataAdded").once("value", function(snapshot){
+    
+    //dishes ordering by date Added
+    firebase.database().ref('dish/').orderByChild("dateAdded").once("value", function(snapshot){
         var allDishes = snapshot.val();
-        $log.info(allDishes);
+        //$log.info(allDishes);
         var dishes = [];
+        
+        //iterate through all the dishes and put the ones that aren't owned by current owner in the scope
         for (var key in allDishes){
             console.log("dish key: " + key + " ; uid of dish: " + allDishes[key]["ownerid"]);
              if (!allDishes[key]["deleted"] && allDishes[key]["ownerid"] !== currentUser.uid){
-            //if (!allDishes[key]["deleted"]){
-                //console.log("ownerid if");
-                //console.log(allDishes[key]);
-                //go find the owner's phone & address
-                //firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function(snapshot){
-                //    console.log("before scope.apply");
-                //    console.log(allDishes[key]);
-                //    console.log(snapshot.val());
-                //sets the time
+                 
+                //making a pretty time string
                 var timeString;
                 if (allDishes[key]["time"]["day"] == new Date().getDate()) {
                     timeString = "Today ";
@@ -270,23 +284,18 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
                 timeString += allDishes[key]["time"]['starthour'].toString() +  ":00 - " + allDishes[key]["time"]['endhour'].toString() + ":00";
                 console.log("pushing dish with key: " + key);
                     
-                        dishes.unshift({
-                            dishName    : allDishes[key]["dishName"],
-                            description : allDishes[key]["description"],
-                            price       : allDishes[key]["price"],
-                            quantity    : allDishes[key]["quantity"],
-                            time        : timeString,
-                            address     : allDishes[key]["address"],
-                            owner       : allDishes[key]["owner"],
-                            key         : key,
-                            phone       : allDishes[key]["phone"]
-                        });
-                        console.log(dishes);
-
-                    
-                    
-                    
-                //}); //end $scope.$apply
+                dishes.unshift({
+                    dishName    : allDishes[key]["dishName"],
+                    description : allDishes[key]["description"],
+                    price       : allDishes[key]["price"],
+                    quantity    : allDishes[key]["quantity"],
+                    time        : timeString,
+                    address     : allDishes[key]["address"],
+                    owner       : allDishes[key]["owner"],
+                    key         : key,
+                    phone       : allDishes[key]["phone"]
+                });
+                console.log(dishes);
             } //end if  
         } // end forEach loop
         $timeout(function(){
@@ -320,6 +329,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
             $scope.dish.address = snapshot.val().address;
             $scope.dish.lat     = snapshot.val().lat;
             $scope.dish.lng     = snapshot.val().lng;
+            $scope.user.address = snapshot.val().address;
         } else {
             $scope.dish.errors.push({
                 errorType: "userinfo",
@@ -330,6 +340,25 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         
         
     });
+    
+    $scope.submitAddress = function(user){
+        //format form data
+        var formData = {
+            region  : "ca",
+            address : user.address
+        };
+        
+        var formDataString = $.param(formData);
+        var queryString = QUERYSTRINGBASE + '&' + formDataString;
+        $scope.user.queryString = queryString;
+        $http.get(queryString)
+        .then(function(res){
+            $scope.results = res.data.results;
+        }, function(err){
+           $scope.error = err; 
+        });
+        
+    };
     
     
     
@@ -399,6 +428,7 @@ myApp.controller('testController', function($scope, $timeout, $http){
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
     
     $scope.user = {};
+    $scope.user = firebase.auth().currentUser;
      
     $scope.submitAddress = function(user){
         //format form data
@@ -418,6 +448,21 @@ myApp.controller('testController', function($scope, $timeout, $http){
         });
         
     };
+    
+    $scope.signout = function(){
+        firebase.auth().signOut().then(function(){
+            $timeout(function(){
+                $scope.signout = true;
+                $scope.user = firebase.auth().currentUser;
+            });
+        }, function(err){
+            console.log(err);
+        });        
+    };  
      
+    var storage = firebase.storage();
+    var storageRef = storage.ref();
+    var ProfileUrlRef = storageRef.child('profileImg');
+    console.log($scope.photo);
      
 });

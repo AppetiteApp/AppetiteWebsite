@@ -110,6 +110,7 @@
   float:left;
   margin: 0;
   padding: 2px;
+  height:61px;
 }
 
 .dishthumbnail > img.img-thumbnail {
