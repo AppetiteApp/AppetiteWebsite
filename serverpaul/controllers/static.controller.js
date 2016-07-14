@@ -47,6 +47,10 @@ module.exports = function(app) {
         res.render(__dirname + '/../views/subviews/aboutus');
     });
     
+    app.get('/cheryl/test', function(req, res){
+        res.render(__dirname + '/../views/subviews/test');
+    });
+    
     app.get('/', function(req, res){
         res.render(__dirname + '/../views/frame');
     });

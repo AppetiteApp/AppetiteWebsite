@@ -26,6 +26,10 @@ $routeProvider
   .when('/terms', {
       templateUrl: '/terms'
   })
+  .when('/cheryl/test', {
+      templateUrl: '/cheryl/test',
+      controller: 'testController'
+  })
   .otherwise({
     redirectTo: '/'
   });
@@ -386,4 +390,34 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         });
     };
     
+});
+
+
+//testing: right now testing google api
+//on the assumption that we're including jquery as of now
+myApp.controller('testController', function($scope, $timeout, $http){
+    const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
+    
+    $scope.user = {};
+     
+    $scope.submitAddress = function(user){
+        //format form data
+        var formData = {
+            region  : "ca",
+            address : user.address
+        };
+        
+        var formDataString = $.param(formData);
+        var queryString = QUERYSTRINGBASE + '&' + formDataString;
+        $scope.user.queryString = queryString;
+        $http.get(queryString)
+        .then(function(res){
+            $scope.results = res.data.results;
+        }, function(err){
+           $scope.error = err; 
+        });
+        
+    };
+     
+     
 });

@@ -1,0 +1,17 @@
+<h1>Testing stuff, Paul don't change this</h1>
+
+<form ng-submit="submitAddress(user)">
+    <label>Address: </label><input ng-model="user.address" />
+    <input type="submit" value="Try To Find Your Address!" ng-click="submitAddress(user)">
+    
+    
+</form>
+
+<h3>Query String: {{user.queryString}}</h3>
+<hr>
+<div ng-repeat="result in results">
+    <h2>{{result.formatted_address}}</h2>
+    <p>Lat: {{result.geometry.location.lat}}, Long: {{result.geometry.location.lng}}</p> 
+    <hr>
+</div>
+<p>{{error}}</>
