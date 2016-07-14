@@ -9,15 +9,16 @@ module.exports = function(app) {
 	//TODO: add regex control
 	app.post('/newdish', function(req, res, next){
 		var data = req.body;
-		var error = [];
+		var errors = [];
 		var warnings = [];
 
 		if (!data.uid) {
 			res.send({
-				error: {
+				errors: {
 					errorType	: "uid",
 					errorMessage: "You didn't send the userid."
-					}	
+					},
+				madeMeal: true
 			});
 			return;
 		}
@@ -29,12 +30,12 @@ module.exports = function(app) {
 		
 		//check if dishName is present and valid
 		if (!data.dishName) {
-			error.push({
+			errors.push({
 				errorType	: "dishName",
 				errorMessage: "No dish name submitted."
 			});
 		} else if (!globals.dishNameRegex.test(data.dishName)){
-			error.push({
+			errors.push({
 				errorType	:"dishName",
 				errorMessage: "Invalid characters in dish's name."
 			});
@@ -44,12 +45,12 @@ module.exports = function(app) {
 		
 		//check if location is present and valid
 		if (!data.location) {
-			error.push({
+			errors.push({
 				errorType	: "location",
 				errorMessage: "You didn't send the location"
 			});
 		} else if (!globals.addressRegex.test(data.location)){
-			error.push({
+			errors.push({
 				errorType	: "location",
 				errorMessage: "Invalid characters in location"
 			});
@@ -75,12 +76,12 @@ module.exports = function(app) {
 		
 		//check if price is present and valid
 		if (!data.price) {
-			error.push({
+			errors.push({
 				errorType	: "price",
 				errorMessage: "No price entered"
 			});
 		} else if (!globals.priceRegex.test(data.price)){
-			error.push({
+			errors.push({
 				errorType	: "price",
 				errorMessage: "Invalid characters in price"
 			});
@@ -91,7 +92,7 @@ module.exports = function(app) {
 		//check if time is entered, regex not added yet bc I want to further change the time input
 		//into a period of time as well as only store year/month/day/hour/min
 		if (!data.time) {
-			error.push({
+			errors.push({
 				errorType		: "time",
 				errorMessage	: "No time entered"
 			});
@@ -107,7 +108,7 @@ module.exports = function(app) {
 			});
 			dishObject.portion = 1;
 		} else if (!globals.onlyIntsRegex.test(data.portions)){
-			error.push({
+			errors.push({
 				errorType		: "portion",
 				errorMessage	: "Invalid characters in prportionice"
 			});
@@ -128,10 +129,11 @@ module.exports = function(app) {
 		}
 		
 		//if no errors, then continue
-		if (error.length > 0 ){
+		if (errors.length > 0 ){
 			res.send({
-				error: error,
-				message: "not updated because of error"
+				errors: errors,
+				message: "not updated because of error",
+				madeMeal: true
 			});
 			return;
 		}
@@ -189,9 +191,10 @@ module.exports = function(app) {
 			
 		});
 		res.send({
-			error: error,
+			errors: errors,
 			warnings: warnings,
-			message: "ok"
+			message: "You've successfully updated the meal!",
+			madeMeal: true
 		});
 		
 		//update user's mealsMade

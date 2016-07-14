@@ -145,7 +145,7 @@ async defer></script>
             for (var key in allDishes){
                 // if (!allDishes[key]["deleted"] && allDishes[key]["uid"] !== firebase.auth().currentUser.uid){
                 //if (!allDishes[key]["deleted"]){
-                    console.log(allDishes[key]);
+                    //console.log(allDishes[key]);
                     dishes.unshift({
                         dishName    : allDishes[key]["dishName"],
                         description : allDishes[key]["description"],
@@ -167,7 +167,7 @@ async defer></script>
                     });
 
                     markers.push(marker);
-                    console.log(marker);
+                    //console.log(marker);
 
                 //} //end if
             } // end forEach loop

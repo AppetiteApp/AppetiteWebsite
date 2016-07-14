@@ -221,13 +221,13 @@ myApp.controller('accountController', function($scope, $log, $location, $http){
 
 
 
-myApp.controller('browseController', function($scope, $log, $location, $http){
+myApp.controller('browseController', function($scope, $log, $location, $http, $timeout){
     
     //if user isn't logged in, then go to home
     //ask for a promise here, or use $cookie
     var currentUser = firebase.auth().currentUser;
     
-    if(!firebase.auth().currentUser) {
+    if(!currentUser) {
         $location.path('/');
         return;
     }
@@ -238,9 +238,11 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
     firebase.database().ref('dish/').orderByChild("dataAdded").once("value", function(snapshot){
         var allDishes = snapshot.val();
         $log.info(allDishes);
+        var dishes = [];
         for (var key in allDishes){
-            // if (!allDishes[key]["deleted"] && allDishes[key]["ownerid"] !== firebase.auth().currentUser.uid){
-            if (!allDishes[key]["deleted"]){
+            console.log("dish key: " + key + " ; uid of dish: " + allDishes[key]["ownerid"]);
+             if (!allDishes[key]["deleted"] && allDishes[key]["ownerid"] !== currentUser.uid){
+            //if (!allDishes[key]["deleted"]){
                 //console.log("ownerid if");
                 //console.log(allDishes[key]);
                 //go find the owner's phone & address
@@ -259,8 +261,9 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
                 }
                 
                 timeString += allDishes[key]["time"]['starthour'].toString() +  ":00 - " + allDishes[key]["time"]['endhour'].toString() + ":00";
-                    $scope.$apply(function(){
-                        $scope.dishes.unshift({
+                console.log("pushing dish with key: " + key);
+                    
+                        dishes.unshift({
                             dishName    : allDishes[key]["dishName"],
                             description : allDishes[key]["description"],
                             price       : allDishes[key]["price"],
@@ -271,13 +274,19 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
                             key         : key,
                             phone       : allDishes[key]["phone"]
                         });
-                    });
+                        console.log(dishes);
+
+                    
                     
                     
                 //}); //end $scope.$apply
             } //end if  
         } // end forEach loop
-        
+                            $timeout(function(){
+                        $scope.dishes = dishes;
+                        console.log("changed dishes");
+                        console.log($scope.dishes);
+                    });
     });
     
     
@@ -337,8 +346,8 @@ myApp.controller('browseController', function($scope, $log, $location, $http){
                     year    : date.getFullYear(),
                     month   : date.getMonth(),
                     day     : dish.day || date.getDate(),
-                    start   : dish.starthour,
-                    end     : dish.endhour
+                    starthour: dish.starthour,
+                    endhour : dish.endhour
                 },
             portions    : dish.portions || 1,
             ingredients : dish.ingredients || ""
