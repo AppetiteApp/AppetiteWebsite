@@ -76,7 +76,7 @@ label {
 #profilethumbnail {
   width: 160px;
   height: 160px;
-  left: 100px;
+  left: 40px;
   position: fixed;
   display:block;
   margin:auto;
@@ -160,6 +160,7 @@ label {
   position: relative;
   top:10px;
   left: 270px;
+  width:auto;
   font-family: Source Sans Pro;
   font-size: 40px;
 }
@@ -169,9 +170,11 @@ label {
   position: fixed;
   top: 250px;
   left: 0;
+  width:auto;
+  height:auto;
+  bottom:0;
   min-width: 600px;
   background-color: white;
-  height: 100%;
   border: 2px solid #75d0f4;
 }
 
@@ -198,8 +201,9 @@ label {
   position: fixed;
   top: 250px;
   left: 600px;
-  width: 680px;
-  height: 100%;
+  right:0;
+  width: auto;
+  height: auto;
   overflow-y: scroll;
   bottom: 0;
   padding:3px;

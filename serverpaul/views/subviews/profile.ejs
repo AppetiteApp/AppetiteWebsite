@@ -20,12 +20,15 @@
 
     <div id="profilesection">
       <form ng-submit="editProfile(user)">
-
-        <div id="profilename">
-          <input class="nameinput" type='text' onkeypress="this.style.width = ((this.value.length + 1) * 20) + 'px';" ng-model="user.firstName" name="firstName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/>
-          <input class="nameinput" type='text' onkeypress="this.style.width = ((this.value.length + 1) * 20) + 'px';" ng-model="user.lastName" name="lastName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>
-        </div>
         <div id="profileinfo">
+          <!--CHERYL WROTE THIS AS A DEMO/TEST, FEEL FREE TO REMOVE-->
+          <div ng-repeat="error in updateProfile.errors">{{error.errorMessage}}</div>
+            <!--CHERYL'S TEST ENDS HERE-->
+            <div id="profilename">
+              {{user.firstName}}
+              {{user.lastName}}
+              dsfnadskjfhnashdlkfjdhflaksdjhflaskjdhf
+            </div>
 
           <textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/></textarea><br>
 
@@ -42,24 +45,28 @@
 
 <div id="profilecontainer">
   <div id="profileinnercontainer">
+    
     <div id="repeateditem" ng-repeat="dish in user.dishes">
+      <form ng-submit="editDish(dish)">
         <div id="listitem" ng-click="showDetails = !showDetails">
-
+          
           <div id="dishbanner">
             <div class="dishthumbnail">
               <img class="img-thumbnail" src="/imgs/gordon.jpg" />
             </div>
-
-            <div id="dishtitle">{{dish.dishName}}</div>
-            <div id="dish.price">{{dish.price}}</div>
+            <input type="text" ng-model="dish.dishName" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+            <input type="text" ng-model="dish.price" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+            Active: <input type="checkbox" ng-model="dish.active" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
           </div>
         </div>
         <div ng-show="showDetails" id="itemdetails">
-          <p align="center">{{dish.description}}</p>
-          <div id="dish.time">{{dish.time}}</div>
-          <div id="dish.phone">{{dish.phone}}</div>
-          <div id="dish.address">{{dish.location}}</div>
+          <input type="text" ng-model="dish.description" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+          <input type="text" ng-model="dish.time" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+          <input type="text" ng-model="dish.phone" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+          <input type="text" ng-model="dish.location" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+          <input type="submit" value="Save Edits" ng-show="dish.changed"/>
         </div>
+      </form>
     </div>
   
   

@@ -24,7 +24,7 @@ module.exports = function(app) {
 		}
 		
 		var dishObject = {
-			dateAdded	: Date(),
+			dateUpadted	: Date(),
 			ownerid		: data.uid
 		};
 		
@@ -97,7 +97,14 @@ module.exports = function(app) {
 				errorMessage	: "No time entered"
 			});
 		} else {
-			dishObject.time = data.time;
+			//time object: has year, month, day, 
+			var start = data.time.year + " " + data.time.month + " " + data.time.day + " " + data.time.starthour;
+			var day = data.time.year + " " + data.time.month + " " + data.time.day;
+			dishObject.time = {
+				day: day,
+				startTime: start,
+				endHour: data.time.endhour
+			};
 		}
 		
 		//check if portions is entered, if not, set at 1
@@ -137,6 +144,8 @@ module.exports = function(app) {
 			});
 			return;
 		}
+		
+		dishObject.active = true;
 		
 		//go and make a new dish under "dish" in db
 		var newDishRef = global.dishRef.push();
@@ -220,7 +229,7 @@ module.exports = function(app) {
 			return;
 		}
 		
-		if (!req.body.delete && !req.body.dishName && !req.body.location && !req.body.phone && !req.body.description && 
+		if (!req.body.active && !req.body.dishName && !req.body.location && !req.body.phone && !req.body.description && 
 			!req.body.price  && !req.body.time	   && !req.body.portion && req.body.lng	   && !req.body.lat) {
 			res.send({
 				errorType: 'content',
@@ -234,8 +243,8 @@ module.exports = function(app) {
 		var error = [];
 		var warnings = [];
 		
-		if (data.delete === true || data.delete === false) {
-			update.delete = data.delete;
+		if (data.active === true || data.active === false) {
+			update.active = data.active;
 		}
 		
 		if (data.dishName) {
@@ -322,6 +331,8 @@ module.exports = function(app) {
 			}
 		}
 		
+		update.dateUpdated = Date();
+		
 		global.dishRef.child(data.key).once("value", function(snapshot){
 			if (snapshot.val().ownerid !== data.uid) {
 				res.send({
@@ -358,8 +369,8 @@ module.exports = function(app) {
 		var update = {};
 		var errors = [];
 		
-		if (!req.body.zip & !req.body.lat & !req.body.lng & !req.body.phone & !req.body.location & !req.body.fname 
-			& !req.body.lname) {
+		if (!req.body.zip & !req.body.lat & !req.body.lng & !req.body.phone & !req.body.location & !req.body.firstName 
+			& !req.body.lastName) {
 			res.send({
 				errorType: 'content',
 				errorMessage: "There's nothing to change"
@@ -372,25 +383,25 @@ module.exports = function(app) {
 			update.zip = req.body.zip;
 		}
 		
-		if (req.body.fname) {
-			if (!globals.individualNameRegex.test(req.body.fname)){
+		if (req.body.fistName) {
+			if (!globals.individualNameRegex.test(req.body.fistName)){
 				errors.push({
-					errorType: "fname",
-					errorMessage: "invalid characters in fname"
+					errorType: "fistName",
+					errorMessage: "Invalid characters in fist name"
 				});
 			} else {
 				update.firstName = req.body.fname;
 			}
 		}
 		
-		if (req.body.lname) {
-			if (!globals.individualNameRegex.test(req.body.lname)){
+		if (req.body.lastName) {
+			if (!globals.individualNameRegex.test(req.body.lastName)){
 				errors.push({
-					errorType: "lname",
-					errorMessage: "invalid characters in lname"
+					errorType: "lastName",
+					errorMessage: "Invalid characters in last name"
 				});
 			} else {
-				update.lastName = req.body.lname;
+				update.lastName = req.body.lastName;
 			}
 		}
 		

@@ -1,0 +1,17 @@
+User notifications:
+homeController:
+    $scope.currentUser: info of the currently logged in user
+    $scope.warnings: an array containing objects with errorType & errorMessage
+        {errorType: "user", errorMessage: "Already logged in with " + currentUser.email} if there’s already an user logged in
+        {errorType: “login”, errorMessage: error.message from firebase} if there’s an error with login
+        {errorType: “signup”, errorMessage: error.message from firebase} if there’s an error with signup
+    $scope.loginSuccess and $scope.signupSuccess: regardless of whether there is an user already signed in, default is false, becomes true if there’s a successful signup or login on the page. Maybe use these variables and an ng-show div to notify users if they’ve successfully signed up or logged in. I can also set these two variables to turn back to false after 3 seconds or something
+
+accountController:
+    $scope.updateProfile.errors: an array of errors, if any. Each error has an errorType & errorMessage
+    $scope.updateDish.errors: an array of errors, if any. Each error has an errorType & errorMessage. //not done yet
+
+browseController:
+    $scope.dish.warnings & $scope.dish.error: array of error/warning objects
+    $scope.dish.submitSuccess = true if dish has been successfully submitted; this value changes to false when user clicks open “sell dish”
+

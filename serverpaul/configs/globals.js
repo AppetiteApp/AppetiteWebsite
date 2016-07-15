@@ -2,7 +2,7 @@
 
 module.exports = {
 	onlyIntsRegex		: /^[0-9]+$/,
-	phoneRegex   		: /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/,
+	phoneRegex   		: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
 	usernameRegex		: /^[a-zA-Z0-9]+$/,
 	passwordRegex		: /^[a-zA-Z0-9:.?!@#$%^&*\-=_+\'\";<>,\/]+$/,
 	individualNameRegex : /^[\w .-]+$/i,

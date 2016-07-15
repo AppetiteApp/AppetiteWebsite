@@ -1,6 +1,7 @@
 /* global angular*/
 /* global firebase*/
 /* global google*/
+//var myApp = angular.module('myApp', ['ngRoute']);
 var myApp = angular.module('myApp', ['ngRoute']);
 
 myApp.config(['$routeProvider', function($routeProvider){
@@ -41,7 +42,7 @@ $routeProvider
 //for controlling regex, to be addedS
 myApp.service('regexService', function(){
     this.onlyIntsRegex    = /^[0-9]+$/;
-    this.phoneRegex       = /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/;
+    this.phoneRegex       = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
     this.usernameRegex    = /^[a-zA-Z0-9]+$/;
     this.passwordRegex    = /^[a-zA-Z0-9:.?!@#$%^&*\-=_+\'\";<>,\/]+$/;
     this.individualNameRegex = /^[\w\d]+$/i;
@@ -187,17 +188,17 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
             $scope.user.phone     = snapshot.val().phone;
             $scope.user.location  = snapshot.val().location;
             $scope.user.dishes    = [];
-            //should go and fetch meals
+            
+            //go and fetch meals
             if (snapshot.val().mealsMade){
                 snapshot.val().mealsMade.forEach(function(mealId){
                     firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
                         snapshot.val().mealId = mealId;
+                        var meal = snapshot.val();
+                        meal.key = mealId;
                         $timeout(function(){
-                            $scope.user.dishes.push(snapshot.val());    
+                            $scope.user.dishes.push(meal);    
                         });
-                        
-                      
-                        console.log($scope.user.dishes);      
                   });//end firebase fetch dish info
               });//end foreach meal
 
@@ -206,45 +207,51 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
 
         }); //end $timeout
     });
-    
+    $scope.updateProfile = {};
     
     //posts stuff to backend to edit profile
     $scope.editProfile = function(user){
-        $http.post('/api/account/edit', {
-            fname: user.firstName,
-            lname: user.lastName,
-            phone: user.phone,
+        //watch the stuff in the profile, on change, push them to updateObject and send that when user clicks the save edits button
+        var updateObject = {
+            uid     : sessionService.currentUser.uid,
+            phone   : user.phone,
             location: user.location,
-            uid: sessionService.currentUser.uid
-        })
+            firstName: user.firstName,
+            lastName: user.lastName
+        };
+        
+        
+        $http.post('/api/account/edit', updateObject)
         .then(function(res){
             //should use a ng-model to let user know success on success, maybe the ng-rules thingy
             if (res.status === 200) {
                 $scope.updateProfile.errors = res.data.errors;
                 $scope.updateProfile.statusMessage = res.data.message;
             }
+            console.log(res.data);
         },
         function(err){
            console.log(err); 
         });
     };
-    
+    $scope.editDish = {};
     
     //note: must have these things when injecting
     $scope.editDish = function(dish){
+        console.log(sessionService.currentUser.uid);
         $http.post('/api/dish/edit', {
+            uid         : sessionService.currentUser.uid,
             key         : dish.key,
             delete      : dish.delete,
             dishName    : dish.dishName,
             location    : dish.location,
-            uid         : $scope.user.uid,
             description : dish.description,
             price       : dish.price,
             time        : dish.time,
             portions    : dish.portions
         })
-        .then(function(data){
-            console.log(data);
+        .then(function(res){
+            console.log(res.data);
         },
         function(err){
             console.log(err);
@@ -279,36 +286,30 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
     
     
-    //dishes ordering by date Added
-    firebase.database().ref('dish/').orderByChild("dateAdded").once("value", function(snapshot){
+    //dishes ordering by date Added, PROBABLY SWITCH TO ORDERING BY PICKUP TIME
+    //firebase.database().ref('dish/').orderByChild("dateUpdated").once("value", function(snapshot){
+    firebase.database().ref('dish/').orderByChild('time/startTime').once("value", function(snapshot){
         var allDishes = snapshot.val();
         //$log.info(allDishes);
         var dishes = [];
+        console.log(snapshot.val());
         
         //iterate through all the dishes and put the ones that aren't owned by current owner in the scope
         for (var key in allDishes){
             console.log("dish key: " + key + " ; uid of dish: " + allDishes[key]["ownerid"]);
-             if (!allDishes[key]["deleted"] && allDishes[key]["ownerid"] !== currentUser.uid){
+            if (allDishes[key]["active"] && allDishes[key]["ownerid"] !== currentUser.uid){
+        //  if (allDishes[key]["active"] && allDishes[key]["ownerid"] !== currentUser.uid && date is today){
                  
                 //making a pretty time string
-                var timeString;
-                if (allDishes[key]["time"]["day"] == new Date().getDate()) {
-                    timeString = "Today ";
-                } else {
-                    var monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
-                    
-                    timeString =  monthNames[allDishes[key]["time"]["month"]].toString() +  " " + allDishes[key]["time"]["day"].toString() + " at ";
-                }
-                
-                timeString += allDishes[key]["time"]['starthour'].toString() +  ":00 - " + allDishes[key]["time"]['endhour'].toString() + ":00";
+            
                 console.log("pushing dish with key: " + key);
                     
-                dishes.unshift({
+                dishes.push({
                     dishName    : allDishes[key]["dishName"],
                     description : allDishes[key]["description"],
                     price       : allDishes[key]["price"],
                     quantity    : allDishes[key]["quantity"],
-                    time        : timeString,
+                    time        : allDishes[key]["time"],
                     location    : allDishes[key]["location"],
                     owner       : allDishes[key]["owner"],
                     key         : key,
@@ -380,6 +381,19 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
     };
     
     
+    $scope.vm = this;
+    $scope.vm.step ="one";
+    // $scope.vm.stepTwo = stepTwo;
+
+    $scope.stepTwo=function(){
+        $scope.vm.step = "two";
+    };
+       
+       
+    $scope.stepThree = function(){
+    $scope.vm.step = "three";
+    };
+
     
     //submits a dish
     //on success, clear stuff and show div that says submitSuccess and go to manage
@@ -410,7 +424,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         .then(function(res){
             $log.log(res);
             if (res.status === 200) {
-                $scope.submitSuccess = true;
+                $scope.dish.submitSuccess = true;
                 dish.dishName = "";
                 dish.description = "";
                 dish.price = "";
@@ -441,25 +455,34 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
     
 });
 
+   
+
+
 
 //testing: right now testing google api
 //on the assumption that we're including jquery as of now
-myApp.controller('testController', function($scope, $timeout, $http, sessionService){
+myApp.controller('testController', function($scope, $timeout, $http, $log, sessionService, regexService){
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
     
     $scope.user = {};
     $scope.user = firebase.auth().currentUser;
+    $scope.dish = {};
+    $scope.dish.one = false;
+    $scope.dish.two = false;
+    $scope.dish.three = false;
      
-    $scope.submitAddress = function(user){
+    $scope.submitAddress = function(dish){
         //format form data
         var formData = {
             region  : "ca",
-            address: user.location
+            address: $scope.queryAddress
         };
         
         var formDataString = $.param(formData);
         var queryString = QUERYSTRINGBASE + '&' + formDataString;
         $scope.user.queryString = queryString;
+        
+        console.log("submitaddress" + queryString);
         $http.get(queryString)
         .then(function(res){
             $scope.results = res.data.results;
@@ -469,14 +492,120 @@ myApp.controller('testController', function($scope, $timeout, $http, sessionServ
         
     };
     
+    //watch stuff and change dish.one , dish.two, and dish.three accordingly
+    
+    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone', 'dish.location', 'dish.price', 'dish.startHour', 'dish.endHour' ], function(newValues, oldValues, scope){
+        if ($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName) &&
+            $scope.dish.description && regexService.commentRegex.test($scope.dish.description)) {
+                $timeout(function(){
+                    $scope.dish.one = true;        
+                });
+            
+        } else {
+            $timeout(function(){
+                $scope.dish.one = false; 
+            });
+        }
+        
+        if ($scope.dish.phone && regexService.phoneRegex.test($scope.dish.phone) && 
+            $scope.dish.location) {
+                $timeout(function(){
+                    $scope.dish.two = true;
+                });
+        } else {
+            $timeout(function(){
+                $scope.dish.two = false; 
+            });
+        }
+        
+        if ($scope.dish.price && regexService.priceRegex.test($scope.dish.price) &&
+            $scope.dish.startHour && $scope.dish.endHour) {
+                $timeout(function(){
+                    $scope.dish.three = true;
+                });
+        } else {
+            $timeout(function(){
+                $scope.dish.three = false; 
+            });
+        }
+            
+            
+    });
+    
+    $scope.assignLocation = function(result){
+        $timeout(function() {
+            $scope.dish.location = {
+                name: result.formatted_address,
+                lat: result.geometry.location.lat,
+                lng: result.geometry.location.lng
+            }; 
+        });
+    }
+    
+    
     $scope.signout = sessionService.signout;
     
-    var storage = firebase.storage();
-    var storageRef = storage.ref();
-    var ProfileUrlRef = storageRef.child('profileImg');
+    // var storage = firebase.storage();
+    // var storageRef = storage.ref();
+    // var ProfileUrlRef = storageRef.child('profileImg');
     
     $scope.showPhoto = function(){
         console.log($scope.photo);  
+    };
+    
+    
+    //submits a dish
+    //on success, clear stuff and show div that says submitSuccess and go to manage
+    //on fail, show div that warns that submission failed
+    $scope.submitDish = function(dish){
+        var uid = firebase.auth().currentUser.uid;
+        var date = new Date();
+        $http.post('/newdish', {
+            dishName    : dish.dishName,
+            location    : dish.location,
+            uid         : uid,
+            description : dish.description,
+            price       : dish.price,
+            time        : {
+                    year    : date.getFullYear(),
+                    month   : date.getMonth(),
+                    day     : dish.day || date.getDate(),
+                    starthour: dish.starthour,
+                    endhour : dish.endhour
+                },
+            portions    : dish.portions || 1,
+            ingredients : dish.ingredients || ""
+        })
+        .then(function(res){
+            console.log(res);
+            if (res.status === 200) {
+                $scope.dish.submitSuccess = true;
+                dish.dishName = "";
+                dish.description = "";
+                dish.price = "";
+                dish.month = "";
+                dish.year = "";
+                dish.day = "";
+                dish.starttime = "";
+                dish.endtime = "";
+                dish.portions = "";
+                dish.phone = "";
+                dish.location= "";
+                dish.ingredients = "";
+                    $scope.error = res.data.error;
+                    $scope.warnings = res.data.warnings;
+                    $scope.message = res.data.message;    
+                $log.log($scope.error);
+                $log.log(res.data);
+                
+            } else {
+                $log.log(res.status);
+                $scope.message = "Failed to submit";
+            }
+        }, function(err){
+            console.log(err);
+            $scope.message = "Failed to load data, please refresh page";
+        });
     };
     
      

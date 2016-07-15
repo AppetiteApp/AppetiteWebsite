@@ -9,11 +9,6 @@
 
 <h3>Query String: {{user.queryString}}</h3>
 <hr>
-<div ng-repeat="result in results">
-    <h2>{{result.formatted_address}}</h2>
-    <p>Lat: {{result.geometry.location.lat}}, Long: {{result.geometry.location.lng}}</p> 
-    <hr>
-</div>
 <p>{{error}}</p>
 
 My name is Paul
@@ -25,3 +20,35 @@ signout function complete <button ng-click="signout()">Sign Out!</button>
     {{photo}}
     <input type="submit" value="submit" />
 </form>
+<br><br><br>
+<form>
+    Dish Name: <input ng-model="dish.dishName" /><br>
+    Dish Description: <input ng-model="dish.description" />
+    This part is done {{dish.one}}
+    <hr>
+    Phone: <input ng-model="dish.phone" /><br>
+    Location: <input ng-model="queryAddress"/> <button ng-click="submitAddress(dish)">Find your Address!</button>
+    <div ng-repeat="result in results" class="choices" ng-click="assignLocation(result)">
+        <p>{{result.formatted_address}}</>
+            <!--<p>Lat: {{result.geometry.location.lat}}, Long: {{result.geometry.location.lng}}</p>-->
+    </div>
+    location: {{dish.location}}<br>
+    This part is done {{dish.two}}
+    <hr>
+    Price: <input ng-model="dish.price" />
+    StartHour: <input ng-model="dish.startHour" />
+    EndHour: <input ng-model="dish.endHour" />
+    This part is done: {{dish.three}}
+    <input type="submit" value="submit!" />
+</form>
+
+<style>
+    .choices {
+        border: 1px solid #333;
+        background-color: #f0f0f0;
+        margin: 5px 0;
+    }
+    .choices:hover {
+        cursor: pointer;
+    }
+</style>
