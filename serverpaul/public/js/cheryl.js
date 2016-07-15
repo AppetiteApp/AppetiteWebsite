@@ -169,10 +169,11 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
 
 //if user is logged in, make ajax request to fetch stuff
 myApp.controller('accountController', function($scope, $log, $location, $http, $timeout, $route, sessionService){
-    $scope.user = {};
+    $scope.user = firebase.auth().currentUser;
+    const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
     
     //if no one is logged in, then redirect to the login page
-    if (!sessionService.currentUser) {
+    if (!$scope.user) {
         $route.reload();
         $location.path('/login');
         return;
@@ -188,26 +189,60 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
             $scope.user.phone     = snapshot.val().phone;
             $scope.user.location  = snapshot.val().location;
             $scope.user.dishes    = [];
-            
+            var dishes = [];
             //go and fetch meals
             if (snapshot.val().mealsMade){
                 snapshot.val().mealsMade.forEach(function(mealId){
                     firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
-                        snapshot.val().mealId = mealId;
                         var meal = snapshot.val();
                         meal.key = mealId;
+                        dishes.push(meal);
+                        console.log(dishes);
                         $timeout(function(){
-                            $scope.user.dishes.push(meal);    
+                            $scope.user.dishes = dishes; 
                         });
                   });//end firebase fetch dish info
-              });//end foreach meal
-
+                });//end foreach meal
+                
             }
 
 
         }); //end $timeout
     });
     $scope.updateProfile = {};
+    $scope.updateProfile.changeAddress = false;
+    
+    //assign location
+    $scope.assignLocation = function(result){
+        $timeout(function() {
+            $scope.user.location = result.formatted_address;
+            $scope.user.lat = result.geometry.location.lat;
+            $scope.user.lng = result.geometry.location.lng;
+        });
+    };
+    
+    
+    //find a new address function
+    $scope.submitAddress = function(dish){
+        //format form data
+        var formData = {
+            region  : "ca",
+            address: $scope.queryAddress
+        };
+        
+        var formDataString = $.param(formData);
+        var queryString = QUERYSTRINGBASE + '&' + formDataString;
+        $scope.user.queryString = queryString;
+        
+        console.log("submitaddress" + queryString);
+        $http.get(queryString)
+        .then(function(res){
+            $scope.results = res.data.results;
+        }, function(err){
+           $scope.error = err; 
+        });
+        
+    };
     
     //posts stuff to backend to edit profile
     $scope.editProfile = function(user){
@@ -289,35 +324,38 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
     //dishes ordering by date Added, PROBABLY SWITCH TO ORDERING BY PICKUP TIME
     //firebase.database().ref('dish/').orderByChild("dateUpdated").once("value", function(snapshot){
     firebase.database().ref('dish/').orderByChild('time/startTime').once("value", function(snapshot){
-        var allDishes = snapshot.val();
         //$log.info(allDishes);
         var dishes = [];
+        var allDishes = [];
         console.log(snapshot.val());
+        snapshot.forEach(function(child) {
+            console.log(child.val());
+            allDishes.push(child.val());
+        });
         
         //iterate through all the dishes and put the ones that aren't owned by current owner in the scope
-        for (var key in allDishes){
-            console.log("dish key: " + key + " ; uid of dish: " + allDishes[key]["ownerid"]);
-            if (allDishes[key]["active"] && allDishes[key]["ownerid"] !== currentUser.uid){
+        allDishes.forEach(function(dish){
+            //console.log("dish key: " + key + " ; uid of dish: " + allDishes[key]["ownerid"]);
+            if (dish["active"] && dish["ownerid"] !== currentUser.uid){
         //  if (allDishes[key]["active"] && allDishes[key]["ownerid"] !== currentUser.uid && date is today){
                  
                 //making a pretty time string
-            
-                console.log("pushing dish with key: " + key);
+
                     
                 dishes.push({
-                    dishName    : allDishes[key]["dishName"],
-                    description : allDishes[key]["description"],
-                    price       : allDishes[key]["price"],
-                    quantity    : allDishes[key]["quantity"],
-                    time        : allDishes[key]["time"],
-                    location    : allDishes[key]["location"],
-                    owner       : allDishes[key]["owner"],
-                    key         : key,
-                    phone       : allDishes[key]["phone"]
+                    dishName    : dish["dishName"],
+                    description : dish["description"],
+                    price       : dish["price"],
+                    quantity    : dish["quantity"],
+                    time        : dish["time"],
+                    location    : dish["location"],
+                    owner       : dish["owner"],
+                    // key         : key,
+                    phone       : dish["phone"]
                 });
                 console.log(dishes);
             } //end if  
-        } // end forEach loop
+        }); // end forEach loop
         $timeout(function(){
             $scope.dishes = dishes;
             console.log("changed dishes");
@@ -540,7 +578,7 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
                 lng: result.geometry.location.lng
             }; 
         });
-    }
+    };
     
     
     $scope.signout = sessionService.signout;

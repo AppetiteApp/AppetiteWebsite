@@ -7,44 +7,68 @@
 </ul>
 
 <!-- <div id="profilepage"> -->
-  <!-- <div id="profilecontainer"> -->
-
-<!-- <div id="thumbnailbackground"> -->
 
 <div id="profilebanner"></div>
 
 
-  <img id="profilethumbnail" border-radius="10px" src="/imgs/gordon.jpg" />
+<img id="profilethumbnail" border-radius="10px" src="/imgs/gordon.jpg" />
 
 
 
-    <div id="profilesection">
-      <form ng-submit="editProfile(user)">
-        <div id="profileinfo">
+<div id="profilecontainer">
+    
           <!--CHERYL WROTE THIS AS A DEMO/TEST, FEEL FREE TO REMOVE-->
           <div ng-repeat="error in updateProfile.errors">{{error.errorMessage}}</div>
             <!--CHERYL'S TEST ENDS HERE-->
-            <div id="profilename">
-              {{user.firstName}}
-              {{user.lastName}}
-              dsfnadskjfhnashdlkfjdhflaksdjhflaskjdhf
-            </div>
-
-          <textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/></textarea><br>
+          <div id="profilename">
+            {{user.firstName}}
+            {{user.lastName}}
+          </div>
+        <form ng-submit="editProfile(user)">
+          <div id="descriptionbox"><textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/></textarea></div><br>
 
           <label for="phone" class="profilelabel">Phone:</label>
           <input class="profileinput" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>
 
-          <label class="profilelabel" for="firstName">Address:</label>
+          <label class="profilelabel" for="firstName">Address:</label>{{user.location}}<br>
+          Change Location: <input type="checkbox" ng-click="user.changed=true" ng-model="updateProfile.changeAddress"/>
+          <div ng-show="updateProfile.changeAddress">
+            New Location: <input ng-model="queryAddress"/> <button ng-click="submitAddress(dish)">Find your Address!</button>
+              <div ng-repeat="result in results" class="choices" ng-click="assignLocation(result)">
+                  <p>{{result.formatted_address}}</p>
+              </div>
+    location: {{dish.location}}<br>
+            
+          </div>
+          
           <input class="profileinput" type='text' ng-model="user.location" name="adress" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>
           <input id='profileedit' type="submit" value="Save Edits" ng-show="user.changed" ng-init="user.changed=false"/>
       </form>
-    </div>
 </div>
 
 
-<div id="profilecontainer">
+<div id="dishcontainer">
   <div id="profileinnercontainer">
+    <!--ORIGINAL PART FOR DISHES-->
+    <!--<div id="repeateditem" ng-repeat="dish in user.dishes">-->
+    <!--    <div id="listitem" ng-click="showDetails = !showDetails">-->
+
+    <!--      <div id="dishbanner">-->
+    <!--        <div class="dishthumbnail">-->
+    <!--          <img class="img-thumbnail" src="/imgs/gordon.jpg" />-->
+    <!--        </div>-->
+
+    <!--        <div id="dishtitle">{{dish.dishName}}</div>-->
+    <!--        <div id="dish.price">{{dish.price}}</div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+    <!--    <div ng-show="showDetails" id="itemdetails">-->
+    <!--      <p align="center">{{dish.description}}</p>-->
+    <!--      <div id="dish.time">{{dish.time}}</div>-->
+    <!--      <div id="dish.phone">{{dish.phone}}</div>-->
+    <!--      <div id="dish.address">{{dish.location}}</div>-->
+    <!--    </div>-->
+    <!--</div>-->
     
     <div id="repeateditem" ng-repeat="dish in user.dishes">
       <form ng-submit="editDish(dish)">
@@ -68,8 +92,6 @@
         </div>
       </form>
     </div>
-  
-  
   </div>
 
 <div id="profileinstruction" text-align="center">

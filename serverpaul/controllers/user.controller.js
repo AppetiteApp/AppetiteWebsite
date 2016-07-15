@@ -49,11 +49,11 @@ module.exports = function(app) {
 				errorType	: "location",
 				errorMessage: "You didn't send the location"
 			});
-		} else if (!globals.addressRegex.test(data.location)){
-			errors.push({
-				errorType	: "location",
-				errorMessage: "Invalid characters in location"
-			});
+		//} else if (!globals.addressRegex.test(data.location)){
+		//	errors.push({
+		//		errorType	: "location",
+		//		errorMessage: "Invalid characters in location"
+		//	});
 		} else {
 			dishObject.location = data.location;
 		}
@@ -259,14 +259,14 @@ module.exports = function(app) {
 		}
 		
 		if (data.location) {
-			if (globals.addressRegex.test(data.location)){
+			//if (globals.addressRegex.test(data.location)){
 				update.location = data.location;
-			} else {
-				error.push({
-					errorType: "location",
-					errorMessage: "invalid characters in location"
-				});
-			}
+			//} else {
+			//	error.push({
+			//		errorType: "location",
+			//		errorMessage: "invalid characters in location"
+			//	});
+			//}
 		}
 
 		if (data.phone) {
@@ -435,14 +435,14 @@ module.exports = function(app) {
 		
 		//address updates
 		if (req.body.location) {
-			if (!globals.addressRegex.test(req.body.location)){
-				errors.push({
-					errorType: "location",
-					errorMessage: "Invalid characters in location"
-				});
-			} else {
+			//if (!globals.addressRegex.test(req.body.location)){
+			//	errors.push({
+			//		errorType: "location",
+			//		errorMessage: "Invalid characters in location"
+			//	});
+			//} else {
 				update.location = req.body.location;
-			}	
+			//}	
 		}
 		
 		//updates stuff and sends info regarding success and errors in to browser
