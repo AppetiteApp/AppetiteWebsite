@@ -55,9 +55,12 @@ myApp.service('regexService', function(){
 
 myApp.service('sessionService', function(){
     var self = this;
+    self.currentUser = firebase.auth().currentUser;
     self.signout = function(){
         firebase.auth().signOut().then(function(){
             self.signOut = true;
+            self.currentUser = undefined;
+            console.log("signed out!");
         }, function(err){
             console.log(err);
         });
@@ -65,7 +68,7 @@ myApp.service('sessionService', function(){
 });
 
 //login, signup
-myApp.controller('homeController', function($scope, $log, $location, regexService, $route) {
+myApp.controller('homeController', function($scope, $log, $location, regexService, $route, $timeout) {
     $scope.user = {};
     $log.log("Connected");
     $scope.warnings = [];
@@ -79,6 +82,8 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
                 errorType: "user",
                 errorMessage: "Already logged in with " + user.email
             });
+            $route.reload();
+            $location.path("/");
         } else {
             $log.log("onAuthStateChanged: no user");
         }
@@ -95,13 +100,20 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
         }
     });
     
+    $scope.loginSuccess = false;
+    $scope.signupSuccess = false;
+    
     //function for logging in, once successfully logged in, redirect to /browse
     $scope.login = function(user) {
 
         $log.log("login with email: " + user.email);
         
         firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(
-            function(){
+        function(){
+            $timeout(function(){
+                $scope.loginSuccess = true;
+            });
+                
                 $log.log("login function resolved");
                 $log.log(firebase.auth().currentUser);
                 $route.reload();
@@ -120,8 +132,13 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
     $scope.signup = function(user){
         console.log("signup");
         
+        //control: can only signup with @mail.mcgill.ca
+        
         firebase.auth().createUserWithEmailAndPassword(user.signupemail, user.signuppassword).then(
             function(){
+                $timeout(function(){
+                    $scope.signupSuccess = true;
+                });
                 $log.log("signup resolved");
                 var user = firebase.auth().currentUser;
                 firebase.database().ref('users/' + user.uid).set({
@@ -150,27 +167,26 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
 
 
 //if user is logged in, make ajax request to fetch stuff
-myApp.controller('accountController', function($scope, $log, $location, $http, $timeout, $route){
-    var firebaseUser = firebase.auth().currentUser;
+myApp.controller('accountController', function($scope, $log, $location, $http, $timeout, $route, sessionService){
     $scope.user = {};
     
     //if no one is logged in, then redirect to the login page
-    if (!firebaseUser) {
+    if (!sessionService.currentUser) {
         $route.reload();
         $location.path('/login');
         return;
     }
     
     //getting the user's info and the user's dishes info
-    firebase.database().ref('users/' + firebaseUser.uid).once('value', function(snapshot){
+    firebase.database().ref('users/' + sessionService.currentUser.uid).once('value', function(snapshot){
         $log.log(snapshot.val());
         $timeout(function(){
             $scope.user.firstName = snapshot.val().firstName;
-            $scope.user.lastName = snapshot.val().lastName;
+            $scope.user.lastName  = snapshot.val().lastName;
             //$scope.user.email = snapshot.val().email;
-            $scope.user.phone = snapshot.val().phone;
-            $scope.user.address = snapshot.val().address;
-            $scope.user.dishes = [];
+            $scope.user.phone     = snapshot.val().phone;
+            $scope.user.location  = snapshot.val().location;
+            $scope.user.dishes    = [];
             //should go and fetch meals
             if (snapshot.val().mealsMade){
                 snapshot.val().mealsMade.forEach(function(mealId){
@@ -198,12 +214,15 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
             fname: user.firstName,
             lname: user.lastName,
             phone: user.phone,
-            address: user.address,
-            uid: firebaseUser.uid
+            location: user.location,
+            uid: sessionService.currentUser.uid
         })
-        .then(function(data){
+        .then(function(res){
             //should use a ng-model to let user know success on success, maybe the ng-rules thingy
-            console.log(data);
+            if (res.status === 200) {
+                $scope.updateProfile.errors = res.data.errors;
+                $scope.updateProfile.statusMessage = res.data.message;
+            }
         },
         function(err){
            console.log(err); 
@@ -217,7 +236,7 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
             key         : dish.key,
             delete      : dish.delete,
             dishName    : dish.dishName,
-            address     : dish.address,
+            location    : dish.location,
             uid         : $scope.user.uid,
             description : dish.description,
             price       : dish.price,
@@ -290,7 +309,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
                     price       : allDishes[key]["price"],
                     quantity    : allDishes[key]["quantity"],
                     time        : timeString,
-                    address     : allDishes[key]["address"],
+                    location    : allDishes[key]["location"],
                     owner       : allDishes[key]["owner"],
                     key         : key,
                     phone       : allDishes[key]["phone"]
@@ -325,15 +344,15 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         
         //if user has valid address & lnglat, then use that as the dish's address & lnglat
         //else, error and cannot submit dish
-        if (snapshot.val().address && snapshot.val().lng && snapshot.val().lat) {
-            $scope.dish.address = snapshot.val().address;
-            $scope.dish.lat     = snapshot.val().lat;
-            $scope.dish.lng     = snapshot.val().lng;
-            $scope.user.address = snapshot.val().address;
+        if (snapshot.val().location && snapshot.val().lng && snapshot.val().lat) {
+            $scope.dish.location = snapshot.val().location;
+            $scope.dish.lat      = snapshot.val().lat;
+            $scope.dish.lng      = snapshot.val().lng;
+            $scope.user.location = snapshot.val().location;
         } else {
             $scope.dish.errors.push({
                 errorType: "userinfo",
-                errorMessage: "User info incomplete: missing address, lat & lng"
+                errorMessage: "User info incomplete: missing location."
             });
         }
         
@@ -345,7 +364,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         //format form data
         var formData = {
             region  : "ca",
-            address : user.address
+            address: user.location
         };
         
         var formDataString = $.param(formData);
@@ -374,7 +393,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         var date = new Date();
         $http.post('/newdish', {
             dishName    : dish.dishName,
-            address     : dish.address,
+            location    : dish.location,
             uid         : uid,
             description : dish.description,
             price       : dish.price,
@@ -402,7 +421,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
                 dish.endtime = "";
                 dish.portions = "";
                 dish.phone = "";
-                dish.address= "";
+                dish.location= "";
                 dish.ingredients = "";
                     $scope.error = res.data.error;
                     $scope.warnings = res.data.warnings;
@@ -412,10 +431,11 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
                 
             } else {
                 $log.log(res.status);
+                $scope.message = "Failed to submit";
             }
         }, function(err){
             console.log(err);
-            $scope.error = "Failed to load data, please refresh page";
+            $scope.message = "Failed to load data, please refresh page";
         });
     };
     
@@ -424,7 +444,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
 
 //testing: right now testing google api
 //on the assumption that we're including jquery as of now
-myApp.controller('testController', function($scope, $timeout, $http){
+myApp.controller('testController', function($scope, $timeout, $http, sessionService){
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
     
     $scope.user = {};
@@ -434,7 +454,7 @@ myApp.controller('testController', function($scope, $timeout, $http){
         //format form data
         var formData = {
             region  : "ca",
-            address : user.address
+            address: user.location
         };
         
         var formDataString = $.param(formData);
@@ -449,20 +469,15 @@ myApp.controller('testController', function($scope, $timeout, $http){
         
     };
     
-    $scope.signout = function(){
-        firebase.auth().signOut().then(function(){
-            $timeout(function(){
-                $scope.signout = true;
-                $scope.user = firebase.auth().currentUser;
-            });
-        }, function(err){
-            console.log(err);
-        });        
-    };  
-     
+    $scope.signout = sessionService.signout;
+    
     var storage = firebase.storage();
     var storageRef = storage.ref();
     var ProfileUrlRef = storageRef.child('profileImg');
-    console.log($scope.photo);
+    
+    $scope.showPhoto = function(){
+        console.log($scope.photo);  
+    };
+    
      
 });

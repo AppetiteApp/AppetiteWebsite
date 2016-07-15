@@ -44,18 +44,18 @@ module.exports = function(app) {
 		}
 		
 		//check if location is present and valid
-		if (!data.address) {
+		if (!data.location) {
 			errors.push({
 				errorType	: "location",
 				errorMessage: "You didn't send the location"
 			});
-		} else if (!globals.addressRegex.test(data.address)){
+		} else if (!globals.addressRegex.test(data.location)){
 			errors.push({
 				errorType	: "location",
 				errorMessage: "Invalid characters in location"
 			});
 		} else {
-			dishObject.address = data.address;
+			dishObject.location = data.location;
 		}
 		
 		//check if description is present and valid
@@ -132,7 +132,7 @@ module.exports = function(app) {
 		if (errors.length > 0 ){
 			res.send({
 				errors: errors,
-				message: "not updated because of error",
+				message: "Not updated due to errors",
 				madeMeal: true
 			});
 			return;
@@ -193,7 +193,7 @@ module.exports = function(app) {
 		res.send({
 			errors: errors,
 			warnings: warnings,
-			message: "You've successfully updated the meal!",
+			message: "You've successfully submitted the meal!",
 			madeMeal: true
 		});
 		
@@ -220,7 +220,7 @@ module.exports = function(app) {
 			return;
 		}
 		
-		if (!req.body.delete && !req.body.dishName && !req.body.address && !req.body.phone && !req.body.description && 
+		if (!req.body.delete && !req.body.dishName && !req.body.location && !req.body.phone && !req.body.description && 
 			!req.body.price  && !req.body.time	   && !req.body.portion && req.body.lng	   && !req.body.lat) {
 			res.send({
 				errorType: 'content',
@@ -249,13 +249,13 @@ module.exports = function(app) {
 			}
 		}
 		
-		if (data.address) {
-			if (globals.addressRegex.test(data.address)){
-				update.address = data.address;
+		if (data.location) {
+			if (globals.addressRegex.test(data.location)){
+				update.location = data.location;
 			} else {
 				error.push({
-					errorType: "address",
-					errorMessage: "invalid characters in address"
+					errorType: "location",
+					errorMessage: "invalid characters in location"
 				});
 			}
 		}
@@ -356,9 +356,9 @@ module.exports = function(app) {
 		}
 		
 		var update = {};
-		var error = [];
+		var errors = [];
 		
-		if (!req.body.zip & !req.body.lat & !req.body.lng & !req.body.phone & !req.body.address & !req.body.fname 
+		if (!req.body.zip & !req.body.lat & !req.body.lng & !req.body.phone & !req.body.location & !req.body.fname 
 			& !req.body.lname) {
 			res.send({
 				errorType: 'content',
@@ -374,7 +374,7 @@ module.exports = function(app) {
 		
 		if (req.body.fname) {
 			if (!globals.individualNameRegex.test(req.body.fname)){
-				error.push({
+				errors.push({
 					errorType: "fname",
 					errorMessage: "invalid characters in fname"
 				});
@@ -385,7 +385,7 @@ module.exports = function(app) {
 		
 		if (req.body.lname) {
 			if (!globals.individualNameRegex.test(req.body.lname)){
-				error.push({
+				errors.push({
 					errorType: "lname",
 					errorMessage: "invalid characters in lname"
 				});
@@ -399,7 +399,7 @@ module.exports = function(app) {
 		//if not lat/lng present, do nothing
 		if (req.body.lat & req.body.lng) {
 			if (!globals.latLngRegex.test(req.body.lat) || !globals.latLngRegex.test(req.body.lng)){
-				error.push({
+				errors.push({
 					errorType: "latlng",
 					errorMessage: "Invalid characters in lat/lng"
 				});
@@ -413,7 +413,7 @@ module.exports = function(app) {
 		//phone updates
 		if (req.body.phone) {
 			if (!globals.phoneRegex.test(req.body.phone)){
-				error.push({
+				errors.push({
 					errorType: "phone",
 					errorMessage: "Invalid characters in phone"
 				});
@@ -423,19 +423,19 @@ module.exports = function(app) {
 		}
 		
 		//address updates
-		if (req.body.address) {
-			if (!globals.addressRegex.test(req.body.address)){
-				error.push({
-					errorType: "address",
-					errorMessage: "Invalid characters in address"
+		if (req.body.location) {
+			if (!globals.addressRegex.test(req.body.location)){
+				errors.push({
+					errorType: "location",
+					errorMessage: "Invalid characters in location"
 				});
 			} else {
-				update.address = req.body.address;
+				update.location = req.body.location;
 			}	
 		}
 		
 		//updates stuff and sends info regarding success and errors in to browser
-		if (error.length == 0 ) {
+		if (errors.length == 0 ) {
 			global.userRef.child(req.body.uid).update(update);
 			res.send({
 				status: 200,
@@ -446,13 +446,13 @@ module.exports = function(app) {
 			res.send({
 				status: 201,
 				message: "partially updated",
-				error: error
+				errors: errors
 			});
 		} else {
 			res.send({
 				status: 500,
 				message: "invalid use of api",
-				error: error
+				error: errors
 			});
 		}
 		

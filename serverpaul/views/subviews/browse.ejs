@@ -27,7 +27,7 @@
         <p>{{dish.description}}</p>
         <div id="dishtime">{{dish.time}}</div>
         <div id="dishphone">{{dish.phone}}</div>
-        <div id="dishlocation">{{dish.address}}</div>
+        <div id="dishlocation">{{dish.location}}</div>
     </div>
   </div>
 </div>
@@ -36,18 +36,6 @@
 <div class="morph-button morph-button-modal1 morph-button-modal-2 morph-button-fixed" id="submitdishbutton">
     <button type="button">Sell Dish!</button>
     <div class="morph-content">
-      
-            <form ng-submit="submitAddress(user)">
-              <label>Address: </label><input ng-model="user.address" />
-              <input type="submit" value="Try To Find Your Address!" ng-click="submitAddress(user)">
-            </form>
-            
-            <div ng-repeat="result in results">
-              <hr>
-              <h2>{{result.formatted_address}}</h2>
-              <hr>
-            </div>
-
         <div class="content-style-form content-style-form-1">
             <span class="icon icon-close">Close the dialog</span>
             <h2>Sell a Dish</h2>
@@ -61,7 +49,7 @@
               <p align="center"><label>Description</label><input type="text" ng-model="dish.description" /></p>
               <p align="center"><label>Price</label><input type="text" ng-model="dish.price" /></p>
               <p align="center" ng-hide="!dish.phone"><label>Phone</label><input type="text" ng-model="dish.phone" ></p>
-              <p align="center"><label>Location</label><input type="text" ng-model="dish.address" /></p>
+              <p align="center"><label>Location</label><input type="text" ng-model="dish.location" /></p>
               <p align="center"><label>Time</label>
                   <input type="text" ng-model="dish.day" placeholder="dd" />
                   <input type="text" ng-model="dish.starthour" placeholder="hh"/>
@@ -165,7 +153,7 @@ async defer></script>
                         price       : allDishes[key]["price"],
                         quantity    : allDishes[key]["quantity"],
                         time        : allDishes[key]["time"],
-                        address     : allDishes[key]["address"],
+                        location    : allDishes[key]["location"],
                         owner       : allDishes[key]["owner"],
                         key         : key
                     });

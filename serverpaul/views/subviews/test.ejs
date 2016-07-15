@@ -1,7 +1,7 @@
 <h1>Testing stuff, Paul don't change this</h1>
 
 <form ng-submit="submitAddress(user)">
-    <label>Address: </label><input ng-model="user.address" />
+    <label>Address: </label><input ng-model="user.location" />
     <input type="submit" value="Try To Find Your Address!" ng-click="submitAddress(user)">
     
     
@@ -18,9 +18,10 @@
 
 My name is Paul
 
-signout function complete
+signout function complete <button ng-click="signout()">Sign Out!</button>
 
-<form>
-    Profile Pic: <input type="file" ng-model="photo"/>
+<form ng-submit="showPhoto()">
+    Profile Pic: <input type="file" ng-model="photo" accept="image/*"/>
     {{photo}}
+    <input type="submit" value="submit" />
 </form>

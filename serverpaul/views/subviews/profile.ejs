@@ -33,7 +33,7 @@
           <input class="profileinput" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>
 
           <label class="profilelabel" for="firstName">Address:</label>
-          <input class="profileinput" type='text' ng-model="user.address" name="adress" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>
+          <input class="profileinput" type='text' ng-model="user.location" name="adress" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>
           <input id='profileedit' type="submit" value="Save Edits" ng-show="user.changed" ng-init="user.changed=false"/>
       </form>
     </div>
@@ -58,7 +58,7 @@
           <p align="center">{{dish.description}}</p>
           <div id="dish.time">{{dish.time}}</div>
           <div id="dish.phone">{{dish.phone}}</div>
-          <div id="dish.address">{{dish.address}}</div>
+          <div id="dish.address">{{dish.location}}</div>
         </div>
     </div>
   
