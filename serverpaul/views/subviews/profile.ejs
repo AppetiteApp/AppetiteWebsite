@@ -19,6 +19,7 @@
     
           <!--CHERYL WROTE THIS AS A DEMO/TEST, FEEL FREE TO REMOVE-->
           <div ng-repeat="error in updateProfile.errors">{{error.errorMessage}}</div>
+          <div ng-show="user.updated">Profile Updated!</div>
             <!--CHERYL'S TEST ENDS HERE-->
           <div id="profilename">
             {{user.firstName}}
@@ -37,11 +38,9 @@
               <div ng-repeat="result in results" class="choices" ng-click="assignLocation(result)">
                   <p>{{result.formatted_address}}</p>
               </div>
-    location: {{dish.location}}<br>
-            
           </div>
-          
-          <input class="profileinput" type='text' ng-model="user.location" name="adress" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>
+      
+          <!--<input class="profileinput" type='text' ng-model="user.location" name="adress" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>-->
           <input id='profileedit' type="submit" value="Save Edits" ng-show="user.changed" ng-init="user.changed=false"/>
       </form>
 </div>

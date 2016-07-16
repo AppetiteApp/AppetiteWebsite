@@ -55,7 +55,10 @@ module.exports = function(app) {
 		//		errorMessage: "Invalid characters in location"
 		//	});
 		} else {
-			dishObject.location = data.location;
+			dishObject.location = data.location.name;
+			dishObject.lat = data.location.lat;
+			dishObject.lng = data.location.lng;
+			
 		}
 		
 		//check if description is present and valid
@@ -98,12 +101,12 @@ module.exports = function(app) {
 			});
 		} else {
 			//time object: has year, month, day, 
-			var start = data.time.year + " " + data.time.month + " " + data.time.day + " " + data.time.starthour;
+			var start = data.time.year + " " + data.time.month + " " + data.time.day + " " + data.time.startHour;
 			var day = data.time.year + " " + data.time.month + " " + data.time.day;
 			dishObject.time = {
 				day: day,
 				startTime: start,
-				endHour: data.time.endhour
+				endHour: data.time.endHour
 			};
 		}
 		
@@ -153,27 +156,6 @@ module.exports = function(app) {
 		
 		console.log(dishObject);
 		newDishRef.set(dishObject);
-		
-		if(req.body.lng && req.body.lat){
-			newDishRef.update ({
-				lat: req.body.lat,
-				lng: req.body.lng
-			});
-		} else {
-			global.userRef.child(req.body.uid).once('value', function(snapshot){
-				if (!snapshot.val().lat || !snapshot.val().lng){
-					warnings.push({
-						warningType: "latlng",
-						warningMessage: "User doesn't have a lat/lng and user didn't specify a lat/lng with dish"
-					});
-				} else {
-					newDishRef.update({
-						lat: snapshot.val().lat,
-						lng: snapshot.val().lng
-					});
-				}	
-			});
-		}
 		
 		global.userRef.child(req.body.uid).once("value", function(snapshot){
 			console.log(snapshot.val());

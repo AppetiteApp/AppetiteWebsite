@@ -29,7 +29,7 @@ signout function complete <button ng-click="signout()">Sign Out!</button>
     Phone: <input ng-model="dish.phone" /><br>
     Location: <input ng-model="queryAddress"/> <button ng-click="submitAddress(dish)">Find your Address!</button>
     <div ng-repeat="result in results" class="choices" ng-click="assignLocation(result)">
-        <p>{{result.formatted_address}}</>
+        <p>{{result.formatted_address}}</p>
             <!--<p>Lat: {{result.geometry.location.lat}}, Long: {{result.geometry.location.lng}}</p>-->
     </div>
     location: {{dish.location}}<br>

@@ -117,17 +117,18 @@ label {
   text-align: center;
 }
 
-.descriptionbox{
+#descriptionbox{
   position: absolute;
-  width: 100%;
-  height: 100%;
+  box-sizing: border-box;
+  width:100%;
+  height: auto;
   display: block;
   outline: none;
   border: none;
   top:85px;
-  margin-left: 5px;
   padding:5px;
   background: rgba(255, 255, 255, 0.9);
+  overflow:auto;
 
 }
 

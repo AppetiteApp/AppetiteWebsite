@@ -1,7 +1,5 @@
 /* global angular*/
 /* global firebase*/
-/* global google*/
-//var myApp = angular.module('myApp', ['ngRoute']);
 var myApp = angular.module('myApp', ['ngRoute']);
 
 myApp.config(['$routeProvider', function($routeProvider){
@@ -54,9 +52,12 @@ myApp.service('regexService', function(){
     this.emailRegex       = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 });
 
+//service to manage session: stores: firstname, lastname, email, mealsmade, address
 myApp.service('sessionService', function(){
     var self = this;
     self.currentUser = firebase.auth().currentUser;
+    
+    
     self.signout = function(){
         firebase.auth().signOut().then(function(){
             self.signOut = true;
@@ -69,9 +70,8 @@ myApp.service('sessionService', function(){
 });
 
 //login, signup
-myApp.controller('homeController', function($scope, $log, $location, regexService, $route, $timeout) {
+myApp.controller('homeController', function($scope, $log, $location, regexService, $route, $timeout, sessionService) {
     $scope.user = {};
-    $log.log("Connected");
     $scope.warnings = [];
     
     firebase.auth().onAuthStateChanged(function(user) {
@@ -83,8 +83,8 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
                 errorType: "user",
                 errorMessage: "Already logged in with " + user.email
             });
-            $route.reload();
-            $location.path("/");
+            // $route.reload();
+            // $location.path("/");
         } else {
             $log.log("onAuthStateChanged: no user");
         }
@@ -98,6 +98,7 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
     $scope.$watch('user.confirmpassword', function(newValue, oldValue){
         if (oldValue.keyCode == 13 && $scope.user.signuppassword === $scope.user.confirmpassword) {
             $scope.signup($scope.user);
+            
         }
     });
     
@@ -121,7 +122,7 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
                 $location.path("/");
             }
             ,function(error) {
-                $scope.warnings.push({
+                $scope.warnings.unshift({
                     errorType   : "login",
                     errorMessage: error.message
                 });
@@ -154,7 +155,7 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
             var errorCode = error.code;
             var errorMessage = error.message;
             console.log(errorCode + ": " + errorMessage);
-            $scope.warnings.push({
+            $scope.warnings.unshift({
                 errorType   : "signup",
                 errorMessage: error.message
             });
@@ -179,27 +180,25 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
         return;
     }
     
+    
+    
     //getting the user's info and the user's dishes info
-    firebase.database().ref('users/' + sessionService.currentUser.uid).once('value', function(snapshot){
+    firebase.database().ref('users/' +  $scope.user.uid).once('value', function(snapshot){
         $log.log(snapshot.val());
         $timeout(function(){
             $scope.user.firstName = snapshot.val().firstName;
             $scope.user.lastName  = snapshot.val().lastName;
-            //$scope.user.email = snapshot.val().email;
             $scope.user.phone     = snapshot.val().phone;
             $scope.user.location  = snapshot.val().location;
-            $scope.user.dishes    = [];
-            var dishes = [];
+            $scope.user.dishes    = {};
+            
             //go and fetch meals
             if (snapshot.val().mealsMade){
                 snapshot.val().mealsMade.forEach(function(mealId){
                     firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
-                        var meal = snapshot.val();
-                        meal.key = mealId;
-                        dishes.push(meal);
-                        console.log(dishes);
                         $timeout(function(){
-                            $scope.user.dishes = dishes; 
+                            $scope.user.dishes[mealId] = snapshot.val();
+                            $scope.user.dishes[mealId].key = mealId;
                         });
                   });//end firebase fetch dish info
                 });//end foreach meal
@@ -244,11 +243,15 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
         
     };
     
+    $scope.$watch('user.location', function(newValue, oldValue){
+        $scope.user.changed = true; 
+    });
+    
     //posts stuff to backend to edit profile
     $scope.editProfile = function(user){
         //watch the stuff in the profile, on change, push them to updateObject and send that when user clicks the save edits button
         var updateObject = {
-            uid     : sessionService.currentUser.uid,
+            uid     :  $scope.user.uid,
             phone   : user.phone,
             location: user.location,
             firstName: user.firstName,
@@ -256,7 +259,7 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
         };
         
         
-        $http.post('/api/account/edit', updateObject)
+    $http.post('/api/account/edit', updateObject)
         .then(function(res){
             //should use a ng-model to let user know success on success, maybe the ng-rules thingy
             if (res.status === 200) {
@@ -264,26 +267,46 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
                 $scope.updateProfile.statusMessage = res.data.message;
             }
             console.log(res.data);
+            //revert everything
+            if (res.data.status === 200) {
+                $scope.user.changed = false;
+                $scope.user.updated = true;
+            }
         },
         function(err){
            console.log(err); 
         });
     };
+    
+    
     $scope.editDish = {};
     
     //note: must have these things when injecting
     $scope.editDish = function(dish){
-        console.log(sessionService.currentUser.uid);
+        console.log( $scope.user.uid);
+        //dish.time
+        
+        var time = {
+            year: dish.time.year || Date().getFullYear(),
+            month: dish.time.month || Date().getMonth(),
+            day: dish.time.day || Date().getDate(),
+            startHour: dish.time.startHour,
+            endHour: dish.time.endHour
+        };
+        
+        
+        //extract num from price
         $http.post('/api/dish/edit', {
-            uid         : sessionService.currentUser.uid,
+            uid         : $scope.user.uid,
             key         : dish.key,
             delete      : dish.delete,
             dishName    : dish.dishName,
             location    : dish.location,
-            description : dish.description,
+            description : $scope.user.description,
             price       : dish.price,
-            time        : dish.time,
-            portions    : dish.portions
+            time        : time,
+            portions    : dish.portions,
+            phone       : $scope.user.phone
         })
         .then(function(res){
             console.log(res.data);
@@ -367,7 +390,12 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
     //create a dish object and put the user's info into it
     $scope.dish = {
         warnings: [],
-        errors  : []
+        errors  : [],
+        time    : {
+            year: new Date().getFullYear(),
+            month: new Date().getMonth() + 1,
+            day: new Date().getDate()
+        }
     };
     firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function(snapshot){
         //if user has phone num, then use that as the dish's phone num
@@ -384,9 +412,11 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         //if user has valid address & lnglat, then use that as the dish's address & lnglat
         //else, error and cannot submit dish
         if (snapshot.val().location && snapshot.val().lng && snapshot.val().lat) {
-            $scope.dish.location = snapshot.val().location;
-            $scope.dish.lat      = snapshot.val().lat;
-            $scope.dish.lng      = snapshot.val().lng;
+            $scope.dish.location = {
+                name: snapshot.val().location,
+                lat: snapshot.val().lat,
+                lng: snapshot.val().lng
+            };
             $scope.user.location = snapshot.val().location;
         } else {
             $scope.dish.errors.push({
@@ -399,11 +429,11 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         
     });
     
-    $scope.submitAddress = function(user){
+    $scope.submitAddress = function(){
         //format form data
         var formData = {
             region  : "ca",
-            address: user.location
+            address: $scope.searchAddress
         };
         
         var formDataString = $.param(formData);
@@ -416,6 +446,17 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
            $scope.error = err; 
         });
         
+    };
+    
+        $scope.assignLocation = function(result){
+        $timeout(function() {
+            $scope.dish.location = {
+                name: result.formatted_address,
+                lat: result.geometry.location.lat,
+                lng: result.geometry.location.lng
+            }; 
+            $scope.locationCustom = false;
+        });
     };
     
     
@@ -449,13 +490,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
             uid         : uid,
             description : dish.description,
             price       : dish.price,
-            time        : {
-                    year    : date.getFullYear(),
-                    month   : date.getMonth(),
-                    day     : dish.day || date.getDate(),
-                    starthour: dish.starthour,
-                    endhour : dish.endhour
-                },
+            time        : dish.time,
             portions    : dish.portions || 1,
             ingredients : dish.ingredients || ""
         })
@@ -508,7 +543,7 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
     $scope.dish.one = false;
     $scope.dish.two = false;
     $scope.dish.three = false;
-     
+
     $scope.submitAddress = function(dish){
         //format form data
         var formData = {
