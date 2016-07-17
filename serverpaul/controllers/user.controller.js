@@ -351,13 +351,16 @@ module.exports = function(app) {
 		var update = {};
 		var errors = [];
 		
-		if (!req.body.zip & !req.body.lat & !req.body.lng & !req.body.phone & !req.body.location & !req.body.firstName 
-			& !req.body.lastName) {
+		if (!req.body.zip && !req.body.lat && !req.body.lng && !req.body.phone && !req.body.location && !req.body.firstName && !req.body.lastName && !req.body.description) {
 			res.send({
 				errorType: 'content',
 				errorMessage: "There's nothing to change"
 			});
 			return;
+		}
+		
+		if (req.body.description) {
+		    update.description = req.body.description;
 		}
 		
 		//need to add a zipRegex	
@@ -432,25 +435,35 @@ module.exports = function(app) {
 			global.userRef.child(req.body.uid).update(update);
 			res.send({
 				status: 200,
-				message: "success"
+				message: "Successfully updated profile"
 			});
 		} else if (update){
 			global.userRef.child(req.body.uid).update(update);
 			res.send({
 				status: 201,
-				message: "partially updated",
+				message: "Update unsuccessful",
 				errors: errors
 			});
 		} else {
 			res.send({
 				status: 500,
-				message: "invalid use of api",
+				message: "Server error",
 				error: errors
 			});
 		}
 		
 	});
 
-	
+	app.post('/api/newaccount', function(req, res, next){
+        console.log("Creating new user with email", req.body.email, "at", Date());
+        var photoUrl = "http://cliparts.co/cliparts/8cx/Kk7/8cxKk7Xji.png";
+        
+        global.userRef.child(req.body.uid).set({
+            uid: req.body.uid,
+            email: req.body.email,
+            photoUrl: photoUrl
+        })
+        
+	});
 	
 };

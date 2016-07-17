@@ -27,9 +27,10 @@
           <!--CHERYL WROTE THIS AS A DEMO/TEST, FEEL FREE TO REMOVE-->
           <!--<div ng-repeat="error in updateProfile.errors"></div>-->
           <!--<div ng-show="user.updated">Profile Updated!</div>-->
+          {{updateProfile.statusMessage}}
             <!--CHERYL'S TEST ENDS HERE-->
         <form ng-submit="editProfile(user)">
-          <textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/></textarea>
+          <textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-model="user.description"/></textarea>
         
           <label for="phone" class="profilelabel">Phone:</label>
           <input class="profileinput" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>

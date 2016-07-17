@@ -70,7 +70,7 @@ myApp.service('sessionService', function(){
 });
 
 //login, signup
-myApp.controller('homeController', function($scope, $log, $location, regexService, $route, $timeout, sessionService) {
+myApp.controller('homeController', function($scope, $log, $location, regexService, $route, $timeout, sessionService, $http) {
     $scope.user = {};
     $scope.warnings = [];
     
@@ -83,8 +83,8 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
                 errorType: "user",
                 errorMessage: "Already logged in with " + user.email
             });
-            // $route.reload();
-            // $location.path("/");
+            $route.reload();
+            $location.path("/");
         } else {
             $log.log("onAuthStateChanged: no user");
         }
@@ -143,9 +143,19 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
                 });
                 $log.log("signup resolved");
                 var user = firebase.auth().currentUser;
-                firebase.database().ref('users/' + user.uid).set({
-                    email: user.signupemail 
+                //do this in server
+                
+                $http.post('/api/newaccount', {
+                    uid         : user.uid,
+                    email       : user.email
+                })
+                .then(function(res){
+                    console.log(res.data);
+                },
+                function(err){
+                    console.log(err);
                 });
+                
                 $log.log(firebase.auth().currentUser);
                 $route.reload();
                 $location.path('/account');
@@ -180,8 +190,6 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
         return;
     }
     
-    
-    
     //getting the user's info and the user's dishes info
     firebase.database().ref('users/' +  $scope.user.uid).once('value', function(snapshot){
         $log.log(snapshot.val());
@@ -190,6 +198,7 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
             $scope.user.lastName  = snapshot.val().lastName;
             $scope.user.phone     = snapshot.val().phone;
             $scope.user.location  = snapshot.val().location;
+            $scope.user.description = snapshot.val().description;
             $scope.user.dishes    = {};
             
             //go and fetch meals
@@ -204,7 +213,6 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
                 });//end foreach meal
                 
             }
-
 
         }); //end $timeout
     });
@@ -252,6 +260,7 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
         //watch the stuff in the profile, on change, push them to updateObject and send that when user clicks the save edits button
         var updateObject = {
             uid     :  $scope.user.uid,
+            description: user.description,
             phone   : user.phone,
             location: user.location,
             firstName: user.firstName,
@@ -350,9 +359,9 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         //$log.info(allDishes);
         var dishes = [];
         var allDishes = [];
-        console.log(snapshot.val());
+        //console.log(snapshot.val());
         snapshot.forEach(function(child) {
-            console.log(child.val());
+            //console.log(child.val());
             allDishes.push(child.val());
         });
         
@@ -370,7 +379,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
                     owner       : dish["owner"],
                     phone       : dish["phone"]
                 });
-                console.log(dishes);
+                //console.log(dishes);
             } //end if  
         }); // end forEach loop
         
@@ -684,7 +693,7 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
     //     });
     // };
     $scope.test1 = 'http://cliparts.co/cliparts/8cx/Kk7/8cxKk7Xji.png';
-    var test1Ref = storageRef.child('chefhat1.png');
+    var test1Ref = storageRef.child('default/chefhat1.png');
     test1Ref.getDownloadURL().then(function(url){
         $timeout(function() {
            $scope.test1 = url; 

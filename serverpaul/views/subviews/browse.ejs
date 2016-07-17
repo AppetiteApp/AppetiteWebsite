@@ -221,7 +221,7 @@ async defer></script>
         var mapDiv = document.getElementById('map');
         map = new google.maps.Map(mapDiv, {
             center: {lat: 45.5116861, lng: -73.5773356},
-            zoom: 15,
+            zoom: 14,
             streetViewControl: false,
             mapTypeControl: false
         });
@@ -234,37 +234,29 @@ async defer></script>
     var mapHelper = function(map){
         var dishes = [];
         var markers = [];
-        firebase.database().ref('dish/').orderByChild("dataAdded").on("value", function(snapshot){
-            var allDishes = snapshot.val();
-            for (var key in allDishes){
-                // if (!allDishes[key]["deleted"] && allDishes[key]["uid"] !== firebase.auth().currentUser.uid){
-                //if (!allDishes[key]["deleted"]){
-                    //console.log(allDishes[key]);
-                    dishes.unshift({
-                        dishName    : allDishes[key]["dishName"],
-                        description : allDishes[key]["description"],
-                        phone       : allDishes[key]["phone"],
-                        price       : allDishes[key]["price"],
-                        quantity    : allDishes[key]["quantity"],
-                        time        : allDishes[key]["time"],
-                        location    : allDishes[key]["location"],
-                        owner       : allDishes[key]["owner"],
-                        key         : key
-                    });
-
+        var currentUser = firebase.auth().currentUser;
+        firebase.database().ref('dish/').once("value", function(snapshot){
+            
+            snapshot.forEach(function(child) {
+                console.log(child.val());
+                dishes.push(child.val());
+                if (child.val().active && child.val().ownerid !== currentUser.uid){
+                    console.log("new marker pushed!", child.val().dishName);
+                    console.log("lat", child.val().lat, "; lng:", child.val().lng);
                     var marker = new google.maps.Marker({
                         position: {
-                            lat: allDishes[key]["lat"],
-                            lng: allDishes[key]["lng"]
+                            lat: child.val().lat,
+                            lng: child.val().lng
                         },
-                        title: allDishes[key]["dishName"]
+                        title: child.val().dishName
                     });
 
                     markers.push(marker);
                     //console.log(marker);
 
-                //} //end if
-            } // end forEach loop
+                } //end if
+                
+            });
 
             markers.forEach(function(pin){
                 pin.setMap(map);
