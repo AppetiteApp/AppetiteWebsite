@@ -200,6 +200,7 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
             $scope.user.location  = snapshot.val().location;
             $scope.user.description = snapshot.val().description;
             $scope.user.dishes    = {};
+            $scope.user.photoUrl = snapshot.val().photoUrl;
             
             //go and fetch meals
             if (snapshot.val().mealsMade){
@@ -693,7 +694,7 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
     //     });
     // };
     $scope.test1 = 'http://cliparts.co/cliparts/8cx/Kk7/8cxKk7Xji.png';
-    var test1Ref = storageRef.child('default/chefhat1.png');
+    var test1Ref = storageRef.child('default/chefhat4.jpg');
     test1Ref.getDownloadURL().then(function(url){
         $timeout(function() {
            $scope.test1 = url; 

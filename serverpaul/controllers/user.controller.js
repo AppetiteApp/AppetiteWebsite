@@ -456,13 +456,16 @@ module.exports = function(app) {
 
 	app.post('/api/newaccount', function(req, res, next){
         console.log("Creating new user with email", req.body.email, "at", Date());
-        var photoUrl = "http://cliparts.co/cliparts/8cx/Kk7/8cxKk7Xji.png";
+        var photos = ["https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat1.png?alt=media&token=2bae1eba-51bb-4b26-ad5b-f58428f311a1", "https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat2.jpg?alt=media&token=c2f11652-534e-408b-9bad-b3b16b18132a", "https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat3.jpg?alt=media&token=17ebcf03-93e9-4659-97f8-de8fc723d793", "https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat4.jpg?alt=media&token=241c91ae-fc59-4cc3-bcd9-a19ec11b2247"];
+        var randInt = Math.floor(Math.random(4));
+        console.log(randInt);
+        var photoUrl = photos[randInt];
         
         global.userRef.child(req.body.uid).set({
             uid: req.body.uid,
             email: req.body.email,
             photoUrl: photoUrl
-        })
+        });
         
 	});
 	
