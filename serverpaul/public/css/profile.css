@@ -21,16 +21,17 @@ input.blur{
   background-color: #ebd3bd;
   outline-width: 0;
   outline: none;
-
+  margin-top: 10px;
 }
 
 textarea.blur{
   border-width: 0px;
   color: black;
-  background-color: #75d0f4;
   outline-width: 0;
   outline: none;
-  background: rgba(255, 255, 255, 0.3);
+  border:2px solid #ebd3bd;
+  height: 74px;
+  margin-top: 10px;
 
 }
 
@@ -60,8 +61,6 @@ label {
   background-color: #75d0f4;
   color: white;
   display:block;
-  margin-left: auto;
-  margin-right: auto;
   border:none;
 }
 
@@ -69,7 +68,7 @@ label {
 #profilethumbnail {
   width: 160px;
   height: 160px;
-  left: 40px;
+  left: 30px;
   position: fixed;
   display:block;
   margin:auto;
@@ -104,82 +103,114 @@ label {
 }
 
 .profileinput {
-  width: 430px;
+  width: calc(100% - 120px);
+  background-color: #ebd3bd;
+  margin-top: 10px;
   outline: none;
   border: none;
-  padding: none;
-  background-color: #75d0f4;
-  color: white;
+  color: black;
   padding: 5px;
-  margin: 10px;
   font-size: 25px;
   font-family: Source Sans Pro;
   text-align: center;
+  display: inline-block;
+  float:right;
+  margin-right: 10px;
 }
 
-#descriptionbox{
-  position: absolute;
-  box-sizing: border-box;
-  width:100%;
-  height: auto;
-  display: block;
+.addressedit{
+  width: calc(100% - 120px);
+  background-color: #75d0f4;
   outline: none;
   border: none;
-  top:85px;
-  padding:5px;
-  background: rgba(255, 255, 255, 0.9);
-  overflow:auto;
-
+  color: black;
+  font-size: 25px;
+  font-family: Source Sans Pro;
+  text-align: center;
+  display: inline-block;
+  float:right;
+  margin-right: 10px;
+  height: auto;
+  margin-top: 10px;
+    
 }
+
+/*#descriptionbox{*/
+/*  position: absolute;*/
+/*  width:100%;*/
+/*  display: block;*/
+/*  outline: none;*/
+/*  border: none;*/
+/*  top:85px;*/
+/*  padding:5px;*/
+/*  overflow:auto;*/
+/*  background-color: blue;*/
+/*  min-height: 100px;*/
+/*}*/
 
 
 .descriptioninput{
-  position: absolute;
-  width: 100%;
+  border:2px solid #ebd3bd;
+  position:relative;
+  width: calc(100% - 20px);
+  margin: 0 auto;
+  margin-top: 10px;
+  height: 74px;
   display: block;
   outline: none;
-  border: none;
-  background-color: #ebd3bd;
   color: black;
   font-size: 20px;
   font-family: Source Sans Pro;
   text-align: left;
-  background: rgba(255, 255, 255, 0.9);
-  box-sizing: border-box;
+  right:0;
 }
 
 #profilename{
-  position: absolute;
-  top:0px;
-  left: 197px;
-  width:auto;
+  position: fixed;
+  width:inherit;
   font-family: Source Sans Pro;
   font-size: 40px;
-  right:0;
   word-wrap: break-word;
   text-align: center;
   display: block;
+  padding-left: 185px;
+  padding-right: 2px;
   padding-top:5px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 #profilecontainer{
-
   position: fixed;
   top: 250px;
   left: 0;
   width:50%;
-  height:auto;
   bottom:0;
   background-color: white;
   border: 2px solid #75d0f4;
-  overflow: auto;
-  overflow-y:scroll;
+
+}
+
+#infocontainer{
+    position: absolute;
+    top: 0px;
+    left:0;
+    width: 100%;
+    margin-top: 73px;
+    overflow: auto;
+    overflow-y:scroll;
+    height: calc(100%+100px);
+    bottom: 0;
 }
 
 .profilelabel{
   font-family: Source Sans Pro;
   font-size: 25px;
-
+  margin-left: 10px;
+  height: 42px;
+  padding-top: 5px;
+  margin-top: 10px;    
+    
 }
 
 #profileinfo{
@@ -224,4 +255,36 @@ label {
   background: rgba(255, 255, 255, 0.9);
   font-family: Source Sans Pro;
   color: orange;
+}
+
+/*#profilephone{*/
+/*    position: relative;*/
+/*    top: 0px;*/
+/*    display: inline-block;*/
+/*    width: 100%;*/
+
+/*}*/
+
+#profileaddress{
+    position: relative;
+    top: 0px;
+    width: calc(100% - 20px);
+}
+
+input[type="checkbox"] {
+    display:none;
+}
+
+input[type="checkbox"] + label {
+    width:22px;
+    height:22px;
+    margin:0;
+    float: right;
+    vertical-align: bottom;
+    margin-top:5px;
+    background:url(/imgs/edit.png) left top no-repeat;
+    cursor:pointer;
+}
+input[type="checkbox"]:checked + label {
+    background:url(/imgs/edit.png) left top no-repeat;
 }

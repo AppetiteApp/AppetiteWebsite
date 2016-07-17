@@ -358,12 +358,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         
         //iterate through all the dishes and put the ones that aren't owned by current owner in the scope
         allDishes.forEach(function(dish){
-            //console.log("dish key: " + key + " ; uid of dish: " + allDishes[key]["ownerid"]);
             if (dish["active"] && dish["ownerid"] !== currentUser.uid){
-        //  if (allDishes[key]["active"] && allDishes[key]["ownerid"] !== currentUser.uid && date is today){
-                 
-                //making a pretty time string
-
                     
                 dishes.push({
                     dishName    : dish["dishName"],
@@ -373,12 +368,13 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
                     time        : dish["time"],
                     location    : dish["location"],
                     owner       : dish["owner"],
-                    // key         : key,
                     phone       : dish["phone"]
                 });
                 console.log(dishes);
             } //end if  
         }); // end forEach loop
+        
+        //put dishes to the scope
         $timeout(function(){
             $scope.dishes = dishes;
             console.log("changed dishes");
@@ -405,7 +401,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         } else {
             $scope.dish.warnings.push({
                 warningType: "userinfo",
-                warningMessage: "User info incomplete: missing phone number"
+                warningMessage: "User info incomplete: missing phone number."
             });
         }
         
@@ -423,6 +419,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
                 errorType: "userinfo",
                 errorMessage: "User info incomplete: missing location."
             });
+            $scope.userinfoIncomplete = true;
         }
         
         
@@ -618,15 +615,7 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
     
     $scope.signout = sessionService.signout;
     
-    // var storage = firebase.storage();
-    // var storageRef = storage.ref();
-    // var ProfileUrlRef = storageRef.child('profileImg');
-    
-    $scope.showPhoto = function(){
-        console.log($scope.photo);  
-    };
-    
-    
+
     //submits a dish
     //on success, clear stuff and show div that says submitSuccess and go to manage
     //on fail, show div that warns that submission failed
@@ -681,5 +670,49 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
         });
     };
     
+    var storageRef = firebase.storage().ref();
+    // var ProfileUrlRef = storageRef.child('defaultProfiles/');
+    // $scope.uploadPhoto = function(){
+    //     console.log($scope.file);
+    //     console.log($scope.file.type);
+    //     var uploadTask = ProfileUrlRef.child("chefhat1.png").put($scope.file, {contentType: $scope.file.type});
+    //     uploadTask.on('state_changed', null, function(err){
+    //         console.log("upload failed", err);
+    //     }, function(){
+    //         console.log('Uploaded', uploadTask.snapshot.totalBytes, 'bytes.');
+    //         console.log(uploadTask.snapshot.metadata);
+    //     });
+    // };
+    $scope.test1 = 'http://cliparts.co/cliparts/8cx/Kk7/8cxKk7Xji.png';
+    var test1Ref = storageRef.child('chefhat1.png');
+    test1Ref.getDownloadURL().then(function(url){
+        $timeout(function() {
+           $scope.test1 = url; 
+        });
+        
+    }, function(err){
+       console.log(err);
+    });
+    
+
      
 });
+
+myApp.directive("fileread", [function () {
+    return {
+        scope: {
+            fileread: "="
+        },
+        link: function (scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                var reader = new FileReader();
+                reader.onload = function (loadEvent) {
+                    scope.$apply(function () {
+                        scope.fileread = loadEvent.target.result;
+                    });
+                }
+                reader.readAsDataURL(changeEvent.target.files[0]);
+            });
+        }
+    }
+}]);
