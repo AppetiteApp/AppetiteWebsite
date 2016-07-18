@@ -238,11 +238,11 @@ async defer></script>
         firebase.database().ref('dish/').once("value", function(snapshot){
             
             snapshot.forEach(function(child) {
-                console.log(child.val());
+                //console.log(child.val());
                 dishes.push(child.val());
                 if (child.val().active && child.val().ownerid !== currentUser.uid){
-                    console.log("new marker pushed!", child.val().dishName);
-                    console.log("lat", child.val().lat, "; lng:", child.val().lng);
+                    //console.log("new marker pushed!", child.val().dishName);
+                    //console.log("lat", child.val().lat, "; lng:", child.val().lng);
                     var marker = new google.maps.Marker({
                         position: {
                             lat: child.val().lat,

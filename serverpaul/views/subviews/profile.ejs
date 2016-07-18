@@ -13,16 +13,12 @@
 
 <img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" />
 
-
-
-
 <div id="profilecontainer">
-    
     <div id="profilename">
         {{user.firstName}}
         {{user.lastName}}
     </div>
-
+    
     <div id="infocontainer">
           <!--CHERYL WROTE THIS AS A DEMO/TEST, FEEL FREE TO REMOVE-->
           <!--<div ng-repeat="error in updateProfile.errors"></div>-->
@@ -30,18 +26,17 @@
           {{updateProfile.statusMessage}}
             <!--CHERYL'S TEST ENDS HERE-->
         <form ng-submit="editProfile(user)">
-          <textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-model="user.description"/></textarea>
+          <textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-model="user.description" ng-change="user.changed=true"/></textarea>
         
           <label for="phone" class="profilelabel">Phone:</label>
-          <input class="profileinput" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/><br>
+          <input class="profileinput" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/>
 
-          <label class="profilelabel">Address:</label><div class="profileinput">{{user.location}}
-              <input type="checkbox" id="c1" ng-click="user.changed=true" ng-model="updateProfile.changeAddress"/>
+          <label class="profilelabel">Address:</label><div class="profileinput">{{user.location}
+              <input type="checkbox" class="hiddencheckbox" id="c1" ng-model="updateProfile.changeAddress"  ng-change="user.changed=true"/>
               <label for="c1"></label>
           </div>
-          
           <div height="auto" ng-show="updateProfile.changeAddress">
-            New Location: <input ng-model="queryAddress"/> <button ng-click="submitAddress(dish)">Find your Address!</button>
+          <input ng-model="queryAddress" class="addressinput" placeholder="Find address"/> <button ng-click="submitAddress(dish)">Find your Address!</button>
               <div ng-repeat="result in results" class="addressedit" ng-click="assignLocation(result)">
                   {{result.formatted_address}}
               </div>

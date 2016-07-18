@@ -18,10 +18,11 @@
 input.blur{
   border-width: 0px;
   color: black;
-  background-color: #ebd3bd;
   outline-width: 0;
   outline: none;
   margin-top: 10px;
+  border: 2px solid #ebd3bd;
+
 }
 
 textarea.blur{
@@ -60,8 +61,14 @@ label {
 #profileedit{
   background-color: #75d0f4;
   color: white;
-  display:block;
+  display:inline-block;
   border:none;
+  width: 85px;
+  cursor:pointer;
+  margin: 10px;
+  margin-right: 25px;
+  font-family: Source Sans Pro;
+  font-size:15px;
 }
 
 
@@ -103,11 +110,14 @@ label {
 }
 
 .profileinput {
-  width: calc(100% - 120px);
-  background-color: #ebd3bd;
+  width: calc(100% - 130px);
   margin-top: 10px;
   outline: none;
-  border: none;
+  border: 2px solid #ebd3bd;
+  /*border-right: none;*/
+  /*border-left: none;*/
+  /*border-top: none;*/
+;
   color: black;
   padding: 5px;
   font-size: 25px;
@@ -119,7 +129,7 @@ label {
 }
 
 .addressedit{
-  width: calc(100% - 120px);
+  width: calc(100% - 130px);
   background-color: #75d0f4;
   outline: none;
   border: none;
@@ -132,6 +142,7 @@ label {
   margin-right: 10px;
   height: auto;
   margin-top: 10px;
+  cursor: pointer;
     
 }
 
@@ -196,7 +207,7 @@ label {
     top: 0px;
     left:0;
     width: 100%;
-    margin-top: 73px;
+    margin-top: 100px;
     overflow: auto;
     overflow-y:scroll;
     height: calc(100%+100px);
@@ -210,6 +221,7 @@ label {
   height: 42px;
   padding-top: 5px;
   margin-top: 10px;    
+  margin-bottom: 4px;
     
 }
 
@@ -271,7 +283,7 @@ label {
     width: calc(100% - 20px);
 }
 
-input[type="checkbox"] {
+.hiddencheckbox{
     display:none;
 }
 
@@ -285,6 +297,33 @@ input[type="checkbox"] + label {
     background:url(/imgs/edit.png) left top no-repeat;
     cursor:pointer;
 }
+
+#phoneedit {
+    margin:0;
+    float: right;
+    vertical-align: bottom;
+    margin-top:5px;
+    background:url(/imgs/edit.png) left top no-repeat;
+    cursor:pointer;
+}
+
+
 input[type="checkbox"]:checked + label {
     background:url(/imgs/edit.png) left top no-repeat;
+}
+
+.addressinput{
+  width: calc(100% - 130px);
+  outline: none;
+  color: black;
+  padding: 5px;
+  font-size: 25px;
+  font-family: Source Sans Pro;
+  text-align: center;
+  display: inline-block;
+  float:right;
+  margin-right: 10px;
+  border:2px solid #ebd3bd;
+  border-top: none;
+
 }

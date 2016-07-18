@@ -6,6 +6,7 @@ var session     = require('express-session');
 var path        = require('path');
 var staticController= require('./controllers/static.controller');
 var userController  = require('./controllers/user.controller');
+var dishController = require('./controllers/dish.controller');
 
 firebase.initializeApp({
   serviceAccount: "./configs/firebase.json",
@@ -43,6 +44,7 @@ app.set("view engine", "ejs");
 
 staticController(app);
 userController(app);
+dishController(app);
 
 process.env.PORT = process.env.PORT || 80;
 

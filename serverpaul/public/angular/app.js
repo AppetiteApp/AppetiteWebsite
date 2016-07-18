@@ -105,46 +105,37 @@ myApp.controller('homeController', function($scope, $log, $location, regexServic
     $scope.loginSuccess = false;
     $scope.signupSuccess = false;
     
-    //function for logging in, once successfully logged in, redirect to /browse
+    //function for logging in, once successfully logged in, redirect to browse page ('/')
     $scope.login = function(user) {
-
-        $log.log("login with email: " + user.email);
-        
         firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(
         function(){
+            $route.reload();
+            $location.path("/");
             $timeout(function(){
                 $scope.loginSuccess = true;
             });
-                
-                $log.log("login function resolved");
-                $log.log(firebase.auth().currentUser);
-                $route.reload();
-                $location.path("/");
-            }
-            ,function(error) {
-                $scope.warnings.unshift({
-                    errorType   : "login",
-                    errorMessage: error.message
-                });
+        },function(error) {
+            $scope.warnings.unshift({
+                errorType   : "login",
+                errorMessage: error.message
             });
-
+        });
     };
     
     //after successfully creating a new user: create node in users/, and redirect to /account to fill more info
     $scope.signup = function(user){
         console.log("signup");
         
-        //control: can only signup with @mail.mcgill.ca
+        //TODO: control: can only signup with @mail.mcgill.ca
         
         firebase.auth().createUserWithEmailAndPassword(user.signupemail, user.signuppassword).then(
             function(){
                 $timeout(function(){
                     $scope.signupSuccess = true;
                 });
-                $log.log("signup resolved");
                 var user = firebase.auth().currentUser;
-                //do this in server
                 
+                //server-side code: assigns email, uid, and random profile pic
                 $http.post('/api/newaccount', {
                     uid         : user.uid,
                     email       : user.email
@@ -251,10 +242,6 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
         });
         
     };
-    
-    $scope.$watch('user.location', function(newValue, oldValue){
-        $scope.user.changed = true; 
-    });
     
     //posts stuff to backend to edit profile
     $scope.editProfile = function(user){
@@ -369,6 +356,9 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         //iterate through all the dishes and put the ones that aren't owned by current owner in the scope
         allDishes.forEach(function(dish){
             if (dish["active"] && dish["ownerid"] !== currentUser.uid){
+                
+                //prettify time
+                console.log(dish.time);
                     
                 dishes.push({
                     dishName    : dish["dishName"],
