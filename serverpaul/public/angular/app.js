@@ -321,7 +321,7 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
 
 
 
-myApp.controller('browseController', function($scope, $log, $location, $http, $timeout, $route){
+myApp.controller('browseController', function($scope, $log, $location, $http, $timeout, $route, regexService){
     
     //if user isn't logged in, then go to home
     //haha this assignment thing is synchronous
@@ -389,7 +389,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         errors  : [],
         time    : {
             year: new Date().getFullYear(),
-            month: new Date().getMonth() + 1,
+            month: new Date().getMonth(),
             day: new Date().getDate()
         }
     };
@@ -433,19 +433,19 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
             address: $scope.searchAddress
         };
         
-        var formDataString = $.param(formData);
-        var queryString = QUERYSTRINGBASE + '&' + formDataString;
+    var formDataString = $.param(formData);
+    var queryString = QUERYSTRINGBASE + '&' + formDataString;
         $scope.user.queryString = queryString;
-        $http.get(queryString)
-        .then(function(res){
-            $scope.results = res.data.results;
-        }, function(err){
-           $scope.error = err; 
-        });
+    $http.get(queryString)
+    .then(function(res){
+        $scope.results = res.data.results;
+    }, function(err){
+       $scope.error = err; 
+    });
         
     };
     
-        $scope.assignLocation = function(result){
+    $scope.assignLocation = function(result){
         $timeout(function() {
             $scope.dish.location = {
                 name: result.formatted_address,
@@ -457,19 +457,51 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
     };
     
     
-    $scope.vm = this;
-    $scope.vm.step ="one";
-    // $scope.vm.stepTwo = stepTwo;
-
-    $scope.stepTwo=function(){
-        $scope.vm.step = "two";
-    };
-       
-       
-    $scope.stepThree = function(){
-    $scope.vm.step = "three";
-    };
-
+        $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone', 'dish.location', 'dish.price', 'dish.startHour', 'dish.endHour' ], function(newValues, oldValues, scope){
+        if ($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName) &&
+            $scope.dish.description && regexService.commentRegex.test($scope.dish.description) &&
+            $scope.dish.phone && regexService.phoneRegex.test($scope.dish.phone) && 
+            $scope.dish.location && $scope.dish.price && regexService.priceRegex.test($scope.dish.price) &&
+            $scope.dish.startHour && $scope.dish.endHour) {
+                $timeout(function(){
+                    $scope.dish.complete = true;
+                });
+        }
+        
+        if($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName)){
+            $timeout(function(){
+                $scope.dishComplete = "dish is ok!"; 
+            });
+        } else {
+            $timeout(function() {
+                $scope.dishComplete = "dish is not ok!";
+            });
+        }
+        
+        if($scope.dish.description && regexService.commentRegex.test($scope.dish.description)){
+            $timeout(function() {
+                $scope.desComplete = "description is ok!";
+            });
+        } else {
+            $timeout(function(){
+                $scope.desComplete = "description is not ok!"; 
+            });
+        }
+        
+        if($scope.dish.phone && regexService.phoneRegex.test($scope.dish.phone)){
+            $timeout(function(){
+                $scope.phoneComplete="Phone is ok!";
+            });
+        } else {
+            $timeout(function() {
+                $scope.phoneComplete="phone is not ok!";
+            });
+        }
+            
+            
+    });
+    
+    
     
     //submits a dish
     //on success, clear stuff and show div that says submitSuccess and go to manage
@@ -480,7 +512,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
             return;
         }
         var uid = firebase.auth().currentUser.uid;
-        var date = new Date();
+        $scope.dish.time.month -= 1;
         $http.post('/newdish', {
             dishName    : dish.dishName,
             location    : dish.location,

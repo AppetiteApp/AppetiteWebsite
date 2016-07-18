@@ -14,17 +14,17 @@ module.exports = function(app) {
 
 		if (!data.uid) {
 			res.send({
-				errors: {
+				errors: [{
 					errorType	: "uid",
 					errorMessage: "You didn't send the userid."
-					},
+					}],
 				madeMeal: true
 			});
 			return;
 		}
 		
 		var dishObject = {
-			dateUpadted	: Date(),
+			dateUpdated	: Date(),
 			ownerid		: data.uid
 		};
 		
@@ -92,6 +92,8 @@ module.exports = function(app) {
 			dishObject.price = data.price;
 		}
 		
+		var start;
+		var end;
 		//check if time is entered, regex not added yet bc I want to further change the time input
 		//into a period of time as well as only store year/month/day/hour/min
 		if (!data.time) {
@@ -101,12 +103,13 @@ module.exports = function(app) {
 			});
 		} else {
 			//time object: has year, month, day, 
-			var start = data.time.year + " " + data.time.month + " " + data.time.day + " " + data.time.startHour;
-			var day = data.time.year + " " + data.time.month + " " + data.time.day;
+			start = new Date(req.body.time.year, req.body.time.month, req.body.time.day, req.body.time.startHour, req.body.time.startMin, 0);
+			end = new Date(req.body.time.year, req.body.time.month, req.body.time.day, req.body.time.endHour, req.body.time.endMin, 0);
+			console.log(start);
+			console.log(end);
 			dishObject.time = {
-				day: day,
 				startTime: start,
-				endHour: data.time.endHour
+				endTime: end
 			};
 		}
 		
@@ -156,7 +159,16 @@ module.exports = function(app) {
 		
 		console.log(dishObject);
 		newDishRef.set(dishObject);
-		
+		global.dishRef.child(newDishKey).update({
+		    time: {
+		        startTime: start,
+		        endTime: end   
+		    }
+		});
+            
+        console.log(start);
+        console.log(end);
+        
 		global.userRef.child(req.body.uid).once("value", function(snapshot){
 			console.log(snapshot.val());
 			var meals;
@@ -176,8 +188,8 @@ module.exports = function(app) {
 			// });
 			
 			newDishRef.update({
-				"owner": snapshot.val().firstName,
-				"phone": snapshot.val().phone
+				"owner": snapshot.val().firstName || "No Firstname Yet",
+				"phone": snapshot.val().phone || "Uhoh, this user has not updated his/her phone number yet"
 			});
 			
 		});

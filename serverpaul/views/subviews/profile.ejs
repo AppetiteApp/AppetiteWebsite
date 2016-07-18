@@ -13,11 +13,20 @@
 
 <img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" />
 
+<form ng-submit="editProfile(user)">
+
 <div id="profilecontainer">
     <div id="profilename">
-        {{user.firstName}}
-        {{user.lastName}}
+        <input class="nameedit" type='text' onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" ng-model="user.firstName" name="firstname" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+        <input class="nameedit" type='text' ng-model="user.lastName" name="firstname" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+
+
+
+        <label class="editbutton" for="c1" ng-click="user.changed=true" ng-init="user.changed=false"></label>
+        <input id='profileedit' type="submit" value="Save Edits" ng-show="user.changed"/>
     </div>
+    
+
     
     <div id="infocontainer">
           <!--CHERYL WROTE THIS AS A DEMO/TEST, FEEL FREE TO REMOVE-->
@@ -25,50 +34,31 @@
           <!--<div ng-show="user.updated">Profile Updated!</div>-->
           {{updateProfile.statusMessage}}
             <!--CHERYL'S TEST ENDS HERE-->
-        <form ng-submit="editProfile(user)">
-          <textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-model="user.description" ng-change="user.changed=true"/></textarea>
-        
-          <label for="phone" class="profilelabel">Phone:</label>
-          <input class="profileinput" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-change="user.changed=true"/>
 
-          <label class="profilelabel">Address:</label><div class="profileinput">{{user.location}
-              <input type="checkbox" class="hiddencheckbox" id="c1" ng-model="updateProfile.changeAddress"  ng-change="user.changed=true"/>
-              <label for="c1"></label>
+        <div id="phonebox">
+          <label for="phone" class="profilelabel">Phone:</label>
+          <input ng-class="{'profileinputedit': !user.changed, 'profileinput':user.changed}" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+        </div>
+          <label class="profilelabel">Address:</label><div class="profileinput"> {{user.location}}
+              <input type="checkbox" class="hiddencheckbox" id="c1" ng-model="updateProfile.changeAddress"/>
+
           </div>
-          <div height="auto" ng-show="updateProfile.changeAddress">
-          <input ng-model="queryAddress" class="addressinput" placeholder="Find address"/> <button ng-click="submitAddress(dish)">Find your Address!</button>
+          <div height="auto" ng-show="user.changed">
+          <input ng-model="queryAddress" class="addressinput" placeholder="Find address"/> <button id="locationedit" ng-click="submitAddress(dish)"><img id="search" src="/imgs/search.png"></button>
               <div ng-repeat="result in results" class="addressedit" ng-click="assignLocation(result)">
                   {{result.formatted_address}}
               </div>
-        </div>
+            </div>
+        
+        <textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-model="user.description"/></textarea>
 
-         <input id='profileedit' type="submit" value="Save Edits" ng-show="user.changed" ng-init="user.changed=false"/>
+
       </form>
 </div>
 </div>
 
 <div id="dishcontainer">
   <div id="profileinnercontainer">
-    <!--ORIGINAL PART FOR DISHES-->
-    <!--<div id="repeateditem" ng-repeat="dish in user.dishes">-->
-    <!--    <div id="listitem" ng-click="showDetails = !showDetails">-->
-
-    <!--      <div id="dishbanner">-->
-    <!--        <div class="dishthumbnail">-->
-    <!--          <img class="img-thumbnail" src="/imgs/gordon.jpg" />-->
-    <!--        </div>-->
-
-    <!--        <div id="dishtitle">{{dish.dishName}}</div>-->
-    <!--        <div id="dish.price">{{dish.price}}</div>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--    <div ng-show="showDetails" id="itemdetails">-->
-    <!--      <p align="center">{{dish.description}}</p>-->
-    <!--      <div id="dish.time">{{dish.time}}</div>-->
-    <!--      <div id="dish.phone">{{dish.phone}}</div>-->
-    <!--      <div id="dish.address">{{dish.location}}</div>-->
-    <!--    </div>-->
-    <!--</div>-->
     
     <div id="repeateditem" ng-repeat="dish in user.dishes">
       <form ng-submit="editDish(dish)">

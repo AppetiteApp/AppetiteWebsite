@@ -91,6 +91,11 @@
           <!--</form>-->
 
           <form ng-submit="submitDish(dish)">
+              {{dishComplete}}
+              {{desComplete}}
+              {{priceComplete}}
+              {{phoneComplete}}
+              {{locationCompelete}}
                 <div class="form-group">
                   <label>Dish</label>
                   <input type="text" ng-model="dish.dishName" />
@@ -104,11 +109,11 @@
                   <input ng-model="dish.price" />
                 </div>
                 <div class="form-group">
-                  <p>{{dish.time.year}} / {{dish.time.month}} / {{dish.time.day}}</p> 
+                  <p>{{dish.time.year}} / {{dish.time.month + 1}} / {{dish.time.day}}</p> 
                   <p>Chose custom date: <input type="checkbox" ng-model="dish.time.custom" /></p>
                   <p ng-show="dish.time.custom"><input ng-model="dish.time.year"/><input ng-model="dish.time.month"><input ng-model="dish.time.day"></p>
                  
-                  <p>From: <input ng-model="dish.time.startHour" /> To: <input ng-model="dish.time.endHour" />
+                  <p>From: <input ng-model="dish.time.startHour" />:<input ng-model="dish.time.startMin"/> To: <input ng-model="dish.time.endHour" />:<input ng-model="dish.time.endMin" />
                 </div>
                 <div class="form-group">
                   <p>Pickup Location:</p>
@@ -127,7 +132,7 @@
                   <label for="phone">Phone:</label>
                   <input type="text" class="form-control" ng-model="dish.phone">
                 </div>
-                <button type="submit"class="btn btn-default">Submit</button>
+                <button type="submit"class="btn btn-default" ng-disabled="!dish.complete" ng-init="dish.complete=false">Submit</button>
               </div>  
             </div>
           </form>

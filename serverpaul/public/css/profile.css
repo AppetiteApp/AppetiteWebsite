@@ -21,7 +21,7 @@ input.blur{
   outline-width: 0;
   outline: none;
   margin-top: 10px;
-  border: 2px solid #ebd3bd;
+  height: 39px;
 
 }
 
@@ -30,9 +30,10 @@ textarea.blur{
   color: black;
   outline-width: 0;
   outline: none;
-  border:2px solid #ebd3bd;
   height: 74px;
   margin-top: 10px;
+  border: 1px solid #CCCCCC;
+
 
 }
 
@@ -56,19 +57,6 @@ label {
 *:-ms-input-placeholder {
     /* IE 10+ */
     color: grey;
-}
-
-#profileedit{
-  background-color: #75d0f4;
-  color: white;
-  display:inline-block;
-  border:none;
-  width: 85px;
-  cursor:pointer;
-  margin: 10px;
-  margin-right: 25px;
-  font-family: Source Sans Pro;
-  font-size:15px;
 }
 
 
@@ -110,17 +98,12 @@ label {
 }
 
 .profileinput {
-  width: calc(100% - 130px);
+  width: calc(100% - 120px);
   margin-top: 10px;
   outline: none;
-  border: 2px solid #ebd3bd;
-  /*border-right: none;*/
-  /*border-left: none;*/
-  /*border-top: none;*/
-;
   color: black;
   padding: 5px;
-  font-size: 25px;
+  font-size: 20px;
   font-family: Source Sans Pro;
   text-align: center;
   display: inline-block;
@@ -128,13 +111,30 @@ label {
   margin-right: 10px;
 }
 
+.profileinputedit {
+  width: calc(100% - 120px);
+  margin-top: 10px;
+  outline: none;
+  color: black;
+  padding: 5px;
+  font-size: 20px;
+  font-family: Source Sans Pro;
+  text-align: center;
+  display: inline-block;
+  float:right;
+  margin-right: 10px;
+  border:none;
+}
+
+
+
 .addressedit{
-  width: calc(100% - 130px);
+  width: calc(100% - 120px);
   background-color: #75d0f4;
   outline: none;
   border: none;
   color: black;
-  font-size: 25px;
+  font-size: 20px;
   font-family: Source Sans Pro;
   text-align: center;
   display: inline-block;
@@ -146,22 +146,7 @@ label {
     
 }
 
-/*#descriptionbox{*/
-/*  position: absolute;*/
-/*  width:100%;*/
-/*  display: block;*/
-/*  outline: none;*/
-/*  border: none;*/
-/*  top:85px;*/
-/*  padding:5px;*/
-/*  overflow:auto;*/
-/*  background-color: blue;*/
-/*  min-height: 100px;*/
-/*}*/
-
-
 .descriptioninput{
-  border:2px solid #ebd3bd;
   position:relative;
   width: calc(100% - 20px);
   margin: 0 auto;
@@ -174,6 +159,7 @@ label {
   font-family: Source Sans Pro;
   text-align: left;
   right:0;
+  border: 1px solid #CCCCCC;
 }
 
 #profilename{
@@ -216,13 +202,13 @@ label {
 
 .profilelabel{
   font-family: Source Sans Pro;
-  font-size: 25px;
+  font-size: 20px;
   margin-left: 10px;
   height: 42px;
   padding-top: 5px;
   margin-top: 10px;    
-  margin-bottom: 4px;
-    
+  height: 39px;    
+  
 }
 
 #profileinfo{
@@ -287,17 +273,6 @@ label {
     display:none;
 }
 
-input[type="checkbox"] + label {
-    width:22px;
-    height:22px;
-    margin:0;
-    float: right;
-    vertical-align: bottom;
-    margin-top:5px;
-    background:url(/imgs/edit.png) left top no-repeat;
-    cursor:pointer;
-}
-
 #phoneedit {
     margin:0;
     float: right;
@@ -310,20 +285,72 @@ input[type="checkbox"] + label {
 
 input[type="checkbox"]:checked + label {
     background:url(/imgs/edit.png) left top no-repeat;
+    
 }
 
 .addressinput{
-  width: calc(100% - 130px);
+  border: 1px solid #CCCCCC;
+  width: calc(100% - 157px);
   outline: none;
   color: black;
   padding: 5px;
-  font-size: 25px;
+  font-size: 20px;
   font-family: Source Sans Pro;
   text-align: center;
   display: inline-block;
-  float:right;
-  margin-right: 10px;
-  border:2px solid #ebd3bd;
-  border-top: none;
-
+  float:left;
+  margin-left: 110px;
+  height: 39px;
 }
+
+#phonebox{
+    width: 100%;
+    height:auto;
+}
+
+#locationedit{
+  background-color: #75d0f4;
+  color: white;
+  display:inline-block;
+  border:none;
+  width: 39px;
+  height:39px;
+  cursor:pointer;
+  margin: none;
+  font-family: Source Sans Pro;
+  font-size:15px;
+  float: right;
+  margin-right: 8px;
+}
+
+.editbutton{
+    width:22px;
+    height:22px;
+    margin:0;
+    vertical-align: bottom;
+    background:url(/imgs/edit.png) left top no-repeat;
+    cursor:pointer;
+    vertical-align: middle;
+}
+
+#profileedit{
+  word-wrap: break-word;
+  text-align: center;
+  background-color: #75d0f4;
+  color: white;
+  display:inline-block;
+  border:none;
+  width: 85px;
+  cursor:pointer;
+  font-family: Source Sans Pro;
+  font-size:15px;
+  vertical-align: middle;
+  border-right: 5px;
+  border-left: 5px;
+}
+
+.nameedit{
+    width:auto;
+    
+}
+

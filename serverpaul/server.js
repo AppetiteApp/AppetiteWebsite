@@ -4,6 +4,7 @@ var bodyParser  = require('body-parser');
 var firebase    = require('firebase');
 var session     = require('express-session');
 var path        = require('path');
+var cors        = require('cors');
 var staticController= require('./controllers/static.controller');
 var userController  = require('./controllers/user.controller');
 var dishController = require('./controllers/dish.controller');
@@ -34,6 +35,7 @@ var sess   = {
     saveUninitialized: false
 };
 
+app.use(cors());
 app.use(session(sess));
 
 app.use(bodyParser.urlencoded({ extended: true }));
