@@ -1,5 +1,5 @@
+
 .nav{
-  position: fixed;
   background-color: #75d0f4;
   color: #ffffff;
   list-style: none;
@@ -7,24 +7,31 @@
   margin-bottom: 0;
   margin-top: 0;
   font-family: Source Sans Pro;
-  height: 65px;
+  height: 60px;
   top: 0;
   width: 100%;
   z-index: 98;
 }
 
 
-.nav > a > li {
+.navlogo{
   border-radius: 30px;
   display: inline-block;
   text-align: center;
   text-decoration: none;
   color: #ffffff;
-  padding: 15px 15px 15px 15px;
+  padding: 12.5px 15px 12.5px 15px;
 }
 
-.nav > a > li > div:hover{
-  background-color: #8e44ad;
-  }
+.navelements {
+  border-radius: 30px;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  color: #ffffff;
+  padding: 20px 15px 20px 15px;
+  line-height:30px;
+}
+
 
   

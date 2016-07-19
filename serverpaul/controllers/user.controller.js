@@ -35,14 +35,14 @@ module.exports = function(app) {
 			update.zip = req.body.zip;
 		}
 		
-		if (req.body.fistName) {
+		if (req.body.firstName) {
 			if (!globals.individualNameRegex.test(req.body.fistName)){
 				errors.push({
-					errorType: "fistName",
+					errorType: "firstName",
 					errorMessage: "Invalid characters in fist name"
 				});
 			} else {
-				update.firstName = req.body.fname;
+				update.firstName = req.body.firstName;
 			}
 		}
 		
@@ -96,6 +96,8 @@ module.exports = function(app) {
 				update.location = req.body.location;
 			//}	
 		}
+		console.log("updates");
+		console.log(update);
 		
 		//updates stuff and sends info regarding success and errors in to browser
 		if (errors.length == 0 ) {
@@ -131,7 +133,8 @@ module.exports = function(app) {
         global.userRef.child(req.body.uid).set({
             uid: req.body.uid,
             email: req.body.email,
-            photoUrl: photoUrl
+            photoUrl: photoUrl,
+            firstName: "Please Enter Name"
         });
         
 	});

@@ -1,10 +1,4 @@
-<ul class="nav">
-  <a align="center" href="#/home"><li>Home</li></a>
-  <a align="center" href="#/aboutus"><li>About Us</li></a>
-  <a align="center" href="#/home"><li><img height="35px" src="/imgs/chefhat.png"></li></a>
-  <a align="center" href="#/browse"><li>Browse</li></a>
-  <a align="center" href="#/account"><li>My Account</li></a>
-</ul>
+<%- include ../partials/navbar.ejs %>
 
 <!-- <div id="profilepage"> -->
 
@@ -17,11 +11,8 @@
 
 <div id="profilecontainer">
     <div id="profilename">
-        <input class="nameedit" type='text' onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" ng-model="user.firstName" name="firstname" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
-        <input class="nameedit" type='text' ng-model="user.lastName" name="firstname" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
-
-
-
+        {{user.firstName}}
+        {{user.lastName}}
         <label class="editbutton" for="c1" ng-click="user.changed=true" ng-init="user.changed=false"></label>
         <input id='profileedit' type="submit" value="Save Edits" ng-show="user.changed"/>
     </div>
@@ -34,7 +25,15 @@
           <!--<div ng-show="user.updated">Profile Updated!</div>-->
           {{updateProfile.statusMessage}}
             <!--CHERYL'S TEST ENDS HERE-->
+    <div height="auto" ng-show="user.changed">
+            <div id="phonebox">
+          <label class="profilelabel">Name:</label>
+          <input ng-class="{'nameinputedit': !user.changed, 'nameinput':user.changed}" type='text' ng-model="user.lastName" name="lastName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
 
+          <input ng-class="{'nameinputedit': !user.changed, 'nameinput':user.changed}" type='text' ng-model="user.firstName" name="firstName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+          </div>
+        </div>    
+    
         <div id="phonebox">
           <label for="phone" class="profilelabel">Phone:</label>
           <input ng-class="{'profileinputedit': !user.changed, 'profileinput':user.changed}" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
@@ -50,7 +49,7 @@
               </div>
             </div>
         
-        <textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-model="user.description"/></textarea>
+        <!--<textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-model="user.description"/></textarea>-->
 
 
       </form>
@@ -74,8 +73,12 @@
           </div>
         </div>
         <div ng-show="showDetails" id="itemdetails">
+            <input type="date" ng-model="time.date"/>
+            <input type="time" step="900" ng-model="time.endTime"/>
           <input type="text" ng-model="dish.description" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
           <input type="text" ng-model="dish.time" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+          {{dish.time}}
+          {{dish.key}}
           <input type="text" ng-model="dish.phone" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
           <input type="text" ng-model="dish.location" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
           <input type="submit" value="Save Edits" ng-show="dish.changed"/>

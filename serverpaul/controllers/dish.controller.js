@@ -8,6 +8,8 @@ module.exports = function(app) {
 	//check for latlng key in req.body, if there is, store it in the dish; if not, get latlng from user & store in dish
 	//TODO: add regex control
 	app.post('/newdish', function(req, res, next){
+	    console.log("Joe's request");
+	    console.log(req.body);
 		var data = req.body;
 		var errors = [];
 		var warnings = [];
@@ -73,9 +75,12 @@ module.exports = function(app) {
 				warningType		: "description",
 				warningMessage	: "Invalid characters in description"
 			});
+			dishObject.description = data.description;
 		} else {
 			dishObject.description = data.description;
 		}
+		
+		console.log(dishObject.description);
 		
 		//check if price is present and valid
 		if (!data.price) {
@@ -102,15 +107,7 @@ module.exports = function(app) {
 				errorMessage	: "No time entered"
 			});
 		} else {
-			//time object: has year, month, day, 
-			start = new Date(req.body.time.year, req.body.time.month, req.body.time.day, req.body.time.startHour, req.body.time.startMin, 0);
-			end = new Date(req.body.time.year, req.body.time.month, req.body.time.day, req.body.time.endHour, req.body.time.endMin, 0);
-			console.log(start);
-			console.log(end);
-			dishObject.time = {
-				startTime: start,
-				endTime: end
-			};
+			dishObject.time = req.body.time;
 		}
 		
 		//check if portions is entered, if not, set at 1
@@ -159,12 +156,6 @@ module.exports = function(app) {
 		
 		console.log(dishObject);
 		newDishRef.set(dishObject);
-		global.dishRef.child(newDishKey).update({
-		    time: {
-		        startTime: start,
-		        endTime: end   
-		    }
-		});
             
         console.log(start);
         console.log(end);
@@ -282,7 +273,7 @@ module.exports = function(app) {
 					warningType	: "description",
 					warningMessage: "invalid characters in description"
 				});
-				update.description = "";
+				update.description = data.description;
 			}
 		}
 		

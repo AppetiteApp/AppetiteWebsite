@@ -197,9 +197,29 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
             if (snapshot.val().mealsMade){
                 snapshot.val().mealsMade.forEach(function(mealId){
                     firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
+                        //parse the time into an year, month, day, starthour + startmin, endhour + endmin
+                            var startTime = new Date(snapshot.val().time.startTime);
+                            var endTime = new Date(snapshot.val().time.endTime);
+                            console.log("startTime:", startTime.toString());
+                            console.log("endTime:", endTime.toString());
+                            var timeObj = {
+                                year    : startTime.getFullYear(),
+                                month   : startTime.getMonth(),
+                                day     : startTime.getDay(),
+                                startHour: startTime.getHours(),
+                                startMin: startTime.getMinutes(),
+                                endHour : endTime.getHours(),
+                                endMine : endTime.getMinutes(),
+                                date: new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDay()),
+                                endTime: endTime
+                            };
+                            
+                            
+                            
                         $timeout(function(){
                             $scope.user.dishes[mealId] = snapshot.val();
                             $scope.user.dishes[mealId].key = mealId;
+                            $scope.user.dishes[mealId].time = timeObj;
                         });
                   });//end firebase fetch dish info
                 });//end foreach meal
@@ -254,10 +274,12 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
             firstName: user.firstName,
             lastName: user.lastName
         };
+        console.log(updateObject);
         
         
     $http.post('/api/account/edit', updateObject)
         .then(function(res){
+            console.log(res);
             //should use a ng-model to let user know success on success, maybe the ng-rules thingy
             if (res.status === 200) {
                 $scope.updateProfile.errors = res.data.errors;
@@ -284,9 +306,9 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
         //dish.time
         
         var time = {
-            year: dish.time.year || Date().getFullYear(),
-            month: dish.time.month || Date().getMonth(),
-            day: dish.time.day || Date().getDate(),
+            year: dish.time.year || new Date().getFullYear(),
+            month: dish.time.month || new Date().getMonth(),
+            day: dish.time.day || new Date().getDate(),
             startHour: dish.time.startHour,
             endHour: dish.time.endHour
         };
@@ -299,9 +321,9 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
             delete      : dish.delete,
             dishName    : dish.dishName,
             location    : dish.location,
-            description : $scope.user.description,
+            description : dish.description,
             price       : dish.price,
-            time        : time,
+            //time        : time,
             portions    : dish.portions,
             phone       : $scope.user.phone
         })
@@ -312,7 +334,7 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
             console.log(err);
         });
     };
-    
+    $scope.signout = sessionService.signout;
 
     
     
@@ -321,7 +343,8 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
 
 
 
-myApp.controller('browseController', function($scope, $log, $location, $http, $timeout, $route, regexService){
+myApp.controller('browseController', function($scope, $log, $location, $http, $timeout, $route, regexService, sessionService){
+    $scope.signout = sessionService.signout;
     
     //if user isn't logged in, then go to home
     //haha this assignment thing is synchronous
@@ -377,25 +400,35 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         //put dishes to the scope
         $timeout(function(){
             $scope.dishes = dishes;
-            console.log("changed dishes");
-            console.log($scope.dishes);
+            //console.log("changed dishes");
+            //console.log($scope.dishes);
         });
     });
     
-    
+    var timeNow = new Date();
     //create a dish object and put the user's info into it
-    $scope.dish = {
-        warnings: [],
-        errors  : [],
-        time    : {
-            year: new Date().getFullYear(),
-            month: new Date().getMonth(),
-            day: new Date().getDate()
-        }
-    };
+    $timeout(function() {
+        $scope.dish = {
+            warnings: [],
+            errors  : [],
+            time    : {
+                startTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate()),
+                endTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate())
+            }
+        };        
+    });
+
+
+
+
+    //regarding the submit a dish part
     firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function(snapshot){
         //if user has phone num, then use that as the dish's phone num
         //else, error and cannot submit dish
+        console.log("users/" + firebase.auth().currentUser.uid);
+        console.log(snapshot.val());
+        console.log(snapshot.val().phone);
+        console.log(snapshot.val().location);
         if (snapshot.val().phone) {
             $scope.dish.phone = snapshot.val().phone;
         } else {
@@ -413,7 +446,6 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
                 lat: snapshot.val().lat,
                 lng: snapshot.val().lng
             };
-            $scope.user.location = snapshot.val().location;
         } else {
             $scope.dish.errors.push({
                 errorType: "userinfo",
@@ -426,6 +458,7 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
         
     });
     
+    
     $scope.submitAddress = function(){
         //format form data
         var formData = {
@@ -433,71 +466,40 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
             address: $scope.searchAddress
         };
         
-    var formDataString = $.param(formData);
-    var queryString = QUERYSTRINGBASE + '&' + formDataString;
-        $scope.user.queryString = queryString;
-    $http.get(queryString)
-    .then(function(res){
-        $scope.results = res.data.results;
-    }, function(err){
-       $scope.error = err; 
-    });
-        
+        var formDataString = $.param(formData);
+        var queryString = QUERYSTRINGBASE + '&' + formDataString;
+            $scope.user.queryString = queryString;
+        $http.get(queryString)
+        .then(function(res){
+            $scope.results = res.data.results;
+        }, function(err){
+            $scope.error = err; 
+        });
     };
     
     $scope.assignLocation = function(result){
         $timeout(function() {
-            $scope.dish.location = {
+            $scope.dish.locationCustom = {
                 name: result.formatted_address,
                 lat: result.geometry.location.lat,
                 lng: result.geometry.location.lng
             }; 
-            $scope.locationCustom = false;
         });
     };
     
     
-        $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone', 'dish.location', 'dish.price', 'dish.startHour', 'dish.endHour' ], function(newValues, oldValues, scope){
+    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone', 'dish.location', 'dish.price', 'dish.startHour', 'dish.endHour', 'dish.locationCustom','dish.useLocationCustom' ], function(newValues, oldValues, scope){
         if ($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName) &&
             $scope.dish.description && regexService.commentRegex.test($scope.dish.description) &&
             $scope.dish.phone && regexService.phoneRegex.test($scope.dish.phone) && 
-            $scope.dish.location && $scope.dish.price && regexService.priceRegex.test($scope.dish.price) &&
-            $scope.dish.startHour && $scope.dish.endHour) {
+            $scope.dish.price && regexService.priceRegex.test($scope.dish.price) &&
+            (($scope.dish.location.lng && $scope.dish.location.lat && $scope.dish.location.name && !$scope.dish.useLocationCustom) || ($scope.dish.locationCustom && $scope.dish.useLocationCustom))) {
                 $timeout(function(){
                     $scope.dish.complete = true;
                 });
-        }
-        
-        if($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName)){
-            $timeout(function(){
-                $scope.dishComplete = "dish is ok!"; 
-            });
         } else {
-            $timeout(function() {
-                $scope.dishComplete = "dish is not ok!";
-            });
+            $scope.dish.complete = false;
         }
-        
-        if($scope.dish.description && regexService.commentRegex.test($scope.dish.description)){
-            $timeout(function() {
-                $scope.desComplete = "description is ok!";
-            });
-        } else {
-            $timeout(function(){
-                $scope.desComplete = "description is not ok!"; 
-            });
-        }
-        
-        if($scope.dish.phone && regexService.phoneRegex.test($scope.dish.phone)){
-            $timeout(function(){
-                $scope.phoneComplete="Phone is ok!";
-            });
-        } else {
-            $timeout(function() {
-                $scope.phoneComplete="phone is not ok!";
-            });
-        }
-            
             
     });
     
@@ -512,17 +514,20 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
             return;
         }
         var uid = firebase.auth().currentUser.uid;
-        $scope.dish.time.month -= 1;
-        $http.post('/newdish', {
-            dishName    : dish.dishName,
-            location    : dish.location,
-            uid         : uid,
-            description : dish.description,
-            price       : dish.price,
-            time        : dish.time,
-            portions    : dish.portions || 1,
-            ingredients : dish.ingredients || ""
-        })
+        var data = {
+            dishName: dish.dishName,
+            uid: uid,
+            description: dish.description,
+            price: dish.price,
+            portions: dish.portions || 1,
+            ingredients: dish.ingredients || ""
+        };
+        if ($scope.dish.useLocationCustom) {
+            data.location = dish.locationCustom;
+        } else {
+            data.location = dish.location;
+        }
+        $http.post('/newdish', data)
         .then(function(res){
             $log.log(res);
             if (res.status === 200) {
@@ -565,9 +570,31 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
 //on the assumption that we're including jquery as of now
 myApp.controller('testController', function($scope, $timeout, $http, $log, sessionService, regexService){
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
-    
-    $scope.user = {};
     $scope.user = firebase.auth().currentUser;
+    $scope.time = {};
+    
+        //getting the user's info and the user's dishes info
+    firebase.database().ref('users/' +  $scope.user.uid).once('value', function(snapshot){
+        $log.log(snapshot.val());
+            //go and fetch meals
+            console.log(snapshot.val().mealsMade);
+                    firebase.database().ref('dish/' + snapshot.val().mealsMade[0]).once('value', function(snapshot){
+                        //parse the time into an year, month, day, starthour + startmin, endhour + endmin
+                        console.log(snapshot.val());
+                        console.log(snapshot.val().time);
+                        $timeout(function(){
+                            $scope.time.start = new Date(snapshot.val().time.startTime);
+                            $scope.time.end = new Date(snapshot.val().time.endTime);
+                        });
+                            
+
+                  });//end firebase fetch dish info
+
+
+    });
+    
+    
+    
     $scope.dish = {};
     $scope.dish.one = false;
     $scope.dish.two = false;
@@ -594,137 +621,13 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
         
     };
     
-    //watch stuff and change dish.one , dish.two, and dish.three accordingly
-    
-    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone', 'dish.location', 'dish.price', 'dish.startHour', 'dish.endHour' ], function(newValues, oldValues, scope){
-        if ($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName) &&
-            $scope.dish.description && regexService.commentRegex.test($scope.dish.description)) {
-                $timeout(function(){
-                    $scope.dish.one = true;        
-                });
-            
-        } else {
-            $timeout(function(){
-                $scope.dish.one = false; 
-            });
-        }
-        
-        if ($scope.dish.phone && regexService.phoneRegex.test($scope.dish.phone) && 
-            $scope.dish.location) {
-                $timeout(function(){
-                    $scope.dish.two = true;
-                });
-        } else {
-            $timeout(function(){
-                $scope.dish.two = false; 
-            });
-        }
-        
-        if ($scope.dish.price && regexService.priceRegex.test($scope.dish.price) &&
-            $scope.dish.startHour && $scope.dish.endHour) {
-                $timeout(function(){
-                    $scope.dish.three = true;
-                });
-        } else {
-            $timeout(function(){
-                $scope.dish.three = false; 
-            });
-        }
-            
-            
-    });
-    
-    $scope.assignLocation = function(result){
-        $timeout(function() {
-            $scope.dish.location = {
-                name: result.formatted_address,
-                lat: result.geometry.location.lat,
-                lng: result.geometry.location.lng
-            }; 
-        });
-    };
-    
+     $scope.example = {
+         value: new Date(2013, 9, 22)
+       };
     
     $scope.signout = sessionService.signout;
     
 
-    //submits a dish
-    //on success, clear stuff and show div that says submitSuccess and go to manage
-    //on fail, show div that warns that submission failed
-    $scope.submitDish = function(dish){
-        var uid = firebase.auth().currentUser.uid;
-        var date = new Date();
-        $http.post('/newdish', {
-            dishName    : dish.dishName,
-            location    : dish.location,
-            uid         : uid,
-            description : dish.description,
-            price       : dish.price,
-            time        : {
-                    year    : date.getFullYear(),
-                    month   : date.getMonth(),
-                    day     : dish.day || date.getDate(),
-                    starthour: dish.starthour,
-                    endhour : dish.endhour
-                },
-            portions    : dish.portions || 1,
-            ingredients : dish.ingredients || ""
-        })
-        .then(function(res){
-            console.log(res);
-            if (res.status === 200) {
-                $scope.dish.submitSuccess = true;
-                dish.dishName = "";
-                dish.description = "";
-                dish.price = "";
-                dish.month = "";
-                dish.year = "";
-                dish.day = "";
-                dish.starttime = "";
-                dish.endtime = "";
-                dish.portions = "";
-                dish.phone = "";
-                dish.location= "";
-                dish.ingredients = "";
-                    $scope.error = res.data.error;
-                    $scope.warnings = res.data.warnings;
-                    $scope.message = res.data.message;    
-                $log.log($scope.error);
-                $log.log(res.data);
-                
-            } else {
-                $log.log(res.status);
-                $scope.message = "Failed to submit";
-            }
-        }, function(err){
-            console.log(err);
-            $scope.message = "Failed to load data, please refresh page";
-        });
-    };
-    
-    var storageRef = firebase.storage().ref();
-    // var ProfileUrlRef = storageRef.child('defaultProfiles/');
-    // $scope.uploadPhoto = function(){
-    //     console.log($scope.file);
-    //     console.log($scope.file.type);
-    //     var uploadTask = ProfileUrlRef.child("chefhat1.png").put($scope.file, {contentType: $scope.file.type});
-    //     uploadTask.on('state_changed', null, function(err){
-    //         console.log("upload failed", err);
-    //     }, function(){
-    //         console.log('Uploaded', uploadTask.snapshot.totalBytes, 'bytes.');
-    //         console.log(uploadTask.snapshot.metadata);
-    //     });
-    // };
-    $scope.test1 = 'http://cliparts.co/cliparts/8cx/Kk7/8cxKk7Xji.png';
-    var test1Ref = storageRef.child('default/chefhat4.jpg');
-    test1Ref.getDownloadURL().then(function(url){
-        $timeout(function() {
-           $scope.test1 = url; 
-        });
-        
-    }, function(err){
-       console.log(err);
-    });
     
 
      

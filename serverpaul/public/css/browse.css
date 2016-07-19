@@ -4,14 +4,14 @@
   width: auto;
   margin: 0;
   border:0;
-  height: 65px;
+  height: 60px;
   border-radius: 13px 13px 0 0;
   z-index: 0;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   border: 2px  solid #75d0f4;
-  min-height: 65px;
+  min-height: 60px;
   line-height:55px;
   background-color: white;
   text-align: left;
@@ -98,7 +98,7 @@
 #map{
   float:right;
   position: absolute;
-  top: 65px;
+  top: 60px;
   left: 400px;
   bottom: 0;
   right: 0;
@@ -124,7 +124,7 @@
 #itemscontainer {
   position: fixed;
   width: 400px;
-  top: 65px;
+  top: 60px;
   bottom: 0 ;
   padding:3px;
   background-image: url(/imgs/board.jpg);
@@ -217,14 +217,14 @@
     width: auto;
     margin: 0;
     border:0;
-    height: 65px;
+    height: 60px;
     border-radius: 13px 13px 0 0;
     z-index: 0;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     border: 2px  solid #75d0f4;
-    min-height: 65px;
+    min-height: 60px;
     line-height:55px;
     background-color: white;
     text-align: center;
@@ -235,7 +235,7 @@
   #map{
     float:right;
     position: absolute;
-    top: 65px;
+    top: 60px;
     left: 0px;
     width: 100% !important;
     height: 300px;
@@ -265,4 +265,6 @@
   #dishprice {
     font-size: 4.0vw;
   }
+
+    
 }

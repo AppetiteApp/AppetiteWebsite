@@ -351,6 +351,34 @@ input[type="checkbox"]:checked + label {
 
 .nameedit{
     width:auto;
-    
+    font-size: 30px;
 }
 
+.nameinput {
+  width: calc(50% - 65px);
+  margin-top: 10px;
+  outline: none;
+  color: black;
+  padding: 5px;
+  font-size: 20px;
+  font-family: Source Sans Pro;
+  text-align: center;
+  display: inline-block;
+  float:right;
+  margin-right: 10px;
+}
+
+.nameinputedit {
+  width: calc(50% - 65px);
+  margin-top: 10px;
+  outline: none;
+  color: black;
+  padding: 5px;
+  font-size: 20px;
+  font-family: Source Sans Pro;
+  text-align: center;
+  display: inline-block;
+  float:right;
+  margin-right: 10px;
+  border:none;
+}
