@@ -7,14 +7,13 @@
 
 <img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" />
 
-<form ng-submit="editProfile(user)">
 
 <div id="profilecontainer">
     <div id="profilename">
         {{user.firstName}}
         {{user.lastName}}
         <label class="editbutton" for="c1" ng-click="user.changed=true" ng-init="user.changed=false"></label>
-        <input id='profileedit' type="submit" value="Save Edits" ng-show="user.changed"/>
+        <input id='profileedit' type="submit" value="Save Edits" ng-click="editProfile(user)" ng-show="user.changed"/>
     </div>
     
 
@@ -52,7 +51,6 @@
         <!--<textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-model="user.description"/></textarea>-->
 
 
-      </form>
 </div>
 </div>
 

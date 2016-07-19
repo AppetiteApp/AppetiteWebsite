@@ -35,54 +35,7 @@
             <div class="warning" ng-repeat="error in dish.errors">{{error.errorMessage}}</div>
 
 
-          <!--PAUL'S FORM-->
-          <!--<form>-->
-          <!--  <div ng-switch="vm.step">-->
-          <!--    <div class="stepone" ng-switch-when="one">-->
-          <!--      <h3>Step 1</h3>-->
-          <!--      <div class="form-group">-->
-          <!--        <label>Dish</label>-->
-          <!--        <input type="text" ng-model="dish.dishName" />-->
-          <!--      </div>-->
-          <!--      <div class="form-group">-->
-          <!--        <label>Password</label>-->
-          <!--        <input ng-model="dish.description" />-->
-          <!--      </div>-->
-          <!--      <button type="button" ng-click="stepTwo()">Step 2</button>-->
-          <!--    </div>-->
-          <!--    <div class="steptwo" ng-switch-when="two">-->
-          <!--      <h3>Step 2</h3>-->
-          <!--      <div class="form-group">-->
-          <!--        <label>Price</label>-->
-          <!--        <input ng-model="dish.price" />-->
-          <!--      </div>-->
-          <!--      <div class="form-group">-->
-          <!--        <label>Start Hour</label>-->
-          <!--        <input ng-model="dish.startHour" />-->
-          <!--      </div>-->
-          <!--      <div class="form-group">-->
-          <!--        <label>End Hour</label>-->
-          <!--        <input ng-model="dish.endHour" />-->
-          <!--      </div>-->
-          <!--      <button type="button" ng-click="stepThree()">Step 3</button>-->
-          <!--    </div>  -->
-          <!--    <div class="stepthree" ng-switch-when="three">-->
-          <!--      <h3>Step 3</h3>-->
-          <!--      <div class="form-group">-->
-          <!--        <label for="exampleInputEmail1">Email address</label>-->
-          <!--        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">-->
-          <!--      </div>-->
-          <!--      <div class="form-group">-->
-          <!--        <label for="exampleInputPassword1">Password</label>-->
-          <!--        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">-->
-          <!--      </div>-->
-          <!--      <button type="button" class="btn btn-default">Submit</button>-->
-          <!--    </div>  -->
-          <!--  </div>-->
-          <!--</form>-->
-
-          <form>
-              {{dish.complete}}
+            <form>
                 <div class="form-group">
                   <label>Dish</label>
                   <input type="text" ng-model="dish.dishName" />
@@ -103,10 +56,8 @@
                 </div>
                 <div class="form-group">
                   <p>Pickup Location:</p>
-                  {{dish.location}}
                   <p ng-hide="dish.useLocationCustom">{{dish.location.name}}</p>
                   <p ng-show="dish.useLocationCustom">{{dish.locationCustom.name}}</p>
-                  locationCustom = {{dish.locationCustom}}
                   <p>Use custom location: <input type="checkbox" ng-model="dish.useLocationCustom" /></p>
                   <div ng-show="dish.useLocationCustom">
                     <p>Search for your Address: <input type="text" ng-model="searchAddress" /><button ng-click="submitAddress()">Search</button></p>

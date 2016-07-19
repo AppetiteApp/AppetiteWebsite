@@ -10,7 +10,9 @@
   height: 60px;
   top: 0;
   width: 100%;
-  z-index: 98;
+  z-index: 98; 
+  vertical-align:middle;
+
 }
 
 
@@ -20,17 +22,16 @@
   text-align: center;
   text-decoration: none;
   color: #ffffff;
-  padding: 12.5px 15px 12.5px 15px;
 }
 
 .navelements {
   border-radius: 30px;
-  display: inline-block;
   text-align: center;
   text-decoration: none;
+  padding: 0px 15px 15px 15px;
+  display:inline;
+  line-height:60px;
   color: #ffffff;
-  padding: 20px 15px 20px 15px;
-  line-height:30px;
 }
 
 
