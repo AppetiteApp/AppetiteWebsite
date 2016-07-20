@@ -36,25 +36,28 @@
 
 
             <form>
-                <div class="form-group">
-                  <label>Dish</label>
-                  <input type="text" ng-model="dish.dishName" />
+              <div class="menusubmit">
+                <div id="dishbox">
+                  <label class="menulabel">Dish</label>
+                  <input class="menutextbox" type="text" ng-model="dish.dishName" />
                 </div>
-                <div class="form-group">
-                  <label>Description</label>
-                  <textarea ng-model="dish.description"></textarea>
-                </div>
-                <div class="form-group">
+                <div id="pricebox">
                   <label>Price</label>
-                  <input ng-model="dish.price" />
+                  <input class="menutextbox" id="pricetextbox" ng-model="dish.price" />
                 </div>
-                <div class="form-group">
+
+                <div>
+                  <label>Description</label>
+                  <textarea id="descriptiontextbox" ng-model="dish.description"></textarea>
+                </div>
+               </div>
+                <div>
                     <label>Pickup Time:</label>
                     <p><input type="date" ng-model="dish.time.startTime" /><input type="time" ng-model="dish.time.startTime" step="600"/></p>
                     <p><input type="date" ng-model="dish.time.endTime" /><input type="time" ng-model="dish.time.endTime" step="600"/></p>
                     
                 </div>
-                <div class="form-group">
+                <div>
                   <p>Pickup Location:</p>
                   <p ng-hide="dish.useLocationCustom">{{dish.location.name}}</p>
                   <p ng-show="dish.useLocationCustom">{{dish.locationCustom.name}}</p>
@@ -68,7 +71,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
+                <div>
                   <label for="phone">Phone:</label>
                   <input type="text" class="form-control" ng-model="dish.phone">
                 </div>

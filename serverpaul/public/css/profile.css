@@ -382,3 +382,11 @@ input[type="checkbox"]:checked + label {
   margin-right: 10px;
   border:none;
 }
+
+#profilestatus {
+    text-align: center;
+    font-family: Source Sans Pro;
+    width: auto;
+    background-color:#f4f48d;
+    color:#f39c12;
+}

@@ -5,6 +5,7 @@ module.exports = function(app) {
 	//edit a user's account
 	//check if the a valid change is in req.body, if yes then update
 	app.post('/api/account/edit', function(req, res, next){
+		console.log("received");
 		console.log(req.body);
 		//if frontend didn't send uid, return error
 		if (!req.body.uid) {
@@ -67,10 +68,8 @@ module.exports = function(app) {
 					errorMessage: "Invalid characters in lat/lng"
 				});
 			}
-			update.latlng = {
-				lat: req.body.lat,
-				lng: req.body.lng
-			};
+			update.lat = req.body.lat;
+			update.lng = req.body.lng;
 		}
 		
 		//phone updates

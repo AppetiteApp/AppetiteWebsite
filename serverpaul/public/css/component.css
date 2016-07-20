@@ -510,4 +510,9 @@
 	.morph-button-sidebar.open .morph-content {
 		height: 100% !important;
 	}
+	.menulabel{
+     font-family: Source Sans Pro;
+     }
+
+
 }

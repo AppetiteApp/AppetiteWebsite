@@ -1,3 +1,38 @@
+.menusubmit{
+    font-family: Source Sans Pro;
+    width: 50%;
+}
+
+.menutextbox{
+    height: 35px;
+    border: 1px solid #ebd3bd;
+    
+}
+
+#dishbox{
+    position: relative;
+    display: inline-block;
+}
+
+#pricebox{
+    position: relative;
+    display: inline-block;
+    width: 200px;
+}
+
+#pricetextbox{
+    width:45px;
+    
+}
+
+#descriptiontextbox{
+    height: 70px;
+    width:100%;
+    border: 1px solid #ebd3bd;
+    
+    
+}
+
 #dishbanner {
   overflow: visible;
   position:relative;
@@ -247,7 +282,7 @@
     width: 100%;
     height: auto;
     overflow-y: scroll;
-    top: 365px;
+    top: 360px;
     bottom: 0;
     padding:3px;
     background-image: url(/imgs/board.jpg);
@@ -266,5 +301,4 @@
     font-size: 4.0vw;
   }
 
-    
 }

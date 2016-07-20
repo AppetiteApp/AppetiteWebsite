@@ -279,7 +279,7 @@ module.exports = function(app) {
 		
 		if (data.price) {
 			if (globals.priceRegex.test(data.price)){
-				update.price = data.price;
+				update.price = parseFloat(data.price);
 			} else {
 				error.push({
 					errorType: "price",
@@ -292,15 +292,15 @@ module.exports = function(app) {
 			update.time = data.time;
 		}
 		
-		if (data.portion) {
-			if (globals.onlyIntsRegex.test(data.portion)){
-				update.portion = data.portion;
+		if (data.portions) {
+			if (globals.onlyIntsRegex.test(data.portions)){
+				update.portions = parseInt(data.portions);
 			} else {
 				error.push({
 					warningType: "portion",
 					warningMessage: "invalid characters in portion"
 				});
-				update.portion = 1;
+				update.portions = 1;
 			}
 		}
 		
@@ -317,7 +317,7 @@ module.exports = function(app) {
 		}
 		
 		update.dateUpdated = Date();
-		
+		console.log(update);
 		global.dishRef.child(data.key).once("value", function(snapshot){
 			if (snapshot.val().ownerid !== data.uid) {
 				res.send({

@@ -38,19 +38,20 @@ $routeProvider
 
 
 //for controlling regex, to be addedS
-myApp.service('regexService', function(){
-    this.onlyIntsRegex    = /^[0-9]+$/;
-    this.phoneRegex       = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-    this.usernameRegex    = /^[a-zA-Z0-9]+$/;
-    this.passwordRegex    = /^[a-zA-Z0-9:.?!@#$%^&*\-=_+\'\";<>,\/]+$/;
-    this.individualNameRegex = /^[\w\d]+$/i;
-    this.commentRegex     = /^[\w\d.,:;"'-=_+!@#$%^&*0-9 ]+$/i;
-    this.mealRegex        = /^[\w\d.,:;"'-=_+!@#$%^&*0-9 ]+$/i;
-    this.addressRegex        = /^[\w\d.,:;"'-=_+!@#$%^&*0-9 ]+$/i;
-    this.latLngRegex      = /^-?[0-9]{1,3}\.?[0-9]{0,}$/;
-    this.priceRegex       = /^\$?[0-9]+\.?[0-9]{0,}$/;
-    this.emailRegex       = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-});
+myApp.service('regexService', regexService);
+// myApp.service('regexService', function(){
+//     this.onlyIntsRegex    = /^[0-9]+$/;
+//     this.phoneRegex       = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+//     this.usernameRegex    = /^[a-zA-Z0-9]+$/;
+//     this.passwordRegex    = /^[a-zA-Z0-9:.?!@#$%^&*\-=_+\'\";<>,\/]+$/;
+//     this.individualNameRegex = /^[\w\d]+$/i;
+//     this.commentRegex     = /^[\w\d.,:;"'-=_+!@#$%^&*0-9 ]+$/i;
+//     this.mealRegex        = /^[\w\d.,:;"'-=_+!@#$%^&*0-9 ]+$/i;
+//     this.addressRegex        = /^[\w\d.,:;"'-=_+!@#$%^&*0-9 ]+$/i;
+//     this.latLngRegex      = /^-?[0-9]{1,3}\.?[0-9]{0,}$/;
+//     this.priceRegex       = /^\$?[0-9]+\.?[0-9]{0,}$/;
+//     this.emailRegex       = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+// });
 
 //service to manage session: stores: firstname, lastname, email, mealsmade, address
 myApp.service('sessionService', function(){
@@ -191,36 +192,27 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
             $scope.user.location  = snapshot.val().location;
             $scope.user.description = snapshot.val().description;
             $scope.user.dishes    = {};
+            $scope.user.lat = snapshot.val().lat;
+            $scope.user.lng = snapshot.val().lng;
             $scope.user.photoUrl = snapshot.val().photoUrl;
             
             //go and fetch meals
             if (snapshot.val().mealsMade){
                 snapshot.val().mealsMade.forEach(function(mealId){
                     firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
-                        //parse the time into an year, month, day, starthour + startmin, endhour + endmin
-                            var startTime = new Date(snapshot.val().time.startTime);
-                            var endTime = new Date(snapshot.val().time.endTime);
-                            console.log("startTime:", startTime.toString());
-                            console.log("endTime:", endTime.toString());
-                            var timeObj = {
-                                year    : startTime.getFullYear(),
-                                month   : startTime.getMonth(),
-                                day     : startTime.getDay(),
-                                startHour: startTime.getHours(),
-                                startMin: startTime.getMinutes(),
-                                endHour : endTime.getHours(),
-                                endMine : endTime.getMinutes(),
-                                date: new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDay()),
-                                endTime: endTime
-                            };
-                            
-                            
-                            
+                        //make the date into a Date object
+                        var time = {
+                            startTime: new Date(snapshot.val().time.startTime),
+                            endTime: new Date(snapshot.val().time.endTime)
+                        };
+                        
                         $timeout(function(){
                             $scope.user.dishes[mealId] = snapshot.val();
                             $scope.user.dishes[mealId].key = mealId;
-                            $scope.user.dishes[mealId].time = timeObj;
+                            $scope.user.dishes[mealId].time = time;
                         });
+                        
+                        console.info(snapshot.val().time);
                   });//end firebase fetch dish info
                 });//end foreach meal
                 
@@ -242,7 +234,7 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
     
     
     //find a new address function
-    $scope.submitAddress = function(dish){
+    $scope.submitAddress = function(){
         //format form data
         var formData = {
             region  : "ca",
@@ -263,6 +255,8 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
         
     };
     
+    
+    
     //posts stuff to backend to edit profile
     $scope.editProfile = function(user){
         //watch the stuff in the profile, on change, push them to updateObject and send that when user clicks the save edits button
@@ -271,6 +265,8 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
             description: user.description,
             phone   : user.phone,
             location: user.location,
+            lat: user.lat,
+            lng: user.lng,
             firstName: user.firstName,
             lastName: user.lastName
         };
@@ -303,16 +299,6 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
     //note: must have these things when injecting
     $scope.editDish = function(dish){
         console.log( $scope.user.uid);
-        //dish.time
-        
-        var time = {
-            year: dish.time.year || new Date().getFullYear(),
-            month: dish.time.month || new Date().getMonth(),
-            day: dish.time.day || new Date().getDate(),
-            startHour: dish.time.startHour,
-            endHour: dish.time.endHour
-        };
-        
         
         //extract num from price
         $http.post('/api/dish/edit', {
@@ -323,7 +309,7 @@ myApp.controller('accountController', function($scope, $log, $location, $http, $
             location    : dish.location,
             description : dish.description,
             price       : dish.price,
-            //time        : time,
+            time        : dish.time,
             portions    : dish.portions,
             phone       : $scope.user.phone
         })
@@ -520,7 +506,8 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
             description: dish.description,
             price: dish.price,
             portions: dish.portions || 1,
-            ingredients: dish.ingredients || ""
+            ingredients: dish.ingredients || "",
+            time: dish.time
         };
         if ($scope.dish.useLocationCustom) {
             data.location = dish.locationCustom;
@@ -535,14 +522,12 @@ myApp.controller('browseController', function($scope, $log, $location, $http, $t
                 dish.dishName = "";
                 dish.description = "";
                 dish.price = "";
-                dish.month = "";
-                dish.year = "";
-                dish.day = "";
                 dish.starttime = "";
                 dish.endtime = "";
                 dish.portions = "";
-                dish.phone = "";
-                dish.location= "";
+                dish.location = "";
+                dish.locationCustom = undefined;
+                dish.useLocationCustom = false;
                 dish.ingredients = "";
                     $scope.error = res.data.error;
                     $scope.warnings = res.data.warnings;
@@ -620,10 +605,6 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
         });
         
     };
-    
-     $scope.example = {
-         value: new Date(2013, 9, 22)
-       };
     
     $scope.signout = sessionService.signout;
     

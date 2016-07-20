@@ -22,7 +22,7 @@
           <!--CHERYL WROTE THIS AS A DEMO/TEST, FEEL FREE TO REMOVE-->
           <!--<div ng-repeat="error in updateProfile.errors"></div>-->
           <!--<div ng-show="user.updated">Profile Updated!</div>-->
-          {{updateProfile.statusMessage}}
+          <div id="profilestatus"font-family="Source Sans Pro">{{updateProfile.statusMessage}}</div>
             <!--CHERYL'S TEST ENDS HERE-->
     <div height="auto" ng-show="user.changed">
             <div id="phonebox">
@@ -42,7 +42,7 @@
 
           </div>
           <div height="auto" ng-show="user.changed">
-          <input ng-model="queryAddress" class="addressinput" placeholder="Find address"/> <button id="locationedit" ng-click="submitAddress(dish)"><img id="search" src="/imgs/search.png"></button>
+          <input ng-model="queryAddress" class="addressinput" placeholder="Find address"/> <button id="locationedit" ng-click="submitAddress()"><img id="search" src="/imgs/search.png"></button>
               <div ng-repeat="result in results" class="addressedit" ng-click="assignLocation(result)">
                   {{result.formatted_address}}
               </div>
@@ -66,17 +66,18 @@
               <img class="img-thumbnail" src="/imgs/gordon.jpg" />
             </div>
             <input type="text" ng-model="dish.dishName" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
-            <input type="text" ng-model="dish.price" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
             Active: <input type="checkbox" ng-model="dish.active" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
           </div>
         </div>
         <div ng-show="showDetails" id="itemdetails">
-            <input type="date" ng-model="time.date"/>
-            <input type="time" step="900" ng-model="time.endTime"/>
+            <label>Price:</label><input type="text" ng-model="dish.price" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/><br>
+            <label>Pickup time:</label>
+            <input type="date" ng-model="dish.time.startTime"/>
+            <input type="time" step="600" ng-model="dish.time.startTime"/>
+            <label>To:</label>
+            <input type="date" ng-model="dish.time.endTime" />
+            <input type="time" step="600" ng-model="dish.time.endTime" />
           <input type="text" ng-model="dish.description" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
-          <input type="text" ng-model="dish.time" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
-          {{dish.time}}
-          {{dish.key}}
           <input type="text" ng-model="dish.phone" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
           <input type="text" ng-model="dish.location" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
           <input type="submit" value="Save Edits" ng-show="dish.changed"/>

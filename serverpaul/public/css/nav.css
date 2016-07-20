@@ -10,9 +10,12 @@
   height: 60px;
   top: 0;
   width: 100%;
-  z-index: 98; 
-  vertical-align:middle;
+  z-index: 98;
+  text-decoration:none !important;
+}
 
+.nav > a {
+    text-decoration: none;
 }
 
 
@@ -28,11 +31,22 @@
   border-radius: 30px;
   text-align: center;
   text-decoration: none;
-  padding: 0px 15px 15px 15px;
+  padding: 15px 15px 15px 15px;
   display:inline;
-  line-height:60px;
-  color: #ffffff;
+  color: #ffffff !important;
+  vertical-align:20px;
 }
 
-
+#logout {
+    position:absolute;
+    right:20px;
+    top:22px;
+    border-radius:5px;
+    border:none;
+    color:white;
+    cursor: pointer;
+    background-color: #9b59b6;
+    font-size:14px;
+    font-family: Source Sans Pro;
+}
   
