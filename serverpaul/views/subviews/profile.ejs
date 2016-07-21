@@ -6,22 +6,19 @@
 
 
 <img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" />
-
-
-<div id="profilecontainer">
     <div id="profilename">
         {{user.firstName}}
         {{user.lastName}}
         <label class="editbutton" for="c1" ng-click="user.changed=true" ng-init="user.changed=false"></label>
         <input id='profileedit' type="submit" value="Save Edits" ng-click="editProfile(user)" ng-show="user.changed"/>
     </div>
+
+<div id="profilecontainer">
+    
     
 
     
     <div id="infocontainer">
-          <!--CHERYL WROTE THIS AS A DEMO/TEST, FEEL FREE TO REMOVE-->
-          <!--<div ng-repeat="error in updateProfile.errors"></div>-->
-          <!--<div ng-show="user.updated">Profile Updated!</div>-->
           <div id="profilestatus"font-family="Source Sans Pro">{{updateProfile.statusMessage}}</div>
             <!--CHERYL'S TEST ENDS HERE-->
     <div height="auto" ng-show="user.changed">
@@ -42,8 +39,8 @@
 
           </div>
           <div height="auto" ng-show="user.changed">
-          <input ng-model="queryAddress" class="addressinput" placeholder="Find address"/> <button id="locationedit" ng-click="submitAddress()"><img id="search" src="/imgs/search.png"></button>
-              <div ng-repeat="result in results" class="addressedit" ng-click="assignLocation(result)">
+          <input ng-model="queryAddress" class="addressinput" placeholder="Find address"/> <button id="locationedit" ng-click="submitAddress(queryAddress, user)"><img id="search" src="/imgs/search.png"></button>
+              <div ng-repeat="result in user.results" class="addressedit" ng-click="assignLocation(result, user)">
                   {{result.formatted_address}}
               </div>
             </div>
@@ -58,29 +55,39 @@
   <div id="profileinnercontainer">
     
     <div id="repeateditem" ng-repeat="dish in user.dishes">
-      <form ng-submit="editDish(dish)">
-        <div id="listitem" ng-click="showDetails = !showDetails">
+      <form>
+        <div id="listitem">
           
           <div id="dishbanner">
             <div class="dishthumbnail">
               <img class="img-thumbnail" src="/imgs/gordon.jpg" />
             </div>
-            <input type="text" ng-model="dish.dishName" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
-            Active: <input type="checkbox" ng-model="dish.active" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+            {{dish.dishName}}
+            <button ng-click="dish.edit=!dish.edit">Edit</button>
+            <input type="submit" ng-click="editDish(dish)"/>
           </div>
         </div>
-        <div ng-show="showDetails" id="itemdetails">
-            <label>Price:</label><input type="text" ng-model="dish.price" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/><br>
+        <div ng-show="dish.edit" id="itemdetails">
+            <input type="text" ng-model="dish.dishName"/>
+            Active: <input type="checkbox" ng-model="dish.active"/>
+            <label>Price:</label><input type="text" ng-model="dish.price"/><br>
             <label>Pickup time:</label>
             <input type="date" ng-model="dish.time.startTime"/>
-            <input type="time" step="600" ng-model="dish.time.startTime"/>
+            <input type="time" step="600" ng-model="dish.time.startTime"/><br>
             <label>To:</label>
             <input type="date" ng-model="dish.time.endTime" />
-            <input type="time" step="600" ng-model="dish.time.endTime" />
-          <input type="text" ng-model="dish.description" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
-          <input type="text" ng-model="dish.phone" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
-          <input type="text" ng-model="dish.location" ng-change="dish.changed=true" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
-          <input type="submit" value="Save Edits" ng-show="dish.changed"/>
+            <input type="time" step="600" ng-model="dish.time.endTime" /><br>
+            <label>Description:</label>
+          <input type="text" ng-model="dish.description"/><br>
+          <label>Phone:</label>
+          <input type="text" ng-model="dish.phone"/><br>
+          <label>Location:</label>
+          <input type="text" ng-model="dish.location"/><br>
+          <input type="text" ng-model="dish.queryAddress" /><button ng-click="submitAddress(dish.queryAddress, dish)">Find Address</button>
+          <div ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
+              {{result.formatted_address}}
+          </div>
+          
         </div>
       </form>
     </div>

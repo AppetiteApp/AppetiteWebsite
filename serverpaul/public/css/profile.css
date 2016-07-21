@@ -12,7 +12,6 @@
 }
 
 #profilebanner:hover{
-  opacity: .8;
 }
 
 input.blur{
@@ -39,7 +38,7 @@ textarea.blur{
 
 label {
   display: inline-block;
-  width: 100px;
+  width:auto;
   }
 
 
@@ -170,11 +169,15 @@ label {
   word-wrap: break-word;
   text-align: center;
   display: block;
-  padding-left: 185px;
   padding-right: 2px;
+  padding-left:200px;
   padding-top:5px;
   margin-right: auto;
   margin-left: auto;
+  text-align: left;
+  top:200px;
+  color:white;
+  background-color:rgba(117,208,244,0.5);
 }
 
 #profilecontainer{
@@ -345,8 +348,7 @@ input[type="checkbox"]:checked + label {
   font-family: Source Sans Pro;
   font-size:15px;
   vertical-align: middle;
-  border-right: 5px;
-  border-left: 5px;
+  border: 1px solid white;
 }
 
 .nameedit{

@@ -124,6 +124,7 @@ module.exports = function(app) {
 
 	app.post('/api/newaccount', function(req, res, next){
         console.log("Creating new user with email", req.body.email, "at", Date());
+        console.log(req.body);
         var photos = ["https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat2.jpg?alt=media&token=c2f11652-534e-408b-9bad-b3b16b18132a", "https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat3.jpg?alt=media&token=17ebcf03-93e9-4659-97f8-de8fc723d793", "https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat4.jpg?alt=media&token=241c91ae-fc59-4cc3-bcd9-a19ec11b2247"];
         var randInt = Math.floor(Math.random(3));
         console.log(randInt);
@@ -133,7 +134,9 @@ module.exports = function(app) {
             uid: req.body.uid,
             email: req.body.email,
             photoUrl: photoUrl,
-            firstName: "Please Enter Name"
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            phone: req.body.phone
         });
         
 	});

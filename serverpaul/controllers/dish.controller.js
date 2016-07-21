@@ -8,7 +8,7 @@ module.exports = function(app) {
 	//check for latlng key in req.body, if there is, store it in the dish; if not, get latlng from user & store in dish
 	//TODO: add regex control
 	app.post('/newdish', function(req, res, next){
-	    console.log("Joe's request");
+	    console.log("Cheryl");
 	    console.log(req.body);
 		var data = req.body;
 		var errors = [];
@@ -58,9 +58,18 @@ module.exports = function(app) {
 		//	});
 		} else {
 			dishObject.location = data.location.name;
-			dishObject.lat = data.location.lat;
-			dishObject.lng = data.location.lng;
+			dishObject.lat = parseFloat(data.location.lat);
+			dishObject.lng = parseFloat(data.location.lng);
 			
+		}
+		
+		if(!data.phone) {
+		    errors.push({
+		        errorType: "phone",
+		        errorMessage: "No phone entered"
+		    });
+		} else {
+		    dishObject.phone = data.phone;
 		}
 		
 		//check if description is present and valid
@@ -138,6 +147,7 @@ module.exports = function(app) {
 			dishObject.ingredients = data.ingredients;
 		}
 		
+		
 		//if no errors, then continue
 		if (errors.length > 0 ){
 			res.send({
@@ -179,8 +189,7 @@ module.exports = function(app) {
 			// });
 			
 			newDishRef.update({
-				"owner": snapshot.val().firstName || "No Firstname Yet",
-				"phone": snapshot.val().phone || "Uhoh, this user has not updated his/her phone number yet"
+				"owner": snapshot.val().firstName || ""
 			});
 			
 		});

@@ -11,3 +11,65 @@ var regexService = function(){
     this.priceRegex       = /^\$?[0-9]+\.?[0-9]{0,}$/;
     this.emailRegex       = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 };
+
+var sessionService = function(){
+    var self = this;
+    self.currentUser;
+    
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            self.currentUser = user;
+        } else {
+            $log.log("onAuthStateChanged: no user");
+            $route.reload();
+            $location.path('/login');
+            self.currentUser = undefined;
+        }
+    });
+    
+    
+    self.signout = function(){
+        firebase.auth().signOut().then(function(){
+            self.currentUser = undefined;
+            console.log("signed out!");
+        }, function(err){
+            console.log(err);
+        });
+    };
+};
+
+var timeService = function(){
+    var self = this;
+    
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    
+    //input a date and get it's hour/minutes, in am/pm time
+    self.formatAPMP = function(date) {
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = hours + ':' + minutes + ampm;
+        return strTime;
+    };
+    
+    self.formatDate = function(date){
+        console.log("Got function to format date!");
+        var todayDate = new Date();
+        var testDate = new Date(date.toString());
+        
+        var timeString;
+        if (testDate.setHours(0,0,0,0) == todayDate.setHours(0,0,0,0)){
+            timeString = "Today ";
+        } else if(date.getFullYear() === todayDate.getFullYear()) {
+            timeString = monthNames[date.getMonth()] + " " + date.getDate() + " ";
+        } else {
+            timeString = date.getFullYear() + ' ' + monthNames[date.getMonth()] + ' ' + date.getDate() + ' ';
+        }
+        console.log(timeString);
+        return timeString;
+    };
+    
+};

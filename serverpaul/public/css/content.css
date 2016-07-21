@@ -183,33 +183,20 @@
 }
 
 .content-style-form form {
-	padding: 10px 30px;
+	padding: 5px 30px;
 }
 
 .content-style-form form p {
 	margin: 0 0 5px 0;
-	font-size: 0.7em;
 }
 
 .content-style-form label {
     font-family: Source Sans Pro;
-	display: block;
 	padding: 10px 0 0;
 	color: #d5bba4;
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	font-weight: bold;
-}
-
-.content-style-form input,
-.content-style-form input {
-	padding: 10px;
-	border: 1px solid #ebd3bd;
-	background: transparent;
-	color: #b09a86;
-	font-weight: 300;
-	font-size: 2.2em;
-	height: 35px;
 }
 
 .content-style-form input[type="text"]:focus,
@@ -223,17 +210,19 @@
 }
 
 .content-style-form button {
-	display: block;
-	margin-top: 2.5em;
-	padding: 1.5em;
-	width: 280px;
+	padding: .5em;
+	width: 100%;
 	border: none;
 	background: #75d0f4;
 	color: #f9f6e5;
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	font-weight: 800;
-	font-size: 1.25em;
+	font-family: Source Sans Pro;
+	font-size:15px;
+    margin-top:15px;
+ 	height:40px;
+	
 }
 
 .content-style-form .icon-close {

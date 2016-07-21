@@ -13,6 +13,13 @@
   padding: 20% 0;
 }
 
+#termsconsent{
+    text-align:center;
+    font-family:Source Sans Pro;
+    
+}
+
+
 .quotes {
   text-align:center;
   font-size:25px;
@@ -48,4 +55,60 @@
   margin-right: 120px;
   margin-top: 40px;
   margin-bottom: 40px;
+}
+
+.logintextbox{
+	padding: 10px;
+	border: 1px solid #ebd3bd;
+	background: transparent;
+	color: #b09a86;
+	font-weight: 300;
+	font-size: 2.2em;
+	height: 35px;
+	margin-left:5px;
+	margin-right:5px;
+	width:100%;
+}
+
+#firstNameregister{
+    width:100%;
+    display:inline-block;
+}
+
+#lastNameregister{
+    width:100%;
+    display:inline-block;
+}
+
+#firstnamebox{
+    width:49%;
+    display:inline-block;
+}
+
+#lastnamebox{
+    width:49%;
+    display:inline-block;
+}
+
+.registerlabel{
+    max-width:110px;
+    margin:0px 0px 0px 5px;
+}
+
+#loginbutton{
+    font-family: Source Sans Pro;
+}
+
+.labelmargin{
+    margin-left: 5px;
+}
+
+.buttonfont{
+    font-size: 20px;
+}
+
+.homepadding{
+    
+    margin-left:5px;
+    margin-right:5px;
 }

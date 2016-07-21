@@ -40,7 +40,7 @@
 #logout {
     position:absolute;
     right:20px;
-    top:22px;
+    top:21px;
     border-radius:5px;
     border:none;
     color:white;
@@ -48,5 +48,7 @@
     background-color: #9b59b6;
     font-size:14px;
     font-family: Source Sans Pro;
+    padding: 5px 5px 5px 5px;
+
 }
   

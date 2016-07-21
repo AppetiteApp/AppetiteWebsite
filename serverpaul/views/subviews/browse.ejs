@@ -25,7 +25,7 @@
 </div>
 
 <div class="morph-button morph-button-modal1 morph-button-modal-2 morph-button-fixed" id="submitdishbutton">
-    <button type="button" ng-click="dish.submitSuccess=false">Sell Dish!</button>
+    <button type="button" id="browsebutton" ng-click="dish.submitSuccess=false">Sell Dish!</button>
     <div class="morph-content">
         <div class="content-style-form content-style-form-1">
             <span class="icon icon-close">Close the dialog</span>
@@ -33,12 +33,19 @@
             {{message}}
             <div class="warning" ng-repeat="warning in dish.warnings">{{warning.warningMessage}}</div>
             <div class="warning" ng-repeat="error in dish.errors">{{error.errorMessage}}</div>
+                <div id="submitleft">    
+                    
+                
+                </div>
 
-
+            
+            <div id="fullformsubmit">
             <form>
+            
               <div class="menusubmit">
                 <div id="dishbox">
-                  <label class="menulabel">Dish</label>
+                    
+                  <label id="whatchamakin">What are you making?</label>
                   <input class="menutextbox" type="text" ng-model="dish.dishName" />
                 </div>
                 <div id="pricebox">
@@ -47,39 +54,45 @@
                 </div>
 
                 <div>
-                  <label>Description</label>
+                  <label id="descriptionlabel">Description</label>
                   <textarea id="descriptiontextbox" ng-model="dish.description"></textarea>
                 </div>
                </div>
-                <div>
-                    <label>Pickup Time:</label>
-                    <p><input type="date" ng-model="dish.time.startTime" /><input type="time" ng-model="dish.time.startTime" step="600"/></p>
-                    <p><input type="date" ng-model="dish.time.endTime" /><input type="time" ng-model="dish.time.endTime" step="600"/></p>
-                    
+               
+               <div id="logisticssubmit">
+                    <label id="whattime">Around what time?</label><br>
+                    <label id="fromlabel">From:</label>
+                    <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.startTime" />
+                    <input class="logistictextbox" type="time" ng-model="dish.time.startTime" step="600"/><br>
+                    <label id="tolabel">To:</label>
+                    <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.endTime" />
+                    <input class="logistictextbox" type="time" ng-model="dish.time.endTime" step="600"/
                 </div>
+               
+               
                 <div>
-                  <p>Pickup Location:</p>
-                  <p ng-hide="dish.useLocationCustom">{{dish.location.name}}</p>
-                  <p ng-show="dish.useLocationCustom">{{dish.locationCustom.name}}</p>
-                  <p>Use custom location: <input type="checkbox" ng-model="dish.useLocationCustom" /></p>
-                  <div ng-show="dish.useLocationCustom">
-                    <p>Search for your Address: <input type="text" ng-model="searchAddress" /><button ng-click="submitAddress()">Search</button></p>
+                  <label id="where">Where?</label> <label id="submitedit" for="c2" ng-click="dish.useLocationCustom=!dish.useLocationCustom" ng-init="dish.useLocationCustom=false"> </label>
+                  <div id="defaultaddress" ng-hide="dish.useLocationCustom">{{dish.location.name}} </div>
+                  
+                  <div ng-show="dish.useLocationCustom">{{dish.locationCustom.name}}</div>
+        
+                  <div id="searchdiv" ng-show="dish.useLocationCustom">
+                  <input type="text" id="addresssearch" placeholder="Search for cusom location" ng-model="searchAddress" />
+                  <button id="searchbutton" ng-click="submitAddress()">Search</button>
                     
                     <div ng-repeat="result in results" class="choices" ng-click="assignLocation(result)">
                       <p>{{result.formatted_address}}</p>
-                    
                     </div>
                   </div>
+
+                  
                 </div>
-                <div>
-                  <label for="phone">Phone:</label>
-                  <input type="text" class="form-control" ng-model="dish.phone">
-                </div>
-                <button type="submit"class="btn btn-default" ng-click="submitDish(dish)" ng-disabled="!dish.complete" ng-init="dish.complete=false">Submit</button>
-              </div>  
+                    <button class="logistictextbox" type="submit"class="btn btn-default" ng-click="submitDish(dish)" ng-disabled="!dish.complete" ng-init="dish.complete=false">Submit</button>
+
+              </div>
             </div>
           </form>
-
+        </div>
 
 
 
