@@ -1,15 +1,4 @@
-  #browsebutton{
-    font-size: 20px;
-    color:#9b59b6;
-}
 
-#fromlabel{
-    width:50px;
-}
-
-#tolabel{
-   width:50px;
-}
 
 
 #submitform{
@@ -17,173 +6,7 @@
 }
 
 .hiddencheckbox{
-    
     display:none;
-}
-
-#whatchamakin{
-    color: #75d0f4;
-    font-size: 20px;
-}
-
-#where{
-    color: #75d0f4;
-    display:inline-block;
-    font-size: 20px;
-}
-
-#defaultaddress{
-    color:#ebd3bd;
-    border: 1px solid #ebd3bd;
-    margin-top:5px;
-}
-
-#searchbutton{
-    display:inline-block;
-    width:95px;
-    height: 30px;
-    padding:0;
-    margin-top:0;
-}
-
-#addresssearch{
-    border:1px solid #ebd3bd;
-    height: 30px;
-    top:0px;
-    left:0px;
-    margin-top:0;
-    position:relative;
-    display:inline-block;
-    vertical-align:top;
-    width:calc(100% - 99px);
-}
-
-#searchdiv{
-    position:relative;
-}
-
-#exampletitle{
-    height:auto;
-    width:100%;
-    max-width:320px;
-    font-size:20px;
-    margin:auto;
-}
-
-#submitedit{
-    width:15px;
-    height:15px;
-    margin:0;
-    background:url(/imgs/edit.png) left top no-repeat;
-    background-size:     cover;                     
-    background-repeat:   no-repeat;
-    cursor:pointer;
-    float:right;
-    margin:5px;
-    display:inline-block;
-    margin-top:13px;
-    margin-bottom:0;
-}
-
-#submitleft{
-    width:50%;
-    float:left;
-    height: auto;
-    padding-top: 15px;
-}
-
-#whattime{
-    color:#75d0f4;
-    font-size: 20px;
-}
-
-.menusubmit{
-    font-family:Source Sans Pro;
-    width: 100%;
-    height:auto;
-    max-width: 320px;
-    margin: auto;
-}
-
-#menuexample{
-    font-family:Source Sans Pro;
-    width: 100%;
-    height:auto;
-    max-width: 320px;
-    margin: auto;
-    color:#ebd3bd;
-    margin-top:5px;
-    font-size:25px;
-}
-
-#fullformsubmit{
-    width:50%;
-    height:auto;
-    float:right;
-}
-
-#logisticssubmit{
-    font-family:Source Sans Pro;
-    width: 100%;
-    margin:0 auto;
-    max-width: 320px;
-}
-
-#logisticsexample{
-    font-family:Source Sans Pro;
-    width: 100%;
-    margin:0 auto;
-    max-width: 320px;
-}
-
-
-
-.menutextbox{
-    height: 35px;
-    border: 1px solid #ebd3bd;
-    width: 100%;
-    margin-top:5px;
-}
-
-#dishbox{
-    position: relative;
-    display: inline-block;
-    width: calc(100% - 49px);
-}
-
-#pricebox{
-    position: relative;
-    display: inline-block;
-    width: 45px;
-}
-
-#pricetextbox{
-    width:100%;
-    
-}
-
-#descriptiontextbox{
-    height: 70px;
-    width:100%;
-    border: 1px solid #ebd3bd;
-}
-
-#descriptionlabel{
-    font-size:10px;
-}
-
-.logistictextbox{
-    border: 1px solid #ebd3bd;
-    width:auto;
-    height:25px;
-    margin-right:10px;
-    padding-bottom:5px;
-    font-family:Source Sans Pro;
-    font-size:15px;
-}
-
-#submitdate{
-    width:135px;
 }
 
 #dishbanner {
@@ -312,9 +135,7 @@
   top: 60px;
   bottom: 0 ;
   padding:3px;
-  background-image: url(/imgs/board.jpg);
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-color: white;
   overflow-y: scroll;
   padding-bottom: 80px;
   padding-top: 50px;
@@ -358,15 +179,6 @@
   color: orange;
 }
 
-#submitdishbutton {
-  position: absolute;
-  z-index: 200;
-  width: 50%;
-  margin: 0;
-  padding: 0;
-  bottom: 0;
-}
-
 
 
 @media (max-width:750px){
@@ -384,16 +196,6 @@
     font-family: Source Sans Pro;
     color: red;
     height: 50px;
-  }
-
-  #submitdishbutton {
-    position: absolute;
-    z-index: 200;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    bottom: 0;
-    background-color: white;
   }
 
   #dishbanner {

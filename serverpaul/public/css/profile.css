@@ -236,9 +236,7 @@ label {
   overflow-y: scroll;
   bottom: 0;
   padding:3px;
-  background-image: url(/imgs/board.jpg);
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-color: white;
   flex: 1 1 auto;
   padding-top: 30px;
   border: 2px solid #75d0f4;
@@ -253,9 +251,9 @@ label {
   top: 0px;
   left:0;
   border: 1px solid black;
-  background: rgba(255, 255, 255, 0.9);
   font-family: Source Sans Pro;
-  color: orange;
+  color: black;
+  text-align:center;
 }
 
 /*#profilephone{*/
@@ -391,4 +389,44 @@ input[type="checkbox"]:checked + label {
     width: auto;
     background-color:#f4f48d;
     color:#f39c12;
+}
+
+.accountdishlabel{
+    width:90px;
+}
+
+#profiledishname{
+    font-family: Source Sans Pro;
+    display: inline-block;
+    font-size:20px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#accountpickup{
+    width:131px;
+}
+
+#accountto{
+    width:131px;
+}
+
+#accountsubmit{
+    margin-left: 5px;
+}
+
+
+#logout {
+    position:absolute;
+    right:20px;
+    top:17px;
+    border-radius:5px;
+    border:none;
+    color:white;
+    cursor: pointer;
+    background-color: #9b59b6;
+    font-size:14px;
+    font-family: Source Sans Pro;
+    padding: 5px 5px 5px 5px;
+    text-decoration: none;
 }
