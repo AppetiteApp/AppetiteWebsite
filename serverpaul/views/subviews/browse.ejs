@@ -33,24 +33,24 @@
             {{message}}
             <div class="warning" ng-repeat="warning in dish.warnings">{{warning.warningMessage}}</div>
             <div class="warning" ng-repeat="error in dish.errors">{{error.errorMessage}}</div>
-                <div id="submitleft">    
-                
+                <div id="submitleft">
+
                 <div id="exampletitle">EXAMPLE</div>
                 <div id="menuexample">
                     Home-made Spicy Stir Fry</br>
                     Traditional Chinese Stir Fry recipe passed down to me through my mom!  Cooked
-                </div>    
+                </div>
                 <div id="logisticsexample"></br>
-                    
+
                 </div>
                 </div>
-            
+
             <div id="fullformsubmit">
             <form>
-            
+
               <div class="menusubmit">
                 <div id="dishbox">
-                    
+
                   <label id="whatchamakin">What are you making?</label>
                   <input class="menutextbox" type="text" ng-model="dish.dishName" />
                 </div>
@@ -64,7 +64,7 @@
                   <textarea id="descriptiontextbox" ng-model="dish.description"></textarea>
                 </div>
                </div>
-               
+
                <div id="logisticssubmit">
                     <label id="whattime">Around what time?</label><br>
                     <label id="fromlabel">From:</label>
@@ -74,24 +74,24 @@
                     <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.endTime" />
                     <input class="logistictextbox" type="time" ng-model="dish.time.endTime" step="600"/
                 </div>
-               
-               
+
+
                 <div>
                   <label id="where">Where?</label> <label id="submitedit" for="c2" ng-click="dish.useLocationCustom=!dish.useLocationCustom" ng-init="dish.useLocationCustom=false"> </label>
                   <div id="defaultaddress" ng-hide="dish.useLocationCustom">{{dish.location.name}} </div>
-                  
+
                   <div ng-show="dish.useLocationCustom">{{dish.locationCustom.name}}</div>
-        
+
                   <div id="searchdiv" ng-show="dish.useLocationCustom">
                   <input type="text" id="addresssearch" placeholder="Search for cusom location" ng-model="searchAddress" />
                   <button id="searchbutton" ng-click="submitAddress()">Search</button>
-                    
+
                     <div ng-repeat="result in results" class="choices" ng-click="assignLocation(result)">
                       <p>{{result.formatted_address}}</p>
                     </div>
                   </div>
 
-                  
+
                 </div>
                     <button class="logistictextbox" type="submit"class="btn btn-default" ng-click="submitDish(dish)" ng-disabled="!dish.complete" ng-init="dish.complete=false">Submit</button>
 
@@ -107,7 +107,6 @@
       </div>
     </div>
 </div><!-- morph-button -->
-
 
 
 
@@ -129,9 +128,14 @@
     .choices:hover {
         cursor: pointer;
     }
-    
-    
-    
+
+    .faded {
+        font-weight: lighter;
+        font-size: 0.7em;
+    }
+
+
+
 
   button.accordion {
       background-color: #eee;
@@ -153,20 +157,31 @@
   div.panel.show {
       display: block !important;
   }
+
+/*CHERYL MADE THESE STYLES, FEEL FREE TO REMOVE*/
+
+  .infoDiv h2 {
+      font-weight: normal;
+  }
+
+  .infoDiv h2,
+  .infoDiv p{
+      margin: 3px;
+  }
+
+  span.right {
+      display: inline-block;
+      float: right;
+  }
+
 </style>
 
-<!--the original one-->
-<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0&callback="-->
-<!--async defer>-->
+
  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0&callback=initMap"
 async defer></script>
 
 
 <script>
-//Note to Paul:
-    // not working because this only adds eventlisteners to elements already on page
-    // but the dishes are actually added later
-    // maybe put this into Angular
   var acc = document.getElementsByClassName("accordion");
   var i;
 
@@ -175,11 +190,6 @@ async defer></script>
           this.classList.toggle("active");
           this.nextElementSibling.classList.toggle("show");
       }, false);
-
-    //   acc[i].onclick = function(){
-    //       this.classList.toggle("active");
-    //       this.nextElementSibling.classList.toggle("show");
-    // }
   }
 
     var map;
@@ -203,13 +213,33 @@ async defer></script>
         var markers = [];
         var currentUser = firebase.auth().currentUser;
         firebase.database().ref('dish/').once("value", function(snapshot){
-            
+
             snapshot.forEach(function(child) {
                 //console.log(child.val());
                 dishes.push(child.val());
                 if (child.val().active && child.val().ownerid !== currentUser.uid){
                     //console.log("new marker pushed!", child.val().dishName);
                     //console.log("lat", child.val().lat, "; lng:", child.val().lng);
+                    console.log(child.val().time.startTime);
+                    var date = new Date(child.val().time.startTime);
+                    console.log(date);
+
+                    var time = makeTime(date);
+                    console.log(time);
+                    var infoContent = "<div class='infoDiv'><h2>" +
+                                      child.val().dishName + "<span class='right'>$" + child.val().price.toString() + "</span></h2><h2><span class='faded'> by " +
+                                      child.val().owner +
+                                      "</span></h2><p>" +
+                                      child.val().description +
+                                      "</p><p>pickup " +
+                                      time +
+                                      "</p></div>";
+
+                    var infowindow = new google.maps.InfoWindow({
+                        content: infoContent
+                    });
+
+
                     var marker = new google.maps.Marker({
                         position: {
                             lat: child.val().lat,
@@ -218,11 +248,17 @@ async defer></script>
                         title: child.val().dishName
                     });
 
+                    marker.addListener('click', function() {
+                        infowindow.open(map, marker);
+                    });
+
+
+
                     markers.push(marker);
                     //console.log(marker);
 
                 } //end if
-                
+
             });
 
             markers.forEach(function(pin){
@@ -230,6 +266,41 @@ async defer></script>
             });
         });
     }; //end mapHelper function
+
+    var makeTime = function(date) {
+        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jue", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        var formatAPMP = function(date) {
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            var strTime = hours + ':' + minutes + ampm;
+            return strTime;
+        };
+
+        var formatDate = function(date){
+            console.log("Got function to format date!");
+            var todayDate = new Date();
+            var testDate = new Date(date.toString());
+
+            var timeString;
+            if (testDate.setHours(0,0,0,0) == todayDate.setHours(0,0,0,0)){
+                timeString = "today @ ";
+            } else if(date.getFullYear() === todayDate.getFullYear()) {
+                timeString = monthNames[date.getMonth()] + " " + date.getDate() + " @ ";
+            } else {
+                timeString = date.getFullYear() + ' ' + monthNames[date.getMonth()] + ' ' + date.getDate() + ' @ ';
+            }
+            console.log(timeString);
+            return timeString;
+        };
+
+        return formatDate(date) + formatAPMP(date);
+
+    };
 
 </script>
 
@@ -304,4 +375,3 @@ async defer></script>
     } );
   })();
 </script>
-
