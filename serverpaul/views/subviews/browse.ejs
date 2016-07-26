@@ -24,7 +24,6 @@
 </div>
 </div>
 
-
 <div class="morph-button morph-button-modal1 morph-button-modal-2 morph-button-fixed" id="submitdishbutton">
     <button type="button" id="browsebutton" ng-click="dish.submitSuccess=false">Sell Dish!</button>
     <div class="morph-content">
@@ -193,18 +192,18 @@ async defer></script>
       }, false);
   }
 
-    var map;
+  var map;
 
-    function initMap() {
-        var mapDiv = document.getElementById('map');
-        map = new google.maps.Map(mapDiv, {
-            center: {lat: 45.5116861, lng: -73.5773356},
-            zoom: 14,
-            streetViewControl: false,
-            mapTypeControl: false
-        });
+  function initMap() {
+    var mapDiv = document.getElementById('map');
+    map = new google.maps.Map(mapDiv, {
+        center: {lat: 45.5116861, lng: -73.5773356},
+        zoom: 14,
+        streetViewControl: false,
+        mapTypeControl: false
+    });
 
-        mapHelper(map);
+    mapHelper(map);
 
      }
 
@@ -223,16 +222,15 @@ async defer></script>
                     //console.log("lat", child.val().lat, "; lng:", child.val().lng);
                     console.log(child.val().time.startTime);
                     var date = new Date(child.val().time.startTime);
-                    console.log(date);
 
                     var time = makeTime(date);
-                    console.log(time);
+
                     var infoContent = "<div class='infoDiv'><h2>" +
                                       child.val().dishName + "<span class='right'>$" + child.val().price.toString() + "</span></h2><h2><span class='faded'> by " +
                                       child.val().owner +
                                       "</span></h2><p>" +
                                       child.val().description +
-                                      "</p><p>pickup " +
+                                      "</p><p>Available @ " +
                                       time +
                                       "</p></div>";
 
