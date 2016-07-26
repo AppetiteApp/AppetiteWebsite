@@ -1,12 +1,11 @@
 <ul class="nav" ng-controller="navController">
   <a href="#/aboutus"><li class="navelements">About Us</li></a>
   <a href="#/home"><div class="navlogo"><img height="60px" src="/imgs/chefhat.png"></div></a>
-  <a href="#/"><li class="navelements">Browse</li></a>
   <a href="#/account"><li class="navelements">My Account</li></a>
 
 
   <div class="morph-button morph-button-modal1 morph-button-modal-2 morph-button-fixed" id="submitdishbutton">
-    <button type="button" id="browsebutton" ng-click="dish.submitSuccess=false">Sell Dish!</button>
+    <button type="button" id="cookbutton" ng-click="dish.submitSuccess=false">Cook</button>
     <div class="morph-content">
         <div class="content-style-form content-style-form-1">
             <span class="icon icon-close">Close the dialog</span>
@@ -44,7 +43,9 @@
                     <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.endTime" />
                     <input class="logistictextbox" type="time" ng-model="dish.time.endTime" step="600"/
                 </div>
-
+                </br>
+               </br>
+               </br>
 
                 <div>
                   <label id="where">Where?</label> <label id="submitedit" for="c2" ng-click="dish.useLocationCustom=!dish.useLocationCustom" ng-init="dish.useLocationCustom=false"> </label>
@@ -57,7 +58,7 @@
                   <button id="searchbutton" ng-click="submitAddress()">Search</button>
 
                     <div ng-repeat="result in results" ng-click="assignLocation(result)">
-                      <p>{{result.formatted_address}}</p>
+                      <p class="addressresults">{{result.formatted_address}}</p>
                     </div>
                   </div>
 

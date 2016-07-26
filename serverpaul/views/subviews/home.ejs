@@ -5,7 +5,7 @@
     <div align="center" class="homebuttons">
 
         <div class="morph-button morph-button-modal morph-button-modal-2 morph-button-fixed" id="buttonpadding">
-            <button type="button" class="buttonfont">Login</button>
+            <button type="button" id="buttonfont">Login</button>
   	        <div class="morph-content">
   	            <div>
   			        <div class="content-style-form content-style-form-1">
@@ -23,7 +23,7 @@
 	    </div><!-- morph-button -->
 
         <div class="morph-button morph-button-modal morph-button-modal-2 morph-button-fixed" id="buttonpadding">
-            <button type="button" class="buttonfont">Join appetite</button>
+            <button type="button" id="buttonfont">Join appetite</button>
                 <div class="morph-content">
                     <div>
                         <div class="content-style-form content-style-form-1">
@@ -38,7 +38,7 @@
                                 <label class="registerlabel">Password</label><input class="logintextbox" type="password" ng-model="user.signuppassword"/>
                                 <label class="registerlabel">Confirm</label><input class="logintextbox" type="password" ng-model="user.confirmpassword" />
                                 <button class="homepadding" ng-disabled=" (user.signuppassword!==user.confirmpassword) || (!user.signuppassword)">Join Appetite</button>
-                                <div id="termsconsent">Read our <a href="#/terms">Terms!</a></div>
+                                <div id="termsconsent">By joining you agree to these <a href="#/terms">Terms</a></div>
                           </form>
                       </div>
                   </div>

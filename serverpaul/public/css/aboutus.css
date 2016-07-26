@@ -6,24 +6,29 @@
 }
 
 .awards {
-  float:right;
+    position: absolute;
+    right: 0px;
   padding-right:100px;
   display: inline-block;
 }
 
 .ourmissiontext {
-  font-family:serif;
+  font-family:Source Sans Pro;
   font-size: 20px;
   color: #a5a5a5;
+}
+
+.ourmission {
+    font-family: Source Sans Pro;
 }
 
 .awardsfont {
   text-align: left;
   color:#7f7f7f;
   font-size:25px;
-  font-family:serif;
-  padding:20%
-  padding-bottom:200px;;
+  font-family:Source Sans Pro;
+  padding:20%;
+  padding-bottom:100px;
   display:block;
   padding-left:100px;
   padding-top: 10px;
@@ -33,4 +38,9 @@
   display:inline;
   padding-top:0;
   padding:5%;
+}
+
+
+#footer{
+    font-family: Source Sans Pro;
 }

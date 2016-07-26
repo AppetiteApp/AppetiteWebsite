@@ -43,7 +43,6 @@
 #dishtime {
   color: white;
   font-family: Source Sans Pro;
-  font-size: 1.5vw;
   float: bottom;
   text-align: center;
   border: 1px solid white;
@@ -56,7 +55,6 @@
 #dishphone {
   color: white;
   font-family: Source Sans Pro;
-  font-size: 1.5vw;
   float: bottom;
   text-align: center;
   border: 1px solid white;
@@ -70,7 +68,6 @@
 #dishlocation {
   color: white;
   font-family: Source Sans Pro;
-  font-size: 1.5vw;
   float: bottom;
   text-align: center;
   border: 1px solid white;
@@ -111,6 +108,7 @@
   bottom: 0;
   right: 0;
   height: auto;
+  
 }
 
 .dishthumbnail {
@@ -139,7 +137,6 @@
   overflow-y: scroll;
   padding-bottom: 80px;
   padding-top: 50px;
-  border: 2px solid #75d0f4;
 }
 
 
