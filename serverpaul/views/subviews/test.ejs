@@ -14,23 +14,17 @@ My name is Paul
 signout function complete <button ng-click="signout()">Sign Out!</button>
 
     
-    
-<form name="myForm">
-   <label for="exampleInput">Pick a date in 2013:</label>
-   <input type="date" ng-model="time.start" placeholder="yyyy-MM-dd" required />
-   <input type="time" ng-model="time.start" required />
-
-    <input type="date" ng-model="time.end" placeholder="yyyy-mm-dd" required />
-    <input type="time" ng-model="time.end" required />
-    {{time.start}} ; {{time.end}}
-   <div role="alert">
-     <span class="error" ng-show="myForm.input.$error.required">
-         Required!</span>
-     <span class="error" ng-show="myForm.input.$error.date">
-         Not a valid date!</span>
-    </div>
-    <tt>value = {{time.startTime | date: "yyyy-MM-dd"}}</tt><br/>
+<br>
+<hr><br>
+<form enctype="multipart/form-data" accept="image/*" ng-submit="upload()">
+   <input type="file"/>
+   <input type="submit" value="Upload File"/>
 </form>
+<br>
+    <div ng-controller = "myCtrl">
+         <input type = "file" file-model = "myFile"/>
+         <button ng-click = "uploadFile()">upload me</button>
+    </div>
 
 <style>
     .choices {

@@ -52,7 +52,7 @@
 }
 
 #cookbutton{
-    position:absolute;
+    position:fixed;
     right:20px;
     top:10px;
     border-radius:0px;
@@ -99,6 +99,7 @@
     border: 1px solid #ebd3bd;
     width: 100%;
     margin-top:5px;
+    font-size: 16px;
 }
 
 #pricebox{
@@ -109,13 +110,14 @@
 
 #pricetextbox{
     width:100%;
-    
+    font-size: 16px;
 }
 
 #descriptiontextbox{
     height: 70px;
     width:100%;
     border: 1px solid #ebd3bd;
+    font-size:14px;
 }
 
 #descriptionlabel{
@@ -198,6 +200,7 @@
     display:inline-block;
     vertical-align:top;
     width:calc(100% - 99px);
+    font-size:14px;
 }
 .addressresults{
     cursor: pointer;

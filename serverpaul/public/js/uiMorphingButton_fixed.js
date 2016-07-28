@@ -56,6 +56,7 @@
 		// init events
 		this._initEvents();
 	}
+	
 
 	UIMorphingButton.prototype._initEvents = function() {
 		var self = this;
@@ -69,7 +70,10 @@
 			}
 		}
 	}
+	
+	
 
+	
 	UIMorphingButton.prototype.toggle = function() {
 		if( this.isAnimating ) return false;
 

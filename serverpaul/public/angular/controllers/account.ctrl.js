@@ -155,12 +155,36 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
         })
         .then(function(res){
             console.log(res.data);
+            dish.message = res.data.message;
+            $timeout(function(){
+                dish.message = "";
+            }, 5000);
         },
         function(err){
             console.log(err);
         });
     };
     $scope.signout = sessionService.signout;
+    
+    $scope.submitFeedback = function(){
+        $http.post('/feedback', {
+            message: $scope.feedback,
+            anonymous: $scope.anonymous,
+            uid: $scope.user.uid
+        }).then(function(res){
+            console.log(res);
+            $scope.commentMessage = res.data.message;
+            $timeout(function(){
+                $scope.commentMessage = ""; 
+            }, 10000);
+        }, function(err){
+            console.log(err);
+            $scope.commentMessage = "There was an internal server errror. We are working very hard to resolve this issue";
+            $timeout(function(){
+                $scope.commentMessage = "";
+            }, 10000);
+        });
+    };
 
 
 

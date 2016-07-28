@@ -35,10 +35,10 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
 
         //iterate through all the dishes and put the ones that aren't owned by current owner in the scope
         allDishes.forEach(function(dish){
-            if (dish["active"] && dish["ownerid"] !== currentUser.uid){
+            if (dish["active"]){
 
                 //prettify time
-                console.log(dish.time);
+                //console.log(dish.time);
                 var time= {};
                 var startDate = new Date(dish.time.startTime);
                 var endDate = new Date(dish.time.endTime);
@@ -48,7 +48,14 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
 
                 time.timeString = date + " " + timeService.formatAPMP(startDate) + " to " + timeService.formatAPMP(endDate);
 
-                console.log(time.timeString);
+                //console.log(time.timeString);
+                console.log(dish.ownerPic);
+                
+                if (dish["ownerid"] === currentUser.uid){
+                    dish.owner = "me";
+                }
+                
+                dish.location = dish.location.split(',')[0];
 
                 dishes.push({
                     dishName    : dish["dishName"],
@@ -58,6 +65,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
                     location    : dish["location"],
                     owner       : dish["owner"],
                     phone       : dish["phone"],
+                    ownerPic    : dish["ownerPic"],
                     time        : time.timeString
                 });
                 //console.log(dishes);
@@ -79,7 +87,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
             errors  : [],
             time    : {
                 startTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours(), minNow, 0),
-                endTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 2, minNow, 0)
+                endTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 6, minNow, 0)
             }
         };
     });
@@ -212,19 +220,30 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
                 dish.locationCustom = undefined;
                 dish.useLocationCustom = false;
                 dish.ingredients = "";
-                    $scope.error = res.data.error;
-                    $scope.warnings = res.data.warnings;
-                    $scope.message = res.data.message;
+                $scope.error = res.data.error;
+                $scope.warnings = res.data.warnings;
+                $scope.message = res.data.message;
                 $log.log($scope.error);
                 $log.log(res.data);
+                $timeout(function(){
+                    $scope.error = "";
+                    $scope.warnings = "";
+                    $scope.message = "";
+                }, 10000);
 
             } else {
                 $log.log(res.status);
                 $scope.message = "Failed to submit";
+                $timeout(function(){
+                    $scope.message = "";
+                }, 10000);
             }
         }, function(err){
             console.log(err);
             $scope.message = "Failed to load data, please refresh page";
+            $timeout(function(){
+                $scope.message = "";
+            }, 10000);
         });
     };
 
