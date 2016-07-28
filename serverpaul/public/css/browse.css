@@ -1,8 +1,12 @@
-
+.dishdescription{
+   padding:4px;
+   margin:0;
+  }
+  
 
 
 #submitform{
-    font-family: Source Sans Pro;
+    font-family: 'Raleway', sans-serif;
 }
 
 .hiddencheckbox{
@@ -10,51 +14,83 @@
 }
 
 #dishbanner {
-  overflow: visible;
+  overflow-x: hidden;
   position:relative;
   width: auto;
   margin: 0;
-  border:0;
-  height: 60px;
-  border-radius: 13px 13px 0 0;
+  border:2px solid white;
+  height: 120px;
+  border-radius: 13px;
   z-index: 0;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  border: 2px  solid #75d0f4;
   min-height: 60px;
-  line-height:55px;
   background-color: white;
   text-align: left;
   cursor: pointer;
-
+  text-overflow: ellipsis;
 }
 
+#dishbanner:hover{
+    border: 2px solid #75d0f4;
+}
+
+#profileflex{
+    margin-left: 10px;
+    width:calc(100% - 130px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;    
+
+    min-width: 0;
+
+}
 #dishtitle {
-  margin-left: 10px;
   color: black;
-  font-family: Source Sans Pro;
-  font-size: 30px;
-  background-color: white;
-  display: inline-block;
+  font-family: 'Raleway', sans-serif;
+  font-size: 25px;
   height: auto;
+  width: auto;
+  margin-right: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;    
+
 }
 
 #dishtime {
-  color: white;
-  font-family: Source Sans Pro;
-  float: bottom;
-  text-align: center;
-  border: 1px solid white;
-  margin-bottom: 1px;
-  border-radius: 10px;
-  margin-left: 4px;
+  color: #75d0f4;
+  font-family: 'Raleway', sans-serif;
+  width:auto;
+  height: auto;
+    margin-right: 0px;
+    width:auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;    
+
+    min-width: 0;
+
+
+
+}
+
+.chefname{
+   font-family: 'Raleway', sans-serif;
+   height: auto;
+   word-wrap: break-word;
+     display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;    
+
 }
 
 
 #dishphone {
   color: white;
-  font-family: Source Sans Pro;
+  font-family: 'Raleway', sans-serif;
   float: bottom;
   text-align: center;
   border: 1px solid white;
@@ -67,7 +103,7 @@
 
 #dishlocation {
   color: white;
-  font-family: Source Sans Pro;
+  font-family: 'Raleway', sans-serif;
   float: bottom;
   text-align: center;
   border: 1px solid white;
@@ -78,20 +114,23 @@
 
 
 #dishprice {
-  font-family: Source Sans Pro;
-  font-size: 30px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 25px;
   background-color: white;
   display: inline-block;
-  float:right;
   color: green;
-  margin-right: 10px;
+  position: absolute;
+  right:0px;
+  top:0px;
+  border-radius:13px;
+  padding-right:5px;
 }
 
 #itemdetails {
   background-color: #75d0f4;
   color: white;
-  font-family: Source Sans Pro;
-  border-radius: 0 0 13px 13px;
+  font-family: 'Raleway', sans-serif;
+  border-radius:13px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -104,7 +143,7 @@
   float:right;
   position: absolute;
   top: 60px;
-  left: 50%;
+  left: 40%;
   bottom: 0;
   right: 0;
   height: auto;
@@ -116,20 +155,21 @@
   float:left;
   margin: 0;
   padding: 2px;
-  height:61px;
+  height:auto;
 }
 
 .img-thumbnail {
-    width: 52px;
-    height: 52px;
+    width: 90px;
+    height: 90px;
     padding: 0;
     margin: 0;
-    border-radius: 10px 0 0 0;
+    border-radius: 10px;
+    display:inline-block;
 }
 
 #itemscontainer {
   position: fixed;
-  width: 50%;
+  width: 40%;
   top: 60px;
   bottom: 0 ;
   padding:3px;
@@ -147,7 +187,7 @@
 
 #repeateditem {
   height: auto;
-  margin: 3px;
+  margin: 10px;
 
 }
 #fullpage {
@@ -172,7 +212,7 @@
   left:0;
   border: 1px solid black;
   background: rgba(255, 255, 255, 0.9);
-  font-family: Source Sans Pro;
+  font-family: 'Raleway', sans-serif;
   color: orange;
 }
 
@@ -190,7 +230,7 @@
     left:0;
     border: 1px solid black;
     background: rgba(255, 255, 255, 0.9);
-    font-family: Source Sans Pro;
+    font-family: 'Raleway', sans-serif;
     color: red;
     height: 50px;
   }
@@ -200,19 +240,19 @@
     position:relative;
     width: auto;
     margin: 0;
-    border:0;
-    height: 60px;
-    border-radius: 13px 13px 0 0;
+    border:2px solid white;
+    border-radius: 13px;
     z-index: 0;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    border: 2px  solid #75d0f4;
     min-height: 60px;
-    line-height:55px;
     background-color: white;
     text-align: center;
     cursor: pointer;
+    padding-right: 30px;
+    display: flex;
+    
 
   }
 
@@ -234,20 +274,12 @@
     top: 360px;
     bottom: 0;
     padding:3px;
-    background-image: url(/imgs/board.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: white;
     padding-bottom: 80px;
     flex: 1 1 auto;
     padding-top: 50px;
     border: 2px solid #75d0f4;
   }
-  #dishtitle {
-    font-size: 4.0vw;
-  }
 
-  #dishprice {
-    font-size: 4.0vw;
-  }
 
 }

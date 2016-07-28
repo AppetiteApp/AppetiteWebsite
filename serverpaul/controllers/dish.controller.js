@@ -189,7 +189,8 @@ module.exports = function(app) {
 			// });
 			
 			newDishRef.update({
-				"owner": snapshot.val().firstName || ""
+				"owner": snapshot.val().firstName + " " + snapshot.val().lastName || "",
+				"ownerPic": snapshot.val().photoUrl || ""
 			});
 			
 		});

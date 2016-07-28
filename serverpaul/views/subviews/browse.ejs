@@ -1,181 +1,32 @@
 <%- include ../partials/navbar.ejs %>
 
 <div id="itemscontainer">
+    <div id="submitsuccess">{{message}}</div>
   <div id="innercontainer">
   <div ng-repeat="dish in dishes" id="repeateditem">
       <div id="listitem" ng-click="showDetails = !showDetails">
 
         <div id="dishbanner">
           <div class="dishthumbnail">
-            <img class="img-thumbnail" src="/imgs/gordon.jpg" />
+            <img class="img-thumbnail" ng-src="{{dish.ownerPic}}" />
           </div>
-
+          <div id="profileflex">
             <div id="dishtitle">{{dish.dishName}}</div>
+            <div class="chefname">by {{dish.owner}}</div></br>
+            <div id="dishtime">{{dish.time}}</div>
+            </div>
             <div id="dishprice">${{dish.price}}</div>
+
         </div>
     </div>
     <div ng-show="showDetails" id="itemdetails">
-        <p>{{dish.description}}</p>
-        <div id="dishtime">{{dish.time}}</div>
+        <p class="dishdescription">{{dish.description}}</p>
         <div id="dishphone">{{dish.phone}}</div>
         <div id="dishlocation">{{dish.location}}</div>
     </div>
   </div>
 </div>
 </div>
-
-<div class="morph-button morph-button-modal1 morph-button-modal-2 morph-button-fixed" id="submitdishbutton">
-    <button type="button" id="browsebutton" ng-click="dish.submitSuccess=false">Sell Dish!</button>
-    <div class="morph-content">
-        <div class="content-style-form content-style-form-1">
-            <span class="icon icon-close">Close the dialog</span>
-            <h2>Sell a Dish</h2>
-            {{message}}
-            <div class="warning" ng-repeat="warning in dish.warnings">{{warning.warningMessage}}</div>
-            <div class="warning" ng-repeat="error in dish.errors">{{error.errorMessage}}</div>
-                <div id="submitleft">
-
-                <div id="exampletitle">EXAMPLE</div>
-                <div id="menuexample">
-                    Home-made Spicy Stir Fry</br>
-                    Traditional Chinese Stir Fry recipe passed down to me through my mom!  Cooked
-                </div>
-                <div id="logisticsexample"></br>
-
-                </div>
-                </div>
-
-            <div id="fullformsubmit">
-            <form>
-
-              <div class="menusubmit">
-                <div id="dishbox">
-
-                  <label id="whatchamakin">What are you making?</label>
-                  <input class="menutextbox" type="text" ng-model="dish.dishName" />
-                </div>
-                <div id="pricebox">
-                  <label>Price</label>
-                  <input class="menutextbox" id="pricetextbox" ng-model="dish.price" />
-                </div>
-
-                <div>
-                  <label id="descriptionlabel">Description</label>
-                  <textarea id="descriptiontextbox" ng-model="dish.description"></textarea>
-                </div>
-               </div>
-
-               <div id="logisticssubmit">
-                    <label id="whattime">Around what time?</label><br>
-                    <label id="fromlabel">From:</label>
-                    <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.startTime" />
-                    <input class="logistictextbox" type="time" ng-model="dish.time.startTime" step="600"/><br>
-                    <label id="tolabel">To:</label>
-                    <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.endTime" />
-                    <input class="logistictextbox" type="time" ng-model="dish.time.endTime" step="600"/
-                </div>
-
-
-                <div>
-                  <label id="where">Where?</label> <label id="submitedit" for="c2" ng-click="dish.useLocationCustom=!dish.useLocationCustom" ng-init="dish.useLocationCustom=false"> </label>
-                  <div id="defaultaddress" ng-hide="dish.useLocationCustom">{{dish.location.name}} </div>
-
-                  <div ng-show="dish.useLocationCustom">{{dish.locationCustom.name}}</div>
-
-                  <div id="searchdiv" ng-show="dish.useLocationCustom">
-                  <input type="text" id="addresssearch" placeholder="Search for cusom location" ng-model="searchAddress" />
-                  <button id="searchbutton" ng-click="submitAddress()">Search</button>
-
-                    <div ng-repeat="result in results" class="choices" ng-click="assignLocation(result)">
-                      <p>{{result.formatted_address}}</p>
-                    </div>
-                  </div>
-
-
-                </div>
-                    <button class="logistictextbox" type="submit"class="btn btn-default" ng-click="submitDish(dish)" ng-disabled="!dish.complete" ng-init="dish.complete=false">Submit</button>
-
-              </div>
-            </div>
-          </form>
-        </div>
-
-
-<!--                <div id="exampletitle">EXAMPLE</div>-->
-<!--                <div id="menuexample">-->
-<!--                    Home-made Spicy Stir Fry</br>-->
-<!--                    Traditional Chinese Stir Fry recipe passed down to me through my mom!  Cooked-->
-<!--                </div>-->
-<!--                <div id="logisticsexample"></br>-->
-
-<!--                </div>-->
-<!--                </div>-->
-
-<!--            <div id="fullformsubmit">-->
-<!--            <form>-->
-
-<!--              <div class="menusubmit">-->
-<!--                <div id="dishbox">-->
-
-<!--                  <label id="whatchamakin">What are you making?</label>-->
-<!--                  <input class="menutextbox" type="text" ng-model="dish.dishName" />-->
-<!--                </div>-->
-<!--                <div id="pricebox">-->
-<!--                  <label>Price</label>-->
-<!--                  <input class="menutextbox" id="pricetextbox" ng-model="dish.price" />-->
-<!--                </div>-->
-
-<!--                <div>-->
-<!--                  <label id="descriptionlabel">Description</label>-->
-<!--                  <textarea id="descriptiontextbox" ng-model="dish.description"></textarea>-->
-<!--                </div>-->
-<!--               </div>-->
-
-<!--               <div id="logisticssubmit">-->
-<!--                    <label id="whattime">Around what time?</label><br>-->
-<!--                    <label id="fromlabel">From:</label>-->
-<!--                    <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.startTime" />-->
-<!--                    <input class="logistictextbox" type="time" ng-model="dish.time.startTime" step="600"/><br>-->
-<!--                    <label id="tolabel">To:</label>-->
-<!--                    <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.endTime" />-->
-<!--                    <input class="logistictextbox" type="time" ng-model="dish.time.endTime" step="600"/-->
-<!--                </div>-->
-
-
-<!--                <div>-->
-<!--                  <label id="where">Where?</label> <label id="submitedit" for="c2" ng-click="dish.useLocationCustom=!dish.useLocationCustom" ng-init="dish.useLocationCustom=false"> </label>-->
-<!--                  <div id="defaultaddress" ng-hide="dish.useLocationCustom">{{dish.location.name}} </div>-->
-
-<!--                  <div ng-show="dish.useLocationCustom">{{dish.locationCustom.name}}</div>-->
-
-<!--                  <div id="searchdiv" ng-show="dish.useLocationCustom">-->
-<!--                  <input type="text" id="addresssearch" placeholder="Search for cusom location" ng-model="searchAddress" />-->
-<!--                  <button id="searchbutton" ng-click="submitAddress()">Search</button>-->
-
-<!--                    <div ng-repeat="result in results" class="choices" ng-click="assignLocation(result)">-->
-<!--                      <p>{{result.formatted_address}}</p>-->
-<!--                    </div>-->
-<!--                  </div>-->
-
-
-<!--                </div>-->
-<!--                    <button class="logistictextbox" type="submit"class="btn btn-default" ng-click="submitDish(dish)" ng-disabled="!dish.complete" ng-init="dish.complete=false">Submit</button>-->
-
-<!--              </div>-->
-<!--            </div>-->
-<!--          </form>-->
-<!--        </div>-->
-
-
-
-
-
-<!--      </div>-->
-<!--    </div>-->
-</div><!-- morph-button -->
-
-
-
 
 <div id="map">
 
@@ -278,18 +129,22 @@ async defer></script>
         var dishes = [];
         var markers = [];
         var currentUser = firebase.auth().currentUser;
-        firebase.database().ref('dish/').once("value", function(snapshot){
+        firebase.database().ref('dish/').on("value", function(snapshot){
 
             snapshot.forEach(function(child) {
                 //console.log(child.val());
                 dishes.push(child.val());
-                if (child.val().active && child.val().ownerid !== currentUser.uid){
+                if (child.val().active){
                     //console.log("new marker pushed!", child.val().dishName);
                     //console.log("lat", child.val().lat, "; lng:", child.val().lng);
                     console.log(child.val().time.startTime);
                     var date = new Date(child.val().time.startTime);
 
                     var time = makeTime(date);
+                    
+                    if (child.val().ownerid === currentUser.uid){
+                        child.val().owner = "me";
+                    }
 
                     var infoContent = "<div class='infoDiv'><h2>" +
                                       child.val().dishName + "<span class='right'>$" + child.val().price.toString() + "</span></h2><h2><span class='faded'> by " +
@@ -353,7 +208,7 @@ async defer></script>
 
             var timeString;
             if (testDate.setHours(0,0,0,0) == todayDate.setHours(0,0,0,0)){
-                timeString = "today @ ";
+                timeString = "today ";
             } else if(date.getFullYear() === todayDate.getFullYear()) {
                 timeString = monthNames[date.getMonth()] + " " + date.getDate() + " @ ";
             } else {
@@ -372,6 +227,7 @@ async defer></script>
 <script src="/js/classie.js"></script>
 <script src="/js/uiMorphingButton_fixed.js"></script>
 <script>
+
   (function() {
     var docElem = window.document.documentElement, didScroll, scrollPosition;
 

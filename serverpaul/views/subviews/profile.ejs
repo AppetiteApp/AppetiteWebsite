@@ -9,16 +9,13 @@
     <div id="profilename">
         {{user.firstName}}
         {{user.lastName}}
-        <label class="editbutton" for="c1" ng-click="user.changed=true" ng-init="user.changed=false"></label>
-        <input id='profileedit' type="submit" value="Save Edits" ng-click="editProfile(user)" ng-show="user.changed"/>
+        
+        
         <a href="#/home" id="logout" ng-click="signout()">Sign Out</a>
     </div>
 
 <div id="profilecontainer">
-    
-    
-
-    
+    <label class="editbutton" for="c1" ng-click="user.changed=true" ng-init="user.changed=false"></label>
     <div id="infocontainer">
           <div id="profilestatus"font-family="Source Sans Pro">{{updateProfile.statusMessage}}</div>
             <!--CHERYL'S TEST ENDS HERE-->
@@ -40,16 +37,23 @@
 
           </div>
           <div height="auto" ng-show="user.changed">
+          <div id="addressbar">      
           <input ng-model="queryAddress" class="addressinput" placeholder="Find address"/> <button id="locationedit" ng-click="submitAddress(queryAddress, user)"><img id="search" src="/imgs/search.png"></button>
+
+          </div>
               <div ng-repeat="result in user.results" class="addressedit" ng-click="assignLocation(result, user)">
                   {{result.formatted_address}}
               </div>
-            </div>
-        
-        <!--<textarea class="descriptioninput" placeholder="Tell us about yourself!" type='text' name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true" ng-model="user.description"/></textarea>-->
-
+              <input id='profileedit' type="submit" value="Save Edits" ng-click="editProfile(user)" ng-show="user.changed"/>
 
 </div>
+
+        <div ng-show="!user.changed" id="feedbackform">    
+        <textarea id="feedback" rows="10" cols="2" ng-model="feedback"></textarea>
+        <!--<label>Leave feedback anonymously by ticking this checkbox: </label><input type="checkbox" ng-model="anonymous" />-->
+        <button id="feedbackbutton" ng-click="submitFeedback()">Send Us Your Feedback!</button>
+        </div>
+
 </div>
 
 <div id="dishcontainer">
@@ -61,17 +65,18 @@
           
           <div id="dishbanner">
             <div class="dishthumbnail">
+                <!--NOTE TO PAUL: I think we don't need the dish's photos on this page bc it would be the owner's photo-->
               <img class="img-thumbnail" src="/imgs/gordon.jpg" />
             </div>
             <div id="profiledishname">{{dish.dishName}}</div>
-            <button ng-click="dish.edit=!dish.edit">Edit</button>
+            <button ng-click="dish.edit=!dish.edit">Edit</button> 
             
           </div>
         </div>
         <div ng-show="dish.edit" id="itemdetails">
             <label class="accountdishlabel">Dish name:</label>
-            <input type="text" ng-model="dish.dishName"/>
-            Active: <input type="checkbox" ng-model="dish.active"/></br>
+            <input type="text" ng-model="dish.dishName"/></br>
+            <label class="accountdishlabel">Active:</label> <input type="checkbox" ng-model="dish.active"/></br>
             <label class="accountdishlabel">Price:</label>
             <input type="text" ng-model="dish.price"/><br>
             <label class="accountdishlabel">Pickup time:</label>
@@ -88,22 +93,23 @@
           <input type="text" ng-model="dish.location"/><br>
           <label class="accountdishlabel">New Address:</label>
           <input type="text" ng-model="dish.queryAddress" /><button id="accountsubmit" ng-click="submitAddress(dish.queryAddress, dish)">Find Address</button>
-          <div ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
+          <div class="addresshistory" ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
               {{result.formatted_address}}
           </div>
-          <input type="submit" ng-click="editDish(dish)"/>
+          <input id="submiteditprofile" type="submit" value="Save Edits" ng-click="editDish(dish)"/><div id="editsuccess">{{dish.message}}</div>
         </div>
       </form>
     </div>
   </div>
 
 <div id="profileinstruction" text-align="center">
-  A list of the dishes you sold!
+  A list of the dishes you posted!
 </div>
 
 <script src="/js/classie.js"></script>
 <script src="/js/uiMorphingButton_fixed.js"></script>
 <script>
+    $('#submitdishbutton').hide();
   (function() {
     var docElem = window.document.documentElement, didScroll, scrollPosition;
 

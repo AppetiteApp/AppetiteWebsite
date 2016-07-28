@@ -27,9 +27,7 @@ var loginController = function($scope, $log, $location, regexService, $route, $t
             
         }
     });
-    
-    $scope.loginSuccess = false;
-    $scope.signupSuccess = false;
+
     
     //function for logging in, once successfully logged in, redirect to browse page ('/')
     $scope.login = function(user) {
@@ -37,9 +35,6 @@ var loginController = function($scope, $log, $location, regexService, $route, $t
         function(){
             $route.reload();
             $location.path("/");
-            $timeout(function(){
-                $scope.loginSuccess = true;
-            });
         },function(error) {
             $scope.warnings.unshift({
                 errorType   : "login",
@@ -56,9 +51,7 @@ var loginController = function($scope, $log, $location, regexService, $route, $t
         
         firebase.auth().createUserWithEmailAndPassword(user.signupemail, user.signuppassword).then(
             function(){
-                $timeout(function(){
-                    $scope.signupSuccess = true;
-                });
+                firebase.auth().currentUser.sendEmailVerification();
                 var user = {
                     uid : firebase.auth().currentUser.uid,
                     email: firebase.auth().currentUser.email,

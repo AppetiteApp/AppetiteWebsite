@@ -136,9 +136,32 @@ module.exports = function(app) {
             photoUrl: photoUrl,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            phone: req.body.phone
+            phone: req.body.phone,
+            address: "Please update your address by clicking the edit icon!"
+            
         });
         
+	});
+	
+	app.post('/feedback', function(req, res){
+	    console.log(req.body);
+	    var newCommentRef = global.commentRef.push();
+	    var updateObj = {};
+	    if (req.body.anonymous === true){
+	        updateObj = {
+	            message: req.body.message
+	        };
+	    } else {
+	        updateObj = {
+	            message: req.body.message,
+	            ownerid: req.body.uid
+	        };
+	    }
+	    newCommentRef.set(updateObj);
+	    res.send({
+	        message: "Thank you for your feedback!"
+	    });
+	    
 	});
 	
 };

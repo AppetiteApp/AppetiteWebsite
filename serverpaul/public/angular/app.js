@@ -86,6 +86,14 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
 
 
     });
+    
+    $scope.sendEmail = function(){
+        $scope.user.sendEmailVerification().then(function(){
+           console.log("email sent"); 
+        }, function(err){
+            console.log(err);
+        });
+    };
 
 
 
@@ -116,6 +124,8 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
     };
 
     $scope.signout = sessionService.signout;
+    
+
 
 
 
@@ -123,21 +133,50 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
 
 });
 
-myApp.directive("fileread", [function () {
-    return {
-        scope: {
-            fileread: "="
-        },
-        link: function (scope, element, attributes) {
-            element.bind("change", function (changeEvent) {
-                var reader = new FileReader();
-                reader.onload = function (loadEvent) {
-                    scope.$apply(function () {
-                        scope.fileread = loadEvent.target.result;
-                    });
-                }
-                reader.readAsDataURL(changeEvent.target.files[0]);
-            });
-        }
-    }
-}]);
+        //just a bunch of stuff from stackoverflow
+         myApp.directive('fileModel', ['$parse', function ($parse) {
+            return {
+               restrict: 'A',
+               link: function(scope, element, attrs) {
+                  var model = $parse(attrs.fileModel);
+                  var modelSetter = model.assign;
+                  
+                  element.bind('change', function(){
+                     scope.$apply(function(){
+                        modelSetter(scope, element[0].files[0]);
+                     });
+                  });
+               }
+            };
+         }]);
+      
+         myApp.service('fileUpload', ['$http', function ($http) {
+            var ref = firebase.storage().ref();
+             
+            this.uploadFileToUrl = function(file){
+                var uploadTask = ref.child('ProfileImages').child(file.name).put(file);
+                uploadTask.on('state_changed', function(snapshot){
+                    // Observe state change events such as progress, pause, and resume
+                    // See below for more detail
+                }, function(error) {
+                    // Handle unsuccessful uploads
+                }, function() {
+                    // Handle successful uploads on complete
+                    // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                    var downloadURL = uploadTask.snapshot.downloadURL;
+                    console.log(downloadURL);
+                }); 
+            };
+         }]);
+      
+         myApp.controller('myCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
+            $scope.uploadFile = function(){
+               var file = $scope.myFile;
+               
+               console.log('file is ' );
+               console.dir(file);
+               
+               var uploadUrl = "/api/profileImg";
+               fileUpload.uploadFileToUrl(file, uploadUrl);
+            };
+         }]);
