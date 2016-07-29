@@ -103,7 +103,7 @@ module.exports = function(app) {
 				errorMessage: "Invalid characters in price"
 			});
 		} else {
-			dishObject.price = data.price;
+			dishObject.price = parseFloat(data.price);
 		}
 		
 		var start;

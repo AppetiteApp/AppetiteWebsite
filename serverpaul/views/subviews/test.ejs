@@ -44,32 +44,33 @@ signout function complete <button ng-click="signout()">Sign Out!</button>
 <hr>
 MODAL BUTTON TESTING
 
-            <button ng-click="clickToOpen">Login</button>
-                <div class="modal0">
-                    <div class="modal0-container">
-                        
-                        <a href="#">close</a>
-  				       </div> 
-                    </div>
-                </br>
-                </br>
-                </br>
-                </br>
-                </br>
-                </br>
-                </br>
-                </br>
-                </br>
-                </br>
-                </br>
-                </br>
-                </br>
-                </br>
-            <button>Join appetite</button>
-                <div class="modal0">
-                        <div class="modal0-container">
-                            <a href="#">Close</a>
-                            
+<div id="welcomebackground">
+<!-- Trigger/Open The Modal -->
+<button id="myBtn">Login</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">×</span>
+                <form ng-submit="login(user)">
+                <div class="alert-warning" ng-show="warnings" ng-repeat="warning in warnings">{{warning.errorMessage}}</div>
+                    <p><label class="labelmargin">Email</label><input class="logintextbox" type="text" ng-model="user.email" /></p>
+                    <p><label class="labelmargin">Password</label><input class="logintextbox" type="password" ng-model="user.password" /></p>
+                    <p><button class="homepadding">Login</button></p>
+            </div>        
+            </form>
+  </div>
+
+<img id="welcomelogo" src="/imgs/welcomelogo.png">
+
+<button id="myBtn2">Join Appetite</button>
+<div id="myModal2" class="modal2">
+
+  <!-- Modal content -->
+  <div class="modal-content2">
+    <span class="close2">×</span>
                             <form ng-submit="signup(user)">
                                 <div class="alert-warning" ng-show="warnings" ng-repeat="warning in warnings">{{warning.errorMessage}}</div>
                                 <div id="firstnamebox"><label class="registerlabel">First Name</label><input class="logintextbox" id="firstNameregister" type="text" ng-model="user.firstName"/></div>
@@ -81,5 +82,71 @@ MODAL BUTTON TESTING
                                 <button class="homepadding" ng-disabled=" (user.signuppassword!==user.confirmpassword) || (!user.signuppassword)">Join Appetite</button>
                                 <div id="termsconsent">By joining you agree to these <a href="#/terms">Terms</a></div>
                           </form>
-                      </div>
-                  </div>
+    
+    
+    
+</div>
+</div> 
+</div>
+  
+<script>
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+    if (event.target == modal2) {
+        modal2.style.display = "none";
+    }    
+}
+
+
+
+// Get the modal
+var modal2 = document.getElementById('myModal2');
+
+// Get the button that opens the modal
+var btn2 = document.getElementById("myBtn2");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close2")[0];
+
+// When the user clicks the button, open the modal
+btn2.onclick = function() {
+    modal2.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal2.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+// window.onclick = function(event) {
+//     if (event.target == modal2) {
+//         modal2.style.display = "none";
+//     }
+// }
+
+
+
+</script>
