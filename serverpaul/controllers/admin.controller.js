@@ -12,16 +12,25 @@ module.exports = function(app) {
         //take down meals occuring before yesterday (on the assumption that we do this in the wee hours of the morning)
         global.dishRef.once("value", function(snapshot){
             console.log(snapshot.val());
-            snapshot.val().forEach(function(dish){
+            var dishes = snapshot.val();
+            for (var key in snapshot.val()){
+                //console.log(snapshot.val()[key]);
                 var timeNow = new Date();
-                var dishTime = new Date(dish.time.startTime);
+                var dishTime = new Date(dishes[key].time.startTime);
                 timeNow.setHours(0, 0, 0, 0);
                 dishTime.setHours(0, 0, 0, 0);
-                if (dishTime.toString() < timeNow.toString()){
-                    dish.active = false;
+                console.log(timeNow.getTime() - dishTime.getTime());
+                if (timeNow.getTime() - dishTime.getTime() > 0){
+                    console.log(snapshot.val()[key].active);
+                    dishes[key].active = false;
                 }
-            });
-            console.log(snapshot.val());
+                console.log("dish time: " + dishTime.getTime() + "\ntime now: " + timeNow.getTime());
+                global.dishRef.child(key).update({
+                    active: false
+                });
+            }
+            
+            res.send("bo");
             
             
             
@@ -30,7 +39,7 @@ module.exports = function(app) {
         });
         
         
-        res.send("Hi!");
+        
         
         
         

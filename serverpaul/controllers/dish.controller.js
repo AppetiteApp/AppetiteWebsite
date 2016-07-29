@@ -49,7 +49,7 @@ module.exports = function(app) {
 		if (!data.location) {
 			errors.push({
 				errorType	: "location",
-				errorMessage: "You didn't send the location"
+				errorMessage: "No location entered"
 			});
 		//} else if (!globals.addressRegex.test(data.location)){
 		//	errors.push({

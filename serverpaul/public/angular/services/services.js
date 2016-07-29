@@ -20,7 +20,7 @@ var sessionService = function(){
         if (user) {
             self.currentUser = user;
         } else {
-            $log.log("onAuthStateChanged: no user");
+            //$log.log("onAuthStateChanged: no user");
             $route.reload();
             $location.path('/login');
             self.currentUser = undefined;
@@ -31,9 +31,9 @@ var sessionService = function(){
     self.signout = function(){
         firebase.auth().signOut().then(function(){
             self.currentUser = undefined;
-            console.log("signed out!");
+            //console.log("signed out!");
         }, function(err){
-            console.log(err);
+            //console.log(err);
         });
     };
 };
@@ -56,7 +56,7 @@ var timeService = function(){
     };
     
     self.formatDate = function(date){
-        console.log("Got function to format date!");
+        //console.log("Got function to format date!");
         var todayDate = new Date();
         var testDate = new Date(date.toString());
         
@@ -68,7 +68,7 @@ var timeService = function(){
         } else {
             timeString = date.getFullYear() + ' ' + monthNames[date.getMonth()] + ' ' + date.getDate() + ' ';
         }
-        console.log(timeString);
+        //console.log(timeString);
         return timeString;
     };
     

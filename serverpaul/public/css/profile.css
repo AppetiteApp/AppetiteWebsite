@@ -355,6 +355,7 @@ input[type="checkbox"]:checked + label {
   margin-top:5px;
   margin-right: 8px;
   margin-left:30px;
+  height:35px;
 }
 
 .nameedit{
@@ -461,7 +462,7 @@ input[type="checkbox"]:checked + label {
     cursor:pointer;
     display: block;
     width:calc(100% - 20px);
-    height: 25px;
+    height: 35px;
     font-family: Source Sans Pro;
     font-size:16px;
     

@@ -1,11 +1,5 @@
 /* Morph Button: Default Styles */
 
-.morph-button {
-	position: relative;
-	display: block;
-	margin: 0 auto;
-
-}
 
 .morph-button > button {
 	position: relative;
@@ -33,13 +27,11 @@
 /* Common styles for overlay and modal type (fixed morph) */
 .morph-button-fixed,
 .morph-button-fixed .morph-content {
-	width: 300px;
-	height: 80px;
+	width: auto;
+	height: auto;
 }
 
 .morph-button-fixed > button {
-	width: auto;
-	height: auto;
 	-webkit-transition: opacity 0.1s 0.5s;
 	transition: opacity 0.1s 0.5s;
 }
@@ -162,12 +154,6 @@
 /* Colors and sizes for individual modals */
 .morph-button.morph-button-modal-1 {
 	float: left;
-}
-
-.morph-button.morph-button-modal-2,
-.morph-button.morph-button-modal-3 {
-	display: inline-block;
-	margin: 10px 15px;
 }
 
 .morph-button-modal-1 > button,

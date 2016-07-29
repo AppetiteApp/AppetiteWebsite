@@ -137,7 +137,7 @@ module.exports = function(app) {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             phone: req.body.phone,
-            address: "Please update your address by clicking the edit icon!"
+            location: "Please update your address by clicking the edit icon!"
             
         });
         

@@ -1,8 +1,6 @@
 <ul class="nav">
-  <a href="#/aboutus"><li class="navelements">About Us</li></a>
   <a href="#/home"><div class="navlogo"><img height="60px" src="/imgs/chefhat.png"></div></a>
-  <a href="#/account"><li class="navelements">Profile</li></a>
-  
+  <a href="#/home"><li class="navelements0">Welcome to Appetite</li></a>  
   
   <div class="morph-button morph-button-modal1 morph-button-modal-2 morph-button-fixed" id="submitdishbutton">
     <button type="button" id="cookbutton" ng-click="dish.submitSuccess=false">Cook</button>
@@ -24,7 +22,7 @@
                   <input class="menutextbox" type="text" ng-model="dish.dishName" />
                 </div>
                 <div id="pricebox">
-                  <label>Price</label>
+                  <label class="secondarylabel">Price</label>
                   <input class="menutextbox" id="pricetextbox" ng-model="dish.price" />
                 </div>
 
@@ -73,7 +71,14 @@
 
       </div>
     </div>
+  
+  <a href="#/aboutus"><li class="navelements">About Us</li></a>
+  <a href="#/account"><li class="navelements">Profile</li></a>
+  <a href="#/home"><li class="navelements">Home</li></a>
+
 </ul>
+
+
 <script>
     function eventFire(el, etype){
         if (el.fireEvent) {

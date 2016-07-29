@@ -1,6 +1,6 @@
 /* global angular*/
 /* global firebase*/
-var myApp = angular.module('myApp', ['ngRoute']);
+var myApp = angular.module('myApp', ['ngRoute', 'ngDialog']);
 
 myApp.config(['$routeProvider', function($routeProvider){
 
@@ -131,6 +131,35 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
 
 
 
+});
+
+myApp.controller('MainCtrl', function ($scope, ngDialog) {
+	$scope.openContactForm = function() {
+		ngDialog.openConfirm({template: 'loginbutton.ejs',
+			scope: $scope //Pass the scope object if you need to access in the template
+		}).then(
+			function(value) {
+				//You need to implement the saveForm() method which should return a promise object
+				$scope.saveForm().then(
+					function(success) {
+						ngDialog.open({template: '<div class="ngdialog-message"> \
+						  Your enquiry has been sent. We will get back to you shortly.</div>',
+							plain: 'true'
+						});
+					},
+					function(error) {
+						ngDialog.open({template: '<div class="ngdialog-message"> \
+						  An error occurred while sending your enquiry. Please try again.</div>',
+							plain: 'true'
+						});
+					}
+				);
+			},
+			function(value) {
+				//Cancel or do nothing
+			}
+		);
+	};
 });
 
         //just a bunch of stuff from stackoverflow
