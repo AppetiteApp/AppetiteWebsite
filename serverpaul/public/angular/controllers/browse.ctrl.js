@@ -27,8 +27,11 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
         var allDishes = [];
         //console.log(snapshot.val());
         snapshot.forEach(function(child) {
-            //console.log(child.val());
-            allDishes.push(child.val());
+            //console.log(child.key);
+            var dish = child.val();
+            dish.key = child.key;
+            //console.log(dish);
+            allDishes.push(dish);
         });
 
 
@@ -49,15 +52,17 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
                 time.timeString = date + " " + timeService.formatAPMP(startDate) + " to " + timeService.formatAPMP(endDate);
 
                 //console.log(time.timeString);
-                console.log(dish.ownerPic);
+                //console.log(dish.ownerPic);
                 
                 if (dish["ownerid"] === currentUser.uid){
                     dish.owner = "me";
                 }
                 
                 dish.location = dish.location.split(',')[0];
+                //console.log(dish.key);
 
                 dishes.push({
+                    key         : dish["key"],
                     dishName    : dish["dishName"],
                     description : dish["description"],
                     price       : dish["price"],
@@ -102,9 +107,9 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
         //if user has phone num, then use that as the dish's phone num
         //else, error and cannot submit dish
         console.log("users/" + firebase.auth().currentUser.uid);
-        console.log(snapshot.val());
-        console.log(snapshot.val().phone);
-        console.log(snapshot.val().location);
+        //console.log(snapshot.val());
+        //console.log(snapshot.val().phone);
+        //console.log(snapshot.val().location);
         if (snapshot.val().phone) {
             $scope.dish.phone = snapshot.val().phone;
         } else {
@@ -246,6 +251,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
             }, 10000);
         });
     };
+    
 
 
 };

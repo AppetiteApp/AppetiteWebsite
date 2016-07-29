@@ -137,7 +137,7 @@ module.exports = function(app) {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             phone: req.body.phone,
-            address: "Please update your address by clicking the edit icon!"
+            location: "Please update your address by clicking the edit icon!"
             
         });
         
@@ -162,6 +162,31 @@ module.exports = function(app) {
 	        message: "Thank you for your feedback!"
 	    });
 	    
+	});
+	
+	app.post('/api/profileImg', function(req, res){
+	    console.log(req.body);
+	    //update the user's photoUrl
+	    global.userRef.child(req.body.uid).update({
+	        photoUrl: req.body.photoUrl
+	    });
+	    
+	    //update the user's dishes photoUrl
+	    global.userRef.child(req.body.uid).child('mealsMade').once("value", function(snapshot){
+	        //snapshot.val() is a list of meals that the user has made
+	        //NOTE TO SELF: maybe create a local copy of profile pic using 
+	        console.log(snapshot.val());
+	        if (snapshot.val()){
+	            var dishes = snapshot.val();
+	            dishes.forEach(function(dishKey){
+	                global.dishRef.child(dishKey).update({
+	                    ownerPic: req.body.photoUrl
+	                });
+	            });
+	        }
+	        
+	    });
+	    res.send("coolio");
 	});
 	
 };

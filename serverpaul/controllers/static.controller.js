@@ -22,12 +22,10 @@ module.exports = function(app) {
     });
     
     app.get('/login', function(req, res){
-        console.log("get login");
         res.render(__dirname + '/../views/subviews/login');
     });
     
     app.get('/home', function(req, res){
-        console.log("got home");
         res.render(__dirname + '/../views/subviews/home');
     });
     

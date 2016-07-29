@@ -3,12 +3,12 @@
 <div id="itemscontainer">
     <div id="submitsuccess">{{message}}</div>
   <div id="innercontainer">
-  <div ng-repeat="dish in dishes" id="repeateditem">
+  <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}">
       <div id="listitem" ng-click="showDetails = !showDetails">
 
-        <div id="dishbanner">
+        <div id="dishbanner" ng-class="{'dishselect': !dish.selected, 'dishselect2':dish.selected}" ng-click="dish.selected=!dish.selected" >
           <div class="dishthumbnail">
-            <img class="img-thumbnail" ng-src="{{dish.ownerPic}}" />
+            <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"/>
           </div>
           <div id="profileflex">
             <div id="dishtitle">{{dish.dishName}}</div>
@@ -16,7 +16,7 @@
             <div id="dishtime">{{dish.time}}</div>
             </div>
             <div id="dishprice">${{dish.price}}</div>
-
+            
         </div>
     </div>
     <div ng-show="showDetails" id="itemdetails">
@@ -94,7 +94,7 @@
 </style>
 
 
- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0&callback=initMap"
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFeKB5L3QbetPlLDFhuftMqTUTuUhkKhM&callback=initMap"
 async defer></script>
 
 
@@ -122,7 +122,21 @@ async defer></script>
 
     mapHelper(map);
 
-     }
+
+    }
+
+    function eventFire(el, etype){
+        if (el.fireEvent) {
+            el.fireEvent('on' + etype);
+        } else {
+            var evObj = document.createEvent('Events');
+            evObj.initEvent(etype, true, false);
+            el.dispatchEvent(evObj);
+        }
+    }
+    document.getElementById('submit').addEventListener('click', function(){
+        eventFire(document.getElementById('close'), 'click'); 
+    });
 
 
     var mapHelper = function(map){
@@ -134,6 +148,7 @@ async defer></script>
             snapshot.forEach(function(child) {
                 //console.log(child.val());
                 dishes.push(child.val());
+                
                 if (child.val().active){
                     //console.log("new marker pushed!", child.val().dishName);
                     //console.log("lat", child.val().lat, "; lng:", child.val().lng);
@@ -167,6 +182,37 @@ async defer></script>
                         },
                         title: child.val().dishName
                     });
+                    
+                    //function for bouncing
+                          function toggleBounce() {
+        if (marker.getAnimation() !== null) {
+          marker.setAnimation(null);
+        } else {
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+      }
+                    
+                    //simulate a click here, using 'selector' to select the element with ng-id
+                    var selector = 'div[ng-id="' + child.key + '"]';
+                    $('body').on('click', selector, function () {
+                        google.maps.event.trigger(marker, 'click', {});
+                    });
+                    
+                    $('body').on('mouseover', selector, function(){
+                        marker.setAnimation(google.maps.Animation.BOUNCE);
+                    });
+                    
+                    $('body').on('mouseout', selector, function(){
+                        marker.setAnimation(null);
+                    });
+                    
+                    // marker.addListener('mouseover', function(){
+                    //     marker.setAnimation(google.maps.Animation.BOUNCE);
+                    // });
+                    
+                    // marker.addListener('mouseout', function(){
+                    //     marker.setAnimation(null); 
+                    // });
 
                     marker.addListener('click', function() {
                         infowindow.open(map, marker);

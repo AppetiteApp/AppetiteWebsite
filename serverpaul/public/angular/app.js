@@ -1,6 +1,6 @@
 /* global angular*/
 /* global firebase*/
-var myApp = angular.module('myApp', ['ngRoute']);
+var myApp = angular.module('myApp', ['ngRoute', 'ngDialog']);
 
 myApp.config(['$routeProvider', function($routeProvider){
 
@@ -67,73 +67,12 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
     $scope.user = firebase.auth().currentUser;
     $scope.time = {};
 
-        //getting the user's info and the user's dishes info
-    firebase.database().ref('users/' +  $scope.user.uid).once('value', function(snapshot){
-        $log.log(snapshot.val());
-            //go and fetch meals
-            console.log(snapshot.val().mealsMade);
-                    firebase.database().ref('dish/' + snapshot.val().mealsMade[0]).once('value', function(snapshot){
-                        //parse the time into an year, month, day, starthour + startmin, endhour + endmin
-                        console.log(snapshot.val());
-                        console.log(snapshot.val().time);
-                        $timeout(function(){
-                            $scope.time.start = new Date(snapshot.val().time.startTime);
-                            $scope.time.end = new Date(snapshot.val().time.endTime);
-                        });
-
-
-                  });//end firebase fetch dish info
-
-
-    });
-    
-    $scope.sendEmail = function(){
-        $scope.user.sendEmailVerification().then(function(){
-           console.log("email sent"); 
-        }, function(err){
-            console.log(err);
-        });
-    };
-
-
-
     $scope.dish = {};
-
-    $scope.submitAddress = function(dish){
-        //format form data
-        var formData = {
-            region  : "ca",
-            address: $scope.queryAddress
-        };
-
-        var formDataString = $.param(formData);
-        var queryString = QUERYSTRINGBASE + '&' + formDataString;
-        $scope.user.queryString = queryString;
-
-        console.log("submitaddress" + queryString);
-        $http.get(queryString)
-        .then(function(res){
-            $timeout(function() {
-                $scope.results = res.data.results;
-            });
-
-        }, function(err){
-           $scope.error = err;
-        });
-
-    };
-
-    $scope.signout = sessionService.signout;
-    
-
-
-
-
-
 
 });
 
-        //just a bunch of stuff from stackoverflow
+
+        //upload file
          myApp.directive('fileModel', ['$parse', function ($parse) {
             return {
                restrict: 'A',
@@ -153,30 +92,40 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
          myApp.service('fileUpload', ['$http', function ($http) {
             var ref = firebase.storage().ref();
              
-            this.uploadFileToUrl = function(file){
-                var uploadTask = ref.child('ProfileImages').child(file.name).put(file);
+            this.uploadFileToUrl = function(file, uploadUrl, uid){
+                var uploadTask = ref.child('ProfileImages').child(uid).put(file);
                 uploadTask.on('state_changed', function(snapshot){
                     // Observe state change events such as progress, pause, and resume
-                    // See below for more detail
+                    
                 }, function(error) {
                     // Handle unsuccessful uploads
                 }, function() {
                     // Handle successful uploads on complete
                     // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-                    var downloadURL = uploadTask.snapshot.downloadURL;
-                    console.log(downloadURL);
+                    var photoUrl = uploadTask.snapshot.downloadURL;
+                    
+                    console.log(photoUrl);
+                    $http.post(uploadUrl, {
+                        uid: uid,
+                        photoUrl: photoUrl
+                    }).then(function(res){
+                        console.log(res);
+                    }, function(err){
+                        console.log(err);
+                    });
                 }); 
             };
          }]);
       
-         myApp.controller('myCtrl', ['$scope', 'fileUpload', function($scope, fileUpload){
-            $scope.uploadFile = function(){
+         myApp.controller('profileImgController', ['$scope', 'fileUpload', function($scope, fileUpload){
+            $scope.uploadProfile = function(){
                var file = $scope.myFile;
                
                console.log('file is ' );
                console.dir(file);
                
                var uploadUrl = "/api/profileImg";
-               fileUpload.uploadFileToUrl(file, uploadUrl);
+               fileUpload.uploadFileToUrl(file, uploadUrl, $scope.user.uid);
+               $scope.showEditProfilePic = false;
             };
          }]);

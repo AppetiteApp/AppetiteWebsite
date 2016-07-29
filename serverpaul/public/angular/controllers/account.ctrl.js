@@ -1,14 +1,6 @@
 var accountController = function($scope, $log, $location, $http, $timeout, $route, sessionService){
     $scope.signout = sessionService.signout;
     
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-        } else {
-            $log.log("onAuthStateChanged: no user");
-            $route.reload();
-            $location.path('/login');
-        }
-    });
     $scope.user = firebase.auth().currentUser;
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
 
