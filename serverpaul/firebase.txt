@@ -1,0 +1,55 @@
+Issues: who should enter whether or not the meal is picked up?
+
+UserID: {
+	//active meals are moved to past meals once they're picked up 
+	activeMeals: [
+		{
+			dishId: String,
+			chefId: String,
+			pending: Boolean, //true if chef didn't respond yet, false if chef responded
+			confirmed: Boolean, //true if chef accepts, false is chef declines
+			requestTime: Date, //time when user made the request
+			secretCode: String, //automatically generated code for picking up meal
+			pickedUp: Boolean 
+		}
+	],
+	pastPurchases: [
+		{
+			dishId: String,
+			chefId: String,
+			review: {
+				taste: Number, // out of 5
+				punctuality: Number,
+				comment: String
+			}
+		}
+	]
+}
+
+DishId: {
+	portions: Number,
+	purchases: [
+		{
+			buyerId: String,
+			responded: Boolean, //false by default, when chef accepts or declines a purchase request, changes to True
+			confirmed: Boolean, 
+			pickedUp: Boolean,
+			secretCode: String, //same as the user's code
+			pickedUp: Boolean 
+		}
+	]
+}
+
+
+User Story:
+1. a user sees a dish that's not theirs, clicks "request dish" to request the meal; user sees "pending" next to the meal they requested
+2. the chef sees that someone has requested the meal, either "accept" or "decline"
+	2.1) chef accepts the meal request, the user sees "confirmed: {{confirmCode}}" next to the dish
+	2.2) chef declines the meal request, but must give reason: [no more portions left, user's rating low, etc]
+3) 
+
+
+
+
+
+
