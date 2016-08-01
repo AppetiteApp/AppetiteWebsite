@@ -113,17 +113,20 @@ async defer></script>
 
   function initMap() {
     var mapDiv = document.getElementById('map');
+
     map = new google.maps.Map(mapDiv, {
-        center: {lat: 45.5116861, lng: -73.5773356},
+        center: new google.maps.LatLng(45.5116861, -73.5773356),
         zoom: 14,
         streetViewControl: false,
         mapTypeControl: false
     });
 
     mapHelper(map);
+    google.maps.event.trigger(map, 'resize');
+    map.setZoom( map.getZoom() );
+    //map.setCenter({lat: 45.5116861, lng: -73.5773356});
 
-
-    }
+  }
 
     function eventFire(el, etype){
         if (el.fireEvent) {

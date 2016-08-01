@@ -21,7 +21,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
 
     //dishes ordering by date Added, PROBABLY SWITCH TO ORDERING BY PICKUP TIME
     //firebase.database().ref('dish/').orderByChild("dateUpdated").once("value", function(snapshot){
-    firebase.database().ref('dish/').orderByChild('time/startTime').once("value", function(snapshot){
+    firebase.database().ref('dish/').orderByChild('time/startTime').on("value", function(snapshot){
         //$log.info(allDishes);
         var dishes = [];
         var allDishes = [];
