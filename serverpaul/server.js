@@ -7,8 +7,7 @@ var cors        = require('cors');
 var staticController= require('./controllers/static.controller');
 var userController  = require('./controllers/user.controller');
 var dishController = require('./controllers/dish.controller');
-//var adminController = require('./controllers/admin.controller');
-var requestsController = require('./controllers/requests.controller');
+var adminController = require('./controllers/admin.controller');
 
 firebase.initializeApp({
   serviceAccount: "./configs/firebase.json",
@@ -26,9 +25,8 @@ var serverLogging = function(req, res, next){
 	next();
 };
 
+
 app.use(cors());
-
-
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -39,8 +37,7 @@ app.set("view engine", "ejs");
 staticController(app);
 userController(app);
 dishController(app);
-//adminController(app);
-requestsController(app);
+adminController(app);
 
 process.env.PORT = process.env.PORT || 8080;
 

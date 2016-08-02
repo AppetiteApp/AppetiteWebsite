@@ -4,8 +4,8 @@
 
 <div id="profilebanner"></div>
 
-<img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" ng-click="showEditProfilePic=!showEditProfilePic"/>
-    <div id="profilename">
+<img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" ng-click="showEditProfilePic=!showEditProfilePic" ng-cloak/>
+    <div id="profilename" ng-cloak>
         {{user.firstName}}
         {{user.lastName}}
         
@@ -13,7 +13,7 @@
         <a href="#/home" id="logout" ng-click="signout()">Sign Out</a>
     </div>
 
-<div id="profilecontainer">
+<div id="profilecontainer" ng-cloak>
     <label class="editbutton" for="c1" ng-click="user.changed=true" ng-init="user.changed=false"></label>
     
     
@@ -65,7 +65,7 @@
 
 </div>
 
-<div id="dishcontainer">
+<div id="dishcontainer" ng-cloak>
   <div id="profileinnercontainer">
     
     <div id="repeateditem" ng-repeat="dish in user.dishes">

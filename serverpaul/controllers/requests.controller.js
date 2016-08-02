@@ -1,3 +1,13 @@
+function makeCode() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 6; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+};
+
 module.exports = function(app){
     //when user requests a meal
     //add to their list of activeMeals
@@ -150,8 +160,25 @@ module.exports = function(app){
             });
             return;
         }
+        //test if requestPersonId is valid
+        global.userRef.child(req.body.requestPersonId).then(function(snapshot){
+            if (!snapshot.val()){
+                res.send({
+                    errors: [{
+                        errorType: "info",
+                        errorMessage: "invalid info"
+                    }]
+                });
+                return;
+            } else {
+                //store stuff
+            }
+        }, function(err){
+           console.log(err); 
+        });
+        
         global.dishRef.child(req.body.dishid).once("value").then(function(snapshot){
-            if (snapshot.ownerid !== req.body.uid){
+            if (snapshot.val().ownerid !== req.body.uid){
                 res.send({
                     errors: {
                         errorType: "uid",
@@ -159,6 +186,30 @@ module.exports = function(app){
                     }
                 });
                 return;
+            }
+            
+            if (snapshot.val().purchases){
+                //try to find a record of 
+                if (!snapshot.val().purchases[req.body.requestPersonId]){
+                    res.send({
+                        errors: {
+                            errorType: "request",
+                            errorMessage: "invalid request: the user haven't requested this meal"
+                        }
+                    });
+                    return;
+                } else {
+                    var requestObj = snapshot.val().purchases[req.body.requestPersonId];
+                    console.log(requestObj);
+                    requestObj.pending = false;
+                    requestObj.confirmed = req.body.accept;
+                    //if chef accepted, then generate confirmCode & store for both people
+                    if (req.body.accept){
+                        var confirmCode = makeCode();
+                        requestObj.confirmCode = confirmCode;
+                        
+                    }
+                }
             }
 
             
