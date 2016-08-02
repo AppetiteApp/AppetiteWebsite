@@ -2,8 +2,6 @@
    padding:4px;
    margin:0;
   }
-  
-
 
 #submitform{
     font-family: 'Raleway', sans-serif;
@@ -49,7 +47,7 @@
     width:calc(100% - 130px);
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;    
+    text-overflow: ellipsis;
 
     min-width: 0;
 
@@ -63,7 +61,8 @@
   margin-right: 0px;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;    
+  text-overflow: ellipsis;
+  padding-left:5px;
 
 }
 
@@ -76,12 +75,9 @@
     width:auto;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;    
-
+    text-overflow: ellipsis;
+    padding-left:5px;
     min-width: 0;
-
-
-
 }
 
 .chefname{
@@ -91,8 +87,8 @@
      display: inline-block;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;    
-
+    text-overflow: ellipsis;
+    padding-left:5px;
 }
 
 
@@ -149,13 +145,15 @@
 
 #map{
   float:right;
-  position: absolute;
-  top: 60px;
-  left: 40%;
-  bottom: 0;
+  top:0;
+  position: relative;
   right: 0;
-  height: auto;
-  
+  overflow: auto;
+  height:100%;
+  width: 60%;
+  display: inline-block;
+  height:calc(100% - 205px);
+
 }
 
 .dishthumbnail {
@@ -176,15 +174,16 @@
 }
 
 #itemscontainer {
-  position: fixed;
-  width: 40%;
-  top: 60px;
-  bottom: 0 ;
+  position: relative;
+  width:40%;
+  top: 0px;
   padding:3px;
   background-color: white;
   overflow-y: scroll;
-  padding-bottom: 80px;
-  padding-top: 50px;
+  overflow: auto;
+  margin:0;
+  display: inline-block;
+  height:calc(100% - 205px);
 }
 
 
@@ -260,17 +259,15 @@
     cursor: pointer;
     padding-right: 30px;
     display: flex;
-    
+
 
   }
 
   #map{
     float:right;
-    position: absolute;
-    top: 60px;
-    left: 0px;
+    position: relative;
     width: 100% !important;
-    height: 300px;
+    height: auto;
     flex: 1 1 auto;
   }
 

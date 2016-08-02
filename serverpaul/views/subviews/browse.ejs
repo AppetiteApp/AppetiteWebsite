@@ -1,4 +1,94 @@
-<%- include ../partials/navbar.ejs %>
+<!-- <%- include ../partials/navbar.ejs %> -->
+
+<div id="welcomebackground">
+
+<div id="welcomebuttonleftcontainer">
+<button class="welcomebuttonleft" id="myBtn">Login</button>
+</div>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">x</span></br>
+    <div id="registertitle2">Log in</div>
+                <form ng-submit="login(user)">
+                <div class="alert-warning" ng-show="warnings" ng-repeat="warning in warnings">{{warning.errorMessage}}</div>
+                    <label class="registerlabel">Email</label><input class="logintextbox" type="text" ng-model="user.email" />
+                    <label class="registerlabel">Password</label><input class="logintextbox" type="password" ng-model="user.password" />
+                    <button id="homelogin">Login</button>
+                </form>
+
+  </div>
+
+</div>
+
+<div id="welcomebuttonrightcontainer">
+<button class="welcomebuttonright" id="myBtn2">Join</button>
+</div>
+<div id="myModal2" class="modal2">
+
+  <!-- Modal content -->
+  <div class="modal-content2">
+          <span class="close2">x</span></br>
+
+                            <div id="registertitle">Join Appetite</div>
+                            <form ng-submit="signup(user)">
+                                <div class="alert-warning" ng-show="warnings" ng-repeat="warning in warnings">{{warning.errorMessage}}</div>
+                                <div id="firstnamebox"><label class="registerlabel">First Name</label><input id="firstNameregister" type="text" ng-model="user.firstName"/></div>
+                                <div id="lastnamebox"><label class="registerlabel" id="lastnamelabel">Last Name</label><input id="lastNameregister" type="text" ng-model="user.lastName"/></div></br>
+                                <label class="registerlabel">Phone</label><input class="logintextbox" type="text" ng-model="user.phone"/>
+                                <label class="registerlabel">Email</label><input class="logintextbox" type="text" ng-model="user.signupemail"/>
+                                <label class="registerlabel">Password</label><input class="logintextbox" type="password" ng-model="user.signuppassword"/>
+                                <label class="registerlabel">Confirm</label><input class="logintextbox" type="password" ng-model="user.confirmpassword" />
+                                <div id="termsconsent">By joining you agree to these <a href="#/terms">Terms</a></div>
+                                <button id="homeregister" ng-disabled=" (user.signuppassword!==user.confirmpassword) || (!user.signuppassword)">Join Appetite</button>
+                          </form>
+    </div>
+</div>
+
+<img id="welcomelogo" src="/imgs/welcomelogo.png"/>
+</div>
+
+<input type="button" onclick="growDiv()" value="More Info" id="more-button">
+
+<div id='grow'>
+  <div class="aboutus">
+  <table align="center">
+    <tr class="tableimage">
+      <td>
+        <img src="imgs\meetnew.png" height="80px" width="80px">
+      </td>
+      <td>
+        <img src="imgs\restaurant-cutlery-symbol-of-a-cross.png" height="80px" width="80px">
+      </td>
+      <td>
+        <img src="imgs\moneybag.png" height="80px" width="80px">
+      </td>
+    </tr>
+    <tr>
+      <td class="table">Meet Somebody New</td>
+      <td class="table">Enjoy Delicious Food</td>
+      <td class="table">Earn and Save Money</td>
+    </tr>
+    <tr>
+      <td class="subtable">Appetite offers a unique opportunity to meet your peers outside an academic environment</td>
+      <td class="subtable">The taste of the food is the #1 thing people say they like about Appetite the most</td>
+      <td class="subtable">It's an easy way to make some extra cash, and the average meal price is only $7</td>
+    </tr>
+  </table>
+</div>
+
+<!-- Video -->
+<div class="aboutusvideo" align="center">
+    <iframe width="840" height="472" src="https://www.youtube.com/embed/BEcIlPAScPU" frameborder="0" allowfullscreen></iframe>
+</div>
+
+</div>
+
+
+
+
 
 <div id="itemscontainer">
     <div id="submitsuccess">{{message}}</div>
@@ -16,7 +106,7 @@
             <div id="dishtime">{{dish.time}}</div>
             </div>
             <div id="dishprice">${{dish.price}}</div>
-            
+
         </div>
     </div>
     <div ng-show="showDetails" id="itemdetails">
@@ -138,7 +228,7 @@ async defer></script>
         }
     }
     document.getElementById('submit').addEventListener('click', function(){
-        eventFire(document.getElementById('close'), 'click'); 
+        eventFire(document.getElementById('close'), 'click');
     });
 
 
@@ -151,7 +241,7 @@ async defer></script>
             snapshot.forEach(function(child) {
                 //console.log(child.val());
                 dishes.push(child.val());
-                
+
                 if (child.val().active){
                     //console.log("new marker pushed!", child.val().dishName);
                     //console.log("lat", child.val().lat, "; lng:", child.val().lng);
@@ -159,7 +249,7 @@ async defer></script>
                     var date = new Date(child.val().time.startTime);
 
                     var time = makeTime(date);
-                    
+
                     if (child.val().ownerid === currentUser.uid){
                         child.val().owner = "me";
                     }
@@ -185,7 +275,7 @@ async defer></script>
                         },
                         title: child.val().dishName
                     });
-                    
+
                     //function for bouncing
                           function toggleBounce() {
         if (marker.getAnimation() !== null) {
@@ -194,27 +284,27 @@ async defer></script>
           marker.setAnimation(google.maps.Animation.BOUNCE);
         }
       }
-                    
+
                     //simulate a click here, using 'selector' to select the element with ng-id
                     var selector = 'div[ng-id="' + child.key + '"]';
                     $('body').on('click', selector, function () {
                         google.maps.event.trigger(marker, 'click', {});
                     });
-                    
+
                     $('body').on('mouseover', selector, function(){
                         marker.setAnimation(google.maps.Animation.BOUNCE);
                     });
-                    
+
                     $('body').on('mouseout', selector, function(){
                         marker.setAnimation(null);
                     });
-                    
+
                     // marker.addListener('mouseover', function(){
                     //     marker.setAnimation(google.maps.Animation.BOUNCE);
                     // });
-                    
+
                     // marker.addListener('mouseout', function(){
-                    //     marker.setAnimation(null); 
+                    //     marker.setAnimation(null);
                     // });
 
                     marker.addListener('click', function() {
@@ -344,4 +434,76 @@ async defer></script>
       } );
     } );
   })();
+</script>
+<script>
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+    if (event.target == modal2) {
+        modal2.style.display = "none";
+    }
+}
+
+
+
+// Get the modal
+var modal2 = document.getElementById('myModal2');
+
+// Get the button that opens the modal
+var btn2 = document.getElementById("myBtn2");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close2")[0];
+
+// When the user clicks the button, open the modal
+btn2.onclick = function() {
+    modal2.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal2.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+// window.onclick = function(event) {
+//     if (event.target == modal2) {
+//         modal2.style.display = "none";
+//     }
+// }
+
+</script>
+<script>
+function growDiv() {
+    var growDiv = document.getElementById('grow');
+    if (growDiv.clientHeight) {
+      growDiv.style.height = 0;
+    } else {
+
+      growDiv.style.height = growDiv.scrollHeight + "px";
+    }
+document.getElementById("more-button").value=document.getElementById("more-button").value=='Read more'?'Read less':'Read more';
+}
+
 </script>
