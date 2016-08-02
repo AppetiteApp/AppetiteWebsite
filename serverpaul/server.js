@@ -2,7 +2,6 @@ var express     = require('express');
 var app         = express();
 var bodyParser  = require('body-parser');
 var firebase    = require('firebase');
-var session     = require('express-session');
 var path        = require('path');
 var cors        = require('cors');
 var staticController= require('./controllers/static.controller');
@@ -27,19 +26,9 @@ var serverLogging = function(req, res, next){
 	next();
 };
 
-var sess   = {
-	name: "ohIkgFh3KKxSS57",
-	secret: "eulskdjvbcxnwekfjskzxq389yewqhajsdb",
-	cookie: {
-		secure: false,
-		maxAge: 24*60*60*1000
-	},
-	resave: true,
-    saveUninitialized: false
-};
-
 app.use(cors());
-app.use(session(sess));
+
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
