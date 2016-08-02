@@ -69,6 +69,7 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
 
     $scope.dish = {};
 
+
 });
 
 
