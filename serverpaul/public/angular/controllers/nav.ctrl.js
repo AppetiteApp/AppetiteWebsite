@@ -160,4 +160,7 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
             $scope.message = "Failed to load data, please refresh page";
         });
     };
+    
+    
+    
 };

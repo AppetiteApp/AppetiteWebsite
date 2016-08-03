@@ -19,6 +19,8 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
 
 
+
+
     //dishes ordering by date Added, PROBABLY SWITCH TO ORDERING BY PICKUP TIME
     //firebase.database().ref('dish/').orderByChild("dateUpdated").once("value", function(snapshot){
     firebase.database().ref('dish/').orderByChild('time/startTime').on("value", function(snapshot){

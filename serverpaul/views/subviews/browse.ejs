@@ -5,9 +5,9 @@
 
 
 <div id="itemscontainer">
-    <div id="submitsuccess">{{message}}</div>
+    <div id="submitsuccess" ng-cloak>{{message}}</div>
   <div id="innercontainer">
-  <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}">
+  <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak>
       <div id="listitem" ng-click="showDetails = !showDetails">
 
         <div id="dishbanner" ng-class="{'dishselect': !dish.selected, 'dishselect2':dish.selected}" ng-click="dish.selected=!dish.selected" >
@@ -127,10 +127,29 @@ async defer></script>
 
     mapHelper(map);
     google.maps.event.trigger(map, 'resize');
+    //resizeMap(map);
+    
+
+    
+    
+    //google.maps.event.trigger(map, 'resize');
     map.setZoom( map.getZoom() );
+    
     //map.setCenter({lat: 45.5116861, lng: -73.5773356});
 
   }
+  
+//   function resizeMap(map){
+//     $(document).ready(function() {
+//       var map = 
+//         $(window).resize(function() {
+//             google.maps.event.trigger(map, 'resize');
+//             gmap.checkResize();
+//         });
+//         google.maps.event.trigger(map, 'resize');
+//         gmap.checkResize();
+//     });   
+//   };
 
     function eventFire(el, etype){
         if (el.fireEvent) {
