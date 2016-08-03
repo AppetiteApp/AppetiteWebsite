@@ -1,28 +1,11 @@
-var navController = function($scope, $location, $http, $timeout, $route, regexService, sessionService, timeService){
-    $scope.user = firebase.auth().currentUser;
-    const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
-
-
-    var timeNow = new Date();
-    var minNow = 30 * Math.ceil(timeNow.getMinutes() / 30);
-    //create a dish object and put the user's info into it
-    $timeout(function() {
-        $scope.dish = {
-            warnings: [],
-            errors  : [],
-            time    : {
-                startTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours(), minNow, 0),
-                endTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 2, minNow, 0)
-            }
-        };
-    });
-
-    // function that watches startTime and endTime
-    // var watchTime = function(startTime, endTime){
-
-    // };
-
-    //regarding the submit a dish part
+var navController = function($scope, $location, $http, $timeout, $route, regexService, sessionService, timeService, $log){
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $timeout(function() {
+                $scope.user = user;
+            });
+        
+                //regarding the submit a dish part
     firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function(snapshot){
         //if user has phone num, then use that as the dish's phone num
         //else, error and cannot submit dish
@@ -58,6 +41,45 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
 
 
     });
+        } else {
+            $timeout(function(){
+                $scope.user = undefined;
+            });
+            $log.log("onAuthStateChanged: no user");
+        }
+    });
+    const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
+    
+    var timeNow = new Date();
+    var minNow = 30 * Math.ceil(timeNow.getMinutes() / 30);
+    //create a dish object and put the user's info into it
+    $timeout(function() {
+        $scope.dish = {
+            warnings: [],
+            errors  : [],
+            time    : {
+                startTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours(), minNow, 0),
+                endTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 6, minNow, 0)
+            }
+        };
+    });
+    
+    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone', 'dish.location', 'dish.price', 'dish.startHour', 'dish.endHour', 'dish.locationCustom','dish.useLocationCustom' ], function(newValues, oldValues, scope){
+        if ($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName) &&
+            $scope.dish.description && regexService.commentRegex.test($scope.dish.description) &&
+            $scope.dish.phone && regexService.phoneRegex.test($scope.dish.phone) &&
+            $scope.dish.price && regexService.priceRegex.test($scope.dish.price) &&
+            (($scope.dish.location && !$scope.dish.useLocationCustom) || ($scope.dish.locationCustom && $scope.dish.useLocationCustom))) {
+                $timeout(function(){
+                    $scope.dish.complete = true;
+                });
+        } else {
+            $scope.dish.complete = false;
+        }
+
+    });
+
+
 
 
     $scope.submitAddress = function(){
@@ -148,9 +170,12 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
                     $scope.error = res.data.error;
                     $scope.warnings = res.data.warnings;
                     $scope.message = res.data.message;
-                $log.log($scope.error);
-                $log.log(res.data);
-
+                    
+                //close the text box
+                var modal = document.getElementById('myModal3');
+                modal.style.display = "none";
+    
+    
             } else {
                 $log.log(res.status);
                 $scope.message = "Failed to submit";
@@ -161,6 +186,74 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
         });
     };
     
+        //user can submit signup form by typing ENTER into the confim password box, but only if the two passwords match
+    $scope.$watch('user.confirmpassword', function(newValue, oldValue){
+        if (oldValue.keyCode == 13 && $scope.user.signuppassword === $scope.user.confirmpassword) {
+            $scope.signup($scope.user);
+            
+        }
+    });
+
+    
+    //function for logging in, once successfully logged in, redirect to browse page ('/')
+    $scope.login = function(user) {
+        firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(
+        function(){
+            //stop displaying the login modal
+            var modal = document.getElementById('myModal');
+            modal.style.display = "none";
+        },function(error) {
+            $scope.warnings.unshift({
+                errorType   : "login",
+                errorMessage: error.message
+            });
+        });
+    };
+    
+    //after successfully creating a new user: create node in users/, and redirect to /account to fill more info
+    $scope.signup = function(user){
+        console.log("signup");
+        
+        //TODO: control: can only signup with @mail.mcgill.ca
+        
+        firebase.auth().createUserWithEmailAndPassword(user.signupemail, user.signuppassword).then(
+            function(){
+                firebase.auth().currentUser.sendEmailVerification();
+                var user = {
+                    uid : firebase.auth().currentUser.uid,
+                    email: firebase.auth().currentUser.email,
+                    firstName: $scope.user.firstName,
+                    lastName: $scope.user.lastName,
+                    phone: $scope.user.phone
+                };
+                
+                console.log(user);
+                
+                //server-side code: assigns email, uid, and random profile pic
+                $http.post('/api/newaccount', user)
+                .then(function(res){
+                    console.log(res.data);
+                },
+                function(err){
+                    console.log(err);
+                });
+                
+                $log.log(firebase.auth().currentUser);
+                $route.reload();
+                $location.path('/account');
+            },
+            function(error) {
+        // Handle Errors here. omg why isn't this code running...
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorCode + ": " + errorMessage);
+            $scope.warnings.unshift({
+                errorType   : "signup",
+                errorMessage: error.message
+            });
+        });
+      
+    };
     
     
 };

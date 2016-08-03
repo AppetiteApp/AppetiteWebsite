@@ -4,20 +4,13 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
     //if user isn't logged in, then go to home
     //haha this assignment thing is synchronous
     var currentUser = firebase.auth().currentUser;
-
-    if(!currentUser) {
-        $route.reload();
-        $location.path('/login');
-        return;
-    }
+    $scope.user = firebase.auth().currentUser;
 
     //dishes and markers are arrays
     //user is an object
     $scope.dishes = [];
     $scope.markers = [];
     $scope.user = {};
-    const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
-
 
 
 
@@ -56,7 +49,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
                 //console.log(time.timeString);
                 //console.log(dish.ownerPic);
                 
-                if (dish["ownerid"] === currentUser.uid){
+                if (dish["ownerid"] === $scope.user.uid){
                     dish.owner = "me";
                 }
                 
@@ -85,61 +78,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
         });
     });
 
-    var timeNow = new Date();
-    var minNow = 30 * Math.ceil(timeNow.getMinutes() / 30);
-    //create a dish object and put the user's info into it
-    $timeout(function() {
-        $scope.dish = {
-            warnings: [],
-            errors  : [],
-            time    : {
-                startTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours(), minNow, 0),
-                endTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 6, minNow, 0)
-            }
-        };
-    });
 
-    // function that watches startTime and endTime
-    // var watchTime = function(startTime, endTime){
-
-    // };
-
-    //regarding the submit a dish part
-    firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function(snapshot){
-        //if user has phone num, then use that as the dish's phone num
-        //else, error and cannot submit dish
-        console.log("users/" + firebase.auth().currentUser.uid);
-        //console.log(snapshot.val());
-        //console.log(snapshot.val().phone);
-        //console.log(snapshot.val().location);
-        if (snapshot.val().phone) {
-            $scope.dish.phone = snapshot.val().phone;
-        } else {
-            $scope.dish.warnings.push({
-                warningType: "userinfo",
-                warningMessage: "User info incomplete: missing phone number."
-            });
-        }
-
-        //if user has valid address & lnglat, then use that as the dish's address & lnglat
-        //else, error and cannot submit dish
-        if (snapshot.val().location && snapshot.val().lng && snapshot.val().lat) {
-            $scope.dish.location = {
-                name: snapshot.val().location,
-                lat: snapshot.val().lat,
-                lng: snapshot.val().lng
-            };
-        } else {
-            $scope.dish.errors.push({
-                errorType: "userinfo",
-                errorMessage: "User info incomplete: missing location."
-            });
-            $scope.userinfoIncomplete = true;
-        }
-
-
-
-    });
 
 
     $scope.submitAddress = function(){
@@ -171,20 +110,6 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
     };
 
 
-    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone', 'dish.location', 'dish.price', 'dish.startHour', 'dish.endHour', 'dish.locationCustom','dish.useLocationCustom' ], function(newValues, oldValues, scope){
-        if ($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName) &&
-            $scope.dish.description && regexService.commentRegex.test($scope.dish.description) &&
-            $scope.dish.phone && regexService.phoneRegex.test($scope.dish.phone) &&
-            $scope.dish.price && regexService.priceRegex.test($scope.dish.price) &&
-            (($scope.dish.location && !$scope.dish.useLocationCustom) || ($scope.dish.locationCustom && $scope.dish.useLocationCustom))) {
-                $timeout(function(){
-                    $scope.dish.complete = true;
-                });
-        } else {
-            $scope.dish.complete = false;
-        }
-
-    });
 
 
 
@@ -192,11 +117,11 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
     //on success, clear stuff and show div that says submitSuccess and go to manage
     //on fail, show div that warns that submission failed
     $scope.submitDish = function(dish){
-        if (!firebase.auth().currentUser){
+        if (!$scope.user){
             $location.path('/');
             return;
         }
-        var uid = firebase.auth().currentUser.uid;
+        var uid = $scope.user.uid;
         var data = {
             dishName: dish.dishName,
             uid: uid,

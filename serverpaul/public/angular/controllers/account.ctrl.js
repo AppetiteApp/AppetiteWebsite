@@ -4,15 +4,14 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
     $scope.user = firebase.auth().currentUser;
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
 
-    //if no one is logged in, then redirect to the login page
-    if (!$scope.user) {
-        $route.reload();
-        $location.path('/login');
-        return;
-    }
-
-    //getting the user's info and the user's dishes info
-    firebase.database().ref('users/' +  $scope.user.uid).once('value', function(snapshot){
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $timeout(function() {
+                $scope.user = user;
+            });
+            console.log(user);
+                //getting the user's info and the user's dishes info
+    firebase.database().ref('users/' +  user.uid).on('value', function(snapshot){
         $log.log(snapshot.val());
         $timeout(function(){
             $scope.user.firstName = snapshot.val().firstName;
@@ -49,6 +48,14 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
 
         }); //end $timeout
     });
+        }else {
+            $timeout(function() {
+                $scope.user = undefined; 
+            });
+        }
+    });
+    
+
     $scope.updateProfile = {};
     $scope.updateProfile.changeAddress = false;
 
