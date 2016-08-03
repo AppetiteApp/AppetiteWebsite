@@ -8,7 +8,7 @@
     <div id="submitsuccess" ng-cloak>{{message}}</div>
   <div id="innercontainer">
   <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak>
-      <div id="listitem" ng-click="showDetails = !showDetails">
+      <div id="listitem" ng-click="showDetails=!showDetails">
 
         <div id="dishbanner" ng-class="{'dishselect': !dish.selected, 'dishselect2':dish.selected}" ng-click="dish.selected=!dish.selected" >
           <div class="dishthumbnail">
@@ -23,7 +23,7 @@
 
         </div>
     </div>
-    <div ng-show="showDetails" id="itemdetails">
+    <div ng-show="showDetails && user" id="itemdetails">
         <p class="dishdescription">{{dish.description}}</p>
         <div id="dishphone">{{dish.phone}}</div>
         <div id="dishlocation">{{dish.location}}</div>
@@ -139,20 +139,6 @@ async defer></script>
 
   }
   
-
-    // function eventFire(el, etype){
-    //     if (el.fireEvent) {
-    //         el.fireEvent('on' + etype);
-    //     } else {
-    //         var evObj = document.createEvent('Events');
-    //         evObj.initEvent(etype, true, false);
-    //         el.dispatchEvent(evObj);
-    //     }
-    // }
-    // document.getElementById('submit').addEventListener('click', function(){
-    //     eventFire(document.getElementById('close'), 'click');
-    // });
-
 
     var mapHelper = function(map){
         var dishes = [];

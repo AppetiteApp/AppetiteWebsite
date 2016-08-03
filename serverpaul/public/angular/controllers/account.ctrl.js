@@ -150,7 +150,8 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
             price       : dish.price,
             time        : dish.time,
             portions    : dish.portions,
-            phone       : dish.phone
+            phone       : dish.phone,
+            active      : dish.active
         })
         .then(function(res){
             console.log(res.data);

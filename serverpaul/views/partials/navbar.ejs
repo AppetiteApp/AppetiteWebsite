@@ -4,12 +4,12 @@
 
 
   <a href="#/aboutus"><li class="navelements">About Us</li></a>
-  <a href="#/login"><li class="navelements">About Us #2</li></a>
-  <a href="#/account"><li class="navelements" ng-show="user">Profile</li></a>
-  <button class="welcomebuttonright" id="myBtn" ng-hide="user">Login</button>
+  <a href="#/login"><li class="navelements">Home</li></a>
+  <a href="#/account"><li class="navelements" ng-show="user.uid">Profile</li></a>
+  <button class="welcomebuttonright" id="myBtn" ng-show="!user.uid">Login</button>
   </div>
   <!-- The Modal -->
-  <div id="myModal" class="modal">
+  <div id="myModal" class="modal" ng-show="!user.uid">
 
     <!-- Modal content -->
     <div class="modal-content">
@@ -26,9 +26,9 @@
   </div>
 
   <div id="welcomebuttonrightcontainer">
-  <button class="welcomebuttonright" id="myBtn2" ng-hide="user">Join</button>
+  <button class="welcomebuttonright" id="myBtn2" ng-show="!user.uid">Join</button>
   </div>
-  <div id="myModal2" class="modal2">
+  <div id="myModal2" class="modal2" ng-show="!user.uid">
     <!-- Modal content -->
     <div class="modal-content2">
         <span class="close2">x</span></br>
@@ -48,7 +48,7 @@
 
 
 
-  <button class="welcomebuttonright" id="myBtn3" ng-show="user">Cook</button>
+  <button class="welcomebuttonright" id="myBtn3" ng-show="user.uid">Cook</button>
   </div>
   <div id="myModal3" class="modal3">
     <!-- Modal content -->
@@ -92,7 +92,7 @@
                </br>
                </br>
                 <div>
-                  <label id="where">Where?</label> <label id="submitedit" for="c2" ng-click="dish.useLocationCustom=!dish.useLocationCustom" ng-init="dish.useLocationCustom=false"> </label>
+                  <label id="where">Where?</label> <label id="submitedit" for="c2" ng-click="dish.useLocationCustom=!dish.userLocationCustom" ng-init="dish.useLocationCustom=false"> </label>
                   <div id="defaultaddress" ng-hide="dish.useLocationCustom">{{dish.location.name}} </div>
 
                   <div ng-show="dish.useLocationCustom">{{dish.locationCustom.name}}</div>

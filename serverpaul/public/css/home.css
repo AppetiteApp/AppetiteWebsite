@@ -4,11 +4,15 @@
   background-size: cover;
   margin: 0;
   padding: 0;
-  height: 700px;
+  height: 500px;
   background-position: top;
   background-color: rgba(0, 0, 0, 0.9);
 
   padding: 7.5% 0;
+}
+
+#nomargin{
+    margin:0;
 }
 
 #themotto{
@@ -114,7 +118,6 @@
 
 
 .logintextbox{
-	padding: 10px;
 	border: 1px solid #ebd3bd;
 	background: transparent;
 	color: #b09a86;
@@ -131,7 +134,6 @@
 
 #firstNameregister{
     display:inline-block;
-    padding: 10px;
 	border: 1px solid #ebd3bd;
 	background: transparent;
 	color: #b09a86;
@@ -146,7 +148,6 @@
 
 #lastNameregister{
     display:inline-block;
-    padding: 10px;
 	border: 1px solid #ebd3bd;
 	background: transparent;
 	color: #b09a86;
