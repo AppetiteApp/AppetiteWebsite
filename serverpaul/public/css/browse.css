@@ -148,7 +148,7 @@
   right: 0;
   overflow: auto;
   height:100%;
-  width: 60%;
+  width: 59%;
   display: inline-block;
   height:calc(100% - 60px);
 
@@ -169,6 +169,8 @@
     margin: 0;
     border-radius: 10px;
     display:inline-block;
+  object-fit: cover;
+    
 }
 
 #itemscontainer {

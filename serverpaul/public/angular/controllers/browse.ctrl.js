@@ -3,16 +3,23 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
 
     //if user isn't logged in, then go to home
     //haha this assignment thing is synchronous
-    var currentUser = firebase.auth().currentUser;
-    $scope.user = firebase.auth().currentUser;
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $timeout(function() {
+                $scope.user = user;
+            });
+            
+        }else{
+            $timeout(function(){
+                $scope.user = undefined;
+            });
+        }
+    });
 
     //dishes and markers are arrays
     //user is an object
     $scope.dishes = [];
     $scope.markers = [];
-    $scope.user = {};
-
-
 
     //dishes ordering by date Added, PROBABLY SWITCH TO ORDERING BY PICKUP TIME
     //firebase.database().ref('dish/').orderByChild("dateUpdated").once("value", function(snapshot){
@@ -34,7 +41,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
         //iterate through all the dishes and put the ones that aren't owned by current owner in the scope
         allDishes.forEach(function(dish){
             if (dish["active"]){
-
+                console.log(dish.dishName);
                 //prettify time
                 //console.log(dish.time);
                 var time= {};
@@ -48,9 +55,10 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
 
                 //console.log(time.timeString);
                 //console.log(dish.ownerPic);
-                
-                if (dish["ownerid"] === $scope.user.uid){
-                    dish.owner = "me";
+                if ($scope.user){
+                    if (dish["ownerid"] === $scope.user.uid){
+                        dish.owner = "me";
+                    }
                 }
                 
                 dish.location = dish.location.split(',')[0];
@@ -66,7 +74,8 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
                     owner       : dish["owner"],
                     phone       : dish["phone"],
                     ownerPic    : dish["ownerPic"],
-                    time        : time.timeString
+                    time        : time.timeString,
+                    showDetails : false
                 });
                 //console.log(dishes);
             } //end if

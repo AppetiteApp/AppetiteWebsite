@@ -38,12 +38,27 @@ module.exports = function(app) {
             
         });
         
-        
-        
-        
-        
-        
-    });
+    }); //end POST /api/admin/inactivate
     
-    
+    //query humans by email
+    app.post('/api/admin/queryByEmail', function(req, res){
+        //check for admin key
+        if (req.body.adminKey !== "1430B Frontenac"){
+            res.send("Invalid Request");
+            return;
+        }
+        //check if email is present
+        if (!req.body.email){
+            res.send("Nothing to query");
+            return;
+        }
+        
+        global.userRef.child('users').orderByChild('email').equalTo(req.body.email).once("value", function(snapshot){
+            if (snapshot.val()){
+                res.send(snapshot.val());
+            } else {
+                res.send("Invalid query");
+            }
+        });
+    }); //end POST /api/admin/queryByEmail
 };

@@ -45,7 +45,6 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
             $timeout(function(){
                 $scope.user = undefined;
             });
-            $log.log("onAuthStateChanged: no user");
         }
     });
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
@@ -63,22 +62,6 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
             }
         };
     });
-    
-    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone', 'dish.location', 'dish.price', 'dish.startHour', 'dish.endHour', 'dish.locationCustom','dish.useLocationCustom' ], function(newValues, oldValues, scope){
-        if ($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName) &&
-            $scope.dish.description && regexService.commentRegex.test($scope.dish.description) &&
-            $scope.dish.phone && regexService.phoneRegex.test($scope.dish.phone) &&
-            $scope.dish.price && regexService.priceRegex.test($scope.dish.price) &&
-            (($scope.dish.location && !$scope.dish.useLocationCustom) || ($scope.dish.locationCustom && $scope.dish.useLocationCustom))) {
-                $timeout(function(){
-                    $scope.dish.complete = true;
-                });
-        } else {
-            $scope.dish.complete = false;
-        }
-
-    });
-
 
 
 
@@ -111,7 +94,7 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
     };
 
 
-    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone', 'dish.location', 'dish.price', 'dish.startHour', 'dish.endHour', 'dish.locationCustom','dish.useLocationCustom' ], function(newValues, oldValues, scope){
+    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone', 'dish.location', 'dish.price', 'dish.startHour', 'dish.endHour', 'dish.locationCustom','dish.useLocationCustom' ], function(newValues, oldValues){
         if ($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName) &&
             $scope.dish.description && regexService.commentRegex.test($scope.dish.description) &&
             $scope.dish.phone && regexService.phoneRegex.test($scope.dish.phone) &&

@@ -70,6 +70,7 @@ label {
   top:165px;
   border-radius: 5px;
   z-index: 100;
+  object-fit:cover;
 }
 
 #profileinfo{
@@ -176,6 +177,8 @@ label {
   margin-left: auto;
   text-align: left;
   top:195px;
+  left:0;
+  right:0;
   color:white;
   background-color:rgba(117,208,244,0.7);
 }
@@ -290,10 +293,9 @@ input[type="checkbox"]:checked + label {
 
 .addressinput{
   border: 1px solid #CCCCCC;
-  width: calc(100% - 157px);
+  width: calc(100% - 160px);
   outline: none;
   color: black;
-  padding: 5px;
   font-size: 20px;
   font-family: Source Sans Pro;
   text-align: center;
@@ -301,7 +303,7 @@ input[type="checkbox"]:checked + label {
   float:left;
   margin:5px;
   margin-right: 0px;
-  margin-left: 110px;
+  margin-left: 100px;
   height: 39px;
 }
 
@@ -364,7 +366,7 @@ input[type="checkbox"]:checked + label {
 }
 
 .nameinput {
-  width: calc(50% - 65px);
+  width: calc(48% - 65px);
   margin-top: 10px;
   outline: none;
   color: black;
@@ -444,7 +446,7 @@ input[type="checkbox"]:checked + label {
 }
 
 #feedback{
-    width:calc(100% - 20px) !important;
+    width:calc(100% - 25px) !important;
     height:75px;
     font-family: Source Sans Pro;
     margin:10px;
