@@ -1,7 +1,7 @@
 <%- include ../partials/navbar.ejs %>
 
 <!-- <div id="profilepage"> -->
-
+<div ng-show="user">
 <div id="profilebanner"></div>
 
 <img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" ng-click="showEditProfilePic=!showEditProfilePic" ng-cloak/>
@@ -113,6 +113,7 @@
 
 <div id="profileinstruction" text-align="center">
   A list of the dishes you posted!
+</div>
 </div>
 
 <script src="/js/classie.js"></script>

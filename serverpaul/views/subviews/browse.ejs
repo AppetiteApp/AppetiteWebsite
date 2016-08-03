@@ -139,30 +139,19 @@ async defer></script>
 
   }
   
-//   function resizeMap(map){
-//     $(document).ready(function() {
-//       var map = 
-//         $(window).resize(function() {
-//             google.maps.event.trigger(map, 'resize');
-//             gmap.checkResize();
-//         });
-//         google.maps.event.trigger(map, 'resize');
-//         gmap.checkResize();
-//     });   
-//   };
 
-    function eventFire(el, etype){
-        if (el.fireEvent) {
-            el.fireEvent('on' + etype);
-        } else {
-            var evObj = document.createEvent('Events');
-            evObj.initEvent(etype, true, false);
-            el.dispatchEvent(evObj);
-        }
-    }
-    document.getElementById('submit').addEventListener('click', function(){
-        eventFire(document.getElementById('close'), 'click');
-    });
+    // function eventFire(el, etype){
+    //     if (el.fireEvent) {
+    //         el.fireEvent('on' + etype);
+    //     } else {
+    //         var evObj = document.createEvent('Events');
+    //         evObj.initEvent(etype, true, false);
+    //         el.dispatchEvent(evObj);
+    //     }
+    // }
+    // document.getElementById('submit').addEventListener('click', function(){
+    //     eventFire(document.getElementById('close'), 'click');
+    // });
 
 
     var mapHelper = function(map){
@@ -182,8 +171,7 @@ async defer></script>
                     var date = new Date(child.val().time.startTime);
 
                     var time = makeTime(date);
-
-                    if (child.val().ownerid === currentUser.uid){
+                    if (currentUser && child.val().ownerid === currentUser.uid){
                         child.val().owner = "me";
                     }
 
@@ -232,14 +220,6 @@ async defer></script>
                         marker.setAnimation(null);
                     });
 
-                    // marker.addListener('mouseover', function(){
-                    //     marker.setAnimation(google.maps.Animation.BOUNCE);
-                    // });
-
-                    // marker.addListener('mouseout', function(){
-                    //     marker.setAnimation(null);
-                    // });
-
                     marker.addListener('click', function() {
                         infowindow.open(map, marker);
                     });
@@ -282,9 +262,9 @@ async defer></script>
             if (testDate.setHours(0,0,0,0) == todayDate.setHours(0,0,0,0)){
                 timeString = "today ";
             } else if(date.getFullYear() === todayDate.getFullYear()) {
-                timeString = monthNames[date.getMonth()] + " " + date.getDate() + " @ ";
+                timeString = monthNames[date.getMonth()] + " " + date.getDate() + " ";
             } else {
-                timeString = date.getFullYear() + ' ' + monthNames[date.getMonth()] + ' ' + date.getDate() + ' @ ';
+                timeString = date.getFullYear() + ' ' + monthNames[date.getMonth()] + ' ' + date.getDate() + ' ';
             }
             console.log(timeString);
             return timeString;

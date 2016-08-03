@@ -49,7 +49,9 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
         }); //end $timeout
     });
         }else {
-            
+            $timeout(function() {
+                $scope.user = undefined; 
+            });
         }
     });
     
