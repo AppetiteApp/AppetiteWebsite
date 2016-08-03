@@ -190,14 +190,6 @@
 	margin: 0 0 5px 0;
 }
 
-.content-style-form label {
-    font-family: Source Sans Pro;
-	padding: 10px 0 0;
-	color: #d5bba4;
-	text-transform: uppercase;
-	letter-spacing: 1px;
-	font-weight: bold;
-}
 
 .content-style-form input[type="text"]:focus,
 .content-style-form input[type="password"]:focus {
@@ -209,22 +201,6 @@
 	outline: 0;
 }
 
-.content-style-form button {
-	padding: .5em;
-	width: 100%;
-	border: none;
-	background: #75d0f4;
-	color: #f9f6e5;
-	text-transform: uppercase;
-	letter-spacing: 1px;
-	font-weight: 800;
-	font-family: Source Sans Pro;
-	font-size:15px;
-    margin-top:15px;
- 	height:40px;
- 	cursor: pointer;
-	
-}
 
 .content-style-form .icon-close {
 	top: 0;
