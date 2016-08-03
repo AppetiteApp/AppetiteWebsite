@@ -1,28 +1,11 @@
 var navController = function($scope, $location, $http, $timeout, $route, regexService, sessionService, timeService){
-    $scope.user = firebase.auth().currentUser;
-    const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
-
-
-    var timeNow = new Date();
-    var minNow = 30 * Math.ceil(timeNow.getMinutes() / 30);
-    //create a dish object and put the user's info into it
-    $timeout(function() {
-        $scope.dish = {
-            warnings: [],
-            errors  : [],
-            time    : {
-                startTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours(), minNow, 0),
-                endTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 2, minNow, 0)
-            }
-        };
-    });
-
-    // function that watches startTime and endTime
-    // var watchTime = function(startTime, endTime){
-
-    // };
-
-    //regarding the submit a dish part
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $timeout(function() {
+                $scope.user = user;
+            });
+        
+                //regarding the submit a dish part
     firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function(snapshot){
         //if user has phone num, then use that as the dish's phone num
         //else, error and cannot submit dish
@@ -58,6 +41,45 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
 
 
     });
+        } else {
+            $timeout(function(){
+                $scope.user = undefined;
+            });
+            $log.log("onAuthStateChanged: no user");
+        }
+    });
+    const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
+    
+    var timeNow = new Date();
+    var minNow = 30 * Math.ceil(timeNow.getMinutes() / 30);
+    //create a dish object and put the user's info into it
+    $timeout(function() {
+        $scope.dish = {
+            warnings: [],
+            errors  : [],
+            time    : {
+                startTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours(), minNow, 0),
+                endTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 6, minNow, 0)
+            }
+        };
+    });
+    
+    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone', 'dish.location', 'dish.price', 'dish.startHour', 'dish.endHour', 'dish.locationCustom','dish.useLocationCustom' ], function(newValues, oldValues, scope){
+        if ($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName) &&
+            $scope.dish.description && regexService.commentRegex.test($scope.dish.description) &&
+            $scope.dish.phone && regexService.phoneRegex.test($scope.dish.phone) &&
+            $scope.dish.price && regexService.priceRegex.test($scope.dish.price) &&
+            (($scope.dish.location && !$scope.dish.useLocationCustom) || ($scope.dish.locationCustom && $scope.dish.useLocationCustom))) {
+                $timeout(function(){
+                    $scope.dish.complete = true;
+                });
+        } else {
+            $scope.dish.complete = false;
+        }
+
+    });
+
+
 
 
     $scope.submitAddress = function(){

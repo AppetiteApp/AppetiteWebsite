@@ -1,11 +1,11 @@
-<ul class="nav">
+<ul class="nav" ng-controller="navController">
   <a href="#/home"><div class="navlogo"><img height="60px" src="/imgs/chefhat.png"></div></a>
   <a href="#/home"><li class="navelements0">Welcome to Appetite</li></a>
 
 
   <a href="#/aboutus"><li class="navelements">About Us</li></a>
   <a href="#/account"><li class="navelements">Profile</li></a>
-  <button class="welcomebuttonright" id="myBtn">Login</button>
+  <button class="welcomebuttonright" id="myBtn" ng-hide="user">Login</button>
   </div>
   <!-- The Modal -->
   <div id="myModal" class="modal">
@@ -15,7 +15,6 @@
       <span class="close">x</span></br>
       <div id="registertitle2">Log in</div>
                   <form ng-submit="login(user)">
-                  <div id="loginwarning" class="alert-warning" ng-show="warnings" ng-repeat="warning in warnings">{{warning.errorMessage}}</div>
                       <label class="registerlabel">Email</label><input class="logintextbox" type="text" ng-model="user.email" />
                       <label class="registerlabel">Password</label><input class="logintextbox" type="password" ng-model="user.password" />
                       <button id="homelogin">Login</button>
@@ -26,16 +25,14 @@
   </div>
 
   <div id="welcomebuttonrightcontainer">
-  <button class="welcomebuttonright" id="myBtn2">Join</button>
+  <button class="welcomebuttonright" id="myBtn2" ng-hide="user">Join</button>
   </div>
   <div id="myModal2" class="modal2">
     <!-- Modal content -->
     <div class="modal-content2">
-            <span class="close2">x</span></br>
-
-                              <div id="registertitle">Join Appetite</div>
-                              <form ng-submit="signup(user)">
-                                  <div class="alert-warning" ng-show="warnings" ng-repeat="warning in warnings">{{warning.errorMessage}}</div>
+        <span class="close2">x</span></br>
+            <div id="registertitle">Join Appetite</div>
+                <form ng-submit="signup(user)">
                                   <div id="firstnamebox"><label class="registerlabel">First Name</label><input id="firstNameregister" type="text" ng-model="user.firstName"/></div>
                                   <div id="lastnamebox"><label class="registerlabel" id="lastnamelabel">Last Name</label><input id="lastNameregister" type="text" ng-model="user.lastName"/></div></br>
                                   <label class="registerlabel">Phone</label><input class="logintextbox" type="text" ng-model="user.phone"/>
@@ -50,7 +47,7 @@
 
 
 
-  <button class="welcomebuttonright" id="myBtn3">Cook</button>
+  <button class="welcomebuttonright" id="myBtn3" ng-show="user">Cook</button>
   </div>
   <div id="myModal3" class="modal3">
     <!-- Modal content -->
@@ -136,10 +133,7 @@
         eventFire(document.getElementById('close'), 'click');
     });
 
-</script>
 
-
-<script>
 // Get the modal
 var modal = document.getElementById('myModal');
 

@@ -5,11 +5,11 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
 
     //if no one is logged in, then redirect to the login page
-    if (!$scope.user) {
-        $route.reload();
-        $location.path('/login');
-        return;
-    }
+    // if (!$scope.user) {
+    //     $route.reload();
+    //     $location.path('/login');
+    //     return;
+    // }
 
     //getting the user's info and the user's dishes info
     firebase.database().ref('users/' +  $scope.user.uid).once('value', function(snapshot){

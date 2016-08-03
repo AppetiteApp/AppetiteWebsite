@@ -4,9 +4,7 @@ var loginController = function($scope, $log, $location, regexService, $route, $t
     
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-            $route.reload();
-            $location.path("/");
-            $scope.currentUser = user;
+            $scope.user = user;
             $scope.warnings.push({
                 errorType: "user",
                 errorMessage: "Already logged in with " + user.email
