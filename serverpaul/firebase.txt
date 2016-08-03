@@ -11,7 +11,7 @@ UserID: {
 			secretCode: String, //automatically generated code for picking up meal
 			pickedUp: Boolean 
 		}
-	],
+	]
 	pastPurchases: [
 		{
 			dishId: String,
@@ -33,7 +33,7 @@ DishId: {
 			pending: Boolean, //false by default, when chef accepts or declines a purchase request, changes to True
 			confirmed: Boolean, 
 			pickedUp: Boolean,
-			secretCode: String //same as the user's code
+			confirmCode: String //same as the user's code
 		}
 	}
 }

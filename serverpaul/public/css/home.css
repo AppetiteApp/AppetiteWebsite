@@ -1,12 +1,54 @@
 .background{
-  background-image: url(/imgs/Optimized-appetite.jpg);
+  background-image: url(/imgs/eatappetitehome.jpeg);
   background-repeat: no-repeat;
   background-size: cover;
   margin: 0;
   padding: 0;
-  height: 650px;
-  background-position:center;
+  height: 700px;
+  background-position: top;
+  background-color: rgba(0, 0, 0, 0.9);
+
   padding: 7.5% 0;
+}
+
+#themotto{
+  font-size: 70px;
+  font-weight: bold;
+  color:white;
+  margin: 0 auto;
+  font-style: oblique;
+  text-align: center;
+  font-family: 'Raleway', sans-serif;
+  background-color: rgba(117,208,244,0.7);
+}
+
+#browsehome{
+  position: relative;
+  top:200px;
+  font-size: 25px;
+  font-weight: bold;
+  color:white;
+  width:30%;
+  display: block;
+  margin:auto;
+  text-align: center;
+  font-family: 'Raleway', serif;
+  border: 1px solid #75d0f4;
+  color: #75d0f4;
+  text-decoration: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+}
+
+#missionhome{
+  font-size: 25px;
+  font-weight: bold;
+  color:white;
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Raleway', serif;
+  background-color: rgba(117,208,244,0.7);
 }
 
 .homebuttons {
@@ -36,6 +78,7 @@
     margin-bottom: 5px;
     text-align:center;
     font-family:Source Sans Pro;
+    color:#75d0f4;
 
 }
 

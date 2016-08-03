@@ -97,7 +97,6 @@
   font-family: 'Raleway', sans-serif;
   float: bottom;
   text-align: center;
-  border: 1px solid white;
   margin-bottom: 1px;
   border-radius: 10px;
   margin-left: 4px;
@@ -110,7 +109,6 @@
   font-family: 'Raleway', sans-serif;
   float: bottom;
   text-align: center;
-  border: 1px solid white;
   border-radius: 10px;
   margin-left: 4px;
 }
@@ -152,7 +150,7 @@
   height:100%;
   width: 60%;
   display: inline-block;
-  height:calc(100% - 205px);
+  height:calc(100% - 60px);
 
 }
 
@@ -183,7 +181,7 @@
   overflow: auto;
   margin:0;
   display: inline-block;
-  height:calc(100% - 205px);
+  height:calc(100% - 60px);
 }
 
 
@@ -267,7 +265,7 @@
     float:right;
     position: relative;
     width: 100% !important;
-    height: auto;
+    height: 45%;
     flex: 1 1 auto;
   }
 

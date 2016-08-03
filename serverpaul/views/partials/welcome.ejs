@@ -1,0 +1,60 @@
+
+<div id="welcomebackground">
+
+<div id="welcomebuttonleftcontainer">
+<button class="welcomebuttonleft" id="myBtn">Login</button>
+</div>
+<!-- The Modal -->
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">x</span></br>
+    <div id="registertitle2">Log in</div>
+                <form ng-submit="login(user)">
+                <div class="alert-warning" ng-show="warnings" ng-repeat="warning in warnings">{{warning.errorMessage}}</div>
+                    <label class="registerlabel">Email</label><input class="logintextbox" type="text" ng-model="user.email" />
+                    <label class="registerlabel">Password</label><input class="logintextbox" type="password" ng-model="user.password" />
+                    <button id="homelogin">Login</button>
+                </form>
+  </div>
+
+</div>
+
+
+<img id="welcomelogo" src="/imgs/welcomelogo.png"/>
+</div>
+
+<input type="button" onclick="growDiv()" value="Learn More" id="more-button">
+
+<div id='grow'>
+  <div class="aboutus">
+  <table align="center">
+    <tr class="tableimage">
+      <td>
+        <img src="imgs\meetnew.png" height="80px" width="80px">
+      </td>
+      <td>
+        <img src="imgs\restaurant-cutlery-symbol-of-a-cross.png" height="80px" width="80px">
+      </td>
+      <td>
+        <img src="imgs\moneybag.png" height="80px" width="80px">
+      </td>
+    </tr>
+    <tr>
+      <td class="table">Meet Somebody New</td>
+      <td class="table">Enjoy Delicious Food</td>
+      <td class="table">Earn and Save Money</td>
+    </tr>
+    <tr>
+      <td class="subtable">Appetite offers a unique opportunity to meet your peers outside an academic environment</td>
+      <td class="subtable">The taste of the food is the #1 thing people say they like about Appetite the most</td>
+      <td class="subtable">It's an easy way to make some extra cash, and the average meal price is only $7</td>
+    </tr>
+  </table>
+</div>
+
+<!-- Video -->
+<div class="aboutusvideo" align="center">
+    <iframe width="840" height="472" src="https://www.youtube.com/embed/BEcIlPAScPU" frameborder="0" allowfullscreen></iframe>
+</div>
+
+</div>
