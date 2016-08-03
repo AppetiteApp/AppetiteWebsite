@@ -1,4 +1,4 @@
-var navController = function($scope, $location, $http, $timeout, $route, regexService, sessionService, timeService){
+var navController = function($scope, $location, $http, $timeout, $route, regexService, sessionService, timeService, $log){
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             $timeout(function() {
@@ -170,9 +170,12 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
                     $scope.error = res.data.error;
                     $scope.warnings = res.data.warnings;
                     $scope.message = res.data.message;
-                $log.log($scope.error);
-                $log.log(res.data);
-
+                    
+                //close the text box
+                var modal = document.getElementById('myModal3');
+                modal.style.display = "none";
+    
+    
             } else {
                 $log.log(res.status);
                 $scope.message = "Failed to submit";

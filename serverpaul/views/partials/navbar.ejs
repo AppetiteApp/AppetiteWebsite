@@ -119,19 +119,19 @@
 
 
 <script>
-    function eventFire(el, etype){
-        if (el.fireEvent) {
-        el.fireEvent('on' + etype);
-    } else {
-        var evObj = document.createEvent('Events');
-        evObj.initEvent(etype, true, false);
-        el.dispatchEvent(evObj);
-    }
-}
+//     function eventFire(el, etype){
+//         if (el.fireEvent) {
+//         el.fireEvent('on' + etype);
+//     } else {
+//         var evObj = document.createEvent('Events');
+//         evObj.initEvent(etype, true, false);
+//         el.dispatchEvent(evObj);
+//     }
+// }
 
-    document.getElementById('submit').addEventListener('click', function(){
-        eventFire(document.getElementById('close'), 'click');
-    });
+//     document.getElementById('submit').addEventListener('click', function(){
+//         eventFire(document.getElementById('close3'), 'click');
+//     });
 
 
 // Get the modal
@@ -162,7 +162,6 @@ window.onclick = function(event) {
         modal2.style.display = "none";
     }
 }
-
 
 
 // Get the modal
