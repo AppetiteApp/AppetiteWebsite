@@ -4,15 +4,18 @@
   background-size: cover;
   margin: 0;
   padding: 0;
-  height: 250px;
+  height: 200px;
   width: 100%;
   background-position:center;
   overflow-x: hidden;
   position: fixed;
 }
 
-#profilebanner:hover{
+
+#picinput{
+    display:none;
 }
+
 
 input.blur{
   border-width: 0px;
