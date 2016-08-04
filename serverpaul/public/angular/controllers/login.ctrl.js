@@ -1,4 +1,4 @@
-var loginController = function($scope, $log, $location, regexService, $route, $timeout, sessionService, $http) {
+var loginController = function($scope) {
     $scope.user = {};
     $scope.warnings = [];
     
