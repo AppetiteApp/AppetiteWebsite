@@ -2,68 +2,71 @@
 
 <!-- <div id="profilepage"> -->
 <div ng-show="user">
-<div id="profilebanner"></div>
+    <div id="profilebanner"></div>
 
-<img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" ng-click="showEditProfilePic=!showEditProfilePic" ng-cloak/>
+    <label id="profilepicedit" for="picinput">
+        <img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" ng-cloak/>
+    </label>
     <div id="profilename" ng-cloak>
         {{user.firstName}}
         {{user.lastName}}
-        
+        {{user.changed}}
         
         <a href="#/home" id="logout" ng-click="signout()">Sign Out</a>
     </div>
 
-<div id="profilecontainer" ng-cloak>
-    <label class="editbutton" for="c1" ng-click="user.changed=true" ng-init="user.changed=false"></label>
+    <div id="profilecontainer" ng-cloak>
+        <label class="editbutton" for="c1" ng-click="user.changed=!user.changed" ng-init="user.changed=false"></label>
     
     
-    <div id="infocontainer">
-        
-            <div ng-controller="profileImgController" ng-show="showEditProfilePic">
-                <input type="file" file-model="myFile"/>
+        <div id="infocontainer">
+            <div ng-controller="profileImgController">
+                <input id="picinput" type="file" file-model="myFile"/>
                 <button ng-click="uploadProfile()">Change Profile Picture</button>
             </div>
-        
-        
-        <div id="profilestatus"font-family="Source Sans Pro">{{updateProfile.statusMessage}}</div>
+
+            <div id="profilestatus"font-family="Source Sans Pro">{{updateProfile.statusMessage}}</div>
         
             <!--CHERYL'S TEST ENDS HERE-->
-    <div height="auto" ng-show="user.changed">
-            <div id="phonebox">
-          <label class="profilelabel">Name:</label>
-          <input ng-class="{'nameinputedit': !user.changed, 'nameinput':user.changed}" type='text' ng-model="user.lastName" name="lastName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+            <div height="auto">
+                <div id="phonebox">
+                    <label class="profilelabel">Name:</label>
+                    <input ng-class="{'nameinputedit': !user.changed, 'nameinput':user.changed}" type='text' ng-model="user.lastName" name="lastName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
 
-          <input ng-class="{'nameinputedit': !user.changed, 'nameinput':user.changed}" type='text' ng-model="user.firstName" name="firstName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
-          </div>
-        </div>    
+                    <input ng-class="{'nameinputedit': !user.changed, 'nameinput':user.changed}" type='text' ng-model="user.firstName" name="firstName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+                </div>
+            
     
-        <div id="phonebox">
-          <label for="phone" class="profilelabel">Phone:</label>
-          <input ng-class="{'profileinputedit': !user.changed, 'profileinput':user.changed}" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+                <div id="phonebox">
+                    <label for="phone" class="profilelabel">Phone:</label>
+                        <input ng-class="{'profileinputedit': !user.changed, 'profileinput':user.changed}" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+                </div>
+                    <label class="profilelabel">Address:</label>
+                    <div class="profileinput"> {{user.location}}
+                        <input type="checkbox" class="hiddencheckbox" id="c1" ng-model="updateProfile.changeAddress"/>
+
+                    </div>
+                    <div height="auto" ng-show="user.changed">
+                        <div id="addressbar">      
+                        <input ng-model="queryAddress" class="addressinput" placeholder="Find address"/> <button id="locationedit" ng-click="submitAddress(queryAddress, user)"><img id="search" src="/imgs/search.png"></button>
+
+                        </div>
+                        <div ng-repeat="result in user.results" class="addressedit" ng-click="assignLocation(result, user)">
+                            {{result.formatted_address}}
+                        </div>
+                        <input id='profileedit' type="submit" value="Save Edits" ng-click="editProfile(user)" ng-show="user.changed"/>
+
+                    </div>
+
+                    <div ng-show="!user.changed" id="feedbackform">    
+                        <textarea id="feedback" rows="10" cols="2" ng-model="feedback"></textarea>
+                        <!--<label>Leave feedback anonymously by ticking this checkbox: </label><input type="checkbox" ng-model="anonymous" />-->
+                        <button id="feedbackbutton" ng-click="submitFeedback()">Send Us Your Feedback!</button>
+                    </div>
+
+            </div>
         </div>
-          <label class="profilelabel">Address:</label><div class="profileinput"> {{user.location}}
-              <input type="checkbox" class="hiddencheckbox" id="c1" ng-model="updateProfile.changeAddress"/>
-
-          </div>
-          <div height="auto" ng-show="user.changed">
-          <div id="addressbar">      
-          <input ng-model="queryAddress" class="addressinput" placeholder="Find address"/> <button id="locationedit" ng-click="submitAddress(queryAddress, user)"><img id="search" src="/imgs/search.png"></button>
-
-          </div>
-              <div ng-repeat="result in user.results" class="addressedit" ng-click="assignLocation(result, user)">
-                  {{result.formatted_address}}
-              </div>
-              <input id='profileedit' type="submit" value="Save Edits" ng-click="editProfile(user)" ng-show="user.changed"/>
-
-</div>
-
-        <div ng-show="!user.changed" id="feedbackform">    
-        <textarea id="feedback" rows="10" cols="2" ng-model="feedback"></textarea>
-        <!--<label>Leave feedback anonymously by ticking this checkbox: </label><input type="checkbox" ng-model="anonymous" />-->
-        <button id="feedbackbutton" ng-click="submitFeedback()">Send Us Your Feedback!</button>
-        </div>
-
-</div>
+    </div>
 
 <div id="dishcontainer" ng-cloak>
   <div id="profileinnercontainer">
@@ -74,8 +77,7 @@
           
           <div id="dishbanner">
             <div class="dishthumbnail">
-                <!--NOTE TO PAUL: I think we don't need the dish's photos on this page bc it would be the owner's photo-->
-              <!--<img class="img-thumbnail" ng-src="{{user.photoUrl}}" />-->
+                
             </div>
             <div id="profiledishname">{{dish.dishName}}</div>
             <button ng-click="dish.edit=!dish.edit">Edit</button> 
@@ -113,6 +115,7 @@
 
 <div id="profileinstruction" text-align="center">
   A list of the dishes you posted!
+</div>
 </div>
 </div>
 

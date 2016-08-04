@@ -4,10 +4,9 @@
   background-size: cover;
   margin: 0;
   padding: 0;
-  height: 500px;
+  height: 600px;
   background-position: top;
   background-color: rgba(0, 0, 0, 0.9);
-
   padding: 7.5% 0;
 }
 
@@ -204,6 +203,7 @@
     margin: 0 auto;
     width:50%;
     height:auto;
+    cursor:pointer;
 }
 
 #homelogin{
@@ -218,6 +218,7 @@
     width:50%;
     margin-bottom:40px;
     margin-top:40px;
+    cursor:pointer;
 }
 
 .subheader {

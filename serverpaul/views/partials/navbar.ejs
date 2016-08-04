@@ -5,11 +5,11 @@
 
   <a href="#/aboutus"><li class="navelements">About Us</li></a>
   <a href="#/login"><li class="navelements">Home</li></a>
-  <a href="#/account"><li class="navelements" ng-show="user.uid">Profile</li></a>
-  <button class="welcomebuttonright" id="myBtn" ng-show="!user.uid">Login</button>
+  <a href="#/account"><li class="navelements" ng-show="parentController.user.uid">Profile</li></a>
+  <button class="welcomebuttonright" id="myBtn" ng-show="!parentController.user.uid">Login</button>
   </div>
   <!-- The Modal -->
-  <div id="myModal" class="modal" ng-show="!user.uid">
+  <div id="myModal" class="modal" ng-show="!parentController.user.uid">
 
     <!-- Modal content -->
     <div class="modal-content">
@@ -26,9 +26,9 @@
   </div>
 
   <div id="welcomebuttonrightcontainer">
-  <button class="welcomebuttonright" id="myBtn2" ng-show="!user.uid">Join</button>
+  <button class="welcomebuttonright" id="myBtn2" ng-show="!parentController.user.uid">Join</button>
   </div>
-  <div id="myModal2" class="modal2" ng-show="!user.uid">
+  <div id="myModal2" class="modal2" ng-show="!parentController.user.uid">
     <!-- Modal content -->
     <div class="modal-content2">
         <span class="close2">x</span></br>
@@ -48,7 +48,7 @@
 
 
 
-  <button class="welcomebuttonright" id="myBtn3" ng-show="user.uid">Cook</button>
+  <button class="welcomebuttonright" id="myBtn3" ng-show="parentController.user.uid">Cook</button>
   </div>
   <div id="myModal3" class="modal3">
     <!-- Modal content -->
