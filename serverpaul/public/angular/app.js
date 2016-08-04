@@ -1,36 +1,39 @@
 /* global angular*/
 /* global firebase*/
-var myApp = angular.module('myApp', ['ngRoute', 'ngDialog']);
+var myApp = angular.module('myApp', ['ngRoute', 'ngDialog', 'ui-router']);
 
-myApp.config(['$routeProvider', function($routeProvider){
+myApp.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $urlRouterProvider){
 
+$urlRouterProvider.otherwise('/');
 //testing to see if this works
-$routeProvider
-
-  .when('/', {
+$stateProvider
+  .state('browse', {
+    url: '/',
     templateUrl: '/browse',
     controller: 'browseController'
   })
-  .when('/account', {
+  .state('account', {
+      url:'/account',
       templateUrl: '/account',
       controller: 'accountController'
   })
-  .when('/login', {
+  .state('login', {
+      url: '/login',
       templateUrl: '/home',
       controller: 'homeController'
   })
-  .when('/aboutus', {
+  .state('/aboutus', {
+      url:'/aboutus',
       templateUrl: '/aboutus'
   })
-  .when('/terms', {
+  .state('terms', {
+      url: '/terms',
       templateUrl: '/terms'
   })
-  .when('/cheryl/test', {
+  .state('cheryl-test', {
+      url: '/cheryl/test',
       templateUrl: '/cheryl/test',
       controller: 'testController'
-  })
-  .otherwise({
-    redirectTo: '/'
   });
 
 }]);
@@ -80,7 +83,7 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
                link: function(scope, element, attrs) {
                   var model = $parse(attrs.fileModel);
                   var modelSetter = model.assign;
-                  
+
                   element.bind('change', function(){
                      scope.$apply(function(){
                         modelSetter(scope, element[0].files[0]);
@@ -89,22 +92,22 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
                }
             };
          }]);
-      
+
          myApp.service('fileUpload', ['$http', function ($http) {
             var ref = firebase.storage().ref();
-             
+
             this.uploadFileToUrl = function(file, uploadUrl, uid){
                 var uploadTask = ref.child('ProfileImages').child(uid).put(file);
                 uploadTask.on('state_changed', function(snapshot){
                     // Observe state change events such as progress, pause, and resume
-                    
+
                 }, function(error) {
                     // Handle unsuccessful uploads
                 }, function() {
                     // Handle successful uploads on complete
                     // For instance, get the download URL: https://firebasestorage.googleapis.com/...
                     var photoUrl = uploadTask.snapshot.downloadURL;
-                    
+
                     console.log(photoUrl);
                     $http.post(uploadUrl, {
                         uid: uid,
@@ -114,17 +117,17 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
                     }, function(err){
                         console.log(err);
                     });
-                }); 
+                });
             };
          }]);
-      
+
          myApp.controller('profileImgController', ['$scope', 'fileUpload', function($scope, fileUpload){
             $scope.uploadProfile = function(){
                var file = $scope.myFile;
-               
+
                console.log('file is ' );
                console.dir(file);
-               
+
                var uploadUrl = "/api/profileImg";
                fileUpload.uploadFileToUrl(file, uploadUrl, $scope.user.uid);
                $scope.showEditProfilePic = false;
