@@ -1,52 +1,7 @@
 var navController = function($scope, $location, $http, $timeout, $route, regexService, sessionService, timeService, $log){
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-            $timeout(function() {
-                $scope.user = user;
-            });
-        
-                //regarding the submit a dish part
-    firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function(snapshot){
-        //if user has phone num, then use that as the dish's phone num
-        //else, error and cannot submit dish
-        console.log("users/" + firebase.auth().currentUser.uid);
-        console.log(snapshot.val());
-        console.log(snapshot.val().phone);
-        console.log(snapshot.val().location);
-        if (snapshot.val().phone) {
-            $scope.dish.phone = snapshot.val().phone;
-        } else {
-            $scope.dish.warnings.push({
-                warningType: "userinfo",
-                warningMessage: "User info incomplete: missing phone number."
-            });
-        }
 
-        //if user has valid address & lnglat, then use that as the dish's address & lnglat
-        //else, error and cannot submit dish
-        if (snapshot.val().location && snapshot.val().lng && snapshot.val().lat) {
-            $scope.dish.location = {
-                name: snapshot.val().location,
-                lat: snapshot.val().lat,
-                lng: snapshot.val().lng
-            };
-        } else {
-            $scope.dish.errors.push({
-                errorType: "userinfo",
-                errorMessage: "User info incomplete: missing location."
-            });
-            $scope.userinfoIncomplete = true;
-        }
-
-
-
-    });
-        } else {
-            $timeout(function(){
-                $scope.user = undefined;
-            });
-        }
-    });
+    console.log($scope.parentController);    
+    
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
     
     var timeNow = new Date();

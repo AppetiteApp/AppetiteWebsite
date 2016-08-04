@@ -2,25 +2,19 @@
 <html lang="en" >
   <head>
     <title>Appetite</title>
-        <!--<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>-->
     <meta name="viewport" content="width=device-width" />
     <script src="/lib/jquery-3.0.0.min.js"></script>
-    <!--<link href="/css/styles.css" rel="stylesheet" type="text/css" />-->
-    <!--<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>-->
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300|Martel+Sans:300' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
-    <!--<link rel="stylesheet" type="text/css" href="/css/submitdish.css" />-->
     <link rel="stylesheet" type="text/css" href="/css/browse.css" />
     <link rel="stylesheet" type="text/css" href="/css/component.css" />
     <link rel="stylesheet" type="text/css" href="/css/home.css" />
     <link rel="stylesheet" type="text/css" href="/css/profile.css" />
-    <!--<link rel="stylesheet" type="text/css" href="/css/terms.css" />-->
     <link rel="stylesheet" type="text/css" href="/css/nav.css" />
     <link rel="stylesheet" type="text/css" href="/css/welcome.css" />
     
 
     <link rel="stylesheet" type="text/css" href="/css/component.css" />
-    <!--<link rel="stylesheet" type="text/css" href="/css/submitdish.css" />-->
     <link rel="stylesheet" type="text/css" href="/css/content.css" />
     <link rel="stylesheet" type="text/css" href="/css/ngDialog.min.css">
     <link rel="stylesheet" type="text/css" href="/css/ngDialog-theme-default.min.css">
@@ -49,17 +43,18 @@
       firebase.initializeApp(config);
     </script>
 
-
+    <script src='/angular/controllers/parent.ctrl.js'></script>
     <script src='/angular/services/services.js'></script>
     <script src='/angular/controllers/login.ctrl.js'></script>
     <script src='/angular/controllers/browse.ctrl.js'></script>
     <script src='/angular/controllers/account.ctrl.js'></script>
     <script src='/angular/controllers/nav.ctrl.js'></script>
+    
     <script src="/angular/app.js"></script>
   </head>
   <body ng-app="myApp" id="nomargin">
 
-    <main ng-view id="fullpage">
+    <main ng-view id="fullpage" ng-controller="parentController">
 
     </main>
 
