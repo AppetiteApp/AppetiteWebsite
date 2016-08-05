@@ -1,5 +1,4 @@
 <%- include ../partials/navbar.ejs %>
-
 <!-- <div id="profilepage"> -->
 <div ng-show="user">
     <div id="profilebanner"></div>
@@ -11,6 +10,7 @@
         {{user.firstName}}
         {{user.lastName}}
         {{user.changed}}
+        
         
         <a href="#/home" id="logout" ng-click="signout()">Sign Out</a>
     </div>

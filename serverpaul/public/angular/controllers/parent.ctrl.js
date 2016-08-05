@@ -14,6 +14,7 @@ var parentController = ['$timeout', '$scope', function($timeout, $scope) {
                     emailVerified   : user.emailVerified,
                     email           : user.email
                 };
+                $scope.parentController.uid = user.uid;
             });
             
             //retrieve person's info, autoreferesh if anything changes
@@ -21,12 +22,17 @@ var parentController = ['$timeout', '$scope', function($timeout, $scope) {
                 //check for null/undefined
                 if (snapshot.val()){
                     //store things in the parentController, an error for location if it's not filled out
-                        $scope.parentController.dish.location = {
-                            name: snapshot.val().location,
-                            lat: snapshot.val().lat,
-                            lng: snapshot.val().lng,
-                            error: undefined
-                        };
+                    
+                    $scope.parentController.user = snapshot.val();
+                    $scope.emailVerified = user.emailVerified;    
+                    $scope.parentController.dish.location = {
+                        name: snapshot.val().location,
+                        lat: snapshot.val().lat,
+                        lng: snapshot.val().lng,
+                        error: undefined
+                    };
+                    console.log($scope.parentController.user.location);
+                        
                     if (!snapshot.val().lng){
                         $scope.parentController.dish.location.error = "Please fill out your address before posting a dish!";
                     }
