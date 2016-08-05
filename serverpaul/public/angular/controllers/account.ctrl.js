@@ -1,6 +1,6 @@
-var accountController = function($scope, $log, $location, $http, $timeout, $route, sessionService){
+var accountController = function($scope, $log, $location, $http, $timeout, sessionService){
     $scope.signout = sessionService.signout;
-    
+
     $scope.user = firebase.auth().currentUser;
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
 
@@ -50,11 +50,11 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
     });
         }else {
             $timeout(function() {
-                $scope.user = undefined; 
+                $scope.user = undefined;
             });
         }
     });
-    
+
 
     $scope.updateProfile = {};
     $scope.updateProfile.changeAddress = false;
@@ -165,7 +165,7 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
         });
     };
     $scope.signout = sessionService.signout;
-    
+
     $scope.submitFeedback = function(){
         $http.post('/feedback', {
             message: $scope.feedback,
@@ -175,7 +175,7 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
             console.log(res);
             $scope.commentMessage = res.data.message;
             $timeout(function(){
-                $scope.commentMessage = ""; 
+                $scope.commentMessage = "";
             }, 10000);
         }, function(err){
             console.log(err);
