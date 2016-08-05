@@ -1,10 +1,10 @@
-var navController = function($scope, $location, $http, $timeout, $route, regexService, sessionService, timeService, $log){
+var navController = function($scope, $location, $http, $timeout, regexService, sessionService, timeService, $log){
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             $timeout(function() {
                 $scope.user = user;
             });
-        
+
                 //regarding the submit a dish part
     firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function(snapshot){
         //if user has phone num, then use that as the dish's phone num
@@ -48,7 +48,7 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
         }
     });
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
-    
+
     var timeNow = new Date();
     var minNow = 30 * Math.ceil(timeNow.getMinutes() / 30);
     //create a dish object and put the user's info into it
@@ -153,12 +153,12 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
                     $scope.error = res.data.error;
                     $scope.warnings = res.data.warnings;
                     $scope.message = res.data.message;
-                    
+
                 //close the text box
                 var modal = document.getElementById('myModal3');
                 modal.style.display = "none";
-    
-    
+
+
             } else {
                 $log.log(res.status);
                 $scope.message = "Failed to submit";
@@ -168,16 +168,16 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
             $scope.message = "Failed to load data, please refresh page";
         });
     };
-    
+
         //user can submit signup form by typing ENTER into the confim password box, but only if the two passwords match
     $scope.$watch('user.confirmpassword', function(newValue, oldValue){
         if (oldValue.keyCode == 13 && $scope.user.signuppassword === $scope.user.confirmpassword) {
             $scope.signup($scope.user);
-            
+
         }
     });
 
-    
+
     //function for logging in, once successfully logged in, redirect to browse page ('/')
     $scope.login = function(user) {
         firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(
@@ -192,13 +192,13 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
             });
         });
     };
-    
+
     //after successfully creating a new user: create node in users/, and redirect to /account to fill more info
     $scope.signup = function(user){
         console.log("signup");
-        
+
         //TODO: control: can only signup with @mail.mcgill.ca
-        
+
         firebase.auth().createUserWithEmailAndPassword(user.signupemail, user.signuppassword).then(
             function(){
                 firebase.auth().currentUser.sendEmailVerification();
@@ -209,9 +209,9 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
                     lastName: $scope.user.lastName,
                     phone: $scope.user.phone
                 };
-                
+
                 console.log(user);
-                
+
                 //server-side code: assigns email, uid, and random profile pic
                 $http.post('/api/newaccount', user)
                 .then(function(res){
@@ -220,7 +220,7 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
                 function(err){
                     console.log(err);
                 });
-                
+
                 $log.log(firebase.auth().currentUser);
                 $route.reload();
                 $location.path('/account');
@@ -235,8 +235,8 @@ var navController = function($scope, $location, $http, $timeout, $route, regexSe
                 errorMessage: error.message
             });
         });
-      
+
     };
-    
-    
+
+
 };

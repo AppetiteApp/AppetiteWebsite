@@ -1,43 +1,46 @@
 /* global angular*/
 /* global firebase*/
-var myApp = angular.module('myApp', ['ngRoute', 'ngDialog', 'ui-router']);
+var myApp = angular.module('myApp', ['ngDialog', 'ui.router']);
 
 myApp.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $urlRouterProvider){
 
-$urlRouterProvider.otherwise('/');
 //testing to see if this works
 $stateProvider
   .state('browse', {
-    url: '/',
     templateUrl: '/browse',
-    controller: 'browseController'
+    controller: 'browseController',
+    url: "/browse"
   })
   .state('account', {
-      url:'/account',
       templateUrl: '/account',
-      controller: 'accountController'
+      controller: 'accountController',
+      url: "/account"
   })
   .state('login', {
-      url: '/login',
       templateUrl: '/home',
-      controller: 'homeController'
+      controller: 'homeController',
+      url:'/login'
   })
-  .state('/aboutus', {
-      url:'/aboutus',
-      templateUrl: '/aboutus'
+  .state('aboutus', {
+      templateUrl: '/aboutus',
+      url: "/aboutus"
   })
   .state('terms', {
-      url: '/terms',
-      templateUrl: '/terms'
+      templateUrl: '/terms',
+      url:'terms'
   })
-  .state('cheryl-test', {
-      url: '/cheryl/test',
+  .state('cheryl/test', {
       templateUrl: '/cheryl/test',
-      controller: 'testController'
+      controller: 'testController',
+      url:'/cheryl/test'
   });
+  $urlRouterProvider.otherwise('/browse');
 
 }]);
 
+myApp.run(function($rootScope) {
+  $rootScope.$on("$stateChangeError", console.log.bind(console));
+});
 
 
 //for controlling regex

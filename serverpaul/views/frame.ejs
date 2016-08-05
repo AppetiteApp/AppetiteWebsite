@@ -54,11 +54,12 @@
     <script src='/angular/controllers/nav.ctrl.js'></script>
     <script src="/angular/app.js"></script>
   </head>
+
+  <%- include ../views/partials/navbar.ejs %>
+
   <body ng-app="myApp" id="nomargin">
 
-    <main ng-view id="fullpage">
-
-    </main>
+    <div ui-view id="fullpage"></div>
 
   </body>
 </html>
