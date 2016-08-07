@@ -1,4 +1,4 @@
-var browseController = function($scope, $log, $location, $http, $timeout, $route, regexService, sessionService, timeService){
+var browseController = function($scope, $log, $location, $http, $timeout, regexService, sessionService, timeService){
     $scope.signout = sessionService.signout;
 
     //if user isn't logged in, then go to home
@@ -8,7 +8,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
             $timeout(function() {
                 $scope.user = user;
             });
-            
+
         }else{
             $timeout(function(){
                 $scope.user = undefined;
@@ -60,7 +60,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
                         dish.owner = "me";
                     }
                 }
-                
+
                 dish.location = dish.location.split(',')[0];
                 //console.log(dish.key);
 
@@ -187,7 +187,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, $route
             }, 10000);
         });
     };
-    
+
 
 
 };

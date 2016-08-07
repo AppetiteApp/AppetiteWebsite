@@ -1,8 +1,9 @@
-var accountController = function($scope, $log, $location, $http, $timeout, $route, sessionService){
+var accountController = function($scope, $log, $location, $http, $timeout, sessionService){
     $scope.signout = sessionService.signout;
-    
+
     $scope.user = firebase.auth().currentUser;
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
+<<<<<<< HEAD
     console.log($scope.parentController.user);
      
     $scope.$watch('parentController.uid', function(newValue, oldValue){
@@ -55,6 +56,60 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
     
 
     
+=======
+
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $timeout(function() {
+                $scope.user = user;
+            });
+            console.log(user);
+                //getting the user's info and the user's dishes info
+    firebase.database().ref('users/' +  user.uid).on('value', function(snapshot){
+        $log.log(snapshot.val());
+        $timeout(function(){
+            $scope.user.firstName = snapshot.val().firstName;
+            $scope.user.lastName  = snapshot.val().lastName;
+            $scope.user.phone     = snapshot.val().phone;
+            $scope.user.location  = snapshot.val().location;
+            $scope.user.description = snapshot.val().description;
+            $scope.user.dishes    = {};
+            $scope.user.lat = snapshot.val().lat;
+            $scope.user.lng = snapshot.val().lng;
+            $scope.user.photoUrl = snapshot.val().photoUrl;
+
+            //go and fetch meals
+            if (snapshot.val().mealsMade){
+                snapshot.val().mealsMade.forEach(function(mealId){
+                    firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
+                        //make the date into a Date object
+                        var time = {
+                            startTime: new Date(snapshot.val().time.startTime),
+                            endTime: new Date(snapshot.val().time.endTime)
+                        };
+
+                        $timeout(function(){
+                            $scope.user.dishes[mealId] = snapshot.val();
+                            $scope.user.dishes[mealId].key = mealId;
+                            $scope.user.dishes[mealId].time = time;
+                        });
+
+                        console.info(snapshot.val().time);
+                  });//end firebase fetch dish info
+                });//end foreach meal
+
+            }
+
+        }); //end $timeout
+    });
+        }else {
+            $timeout(function() {
+                $scope.user = undefined;
+            });
+        }
+    });
+
+>>>>>>> d6dcec2e91052995203ce74ab8ea9a0a5d36d4b9
 
     $scope.updateProfile = {};
     $scope.updateProfile.changeAddress = false;
@@ -165,7 +220,7 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
         });
     };
     $scope.signout = sessionService.signout;
-    
+
     $scope.submitFeedback = function(){
         $http.post('/feedback', {
             message: $scope.feedback,
@@ -175,7 +230,7 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
             console.log(res);
             $scope.commentMessage = res.data.message;
             $timeout(function(){
-                $scope.commentMessage = ""; 
+                $scope.commentMessage = "";
             }, 10000);
         }, function(err){
             console.log(err);

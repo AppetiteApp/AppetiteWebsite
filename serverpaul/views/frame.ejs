@@ -4,6 +4,7 @@
     <title>Appetite</title>
     <meta name="viewport" content="width=device-width" />
     <script src="/lib/jquery-3.0.0.min.js"></script>
+    <!--<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>-->
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300|Martel+Sans:300' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="/css/browse.css" />
@@ -12,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="/css/profile.css" />
     <link rel="stylesheet" type="text/css" href="/css/nav.css" />
     <link rel="stylesheet" type="text/css" href="/css/welcome.css" />
-    
+
 
     <link rel="stylesheet" type="text/css" href="/css/component.css" />
     <link rel="stylesheet" type="text/css" href="/css/content.css" />
@@ -20,11 +21,12 @@
     <link rel="stylesheet" type="text/css" href="/css/ngDialog-theme-default.min.css">
 
     <script src="/lib/angular.min.js"></script>
-    
+
 		<script src="/js/modernizr.custom.js"></script>
     <script src="/lib/angular-route.min.js"></script>
     <script src="/lib/angular-css.min.js"></script>
     <script src="/js/ngDialog.min.js"></script>
+    <script src="/lib/angular-ui-router.min.js"></script>
 
     <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-app.js"></script>
@@ -48,14 +50,15 @@
     <script src='/angular/controllers/browse.ctrl.js'></script>
     <script src='/angular/controllers/account.ctrl.js'></script>
     <script src='/angular/controllers/nav.ctrl.js'></script>
-    
+
     <script src="/angular/app.js"></script>
   </head>
+
+  <%- include ../views/partials/navbar.ejs %>
+
   <body ng-app="myApp" id="nomargin">
 
-    <main ng-view id="fullpage" ng-controller="parentController">
-
-    </main>
+    <div ui-view id="fullpage" ng-controller="parentController"></div>
 
   </body>
 </html>
