@@ -46,8 +46,6 @@ myApp.service('sessionService', sessionService);
 //formating time
 myApp.service('timeService', timeService);
 
-//login, signup
-myApp.controller('homeController', loginController);
 
 //if user is logged in, make ajax request to fetch stuff
 myApp.controller('accountController', accountController);
@@ -55,6 +53,8 @@ myApp.controller('accountController', accountController);
 myApp.controller('browseController', browseController);
 
 myApp.controller('navController', navController);
+
+myApp.controller('parentController', parentController);
 
 
 

@@ -1,12 +1,57 @@
 .background{
-  background-image: url(/imgs/Optimized-appetite.jpg);
+  background-image: url(/imgs/eatappetitehome.jpeg);
   background-repeat: no-repeat;
   background-size: cover;
   margin: 0;
   padding: 0;
-  height: 650px;
-  background-position:center;
+  height: 600px;
+  background-position: top;
+  background-color: rgba(0, 0, 0, 0.9);
   padding: 7.5% 0;
+}
+
+#nomargin{
+    margin:0;
+}
+
+#themotto{
+  font-size: 70px;
+  font-weight: bold;
+  color:white;
+  margin: 0 auto;
+  font-style: oblique;
+  text-align: center;
+  font-family: 'Raleway', sans-serif;
+  background-color: rgba(117,208,244,0.7);
+}
+
+#browsehome{
+  position: relative;
+  top:200px;
+  font-size: 25px;
+  font-weight: bold;
+  color:white;
+  width:30%;
+  display: block;
+  margin:auto;
+  text-align: center;
+  font-family: 'Raleway', serif;
+  border: 1px solid #75d0f4;
+  color: #75d0f4;
+  text-decoration: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+}
+
+#missionhome{
+  font-size: 25px;
+  font-weight: bold;
+  color:white;
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Raleway', serif;
+  background-color: rgba(117,208,244,0.7);
 }
 
 .homebuttons {
@@ -14,12 +59,31 @@
   display: inline-block;
 }
 
-#termsconsent{
+#registertitle{
+    padding-top:10px;
+    padding-bottom: 20px;
+    color:#75d0f4;
     text-align:center;
-    font-family:Source Sans Pro;
-    
+    font-family: 'Raleway', sans-serif;
+    font-size:35px;
+}
+#registertitle2{
+    padding-top:10px;
+    padding-bottom: 20px;
+    color:#75d0f4;
+    text-align:center;
+    font-family: 'Raleway', sans-serif;
+    font-size:35px;
 }
 
+#termsconsent{
+    margin-top:40px;
+    margin-bottom: 5px;
+    text-align:center;
+    font-family:Source Sans Pro;
+    color:#75d0f4;
+
+}
 
 .quotes {
   text-align:center;
@@ -51,45 +115,66 @@
   font-family: Source Sans Pro;
 }
 
-#buttonpadding {
-}
 
 .logintextbox{
-	padding: 10px;
 	border: 1px solid #ebd3bd;
 	background: transparent;
 	color: #b09a86;
 	font-weight: 300;
 	font-size: 16px;
 	height: 35px;
-	margin-left:5px;
-	margin-right:5px;
-	width:100%;
+	margin-left:50px;
+	margin-right:50px;
+	width:calc(100% - 100px);
+	font-family: "Raleway", sans-serif;
+	font-size:16px;
+	color:#75d0f4;
 }
 
 #firstNameregister{
-    width:100%;
     display:inline-block;
+	border: 1px solid #ebd3bd;
+	background: transparent;
+	color: #b09a86;
+	font-weight: 300;
+	font-size: 16px;
+	height: 35px;
+	margin-left:50px;
+	width:calc(100% - 50px);
+	font-size:16px;
+	color:#75d0f4;
 }
 
 #lastNameregister{
-    width:100%;
     display:inline-block;
+	border: 1px solid #ebd3bd;
+	background: transparent;
+	color: #b09a86;
+	font-weight: 300;
+	font-size: 16px;
+	height: 35px;
+	margin-left:10px;
+	margin-right:auto;
+	width:calc(100% - 50px);
+	font-size:16px;
+	color:#75d0f4;
 }
 
 #firstnamebox{
-    width:49%;
+    width:50%;
     display:inline-block;
 }
 
 #lastnamebox{
-    width:49%;
+    width:47%;
     display:inline-block;
 }
 
 .registerlabel{
+    color:#ebd3bd;
+    font-family: 'Raleway', sans-serif;
     max-width:110px;
-    margin:0px 0px 0px 5px;
+    margin:10px 0px 0px 50px;
 }
 
 #loginbutton{
@@ -107,8 +192,124 @@
     cursor: pointer;
 }
 
-.homepadding{
-    
-    margin-left:5px;
-    margin-right:5px;
+#homeregister{
+    display: block;
+    background-color: white;
+    color:#75d0f4;
+    border: 1px solid #75d0f4;
+    height:33px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+    margin: 0 auto;
+    width:50%;
+    height:auto;
+    cursor:pointer;
+}
+
+#homelogin{
+    display: block;
+    background-color: white;
+    color:#75d0f4;
+    border: 1px solid #75d0f4;
+    height:33px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+    margin: 0 auto;
+    width:50%;
+    margin-bottom:40px;
+    margin-top:40px;
+    cursor:pointer;
+}
+
+.subheader {
+  font-family:sans-serif;
+  text-align: center;
+  font-size:20px;
+  color:black;
+}
+
+.aboutusheader {
+  font-family: sans-serif;
+  text-align:center;
+  font-size:30px;
+  color: #a5a5a5;
+  padding:0px;
+}
+
+.aboutuspar {
+  font-family: sans-serif;
+  text-align:center;
+  font-size:20px;
+  color: #a5a5a5;
+}
+.aboutusimg {
+  display:inline-block;
+  padding-left:50px;
+  padding-right:50px;
+  margin:auto;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.aboutusvideo {
+    font-size: 100%;
+    padd
+}
+
+.aboutus {
+  padding:3%;
+}
+
+.aboutbackground {
+  background-image: url(imgs\spread-min.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% 50%;
+  margin: 0;
+  padding: 0;
+  height: 800px;
+  background-position:center;
+  padding:10% 0;
+}
+
+.aboutuspictures {
+  text-align: center;
+}
+
+
+.tablepara {
+  text-align:center;
+  font-size:25px;
+  font-family:sans-serif;
+  color:#a5a5a5;
+  padding-bottom: 30px;
+  padding-top:30px;
+}
+
+.blah {
+  border: 2px solid #75d0f4;
+}
+
+.table {
+  text-align: center;
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:20px;
+  color:#7f7f7f;
+  font-family: sans-serif;
+  font-size:20px;
+  vertical-align: middle;
+}
+
+.tableimage {
+  text-align:center;
+}
+
+.subtable {
+  text-align: center;
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:20px;
+  color:#a5a5a5;
+  font-family: sans-serif;
+  font-size:15px;
 }

@@ -1,51 +1,17 @@
+<%- include ../partials/navbar.ejs %>
 
 
 
 <div class="background">
+
+    <div id="themotto">Connect with students through food</div>
+    <div id="missionhome">A platform for students to buy and sell home-made meals</div>
+    <a id="browsehome" href="#/home">SEE WHO'S COOKING</a>
     <div align="center" class="homebuttons">
 
-        <div class="morph-button morph-button-modal morph-button-modal-2 morph-button-fixed" id="buttonpadding">
-            <button type="button" id="buttonfont">Login</button>
-  	        <div class="morph-content" ng-cloak>
-  	            <div>
-  			        <div class="content-style-form content-style-form-1">
-  			            <span class="icon icon-close">Close the dialog</span>
-  			            <h2 id="loginbutton">Login</h2>
-  			            <form ng-submit="login(user)">
-  			                <div class="alert-warning" ng-show="warnings" ng-repeat="warning in warnings">{{warning.errorMessage}}</div>
-  				            <p><label class="labelmargin">Email</label><input class="logintextbox" type="text" ng-model="user.email" /></p>
-  				            <p><label class="labelmargin">Password</label><input class="logintextbox" type="password" ng-model="user.password" /></p>
-  				            <p><button class="homepadding">Login</button></p>
-  				        </form>
-  			        </div>
-  	        </div>
-          </div>
-	    </div><!-- morph-button -->
-
-        <div class="morph-button morph-button-modal morph-button-modal-2 morph-button-fixed" id="buttonpadding">
-            <button type="button" id="buttonfont">Join appetite</button>
-                <div class="morph-content">
-                    <div>
-                        <div class="content-style-form content-style-form-1" ng-cloak>
-                            <span class="icon icon-close">Close the dialog</span>
-                            
-                            <form ng-submit="signup(user)">
-                                <div class="alert-warning" ng-show="warnings" ng-repeat="warning in warnings">{{warning.errorMessage}}</div>
-                                <div id="firstnamebox"><label class="registerlabel">First Name</label><input class="logintextbox" id="firstNameregister" type="text" ng-model="user.firstName"/></div>
-                                <div id="lastnamebox"><label class="registerlabel">Last Name</label><input class="logintextbox" id="lastNameregister" type="text" ng-model="user.lastName"/></div>
-                                <label class="registerlabel">Phone</label><input class="logintextbox" type="text" ng-model="user.phone"/>
-                                <label class="registerlabel">Email</label><input class="logintextbox" type="text" ng-model="user.signupemail"/>
-                                <label class="registerlabel">Password</label><input class="logintextbox" type="password" ng-model="user.signuppassword"/>
-                                <label class="registerlabel">Confirm</label><input class="logintextbox" type="password" ng-model="user.confirmpassword" />
-                                <button class="homepadding" ng-disabled=" (user.signuppassword!==user.confirmpassword) || (!user.signuppassword)">Join Appetite</button>
-                                <div id="termsconsent">By joining you agree to these <a href="#/terms">Terms</a></div>
-                          </form>
-                      </div>
-                  </div>
-              </div>
-          </div><!-- morph-button -->
      </div>
 </div> <!-- background  --->
+
 
 <div>
     <!-- main logo -->

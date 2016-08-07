@@ -8,7 +8,6 @@ module.exports = function(app) {
 	//check for latlng key in req.body, if there is, store it in the dish; if not, get latlng from user & store in dish
 	//TODO: add regex control
 	app.post('/newdish', function(req, res, next){
-	    console.log("Cheryl");
 	    console.log(req.body);
 		var data = req.body;
 		var errors = [];

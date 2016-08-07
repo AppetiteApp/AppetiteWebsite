@@ -3,52 +3,59 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
     
     $scope.user = firebase.auth().currentUser;
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
+    console.log($scope.parentController.user);
+     
+    $scope.$watch('parentController.uid', function(newValue, oldValue){
+    
+        if ($scope.parentController){
+            console.log($scope.parentController);
+            
+            firebase.database().ref('users/' +  $scope.parentController.uid).on('value', function(snapshot){
+                $log.log(snapshot.val());
+                if (snapshot.val()){
+                    $timeout(function(){
+                    $scope.user.firstName = snapshot.val().firstName;
+                    $scope.user.lastName  = snapshot.val().lastName;
+                    $scope.user.phone     = snapshot.val().phone;
+                    $scope.user.location  = snapshot.val().location;
+                    $scope.user.description = snapshot.val().description;
+                    $scope.user.dishes    = {};
+                    $scope.user.lat = snapshot.val().lat;
+                    $scope.user.lng = snapshot.val().lng;
+                    $scope.user.photoUrl = snapshot.val().photoUrl;
 
-    //if no one is logged in, then redirect to the login page
-    if (!$scope.user) {
-        $route.reload();
-        $location.path('/login');
-        return;
-    }
+                    //go and fetch meals
+                    if (snapshot.val().mealsMade){
+                        snapshot.val().mealsMade.forEach(function(mealId){
+                            firebase.database().ref('dish/' + mealId).on('value', function(snapshot){
+                                //make the date into a Date object
+                                var time = {
+                                    startTime: new Date(snapshot.val().time.startTime),
+                                    endTime: new Date(snapshot.val().time.endTime)
+                                };
 
-    //getting the user's info and the user's dishes info
-    firebase.database().ref('users/' +  $scope.user.uid).once('value', function(snapshot){
-        $log.log(snapshot.val());
-        $timeout(function(){
-            $scope.user.firstName = snapshot.val().firstName;
-            $scope.user.lastName  = snapshot.val().lastName;
-            $scope.user.phone     = snapshot.val().phone;
-            $scope.user.location  = snapshot.val().location;
-            $scope.user.description = snapshot.val().description;
-            $scope.user.dishes    = {};
-            $scope.user.lat = snapshot.val().lat;
-            $scope.user.lng = snapshot.val().lng;
-            $scope.user.photoUrl = snapshot.val().photoUrl;
+                                $timeout(function(){
+                                    $scope.user.dishes[mealId] = snapshot.val();
+                                    $scope.user.dishes[mealId].key = mealId;
+                                    $scope.user.dishes[mealId].time = time;
+                                });
 
-            //go and fetch meals
-            if (snapshot.val().mealsMade){
-                snapshot.val().mealsMade.forEach(function(mealId){
-                    firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
-                        //make the date into a Date object
-                        var time = {
-                            startTime: new Date(snapshot.val().time.startTime),
-                            endTime: new Date(snapshot.val().time.endTime)
-                        };
+                                console.info(snapshot.val().time);
+                            });//end firebase fetch dish info
+                        });//end foreach meal
 
-                        $timeout(function(){
-                            $scope.user.dishes[mealId] = snapshot.val();
-                            $scope.user.dishes[mealId].key = mealId;
-                            $scope.user.dishes[mealId].time = time;
-                        });
+                    }
 
-                        console.info(snapshot.val().time);
-                  });//end firebase fetch dish info
-                });//end foreach meal
+                }); //end $timeout    
+                }
+                
+            }); //end fetch user data
+        }
+    });   
+    
 
-            }
+    
 
-        }); //end $timeout
-    });
     $scope.updateProfile = {};
     $scope.updateProfile.changeAddress = false;
 
@@ -91,7 +98,7 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
     $scope.editProfile = function(user){
         //watch the stuff in the profile, on change, push them to updateObject and send that when user clicks the save edits button
         var updateObject = {
-            uid     :  $scope.user.uid,
+            uid     :  $scope.parentController.user.uid,
             description: user.description,
             phone   : user.phone,
             location: user.location,
@@ -143,7 +150,8 @@ var accountController = function($scope, $log, $location, $http, $timeout, $rout
             price       : dish.price,
             time        : dish.time,
             portions    : dish.portions,
-            phone       : dish.phone
+            phone       : dish.phone,
+            active      : dish.active
         })
         .then(function(res){
             console.log(res.data);

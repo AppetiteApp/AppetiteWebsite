@@ -2,7 +2,7 @@ function makeCode() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for( var i=0; i < 6; i++ )
+    for( var i=0; i < 5; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
@@ -153,10 +153,10 @@ module.exports = function(app){
     app.post('/api/accept', function(req, res){
         if (req.body.uid || req.body.requestPersonId || req.body.accept || req.body.dishid){
             res.send({
-                errors: {
+                errors: [{
                     errorType: "info",
                     errorMessage: "missing info"
-                }
+                }]
             });
             return;
         }
@@ -170,9 +170,28 @@ module.exports = function(app){
                     }]
                 });
                 return;
+            } else if(snapshot.val().activeMeals) {
+                if (!snapshot.val().activeMeals[req.body.dishid]){
+                    res.send({
+                        errors: [{
+                            errorType: "request",
+                            errorMessage: "user have not requested this meal"
+                        }]
+                    });
+                    return;
+                }
             } else {
-                //store stuff
+                res.send({
+                    errors: [{
+                        errorType: "request",
+                        errorMessage: "user have not requested this meal"
+                    }]
+                });
+                return;
             }
+            
+            
+            
         }, function(err){
            console.log(err); 
         });
@@ -180,10 +199,10 @@ module.exports = function(app){
         global.dishRef.child(req.body.dishid).once("value").then(function(snapshot){
             if (snapshot.val().ownerid !== req.body.uid){
                 res.send({
-                    errors: {
+                    errors: [{
                         errorType: "uid",
                         errorMessage: "uid not a match"
-                    }
+                    }]
                 });
                 return;
             }
@@ -192,10 +211,10 @@ module.exports = function(app){
                 //try to find a record of 
                 if (!snapshot.val().purchases[req.body.requestPersonId]){
                     res.send({
-                        errors: {
+                        errors: [{
                             errorType: "request",
                             errorMessage: "invalid request: the user haven't requested this meal"
-                        }
+                        }]
                     });
                     return;
                 } else {
@@ -207,7 +226,7 @@ module.exports = function(app){
                     if (req.body.accept){
                         var confirmCode = makeCode();
                         requestObj.confirmCode = confirmCode;
-                        
+                        console.log("Confirmation code is: " + confirmCode);
                     }
                 }
             }
