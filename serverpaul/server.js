@@ -11,7 +11,7 @@ var adminController = require('./controllers/admin.controller');
 
 firebase.initializeApp({
   serviceAccount: "./configs/firebase.json",
-  databaseURL: "https://angular-project-31b5c.firebaseio.com/"
+  databaseURL: "https://appetite-8827f.firebaseio.com/"
 });
 
 var db = firebase.database();

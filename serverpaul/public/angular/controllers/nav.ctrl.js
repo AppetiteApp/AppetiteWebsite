@@ -38,15 +38,8 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
             $scope.userinfoIncomplete = true;
         }
 
+    console.log($scope.parentController);
 
-
-    });
-        } else {
-            $timeout(function(){
-                $scope.user = undefined;
-            });
-        }
-    });
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
 
     var timeNow = new Date();

@@ -2,7 +2,6 @@
 <html lang="en" id="html">
   <head>
     <title>Appetite</title>
-        <!--<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>-->
     <meta name="viewport" content="width=device-width" />
     <script src="/lib/jquery-3.0.0.min.js"></script>
     <!--<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>-->
@@ -39,20 +38,21 @@
     <script>
       // Initialize Firebase
       var config = {
-        apiKey: "AIzaSyAFeKB5L3QbetPlLDFhuftMqTUTuUhkKhM",
-        authDomain: "angular-project-31b5c.firebaseapp.com",
-        databaseURL: "https://angular-project-31b5c.firebaseio.com",
-        storageBucket: "angular-project-31b5c.appspot.com",
+        apiKey: "AIzaSyBztxeNgL4baVisF6JB-3WgwNXFKJerUs8",
+        authDomain: "appetite-8827f.firebaseapp.com",
+        databaseURL: "https://appetite-8827f.firebaseio.com",
+        storageBucket: "appetite-8827f.appspot.com",
       };
       firebase.initializeApp(config);
     </script>
 
-
+    <script src='/angular/controllers/parent.ctrl.js'></script>
     <script src='/angular/services/services.js'></script>
     <script src='/angular/controllers/login.ctrl.js'></script>
     <script src='/angular/controllers/browse.ctrl.js'></script>
     <script src='/angular/controllers/account.ctrl.js'></script>
     <script src='/angular/controllers/nav.ctrl.js'></script>
+
     <script src="/angular/app.js"></script>
   </head>
 
@@ -60,7 +60,7 @@
 
   <body ng-app="myApp" id="nomargin">
 
-    <div ui-view id="fullpage"></div>
+    <div ui-view id="fullpage" ng-controller="parentController"></div>
 
   </body>
 </html>

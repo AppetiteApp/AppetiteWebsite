@@ -66,6 +66,8 @@ myApp.controller('browseController', browseController);
 
 myApp.controller('navController', navController);
 
+myApp.controller('parentController', parentController);
+
 
 
 

@@ -5,8 +5,22 @@
 
   margin: 0;
   padding: 0;
+<<<<<<< HEAD
   height: 120px;
   top:60px;
+=======
+  height: 200px;
+  width: 100%;
+  background-position:center;
+  overflow-x: hidden;
+  position: fixed;
+}
+
+
+#picinput{
+    display:none;
+  height: 150px;
+>>>>>>> master
   width: calc(100% - 300px);
   float:right;
   background-position:center;
@@ -14,6 +28,7 @@
   position: relative;
   display:block;
 }
+
 
 input.blur{
   border-width: 0px;
