@@ -57,9 +57,9 @@
 
   <%- include ../views/partials/navbar.ejs %>
 
-  <body ng-app="myApp" id="nomargin">
+  <body ng-app="myApp" id="nomargin" ng-controller="parentController">
 
-    <div ui-view id="fullpage" ng-controller="parentController"></div>
+    <div ui-view id="fullpage"></div>
 
   </body>
 </html>

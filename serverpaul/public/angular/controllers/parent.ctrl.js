@@ -4,6 +4,8 @@ var parentController = ['$timeout', '$scope', function($timeout, $scope) {
     $scope.parentController = {
         dish: {}
     }
+    
+    
     //if the person is logged in, get that person's info
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
@@ -32,6 +34,8 @@ var parentController = ['$timeout', '$scope', function($timeout, $scope) {
                         error: undefined
                     };
                     console.log($scope.parentController.user.location);
+                    console.log("yes user");
+                    console.log($scope.parentController.user);
                         
                     if (!snapshot.val().lng){
                         $scope.parentController.dish.location.error = "Please fill out your address before posting a dish!";
@@ -46,6 +50,8 @@ var parentController = ['$timeout', '$scope', function($timeout, $scope) {
         }else{
             $timeout(function() {
                 $scope.parentController.user = undefined;
+                console.log("no user");
+                console.log($scope.parentController.user);
             });
         }
     }); //end auth function
