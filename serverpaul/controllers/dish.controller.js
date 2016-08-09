@@ -23,12 +23,12 @@ module.exports = function(app) {
 			});
 			return;
 		}
-		
+
 		var dishObject = {
 			dateUpdated	: Date(),
 			ownerid		: data.uid
 		};
-		
+
 		//check if dishName is present and valid
 		if (!data.dishName) {
 			errors.push({
@@ -43,7 +43,7 @@ module.exports = function(app) {
 		} else {
 			dishObject.dishName = data.dishName;
 		}
-		
+
 		//check if location is present and valid
 		if (!data.location) {
 			errors.push({
@@ -59,9 +59,9 @@ module.exports = function(app) {
 			dishObject.location = data.location.name;
 			dishObject.lat = parseFloat(data.location.lat);
 			dishObject.lng = parseFloat(data.location.lng);
-			
+
 		}
-		
+
 		if(!data.phone) {
 		    errors.push({
 		        errorType: "phone",
@@ -70,7 +70,7 @@ module.exports = function(app) {
 		} else {
 		    dishObject.phone = data.phone;
 		}
-		
+
 		//check if description is present and valid
 		if (!data.description) {
 			warnings.push({
@@ -87,9 +87,9 @@ module.exports = function(app) {
 		} else {
 			dishObject.description = data.description;
 		}
-		
+
 		console.log(dishObject.description);
-		
+
 		//check if price is present and valid
 		if (!data.price) {
 			errors.push({
@@ -104,7 +104,7 @@ module.exports = function(app) {
 		} else {
 			dishObject.price = parseFloat(data.price);
 		}
-		
+
 		var start;
 		var end;
 		//check if time is entered, regex not added yet bc I want to further change the time input
@@ -117,7 +117,7 @@ module.exports = function(app) {
 		} else {
 			dishObject.time = req.body.time;
 		}
-		
+
 		//check if portions is entered, if not, set at 1
 		if (!data.portions) {
 			warnings.push({
@@ -133,7 +133,7 @@ module.exports = function(app) {
 		} else {
 			dishObject.portion = data.portions;
 		}
-		
+
 		//check if ingredients are there
 		//check regex later cuz I didn't write it yet
 		if (!data.ingredients) {
@@ -145,8 +145,8 @@ module.exports = function(app) {
 		} else {
 			dishObject.ingredients = data.ingredients;
 		}
-		
-		
+
+
 		//if no errors, then continue
 		if (errors.length > 0 ){
 			res.send({
@@ -156,19 +156,19 @@ module.exports = function(app) {
 			});
 			return;
 		}
-		
+
 		dishObject.active = true;
-		
+
 		//go and make a new dish under "dish" in db
 		var newDishRef = global.dishRef.push();
 		var newDishKey = newDishRef.key;
-		
+
 		console.log(dishObject);
 		newDishRef.set(dishObject);
-            
+
         console.log(start);
         console.log(end);
-        
+
 		global.userRef.child(req.body.uid).once("value", function(snapshot){
 			console.log(snapshot.val());
 			var meals;
@@ -184,14 +184,14 @@ module.exports = function(app) {
 			});
 
 			// global.dishRef.child(newDishKey).once("value", function(snapshot){
-			// 	console.log(snapshot.val().firstName);	
+			// 	console.log(snapshot.val().firstName);
 			// });
-			
+
 			newDishRef.update({
 				"owner": snapshot.val().firstName + " " + snapshot.val().lastName || "",
 				"ownerPic": snapshot.val().photoUrl || ""
 			});
-			
+
 		});
 		res.send({
 			errors: errors,
@@ -199,10 +199,10 @@ module.exports = function(app) {
 			message: "You've successfully submitted the meal!",
 			madeMeal: true
 		});
-		
+
 		//update user's mealsMade
 	});
-	
+
 	//to edit a dish; checks for invalid characters and not present info
 	app.post('/api/dish/edit', function(req, res){
 		//if no uid sent, return error
@@ -222,8 +222,8 @@ module.exports = function(app) {
 			});
 			return;
 		}
-		
-		if (!req.body.active && !req.body.dishName && !req.body.location && !req.body.phone && !req.body.description && 
+
+		if (!req.body.active && !req.body.dishName && !req.body.location && !req.body.phone && !req.body.description &&
 			!req.body.price  && !req.body.time	   && !req.body.portion && req.body.lng	   && !req.body.lat) {
 			res.send({
 				errorType: 'content',
@@ -231,16 +231,16 @@ module.exports = function(app) {
 			});
 			return;
 		}
-		
+
 		var data = req.body;
 		var update = {};
 		var error = [];
 		var warnings = [];
-		
+
 		if (data.active === true || data.active === false) {
 			update.active = data.active;
 		}
-		
+
 		if (data.dishName) {
 			if (globals.dishNameRegex.test(data.dishName)){
 				update.dishName = data.dishName;
@@ -251,7 +251,7 @@ module.exports = function(app) {
 				});
 			}
 		}
-		
+
 		if (data.location) {
 			//if (globals.addressRegex.test(data.location)){
 				update.location = data.location;
@@ -273,7 +273,7 @@ module.exports = function(app) {
 				});
 			}
 		}
-		
+
 		if (data.description) {
 			if (globals.commentRegex.test(data.description)){
 				update.description = data.description;
@@ -285,7 +285,7 @@ module.exports = function(app) {
 				update.description = data.description;
 			}
 		}
-		
+
 		if (data.price) {
 			if (globals.priceRegex.test(data.price)){
 				update.price = parseFloat(data.price);
@@ -296,11 +296,11 @@ module.exports = function(app) {
 				});
 			}
 		}
-		
+
 		if (data.time) {
 			update.time = data.time;
 		}
-		
+
 		if (data.portions) {
 			if (globals.onlyIntsRegex.test(data.portions)){
 				update.portions = parseInt(data.portions);
@@ -312,7 +312,7 @@ module.exports = function(app) {
 				update.portions = 1;
 			}
 		}
-		
+
 		if (data.lng & data.lat) {
 			if (globals.latLngRegex.test(data.lng) && globals.latLngRegex.test(data.lat)){
 				update.lng = data.lng;
@@ -324,7 +324,7 @@ module.exports = function(app) {
 				});
 			}
 		}
-		
+
 		update.dateUpdated = Date();
 		console.log(update);
 		global.dishRef.child(data.key).once("value", function(snapshot){
@@ -341,10 +341,10 @@ module.exports = function(app) {
 					warnings: warnings,
 					message: "updated"
 				});
-			} 	
+			}
 		});
-		
-		
+
+
 	});
-	  
+
 };

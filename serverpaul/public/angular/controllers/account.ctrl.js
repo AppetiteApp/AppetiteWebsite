@@ -1,16 +1,20 @@
 var accountController = function($scope, $log, $location, $http, $timeout, sessionService){
+
+    $scope.active = true;
+    $scope.active1 = true;
+
     $scope.signout = sessionService.signout;
 
     $scope.user = firebase.auth().currentUser;
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
 <<<<<<< HEAD
     console.log($scope.parentController.user);
-     
+
     $scope.$watch('parentController.uid', function(newValue, oldValue){
-    
+
         if ($scope.parentController){
             console.log($scope.parentController);
-            
+
             firebase.database().ref('users/' +  $scope.parentController.uid).on('value', function(snapshot){
                 $log.log(snapshot.val());
                 if (snapshot.val()){
@@ -47,15 +51,15 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
 
                     }
 
-                }); //end $timeout    
+                }); //end $timeout
                 }
-                
+
             }); //end fetch user data
         }
-    });   
-    
+    });
 
-    
+
+
 =======
 
     firebase.auth().onAuthStateChanged(function(user) {
@@ -108,8 +112,6 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
             });
         }
     });
-
->>>>>>> d6dcec2e91052995203ce74ab8ea9a0a5d36d4b9
 
     $scope.updateProfile = {};
     $scope.updateProfile.changeAddress = false;

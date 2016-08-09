@@ -1,6 +1,17 @@
 .dishdescription{
-   padding:4px;
-   margin:0;
+  color: grey;
+  font-family: 'Raleway', sans-serif;
+  width:auto;
+  height: auto;
+    margin-right: 0px;
+    width:auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left:5px;
+    min-width: 0;
+    background-color: white;
+    padding: 5px 20px 5px 20px;
+    text-align: center;
   }
 
 #submitform{
@@ -12,12 +23,14 @@
 }
 
 #dishbanner {
-  overflow-x: hidden;
+  overflow: hidden;
+
   position:relative;
   width: auto;
+  border: 2px solid white;
+  border-radius: 14px;
   margin: 0;
-  height: 120px;
-  border-radius: 13px;
+  height: 98px;
   z-index: 0;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -27,10 +40,6 @@
   text-align: left;
   cursor: pointer;
   text-overflow: ellipsis;
-}
-
-#dishbanner:hover{
-    border: 2px solid #75d0f4;
 }
 
 .dishselect{
@@ -78,31 +87,30 @@
     text-overflow: ellipsis;
     padding-left:5px;
     min-width: 0;
+
 }
 
 .chefname{
    font-family: 'Raleway', sans-serif;
    height: auto;
    word-wrap: break-word;
-     display: inline-block;
+   display: inline-block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     padding-left:5px;
+
 }
 
 
 #dishphone {
   color: white;
   font-family: 'Raleway', sans-serif;
-  float: bottom;
   text-align: center;
   margin-bottom: 1px;
-  border-radius: 10px;
   margin-left: 4px;
+  border-radius:14px;
 }
-
-
 
 #dishlocation {
   color: white;
@@ -117,37 +125,71 @@
 
 #dishprice {
   font-family: 'Raleway', sans-serif;
-  font-size: 25px;
-  background-color: white;
+  font-size: 20px;
   display: inline-block;
   color: green;
   position: absolute;
-  right:0px;
-  top:0px;
-  border-radius:13px;
-  padding-right:5px;
+  padding: 5px;
+  padding-right:15px;
+  padding-left: 5px;
+  margin: auto;
+  top: 0; right: 0;
+  height: auto;
+  background-color: white;
+  border-radius: 0 10px 10px 0px;
+}
+
+#order {
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  display: inline-block;
+  color:white;
+  font-size: 14px;
+  position: absolute;
+  padding: 2px;
+  margin: auto;
+  top: 32px; right: 0;
+  height: auto;
+  background-color: grey;
+  border: 1px solid grey;
+  border-radius: 5px;
+  background: linear-gradient(to right, green 50%, grey 50%);
+background-size: 200% 100%;
+background-position:right top;
+margin-left:10px;
+transition:all .3s ease;
+}
+
+#order:hover{
+  background-position:left top;
+}
+
+#itembox{
+padding-right:40px;
+width:auto;
+height:90px;
+display: block;
+overflow-y: hidden;
 }
 
 #itemdetails {
   background-color: #75d0f4;
   color: white;
   font-family: 'Raleway', sans-serif;
-  border-radius:13px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  border: 4px  solid #75d0f4;
   height: auto;
   margin: 0;
+  border-radius:14px;
 }
 
 #map{
   float:right;
-  top:0;
-  position: relative;
+  top:60px;
+  position: absolute;
   right: 0;
   overflow: auto;
-  height:100%;
   width: 59%;
   display: inline-block;
   height:calc(100% - 60px);
@@ -159,7 +201,7 @@
   float:left;
   margin: 0;
   padding: 2px;
-  height:auto;
+  height:90px;
 }
 
 .img-thumbnail {
@@ -170,20 +212,19 @@
     border-radius: 10px;
     display:inline-block;
   object-fit: cover;
-    
+
 }
 
 #itemscontainer {
   position: relative;
   width:40%;
-  top: 0px;
+  height:calc(100% - 60px);
+  top: 60px;
   padding:3px;
   background-color: white;
   overflow-y: scroll;
   overflow: auto;
   margin:0;
-  display: inline-block;
-  height:calc(100% - 60px);
 }
 
 
@@ -194,11 +235,16 @@
 
 #repeateditem {
   height: auto;
-  margin: 10px;
+  margin: 20px 10px 20px 10px;
+  border-radius: 16px;
+  border: 2px solid white;
 
 }
+
+#repeateditem:hover{
+  border: 2px solid #75d0f4;
+}
 #fullpage {
-  position: absolute;
   height: 100%;
   width: 100%;
 }
@@ -247,8 +293,8 @@
     position:relative;
     width: auto;
     margin: 0;
+    border-radius: 10px;
     border:2px solid white;
-    border-radius: 13px;
     z-index: 0;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -259,7 +305,6 @@
     cursor: pointer;
     padding-right: 30px;
     display: flex;
-
 
   }
 
