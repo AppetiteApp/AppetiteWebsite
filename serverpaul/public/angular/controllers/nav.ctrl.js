@@ -43,6 +43,9 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
 
     var timeNow = new Date();
+    var tomorrow = new Date(timeNow.getTime() + 24*60*60*1000);
+    console.log("now: " + timeNow);
+    console.log("tmr: " + tomorrow);
     var minNow = 30 * Math.ceil(timeNow.getMinutes() / 30);
     //create a dish object and put the user's info into it
     $timeout(function() {
@@ -51,7 +54,8 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
             errors  : [],
             time    : {
                 startTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours(), minNow, 0),
-                endTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 6, minNow, 0)
+                endTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 6, minNow, 0),
+                date: "today"
             }
         };
     });
@@ -85,14 +89,41 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
             };
         });
     };
+    
+    $scope.$watch('dish.time.date', function(newValue, oldValue){
+         //if today is chosen, then year/month/date should be today
+        //if tomorrow is chosen, then get the year, month, and date of tomorrow and set them to the time object
+        if ($scope.dish.time.date === "today"){
+            $scope.dish.time.startTime.setFullYear(timeNow.getFullYear());
+            $scope.dish.time.startTime.setMonth(timeNow.getMonth());
+            $scope.dish.time.startTime.setDate(timeNow.getDate());
+            $scope.dish.time.endTime.setFullYear(timeNow.getFullYear());
+            $scope.dish.time.endTime.setMonth(timeNow.getMonth());
+            $scope.dish.time.endTime.setDate(timeNow.getDate());
+            
+            console.log($scope.dish.time.startTime);
+            console.log($scope.dish.time.endTime);
+        } else if($scope.dish.time.date === "tomorrow"){
+            console.log("Tomorrow chosen!");
+            $scope.dish.time.startTime.setFullYear(tomorrow.getFullYear());
+            $scope.dish.time.startTime.setMonth(tomorrow.getMonth());
+            $scope.dish.time.startTime.setDate(tomorrow.getDate());
+            $scope.dish.time.endTime.setFullYear(tomorrow.getFullYear());
+            $scope.dish.time.endTime.setMonth(tomorrow.getMonth());
+            $scope.dish.time.endTime.setDate(tomorrow.getDate());
+            
+            console.log($scope.dish.time.startTime);
+            console.log($scope.dish.time.endTime);
+        } else if ($scope.dish.time.date === "custom"){
+            console.log("custom");
+        }
+    });
 
 
-    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone', 'dish.location', 'dish.price', 'dish.startHour', 'dish.endHour', 'dish.locationCustom','dish.useLocationCustom' ], function(newValues, oldValues){
+    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone', 'dish.location', 'dish.price', 'dish.startHour', 'dish.endHour' ], function(newValues, oldValues){
         if ($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName) &&
             $scope.dish.description && regexService.commentRegex.test($scope.dish.description) &&
-            $scope.dish.phone && regexService.phoneRegex.test($scope.dish.phone) &&
-            $scope.dish.price && regexService.priceRegex.test($scope.dish.price) &&
-            (($scope.dish.location && !$scope.dish.useLocationCustom) || ($scope.dish.locationCustom && $scope.dish.useLocationCustom))) {
+            $scope.dish.price && regexService.priceRegex.test($scope.dish.price) ) {
                 $timeout(function(){
                     $scope.dish.complete = true;
                 });
@@ -113,21 +144,19 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
             return;
         }
         var uid = firebase.auth().currentUser.uid;
+        console.log($scope.parentController.user.location);
         var data = {
             dishName: dish.dishName,
             uid: uid,
             description: dish.description,
             price: dish.price,
-            phone: dish.phone,
+            phone: $scope.parentController.user.phone,
+            location: $scope.parentController.dish.location,
             portions: dish.portions || 1,
             ingredients: dish.ingredients || "",
             time: dish.time
         };
-        if ($scope.dish.useLocationCustom) {
-            data.location = dish.locationCustom;
-        } else {
-            data.location = dish.location;
-        }
+
         $http.post('/newdish', data)
         .then(function(res){
             $log.log(res);
@@ -136,8 +165,6 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                 dish.dishName = "";
                 dish.description = "";
                 dish.price = "";
-                dish.starttime = "";
-                dish.endtime = "";
                 dish.portions = "";
                 dish.location = "";
                 dish.locationCustom = undefined;
