@@ -6,7 +6,7 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
             });
 
             //regarding the submit a dish part
-            firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', function(snapshot){
+            firebase.database().ref('users/' + firebase.auth().currentUser.uid).on('value', function(snapshot){
                 //if user has phone num, then use that as the dish's phone num
                 //else, error and cannot submit dish
                 console.log("users/" + firebase.auth().currentUser.uid);
@@ -62,6 +62,7 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
             }); //end fetch data from firebase
         } else {
             $scope.user = undefined;
+            //change name of dishes by previously-logged in user
         }
     });
 

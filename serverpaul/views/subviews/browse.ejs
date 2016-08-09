@@ -3,7 +3,7 @@
   <div id="innercontainer">
   <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak>
 
-        <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="active = !active" >
+        <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
           <div class="dishthumbnail">
             <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"/>
           </div>
