@@ -2,25 +2,24 @@
     <div id="submitsuccess" ng-cloak>{{message}}</div>
   <div id="innercontainer">
   <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak>
-      <div id="listitem" ng-click="showDetails=!showDetails">
 
-        <div id="dishbanner" ng-class="{'dishselect': !dish.selected, 'dishselect2':dish.selected}" ng-click="dish.selected=!dish.selected" >
+        <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="active = !active" >
           <div class="dishthumbnail">
             <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"/>
           </div>
-          <div id="profileflex">
+            <div id="dishprice">${{dish.price}}</div>
+            <div id="order">ORDER</div>
+          <div id="itembox">
             <div id="dishtitle">{{dish.dishName}}</div>
             <div class="chefname">by {{dish.owner}}</div></br>
-            <div id="dishtime">{{dish.time}}</div>
-            </div>
-            <div id="dishprice">${{dish.price}}</div>
+            <div id="dishtime">{{dish.time}}</div></br></br>
+          </div>
 
         </div>
-    </div>
-    <div ng-show="showDetails && user" id="itemdetails">
-        <p class="dishdescription">{{dish.description}}</p>
-        <div id="dishphone">{{dish.phone}}</div>
-        <div id="dishlocation">{{dish.location}}</div>
+    <div class="slideDown" ng-hide="!active" id="itemdetails">
+    <div class="dishdescription">"{{dish.description}}"</div>
+        <div id="dishphone">{{dish.phone}}</br>
+          {{dish.location}}</div>
     </div>
   </div>
 </div>

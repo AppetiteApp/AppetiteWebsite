@@ -38,6 +38,7 @@
   z-index: 98;
   text-decoration:none !important;
   padding:0;
+  position: fixed;
 }
 
 .nav > a {

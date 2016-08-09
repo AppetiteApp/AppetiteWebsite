@@ -1,6 +1,6 @@
 /* global angular*/
 /* global firebase*/
-var myApp = angular.module('myApp', ['ngDialog', 'ui.router']);
+var myApp = angular.module('myApp', ['ngDialog', 'ui.router', 'ngAnimate']);
 
 myApp.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $urlRouterProvider){
 
@@ -16,6 +16,10 @@ $stateProvider
       controller: 'accountController',
       url: "/account"
   })
+      .state('account.history', {
+          templateUrl: '/account.history',
+          url:'/profile.history'
+      })
   .state('login', {
       templateUrl: '/home',
       controller: 'homeController',

@@ -1,4 +1,8 @@
 var accountController = function($scope, $log, $location, $http, $timeout, sessionService){
+
+    $scope.active = true;
+    $scope.active1 = true;
+
     $scope.signout = sessionService.signout;
 
     $scope.user = firebase.auth().currentUser;

@@ -13,6 +13,11 @@
 
 #nomargin{
     margin:0;
+    height: 100%;
+}
+
+#html{
+  height: 100%;
 }
 
 #themotto{
@@ -23,7 +28,7 @@
   font-style: oblique;
   text-align: center;
   font-family: 'Raleway', sans-serif;
-  background-color: rgba(117,208,244,0.7);
+  /*background-color: rgba(117,208,244,0.7);*/
 }
 
 #browsehome{
@@ -52,7 +57,7 @@
   margin: 0 auto;
   text-align: center;
   font-family: 'Raleway', serif;
-  background-color: rgba(117,208,244,0.7);
+  /*background-color: rgba(117,208,244,0.7);*/
 }
 
 .homebuttons {

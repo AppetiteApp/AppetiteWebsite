@@ -2,9 +2,11 @@
   background-image: url(/imgs/foodwall.jpg);
   background-repeat: no-repeat;
   background-size: cover;
+
   margin: 0;
   padding: 0;
-  height: 150px;
+  height: 120px;
+  top:60px;
   width: calc(100% - 300px);
   float:right;
   background-position:center;
@@ -30,8 +32,6 @@ textarea.blur{
   height: 74px;
   margin-top: 10px;
   border: 1px solid #CCCCCC;
-
-
 }
 
 label {
@@ -56,15 +56,29 @@ label {
     color: grey;
 }
 
+.infolabel {
+  left:0;
+  font-family: Source Sans Pro;
+  font-size: 16px;
+
+}
+
+#profileview {
+
+  height: auto;
+  width: auto;
+  background-color: red;
+}
+
 
 #profilethumbnail {
   width: 200px;
   height: 200px;
-  left: 30px;
+  left: 50px;
   position: fixed;
   display:block;
   margin:auto;
-  top:165px;
+  top:80px;
   border-radius: 5px;
   object-fit:cover;
 }
@@ -98,8 +112,7 @@ label {
   margin-top: 10px;
   outline: none;
   color: black;
-  padding: 5px;
-  font-size: 20px;
+  font-size: 14px;
   font-family: Source Sans Pro;
   text-align: center;
   display: inline-block;
@@ -112,8 +125,7 @@ label {
   margin-top: 10px;
   outline: none;
   color: black;
-  padding: 5px;
-  font-size: 20px;
+  font-size: 14px;
   font-family: Source Sans Pro;
   text-align: center;
   display: inline-block;
@@ -159,7 +171,7 @@ label {
 }
 
 #profilename{
-  width:inherit;
+  width:100%;
   font-family: Source Sans Pro;
   font-size: 40px;
   word-wrap: break-word;
@@ -167,19 +179,15 @@ label {
   display: block;
   margin-right: auto;
   margin-left: auto;
-  text-align: left;
-  top:195px;
-  left:0;
-  right:0;
-  color:white;
-  background-color:rgba(117,208,244,0.7);
+  text-align: center;
+
 }
 
 #profilecontainer{
   position: fixed;
-  top: 250px;
+  top: 280px;
   left: 0;
-  width:50%;
+  width:300px;
   bottom:0;
   background-color: white;
 
@@ -195,17 +203,6 @@ label {
     overflow-y:scroll;
     height: calc(100%+100px);
     bottom: 0;
-}
-
-.profilelabel{
-  font-family: Source Sans Pro;
-  font-size: 20px;
-  margin-left: 30px;
-  height: 42px;
-  padding-top: 5px;
-  margin-top: 10px;
-  height: 39px;
-
 }
 
 #profileinfo{
@@ -224,13 +221,12 @@ label {
 #dishcontainer {
   border-left:1px solid #75d0f4;
   position: fixed;
-  top: 250px;
+  top: 180px;
   right:0;
-  width: 50%;
+  width: calc(100% - 301px);
   height: auto;
   overflow-y: scroll;
   bottom: 0;
-  padding:3px;
   background-color: white;
   flex: 1 1 auto;
   padding-top: 30px;
@@ -297,11 +293,6 @@ input[type="checkbox"]:checked + label {
   margin-right: 0px;
   margin-left: 100px;
   height: 39px;
-}
-
-#phonebox{
-    width: 100%;
-    height:auto;
 }
 
 #locationedit{
@@ -491,4 +482,61 @@ input[type="checkbox"]:checked + label {
 #addressbar{
     width: auto;
     height: auto;
+}
+
+
+
+.expandcollapse-heading-collapsed {
+  cursor: pointer;
+  position: relative;
+  z-index: 100000000;
+}
+
+
+.expandcollapse-heading-expanded {
+  cursor: pointer;
+  z-index: 100000000;
+  position: relative;
+  color: black;
+
+}
+
+/*
+animation:*/
+
+.slideDown.ng-hide {
+  max-height:0;
+  transition:max-height .6s ease;
+  overflow:hidden;
+  position:relative;
+}
+
+.slideDown {
+  max-height:500px;
+  transition:max-height 1s ease;
+  overflow:hidden;
+  position:relative;
+}
+
+
+.slideDown.ng-hide-add {
+  animation-name: hide;
+  -webkit-animation-name: hide;
+
+  animation-duration: .5s;
+  -webkit-animation-duration: .5s;
+
+  animation-timing-function: ease-in;
+  -webkit-animation-timing-function: ease-in;
+}
+
+.slideDown.ng-hide-remove {
+  animation-name: show;
+  -webkit-animation-name: show;
+
+  animation-duration: .5s;
+  -webkit-animation-duration: .5s;
+
+  animation-timing-function: ease-out;
+  -webkit-animation-timing-function: ease-out;
 }
