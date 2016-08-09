@@ -7,7 +7,6 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
 
     $scope.user = firebase.auth().currentUser;
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
-<<<<<<< HEAD
     console.log($scope.parentController.user);
 
     $scope.$watch('parentController.uid', function(newValue, oldValue){
@@ -59,8 +58,6 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
     });
 
 
-
-=======
 
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
