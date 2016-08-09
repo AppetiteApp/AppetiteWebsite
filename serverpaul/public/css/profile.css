@@ -5,22 +5,8 @@
 
   margin: 0;
   padding: 0;
-<<<<<<< HEAD
   height: 120px;
   top:60px;
-=======
-  height: 200px;
-  width: 100%;
-  background-position:center;
-  overflow-x: hidden;
-  position: fixed;
-}
-
-
-#picinput{
-    display:none;
-  height: 150px;
->>>>>>> master
   width: calc(100% - 300px);
   float:right;
   background-position:center;
@@ -29,6 +15,13 @@
   display:block;
 }
 
+#username{
+  text-align: center;
+  font-size:28px;
+  font-family: Source Sans Pro;
+  font-weight: bold;
+
+}
 
 input.blur{
   border-width: 0px;
@@ -205,15 +198,13 @@ label {
   width:300px;
   bottom:0;
   background-color: white;
-
 }
 
 #infocontainer{
     position: absolute;
-    top: 0;
+    top: 280px;
     left:0;
-    width: 100%;
-    margin-top: 75px;
+    width: 300px;
     overflow: auto;
     overflow-y:scroll;
     height: calc(100%+100px);
@@ -330,14 +321,13 @@ input[type="checkbox"]:checked + label {
 .editbutton{
     width:30px;
     height:30px;
-    margin:0;
-    vertical-align: bottom;
     background:url(/imgs/edit.png) left top no-repeat;
     cursor:pointer;
-    vertical-align: middle;
-    position:relative;
+    position:absolute;
     float:right;
     margin:5px;
+    top: 0px;
+    right:0px;
 }
 
 #profileedit{
@@ -378,19 +368,8 @@ input[type="checkbox"]:checked + label {
 }
 
 .nameinputedit {
-  width: calc(50% - 65px);
-  margin-top: 10px;
-  outline: none;
-  color: black;
-  padding: 5px;
-  font-size: 20px;
-  font-family: Source Sans Pro;
-  text-align: center;
-  display: inline-block;
-  float:right;
-  margin-right: 10px;
-  border:none;
-}
+  display: none;
+  }
 
 #profilestatus {
     text-align: center;
