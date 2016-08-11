@@ -8,10 +8,10 @@
   height: 120px;
   top:60px;
   width: calc(100% - 300px);
-  float:right;
   background-position:center;
+  right:0;
   overflow-x: hidden;
-  position: relative;
+  position: absolute;
   display:block;
 }
 
@@ -20,7 +20,14 @@
   font-size:28px;
   font-family: Source Sans Pro;
   font-weight: bold;
+  margin-left: 50px;
+  margin-right: 50px;
+}
 
+#phonebox{
+  display: table;
+  height:50px;
+  width:100%;
 }
 
 input.blur{
@@ -72,10 +79,11 @@ label {
 }
 
 #profileview {
-
-  height: auto;
-  width: auto;
-  background-color: red;
+  position: relative;
+  display: block;
+  height: 100%;
+  width: 100%;
+  background-color: beige;
 }
 
 
@@ -116,47 +124,82 @@ label {
 }
 
 .profileinput {
-  width: calc(100% - 120px);
-  margin-top: 10px;
+  width: 140px;
+  height: auto;
   outline: none;
   color: black;
   font-size: 14px;
   font-family: Source Sans Pro;
   text-align: center;
-  display: inline-block;
   float:right;
-  margin-right: 10px;
+  border:none;
+  display: table-cell;
+  vertical-align: middle;
+  margin-right: 60px;
+  border: 1px solid grey;
+  margin-top: 14px;
+  margin-bottom: 14px;
+
 }
 
 .profileinputedit {
-  width: calc(100% - 120px);
-  margin-top: 10px;
+  width: 140px;
+  height: 50px;
   outline: none;
   color: black;
   font-size: 14px;
   font-family: Source Sans Pro;
   text-align: center;
-  display: inline-block;
   float:right;
-  margin-right: 10px;
   border:none;
+  display: table-cell;
+  vertical-align: middle;
+  margin-right: 60px;
+}
+
+.profileinputeditaddress {
+  width: 140px;
+  height: auto;
+  outline: none;
+  color: black;
+  font-size: 14px;
+  font-family: Source Sans Pro;
+  text-align: center;
+  float:right;
+  border:none;
+  display: table-cell;
+  vertical-align: middle;
+  margin-right: 60px;
+}
+
+.displaynone{
+  display:none;
+}
+
+#addresssearchbox {
+  position: relative;
+  display: table;
+  left: 0px;
+  right: 0px;
+  height: calc(100% - 122px);
+  float: bottom;
+  width: 100%;
 }
 
 
-
 .addressedit{
-  width: calc(100% - 120px);
+  width: 100%;
   background-color: #75d0f4;
   outline: none;
   border: none;
-  color: black;
-  font-size: 20px;
+  color: white;
+  font-size: 14px;
   font-family: Source Sans Pro;
   text-align: center;
   display: inline-block;
   float:right;
-  margin-right: 10px;
   height: auto;
+  border: 1px solid #75d0f4;
   margin-top: 10px;
   cursor: pointer;
 
@@ -207,7 +250,6 @@ label {
     width: 300px;
     overflow: auto;
     overflow-y:scroll;
-    height: calc(100%+100px);
     bottom: 0;
 }
 
@@ -225,7 +267,6 @@ label {
 
 
 #dishcontainer {
-  border-left:1px solid #75d0f4;
   position: fixed;
   top: 180px;
   right:0;
@@ -235,7 +276,6 @@ label {
   bottom: 0;
   background-color: white;
   flex: 1 1 auto;
-  padding-top: 30px;
 }
 
 #profileinstruction{
@@ -266,6 +306,18 @@ label {
     width: calc(100% - 20px);
 }
 
+.addressresult{
+  overflow-y: scroll;
+  position: absolute;
+  height:auto;
+  width: calc(100% - 20px);
+  top: 50px;
+  bottom:55px;
+  padding:10px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
 .hiddencheckbox{
     display:none;
 }
@@ -286,66 +338,94 @@ input[type="checkbox"]:checked + label {
 }
 
 .addressinput{
-  border: 1px solid #CCCCCC;
-  width: calc(100% - 160px);
+  position:absolute;
+  width: 140px;
+  height: auto;
   outline: none;
   color: black;
-  font-size: 20px;
+  font-size: 14px;
   font-family: Source Sans Pro;
   text-align: center;
-  display: inline-block;
-  float:left;
-  margin:5px;
-  margin-right: 0px;
-  margin-left: 100px;
-  height: 39px;
+  float:right;
+  border:none;
+  display: table-cell;
+  vertical-align: middle;
+  right: 60px;
+  border: 1px solid grey;
+  margin-top: 14px;
+  margin-bottom: 14px;
+
 }
 
 #locationedit{
-  background-color: #75d0f4;
-  color: white;
-  display:inline-block;
-  border:none;
-  width: 39px;
-  height:39px;
+  position: absolute;
+  width:16px;
+  height:16px;
+  background:url(/imgs/search.png) left top no-repeat;
+  position:absolute;
+  float:right;
   cursor:pointer;
-  margin: none;
-  font-family: Source Sans Pro;
-  font-size:15px;
-  float: right;
-  margin-right: 8px;
-  margin-bottom: 5px;
-  margin-top: 5px;
+  margin:17px;
+  right:0;
+  border:none;
 }
 
-.editbutton{
-    width:30px;
-    height:30px;
+#editbutton{
+    width:16px;
+    height:16px;
     background:url(/imgs/edit.png) left top no-repeat;
     cursor:pointer;
     position:absolute;
     float:right;
-    margin:5px;
+    margin:10px;
+    margin-left: 17px;
+    margin-right: 17px;
     top: 0px;
     right:0px;
 }
+
+#phoneicon{
+    width:16px;
+    height:16px;
+    background:url(/imgs/telephone.png) left top no-repeat;
+    position:absolute;
+    float:left;
+    margin:10px;
+    margin-left: 60px;
+    margin-top:17px;
+    margin-bottom:17px;
+}
+
+#addressicon{
+  width:16px;
+  height:16px;
+  background:url(/imgs/home.png) left top no-repeat;
+  position:absolute;
+  float:left;
+  margin:10px;
+  margin-left: 60px;
+  margin-top:17px;
+  margin-bottom:17px;
+}
+
+
 
 #profileedit{
   word-wrap: break-word;
   text-align: center;
   background-color: #75d0f4;
   color: white;
-  display:block;
+  display:table-cell;
+  position:absolute;
+  bottom:0;
   border:none;
   cursor:pointer;
   font-family: Source Sans Pro;
   font-size:15px;
-  width: calc(100% - 38px);
-  margin-bottom: 5px;
-  margin-top:5px;
-  margin-right: 8px;
-  margin-left:30px;
+  width: calc(100% - 20px);
+  margin: 10px;
   height:35px;
+  padding: 0;
 }
 
 .nameedit{
@@ -377,6 +457,9 @@ input[type="checkbox"]:checked + label {
     width: auto;
     background-color:#f4f48d;
     color:#f39c12;
+    position: fixed;
+    top:60px;
+    width:300px;
 }
 
 .accountdishlabel{
@@ -423,7 +506,7 @@ input[type="checkbox"]:checked + label {
 }
 
 #feedback{
-    width:calc(100% - 25px) !important;
+    width:calc(100% - 26px) !important;
     height:75px;
     font-family: Source Sans Pro;
     margin:10px;
@@ -473,12 +556,54 @@ input[type="checkbox"]:checked + label {
     margin-right: 5px;
 }
 
-#addressbar{
-    width: auto;
-    height: auto;
+#profilenav{
+  list-style: none;
+  text-decoration: none;
+  font-family: Source Sans Pro;
+  width:100%;
+  position:relative;
+  padding: 0;
+  margin: 0;
+  top: 92px;
+  height:28px;
 }
 
+#profilenav li{
+  display:inline;
+}
 
+.profiletab{
+  position:relative;
+  width:25%;
+  float: left;
+  text-align: center;
+  cursor:pointer;
+  font-weight: bold;
+  color:white;
+  bottom: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.tabclicked{
+  position:relative;
+  width:25%;
+  float: left;
+  text-align: center;
+  cursor:pointer;
+  background-color: white;
+  font-weight: bold;
+  font-size: 14px;
+  bottom:0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+}
+
+.tabview{
+  width:100%;
+  height: 100%;
+}
 
 .expandcollapse-heading-collapsed {
   cursor: pointer;
