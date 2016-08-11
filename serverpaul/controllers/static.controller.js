@@ -29,7 +29,7 @@ module.exports = function(app) {
         res.render(__dirname + '/../views/subviews/profile');
     });
 
-    app.get('/account.history', function(req, res){
+    app.get('/history', function(req, res){
       res.render(__dirname + '/../views/subviews/profile.history');
     });
 

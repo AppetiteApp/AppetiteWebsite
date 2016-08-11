@@ -17,8 +17,9 @@ $stateProvider
       url: "/account"
   })
       .state('account.history', {
-          templateUrl: '/account.history',
-          url:'/profile.history'
+          templateUrl: '/history',
+          controller: 'accountController',
+          url:'/account.history'
       })
   .state('login', {
       templateUrl: '/home',
