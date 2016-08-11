@@ -1,6 +1,8 @@
 function makeCode() {
     var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    //var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    //we may have people manually entering the code, so make it less difficult for them
+    var possible = "0123456789";
 
     for( var i=0; i < 5; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -238,12 +240,128 @@ module.exports = function(app){
         });
 
 
-    });
-
-
-
-
-
+    }); //end function POST /api/accept
+    
+    //call this function to cancel a meal request,
+    //calling this function doesn't remove the transaction history
+    //creates an object to store information on the request: meal (time of request, chef, owner, etc) and
+        // cancellation (who cancelled it and for what reason?)
+    // keep the meal in 'active meals' until review? Should we allow 
+    // reason for cancelling
+    // only buyers can cancel
+    app.post('/api/cancelRequest', function(req, res){
+        if (!req.body.uid || !req.body.personType || !req.body.dishid){
+            res.send({
+                errors: [{
+                    errorType: "info",
+                    errorMessage: "missing info"
+                }]
+            });
+        }
+        
+        global.userRef.child(req.body.uid).once("value").then(function(snapshot){
+            var errors = [];
+            if (!snapshot.val()) {
+                errors = [{
+                    errorType: "uid",
+                    errorMessage: "uid invalid"
+                }];
+            } else if (!snapshot.val().activeMeals) {
+                errors = [{
+                    errorType: "dish",
+                    errorMessage: "no active meals pending confirmation"
+                }];
+            } else if (!snapshot.val().activeMeals[req.body.dishid]){
+                errors = [{
+                    errorType: "dish",
+                    errorMessage: "invalid dishid"
+                }];
+            } else if (snapshot.val().activeMeals[req.body.dishid].pending === false){
+                errors = [{
+                    errorType: "dish",
+                    errorMessage: "cannot cancel a meal after the chef responds"
+                }];
+            }
+            if (errors.length){
+                res.send({
+                    errors: errors
+                });
+                return;
+            }
+            
+            //get info about dish
+            global.dishRef.child(req.body.dishid).once("value", function(snapshot){
+                if (!snapshot.val()) {
+                    errors = [{
+                        errorType: "dish",
+                        errorMessage: "invalid dishid"
+                    }];
+                } else if (!snapshot.val().purchases){
+                    errors = [{
+                        errorType: "dish",
+                        errorMessage: "request to purchase meal doesn't exist"
+                    }];
+                } else if(!snapshot.val().purchases[req.body.uid]){
+                    errors = [{
+                        errorType: "dish",
+                        errorMessage: "request to purchase meal doesn't exist"
+                    }];
+                } else if (snapshot.val().purchases[req.body.uid] === false){
+                    errors = [{
+                        errorType: "cancellation",
+                        errorMessage: "unable to find purchase record"
+                    }];
+                }
+                if (errors.length){
+                    res.send({
+                        errors: errors
+                    });
+                    return;
+                }
+                
+                var newCancelRef = global.cancelRef.push();
+                newCancelRef.set({
+                    date: new Date(),
+                    buyerid: req.body.uid,
+                    chefid: snapshot.val().ownerid,
+                    dish: {
+                        dishName: snapshot.val().dishName,
+                        description: snapshot.val().description,
+                        id: snapshot.key
+                    },
+                    personType: req.body.personType
+                });
+                
+                
+                global.dishRef.child(req.body.dishid).child('purchases').child(req.body.uid).remove();
+                global.userRef.child(req.body.uid).child('activeMeals').child(req.body.dishid).remove();
+                
+                res.send({
+                    message: "success"
+                });
+                
+                
+            }, function(err){
+                res.send({
+                    errors: [{
+                        errorType: "firebase error",
+                        errorMessage: err
+                    }]
+                });
+                return;
+            });
+            
+            
+        }, function(err){
+            res.send({
+                errors: [{
+                    errorType: "firebase",
+                    errorMessage: err
+                }]
+            });
+            return;
+        });
+    }); //end function POST /api/cancelMeal
 
 };
 

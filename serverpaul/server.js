@@ -7,6 +7,7 @@ var cors        = require('cors');
 var staticController= require('./controllers/static.controller');
 var userController  = require('./controllers/user.controller');
 var dishController = require('./controllers/dish.controller');
+var requestController = require('./controllers/requests.controller');
 var adminController = require('./controllers/admin.controller');
 
 firebase.initializeApp({
@@ -17,7 +18,8 @@ firebase.initializeApp({
 var db = firebase.database();
 global.userRef = db.ref("users");
 global.dishRef = db.ref("dish");
-global.commentRef = db.ref("comment");
+global.commentRef = db.ref("comments");
+global.cancelRef = db.ref("cancellations");
 app.set("view engine", "ejs");
 
 var serverLogging = function(req, res, next){
@@ -38,6 +40,7 @@ staticController(app);
 userController(app);
 dishController(app);
 adminController(app);
+requestController(app);
 
 process.env.PORT = process.env.PORT || 8080;
 
