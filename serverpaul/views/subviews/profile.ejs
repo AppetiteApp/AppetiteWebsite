@@ -1,4 +1,13 @@
-<div id="profilebanner"></div>
+<div id="profilebanner">
+
+  <ul id="profilenav" ng-init="tab=1">
+    <li ng-class="{'profiletab': !(tab === 1),'tabclicked': tab === 1 }" ng-click="tab = 1">Active</li>
+    <li ng-class="{'profiletab': !(tab === 2),'tabclicked': tab === 2 }" ng-click="tab = 2">Reviews</li>
+    <li ng-class="{'profiletab': !(tab === 3),'tabclicked': tab === 3 }" ng-click="tab = 3">History</li>
+    <li ng-class="{'profiletab': !(tab === 4),'tabclicked': tab === 4 }" ng-click="tab = 4">Transactions</li>
+  </ul>
+
+</div>
 
 
 <img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" ng-click="showEditProfilePic=!showEditProfilePic" ng-cloak/>
@@ -14,7 +23,7 @@
 <div id="infocontainer">
 
   <div id="username">{{user.firstName}} {{user.lastName}}</div>
-  <label class="editbutton" for="c1" ng-click="user.changed=true" ng-init="user.changed=false"></label>
+  <label id="editbutton" for="c1" ng-click="user.changed=true" ng-init="user.changed=false"></label>
 
 
   <div ng-controller="profileImgController" ng-show="showEditProfilePic">
@@ -24,31 +33,34 @@
 
 
   <div id="profilestatus"font-family="Source Sans Pro">{{updateProfile.statusMessage}}</div>
-            <!--CHERYL'S TEST ENDS HERE-->
+
+</br>        <!--CHERYL'S TEST ENDS HERE-->
     <div id="phonebox">
-        <input ng-class="{'nameinputedit': !user.changed, 'nameinput':user.changed}" type='text' ng-model="user.lastName" name="lastName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
-        <input ng-class="{'nameinputedit': !user.changed, 'nameinput':user.changed}" type='text' ng-model="user.firstName" name="firstName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
-    </div>
+        <!-- <input ng-class="{'nameinputedit': !user.changed, 'nameinput':user.changed}" type='text' ng-model="user.lastName" name="lastName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+        <input ng-class="{'nameinputedit': !user.changed, 'nameinput':user.changed}" type='text' ng-model="user.firstName" name="firstName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/> -->
 
-    <label class="infolabel" for="phone">Phone:</label>
+    <div id="phoneicon" for="phone"></div>
     <input ng-class="{'profileinputedit': !user.changed, 'profileinput':user.changed}" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
-    </br><label class="infolabel">Address:</label>
+  </div>
+  </br>
 
-    <div class="profileinput">
+    <div id="addressicon" ng-show="!user.changed"></div>
+
+    <div ng-class="{'profileinputeditaddress': !user.changed, 'displaynone':user.changed}">
       {{user.location}}
       <input type="checkbox" class="hiddencheckbox" id="c1" ng-model="updateProfile.changeAddress"/>
     </div>
+    <div id="addresssearchbox" ng-show="user.changed">
+      <div id="addressicon"></div>
 
-    <div height="auto" ng-show="user.changed">
-
-      <div id="addressbar">
-        <input ng-model="queryAddress" class="addressinput" placeholder="Find address"/> <button id="locationedit" ng-click="submitAddress(queryAddress, user)"><img id="search" src="/imgs/search.png"></button>
+      <input ng-model="queryAddress" class="addressinput" placeholder="Find address"/> <button id="locationedit" ng-click="submitAddress(queryAddress, user)"></button>
+      <div class="addressresult">
+        <div ng-repeat="result in user.results" class="addressedit" ng-click="assignLocation(result, user)">
+            {{result.formatted_address}}
+        </div>
       </div>
-      <div ng-repeat="result in user.results" class="addressedit" ng-click="assignLocation(result, user)">
-          {{result.formatted_address}}
-      </div>
+    </br>
       <input id='profileedit' type="submit" value="Save Edits" ng-click="editProfile(user)" ng-show="user.changed"/>
-
     </div>
 
     <div ng-show="!user.changed" id="feedbackform">
@@ -60,7 +72,6 @@
 
 
 <div id="dishcontainer">
-<div id="profileinnercontainer">
 
 <div id="repeateditem" ng-repeat="dish in user.dishes">
 
@@ -103,18 +114,26 @@
   </div>
 </div>
 
-      </form>
-    </div>
+</form>
 
-<div id="profileinstruction" text-align="center">
-  A list of the dishes you posted!
 
-  <a ui-sref=".history">history</a>
-  <div id="profileview" ui-view></div>
+        <div class="tabview" ng-show="tab == 1">
+            
+         </div>
+
+        <div class="tabview" ng-show="tab == 2">
+            second
+        </div>
+
+        <div class="tabview" ng-show="tab == 3">
+            third
+        </div>
+
+        <div class="tabview" ng-show="tab == 4">
+            fourth
+        </div>
 
 </div>
-</div>
-
 <script src="/js/classie.js"></script>
 <script src="/js/uiMorphingButton_fixed.js"></script>
 <script>
