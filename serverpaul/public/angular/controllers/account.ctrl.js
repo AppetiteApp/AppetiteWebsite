@@ -90,9 +90,9 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
                         };
 
                         $timeout(function(){
-                            $scope.user.dishes[mealId] = snapshot.val();
-                            $scope.user.dishes[mealId].key = mealId;
-                            $scope.user.dishes[mealId].time = time;
+                            $scope.dishes[mealId] = snapshot.val();
+                            $scope.dishes[mealId].key = mealId;
+                            $scope.dishes[mealId].time = time;
                         });
 
                         console.info(snapshot.val().time);

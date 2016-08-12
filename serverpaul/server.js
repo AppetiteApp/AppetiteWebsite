@@ -20,6 +20,8 @@ global.userRef = db.ref("users");
 global.dishRef = db.ref("dish");
 global.commentRef = db.ref("comments");
 global.cancelRef = db.ref("cancellations");
+global.buyerReviewRef = db.ref("buyerReviews");
+global.chefReviewRef = db.ref("chefReviews");
 app.set("view engine", "ejs");
 
 var serverLogging = function(req, res, next){
