@@ -24,6 +24,13 @@
   margin-right: 50px;
 }
 
+#profilerating{
+  text-align: center;
+  font-family: Source Sans Pro;
+  margin-left: 110px;
+  margin-right: 110px;
+}
+
 #phonebox{
   display: table;
   height:50px;
@@ -244,13 +251,14 @@ label {
 }
 
 #infocontainer{
-    position: absolute;
+    position: fixed;
+
     top: 280px;
     left:0;
     width: 300px;
     overflow: auto;
     overflow-y:scroll;
-    bottom: 0;
+    bottom: 0px;
 }
 
 #profileinfo{
@@ -268,9 +276,9 @@ label {
 
 #dishcontainer {
   position: fixed;
-  top: 180px;
+  top: 60px;
   right:0;
-  width: calc(100% - 301px);
+  width: calc(100% - 400px);
   height: auto;
   overflow-y: scroll;
   bottom: 0;
@@ -309,10 +317,9 @@ label {
 .addressresult{
   overflow-y: scroll;
   position: absolute;
-  height:auto;
   width: calc(100% - 20px);
   top: 50px;
-  bottom:55px;
+  bottom:60px;
   padding:10px;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
@@ -422,8 +429,8 @@ input[type="checkbox"]:checked + label {
   cursor:pointer;
   font-family: Source Sans Pro;
   font-size:15px;
-  width: calc(100% - 20px);
-  margin: 10px;
+  width: calc(100% - 10px);
+  margin: 5px;
   height:35px;
   padding: 0;
 }
@@ -560,16 +567,21 @@ input[type="checkbox"]:checked + label {
   list-style: none;
   text-decoration: none;
   font-family: Source Sans Pro;
-  width:100%;
-  position:relative;
+  position:fixed;
   padding: 0;
   margin: 0;
-  top: 92px;
-  height:28px;
+  top: 60px;
+  left:300px;
+  width:100px;
+  background-color: #75d0f4;
+  height:calc(100% - 60px);
 }
 
 #profilenav li{
-  display:inline;
+  width:100%;
+  height:25%;
+  display:block;
+  color:white;
 }
 
 .profiletab{
@@ -579,7 +591,6 @@ input[type="checkbox"]:checked + label {
   text-align: center;
   cursor:pointer;
   font-weight: bold;
-  color:white;
   bottom: 0;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -591,7 +602,6 @@ input[type="checkbox"]:checked + label {
   float: left;
   text-align: center;
   cursor:pointer;
-  background-color: white;
   font-weight: bold;
   font-size: 14px;
   bottom:0;
@@ -658,4 +668,55 @@ animation:*/
 
   animation-timing-function: ease-out;
   -webkit-animation-timing-function: ease-out;
+}
+
+
+.rating {
+    float:left;
+    border:none;
+    padding:0;
+}
+
+/* :not(:checked) is a filter, so that browsers that don’t support :checked don’t
+   follow these rules. Every browser that supports :checked also supports :not(), so
+   it doesn’t make the test unnecessarily selective */
+.rating:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+    clip:rect(0,0,0,0);
+}
+
+.rating:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    line-height:1.2;
+    color:#ddd;
+}
+
+.rating:not(:checked) > label:before {
+    content: '★';
+}
+
+.rating > input:checked ~ label {
+    color: #f70;
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: gold;
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+    color: #ea0;
+}
+
+.rating > label:active {
+    position:relative;
 }

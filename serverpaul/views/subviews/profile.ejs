@@ -1,4 +1,3 @@
-<div id="profilebanner">
 
   <ul id="profilenav" ng-init="tab=1">
     <li ng-class="{'profiletab': !(tab === 1),'tabclicked': tab === 1 }" ng-click="tab = 1">Active</li>
@@ -7,10 +6,9 @@
     <li ng-class="{'profiletab': !(tab === 4),'tabclicked': tab === 4 }" ng-click="tab = 4">Transactions</li>
   </ul>
 
-</div>
 
 
-<img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" ng-click="showEditProfilePic=!showEditProfilePic" ng-cloak/>
+<img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" ng-click="showEditProfilePic=!showEditProfilePic"/>
 
         <a href="#/home" id="logout" ng-click="signout()">Sign Out</a>
     </div>
@@ -24,6 +22,14 @@
 
   <div id="username">{{user.firstName}} {{user.lastName}}</div>
   <label id="editbutton" for="c1" ng-click="user.changed=true" ng-init="user.changed=false"></label>
+  <fieldset id="profilerating" class="rating">
+      <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
+      <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
+      <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
+      <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
+      <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
+  </fieldset>
+
 
 
   <div ng-controller="profileImgController" ng-show="showEditProfilePic">
@@ -33,8 +39,10 @@
 
 
   <div id="profilestatus"font-family="Source Sans Pro">{{updateProfile.statusMessage}}</div>
+  <br ng-show="user.changed"></br>
+  <br ng-show="user.changed"></br>
+  <br ng-show="user.changed"></br>
 
-</br>        <!--CHERYL'S TEST ENDS HERE-->
     <div id="phonebox">
         <!-- <input ng-class="{'nameinputedit': !user.changed, 'nameinput':user.changed}" type='text' ng-model="user.lastName" name="lastName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
         <input ng-class="{'nameinputedit': !user.changed, 'nameinput':user.changed}" type='text' ng-model="user.firstName" name="firstName" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/> -->
@@ -42,7 +50,6 @@
     <div id="phoneicon" for="phone"></div>
     <input ng-class="{'profileinputedit': !user.changed, 'profileinput':user.changed}" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
   </div>
-  </br>
 
     <div id="addressicon" ng-show="!user.changed"></div>
 
@@ -73,56 +80,58 @@
 
 <div id="dishcontainer">
 
+
+<div class="tabview" ng-show="tab == 1">
+first
 <div id="repeateditem" ng-repeat="dish in user.dishes">
-
           <div id="dishbanner">
-            <div class="dishthumbnail">
-
-            </div>
+            <div class="dishthumbnail"></div>
             <div id="profiledishname">{{dish.dishName}}</div>
             <button ng-click="dish.edit=!dish.edit">Edit</button>
 
-  </div>
+          </div>
+            <div class="slideDown" ng-hide="active">
 
-  <div class="slideDown" ng-hide="active">
-
-      <div id="itemdetails">
-          <label class="accountdishlabel">Dish name:</label>
-          <input type="text" ng-model="dish.dishName"/></br>
-          <label class="accountdishlabel">Active:</label> <input type="checkbox" ng-model="dish.active"/></br>
-          <label class="accountdishlabel">Price:</label>
-          <input type="text" ng-model="dish.price"/><br>
-          <label class="accountdishlabel">Pickup time:</label>
-          <input id="accountpickup" type="date" ng-model="dish.time.startTime"/>
-          <input type="time" step="600" ng-model="dish.time.startTime"/><br>
-          <label class="accountdishlabel">To:</label>
-          <input id="accountto" type="date" ng-model="dish.time.endTime" />
-          <input type="time" step="600" ng-model="dish.time.endTime" /><br>
-          <label class="accountdishlabel">Description:</label>
-        <input type="text" ng-model="dish.description"/><br>
-        <label class="accountdishlabel">Phone:</label>
-        <input type="text" ng-model="dish.phone"/><br>
-        <label class="accountdishlabel">Address:</label>
-        <input type="text" ng-model="dish.location"/><br>
-        <label class="accountdishlabel">New Address:</label>
-        <input type="text" ng-model="dish.queryAddress" /><button id="accountsubmit" ng-click="submitAddress(dish.queryAddress, dish)">Find Address</button>
-        <div class="addresshistory" ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
-            {{result.formatted_address}}
+                <div id="itemdetails">
+                    <label class="accountdishlabel">Dish name:</label>
+                    <input type="text" ng-model="dish.dishName"/></br>
+                    <label class="accountdishlabel">Active:</label> <input type="checkbox" ng-model="dish.active"/></br>
+                    <label class="accountdishlabel">Price:</label>
+                    <input type="text" ng-model="dish.price"/><br>
+                    <label class="accountdishlabel">Pickup time:</label>
+                    <input id="accountpickup" type="date" ng-model="dish.time.startTime"/>
+                    <input type="time" step="600" ng-model="dish.time.startTime"/><br>
+                    <label class="accountdishlabel">To:</label>
+                    <input id="accountto" type="date" ng-model="dish.time.endTime" />
+                    <input type="time" step="600" ng-model="dish.time.endTime" /><br>
+                    <label class="accountdishlabel">Description:</label>
+                  <input type="text" ng-model="dish.description"/><br>
+                  <label class="accountdishlabel">Phone:</label>
+                  <input type="text" ng-model="dish.phone"/><br>
+                  <label class="accountdishlabel">Address:</label>
+                  <input type="text" ng-model="dish.location"/><br>
+                  <label class="accountdishlabel">New Address:</label>
+                  <input type="text" ng-model="dish.queryAddress" /><button id="accountsubmit" ng-click="submitAddress(dish.queryAddress, dish)">Find Address</button>
+                  <div class="addresshistory" ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
+                      {{result.formatted_address}}
+                  </div>
+                  <input id="submiteditprofile" type="submit" value="Save Edits" ng-click="editDish(dish)"/><div id="editsuccess">{{dish.message}}</div>
+                </div>
+            </div>
+          </div>
         </div>
-        <input id="submiteditprofile" type="submit" value="Save Edits" ng-click="editDish(dish)"/><div id="editsuccess">{{dish.message}}</div>
-      </div>
-  </div>
-</div>
 
-</form>
-
-
-        <div class="tabview" ng-show="tab == 1">
-            
-         </div>
 
         <div class="tabview" ng-show="tab == 2">
-            second
+
+          <fieldset class="rating">
+              <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
+              <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
+              <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
+              <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
+              <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
+          </fieldset>
+
         </div>
 
         <div class="tabview" ng-show="tab == 3">
