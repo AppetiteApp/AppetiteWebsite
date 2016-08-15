@@ -125,10 +125,11 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
     });
 
 
-    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone',  'dish.price', 'dish.startHour', 'dish.endHour' ], function(newValues, oldValues){
+    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone',  'dish.price', 'dish.time.startTime', 'dish.time.endTime'], function(newValues, oldValues){
         if ($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName) &&
             $scope.dish.description && regexService.commentRegex.test($scope.dish.description) &&
-            $scope.dish.price && regexService.priceRegex.test($scope.dish.price) ) {
+            $scope.dish.price && regexService.priceRegex.test($scope.dish.price) &&
+            $scope.dish.time.endTime.getTime() - $scope.dish.time.startTime.getTime() >= 0) {
                 $timeout(function(){
                     $scope.dish.complete = true;
                 });
