@@ -9,6 +9,7 @@ var userController  = require('./controllers/user.controller');
 var dishController = require('./controllers/dish.controller');
 var requestController = require('./controllers/requests.controller');
 var adminController = require('./controllers/admin.controller');
+var reviewController = require('./controllers/reviews.controller');
 
 firebase.initializeApp({
   serviceAccount: "./configs/firebase.json",
@@ -43,6 +44,7 @@ userController(app);
 dishController(app);
 adminController(app);
 requestController(app);
+reviewController(app);
 
 process.env.PORT = process.env.PORT || 8080;
 

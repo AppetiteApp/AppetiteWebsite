@@ -158,6 +158,7 @@ module.exports = function(app) {
 		}
 
 		dishObject.active = true;
+		dishObject.dateMade = new Date();
 
 		//go and make a new dish under "dish" in db
 		var newDishRef = global.dishRef.push();

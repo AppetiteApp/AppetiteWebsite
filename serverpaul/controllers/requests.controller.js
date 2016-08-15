@@ -152,8 +152,8 @@ module.exports = function(app){
     	//if accepted, change confirmed=true, generate confirmationCode
     	//display the phone and the address of chef to user
     	//display phone of buyer to chef, give confirmationCode to buyer & chef
-    app.post('/api/accept', function(req, res){
-        if (req.body.uid || req.body.requestPersonId || req.body.accept || req.body.dishid){
+    app.post('/api/requestResponse', function(req, res){
+        if (!req.body.uid || !req.body.requestPersonId || !(req.body.accept === true || req.body.accept === false) || !req.body.dishid){
             res.send({
                 errors: [{
                     errorType: "info",
@@ -329,7 +329,8 @@ module.exports = function(app){
                         description: snapshot.val().description,
                         id: snapshot.key
                     },
-                    personType: req.body.personType
+                    personType: req.body.personType,
+                    requestDate: snapshot.val().purchases[req.body.buyerid].requestTime
                 });
                 
                 

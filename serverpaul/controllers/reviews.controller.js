@@ -20,7 +20,7 @@ module.exports = function(app){
             //check if the taste, value & timing are ints 
             res.send({
                 errors: [{
-                    erroType: 'info',
+                    errorType: 'info',
                     errorMessage: 'missing info'
                 }]
             });
@@ -119,9 +119,10 @@ module.exports = function(app){
                     date: new Date(),
                     dish: {
                         buyer: req.body.buyerid,
-                        chef : req.body.uid
+                        chef : req.body.uid,
                     }
-                }
+                   
+                };
                 if (req.body.review){
                     ratingObj.review = req.body.review;
                 }
