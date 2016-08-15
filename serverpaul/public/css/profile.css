@@ -720,3 +720,173 @@ animation:*/
 .rating > label:active {
     position:relative;
 }
+
+#dishbanneractive {
+  overflow: hidden;
+  position:relative;
+  width: auto;
+  border: 2px solid white;
+  margin: 0;
+  height: auto;
+  z-index: 0;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  min-height: 60px;
+  background-color: white;
+  text-align: left;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+
+#repeateditemactive {
+  height: auto;
+  margin: 20px 10px 20px 10px;
+  border: 2px solid white;
+
+}
+
+
+
+#dishpriceedit{
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  display: inline-block;
+  color: green;
+  position: absolute;
+  padding:0;
+  padding-right:15px;
+  padding-left: 5px;
+  margin: auto;
+  top: 0; right: 0;
+  background-color: white;
+  border-radius: 0 10px 10px 0px;
+  border:1px solid black;
+  width:50px;
+  outline: none;
+  height:30px;
+
+}
+
+#itemboxactive{
+width:auto;
+height:100px;
+display: block;
+overflow-y: hidden;
+padding-right:40px;
+
+}
+
+#dishtitleactive {
+  color: black;
+  font-family: 'Raleway', sans-serif;
+  font-size: 25px;
+  height: auto;
+  width: auto;
+  margin-right: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border:1px solid white;
+  padding-left:5px;
+}
+
+#dishtitleactiveedit {
+  color: black;
+  font-family: 'Raleway', sans-serif;
+  height: 30px;
+  width: auto;
+  margin-right: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 5px;
+  padding:0;
+  border:1px solid grey;
+  font-size: 25px;
+  outline:none;
+  width:calc(100% - 40px);
+}
+
+#dishdescriptionactiveedit {
+  color: black;
+  font-family: 'Raleway', sans-serif;
+  height: 30px;
+  width: auto;
+  margin-right: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 5px;
+  padding:0;
+  border:1px solid grey;
+  outline:none;
+  width:calc(100% - 40px);
+  font-size: 20px;
+
+}
+
+
+.chefnameactive{
+   font-family: 'Raleway', sans-serif;
+   height: auto;
+   word-wrap: break-word;
+   display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left:5px;
+    margin-top: 5px;
+    margin-bottom:5px;
+}
+
+
+#logisticssubmitactive{
+    font-family:Source Sans Pro;
+    float:left;
+    display:inline-block;
+    width:50%;
+}
+
+#dishphoneactive {
+  color: white;
+  font-family: 'Raleway', sans-serif;
+  text-align: center;
+  margin-bottom: 1px;
+  margin-left: 4px;
+  border-radius:14px;
+}
+
+#dishaddressactive {
+  color: white;
+  font-family: 'Raleway', sans-serif;
+  text-align: center;
+  margin-bottom: 1px;
+  margin-left: 4px;
+  border-radius:14px;
+}
+
+#activehr{
+  height: 1px;
+  border: 0;
+  border-top: 1px solid;
+  border-color: #75d0f4;
+}
+
+.activeaddresssearch{
+  display:inline-block;
+}
+
+#fromlabelactive{
+    width:40px;
+    font-size:15px;
+    color:#d5bba4;
+
+}
+
+#tolabelactive{
+   width:40px;
+   font-size:15px;
+   color:#d5bba4;
+
+}
