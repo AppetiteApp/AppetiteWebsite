@@ -8,8 +8,7 @@
             <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"/>
           </div>
             <div id="dishprice">${{dish.price}}</div>
-            <div id="pending">pending</div>
-            <div id="order">{{dish.order}}</div>
+            <div id="order">{{dish.status}}</div>
           <div id="itembox">
             <div id="dishtitle">{{dish.dishName}}</div>
             <div class="chefname">by {{dish.owner}}</div></br>
@@ -18,9 +17,7 @@
         </div>
 
     <div class="slideDown" ng-hide="!dish.active" id="itemdetails">
-    <div class="dishdescription">"{{dish.description}}"</div>
-        <div id="dishphone">ORDER</br>
-          {{dish.location}}</div>
+        <div class="dishdescription">"{{dish.description}}"</div>
     </div>
   </div>
 </div>

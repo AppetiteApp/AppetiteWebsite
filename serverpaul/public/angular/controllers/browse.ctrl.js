@@ -1,126 +1,72 @@
 var browseController = function($scope, $log, $location, $http, $timeout, regexService, sessionService, timeService){
     $scope.signout = sessionService.signout;
 
-    //if user isn't logged in, then go to home
-    //haha this assignment thing is synchronous
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-            $timeout(function() {
-                $scope.user = user;
-            });
-
-        }else{
-            $timeout(function(){
-                $scope.user = undefined;
-            });
-        }
-    });
-
-    //dishes and markers are arrays
-    //user is an object
     $scope.dishes = [];
     $scope.markers = [];
-
-    //dishes ordering by date Added, PROBABLY SWITCH TO ORDERING BY PICKUP TIME
-    //firebase.database().ref('dish/').orderByChild("dateUpdated").once("value", function(snapshot){
-    firebase.database().ref('dish/').orderByChild('time/startTime').on("value", function(snapshot){
-        //$log.info(allDishes);
+    
+    firebase.database().ref('dish/').orderByChild('time/startTime').on('value', function(snapshot){
+        var timeNow = new Date();
         var dishes = [];
-        var allDishes = [];
-        //console.log(snapshot.val());
-        snapshot.forEach(function(child) {
-            //console.log(child.key);
-            var dish = child.val();
-            dish.key = child.key;
-            //console.log(dish);
-            allDishes.push(dish);
-        });
-
-
-
-        //iterate through all the dishes and put the ones that aren't owned by current owner in the scope
-        allDishes.forEach(function(dish){
-            if (dish["active"]){
-                console.log(dish.dishName);
-                //prettify time
-                //console.log(dish.time);
-                var time= {};
-                var startDate = new Date(dish.time.startTime);
-                var endDate = new Date(dish.time.endTime);
-
-                var date = timeService.formatDate(startDate);
-                console.debug(date);
-
-                time.timeString = date + " " + timeService.formatAPMP(startDate) + " to " + timeService.formatAPMP(endDate);
-
-                //console.log(time.timeString);
-                //console.log(dish.ownerPic);
-                if ($scope.user){
-                    if (dish["ownerid"] === $scope.user.uid){
-                        dish.owner = "me";
-                    }
+        
+        console.log($scope.parentController);
+        
+        //get dishes in ordered array
+        snapshot.forEach(function(child){
+            var endTime = new Date(child.val().time.endTime);
+            
+            if (child.val().active && endTime.getTime() >= timeNow.getTime()){
+                var dish = child.val();
+                dish.key = child.key;
+                var startTime = new Date(dish.time.startTime);
+                
+                //format time
+                if (startTime.getTime() > timeNow.getTime()){
+                    dish.time = timeService.formatDate(startTime) + " " + timeService.formatAPMP(startTime);
+                } else {
+                    dish.time = "Pick up until " + timeService.formatAPMP(endTime);
                 }
+                
+                
+               
+                //if dish is my dish, set owner = 'me'
+                //else, give dish default of 'order' unless is in active meals
+                if ($scope.parentController.uid){
+                    console.log("has user");
+                    //set dish.status according to whether or not it's in activeMeals
+                    var activeMeals = $scope.parentController.activeMeals;
+                    if (dish.ownerid === $scope.parentController.uid){
+                        dish.owner = "me";
+                        dish.status = "manage";
+                    } else if (!$scope.parentController.activeMeals){
+                        dish.status = 'order';
+                    }else if ($scope.parentController.activeMeals) {
+                        if (!activeMeals[dish.key]){
+                            dish.status = "order";
+                        } else if (activeMeals[dish.key].pending === true){
+                            dish.status = "pending";
+                        } else if (activeMeals[dish.key].pending === false){
+                            if (activeMeals[dish.key].accept === true){
+                                dish.status = "confirmed";
+                            } else if (activeMeals[dish.key].accept === false){
+                                dish.status = "declined";
+                            }
+                        }
+                    }
+                } //end if $scope.parentController.uid
+                dishes.push(dish);
+                console.log(dishes);
+            }
+        }); //end forEach iteration of snapshot
 
-                dish.location = dish.location.split(',')[0];
-                //console.log(dish.key);
-
-                dishes.push({
-                    key         : dish["key"],
-                    dishName    : dish["dishName"],
-                    description : dish["description"],
-                    price       : dish["price"],
-                    quantity    : dish["quantity"],
-                    location    : dish["location"],
-                    owner       : dish["owner"],
-                    phone       : dish["phone"],
-                    ownerPic    : dish["ownerPic"],
-                    time        : time.timeString,
-                    showDetails : false
-                });
-                //console.log(dishes);
-            } //end if
-        }); // end forEach loop
-
-        //put dishes to the scope
-        $timeout(function(){
+        $timeout(function() {
             $scope.dishes = dishes;
         });
     });
 
-
-
-
-    $scope.submitAddress = function(){
-        //format form data
-        var formData = {
-            region  : "ca",
-            address: $scope.searchAddress
-        };
-
-        var formDataString = $.param(formData);
-        var queryString = QUERYSTRINGBASE + '&' + formDataString;
-            $scope.user.queryString = queryString;
-        $http.get(queryString)
-        .then(function(res){
-            $scope.results = res.data.results;
-        }, function(err){
-            $scope.error = err;
-        });
-    };
-
-    $scope.assignLocation = function(result){
-        $timeout(function() {
-            $scope.dish.locationCustom = {
-                name: result.formatted_address,
-                lat: result.geometry.location.lat,
-                lng: result.geometry.location.lng
-            };
-        });
-    };
-
-
-
-
+    //watch the $scope.parentController.uid
+    $scope.$watchGroup(['parentController.uid', 'parentController.user'], function(newValues, oldValues){
+        
+    });
 
     //submits a dish
     //on success, clear stuff and show div that says submitSuccess and go to manage

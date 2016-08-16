@@ -1,6 +1,10 @@
 var navController = function($scope, $location, $http, $timeout, regexService, sessionService, timeService, $log){
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
     
+    var timeNow = new Date();
+    var tomorrow = new Date(timeNow.getTime() + 24*60*60*1000);
+    var minNow = 30 * Math.ceil(timeNow.getMinutes() / 30);
+    
     //watch $scope.parentController.uid, user.uid, user.email, user.emailVerified, dish.location
     $scope.$watch('parentController.uid', function(newValue, oldValue){
         //if $scope.parentController.uid isn't undefined or null, then there is a user logged in
@@ -39,11 +43,6 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                 console.log($scope.parentController);
 
 
-                var timeNow = new Date();
-                var tomorrow = new Date(timeNow.getTime() + 24*60*60*1000);
-                console.log("now: " + timeNow);
-                console.log("tmr: " + tomorrow);
-                var minNow = 30 * Math.ceil(timeNow.getMinutes() / 30);
                 //create a dish object and put the user's info into it
                 $timeout(function() {
                     $scope.dish = {
@@ -95,10 +94,12 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
         if ($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName) &&
             $scope.dish.description && regexService.commentRegex.test($scope.dish.description) &&
             $scope.dish.price && regexService.priceRegex.test($scope.dish.price) &&
-            $scope.dish.time.endTime.getTime() - $scope.dish.time.startTime.getTime() >= 0) {
+            $scope.dish.time.endTime.getTime() - $scope.dish.time.startTime.getTime() >= 0
+            && $scope.parentController.dish.location.lat) {
                 $timeout(function(){
                     $scope.dish.complete = true;
                 });
+                
         } else {
             $scope.dish.complete = false;
         }
@@ -133,14 +134,10 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
         .then(function(res){
             $log.log(res);
             if (res.status === 200) {
-                $scope.dish.submitSuccess = true;
                 dish.dishName = "";
                 dish.description = "";
                 dish.price = "";
                 dish.portions = "";
-                dish.location = "";
-                dish.locationCustom = undefined;
-                dish.useLocationCustom = false;
                 dish.ingredients = "";
                     $scope.error = res.data.error;
                     $scope.warnings = res.data.warnings;
