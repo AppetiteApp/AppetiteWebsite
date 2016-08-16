@@ -246,9 +246,8 @@ module.exports = function(app){
     //calling this function doesn't remove the transaction history
     //creates an object to store information on the request: meal (time of request, chef, owner, etc) and
         // cancellation (who cancelled it and for what reason?)
-    // keep the meal in 'active meals' until review? Should we allow 
-    // reason for cancelling
-    // only buyers can cancel
+    // keep a log
+    // only buyers can cancel (for now)
     app.post('/api/cancelRequest', function(req, res){
         if (!req.body.uid || !req.body.personType || !req.body.dishid){
             res.send({
@@ -259,6 +258,7 @@ module.exports = function(app){
             });
         }
         
+        //verify that uid is valid, user has requested said meal, chef have not responded yet
         global.userRef.child(req.body.uid).once("value").then(function(snapshot){
             var errors = [];
             if (!snapshot.val()) {
@@ -289,7 +289,7 @@ module.exports = function(app){
                 return;
             }
             
-            //get info about dish
+            //verify dishid is valid & user has requested dish
             global.dishRef.child(req.body.dishid).once("value", function(snapshot){
                 if (!snapshot.val()) {
                     errors = [{
@@ -306,7 +306,7 @@ module.exports = function(app){
                         errorType: "dish",
                         errorMessage: "request to purchase meal doesn't exist"
                     }];
-                } else if (snapshot.val().purchases[req.body.uid] === false){
+                } else if (snapshot.val().purchases[req.body.uid].pending === false){
                     errors = [{
                         errorType: "cancellation",
                         errorMessage: "unable to find purchase record"
@@ -335,7 +335,13 @@ module.exports = function(app){
                 
                 
                 global.dishRef.child(req.body.dishid).child('purchases').child(req.body.uid).remove();
+                global.dishRef.child(req.body.dishid).child('purchases').child(req.body.uid).set({
+                    cancelled: new Date()
+                });
                 global.userRef.child(req.body.uid).child('activeMeals').child(req.body.dishid).remove();
+                global.userRef.child(req.body.uid).child('activeMeals').child(req.body.dishid).update({
+                    canceled: new Date()
+                });
                 
                 res.send({
                     message: "success"
