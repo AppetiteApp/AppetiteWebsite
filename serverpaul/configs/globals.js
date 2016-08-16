@@ -6,7 +6,7 @@ module.exports = {
 	usernameRegex		: /^[a-zA-Z0-9]+$/,
 	passwordRegex		: /^[a-zA-Z0-9:.?!@#$%^&*\-=_+\'\";<>,\/]+$/,
 	individualNameRegex : /^[\w .-]+$/i,
-	commentRegex		: /^[\w\d.,:;"'-=_+!@#$%^&*0-9 ]+$/i,
+	commentRegex		: /^[\w\d\s.,:;"'-=_+!@#$%^&*0-9 ]+$/i,
 	dishNameRegex		: /^[\w\d -()0-9]+$/,
 	addressRegex		: /^[\w\d.,:;"'-=_@#$%^&*0-9 ]+$/i,
 	emailRegex			: /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
