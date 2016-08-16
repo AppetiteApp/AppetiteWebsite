@@ -306,7 +306,10 @@ module.exports = function(app){
                         });
                     }    
                 }, function(err){
-                    res.send(err);
+                    res.send({
+                        errorType: 'firebase',
+                        errorMessage: err
+                    });
                     return;
                 });
                 

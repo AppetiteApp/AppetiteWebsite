@@ -1,18 +1,16 @@
 var navController = function($scope, $location, $http, $timeout, regexService, sessionService, timeService, $log){
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-            $timeout(function() {
-                $scope.user = user;
-            });
-
+    const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
+    
+    //watch $scope.parentController.uid, user.uid, user.email, user.emailVerified, dish.location
+    $scope.$watch('parentController.uid', function(newValue, oldValue){
+        //if $scope.parentController.uid isn't undefined or null, then there is a user logged in
+        if (newValue){
             //regarding the submit a dish part
-            firebase.database().ref('users/' + firebase.auth().currentUser.uid).on('value', function(snapshot){
+            firebase.database().ref('users/' + newValue).on('value', function(snapshot){
                 //if user has phone num, then use that as the dish's phone num
                 //else, error and cannot submit dish
-                console.log("users/" + firebase.auth().currentUser.uid);
-                console.log(snapshot.val());
-                console.log(snapshot.val().phone);
-                console.log(snapshot.val().location);
+                console.log("users/" + newValue);
+                
                 if (snapshot.val().phone) {
                     $scope.dish.phone = snapshot.val().phone;
                 } else {
@@ -40,7 +38,6 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
 
                 console.log($scope.parentController);
 
-                const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
 
                 var timeNow = new Date();
                 var tomorrow = new Date(timeNow.getTime() + 24*60*60*1000);
@@ -60,40 +57,9 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                     };
                 });
             }); //end fetch data from firebase
-        } else {
-            $scope.user = undefined;
-            //change name of dishes by previously-logged in user
+
         }
     });
-
-
-    // $scope.submitAddress = function(){
-    //         //format form data
-    //     var formData = {
-    //         region  : "ca",
-    //         address: $scope.searchAddress
-    //     };
-
-    //     var formDataString = $.param(formData);
-    //     var queryString = QUERYSTRINGBASE + '&' + formDataString;
-    //         $scope.user.queryString = queryString;
-    //     $http.get(queryString)
-    //     .then(function(res){
-    //         $scope.results = res.data.results;
-    //     }, function(err){
-    //         $scope.error = err;
-    //     });
-    // };
-
-    // $scope.assignLocation = function(result){
-    //     $timeout(function() {
-    //         $scope.dish.locationCustom = {
-    //             name: result.formatted_address,
-    //             lat: result.geometry.location.lat,
-    //             lng: result.geometry.location.lng
-    //         };
-    //     });
-    // };
     
     $scope.$watch('dish.time.date', function(newValue, oldValue){
          //if today is chosen, then year/month/date should be today
