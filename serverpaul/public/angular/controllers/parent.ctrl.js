@@ -3,7 +3,7 @@
 var parentController = ['$timeout', '$scope', function($timeout, $scope) {
     $scope.parentController = {
         dish: {}
-    }
+    };
     
     
     //if the person is logged in, get that person's info
@@ -26,7 +26,8 @@ var parentController = ['$timeout', '$scope', function($timeout, $scope) {
                     //store things in the parentController, an error for location if it's not filled out
                     
                     $scope.parentController.user = snapshot.val();
-                    $scope.emailVerified = user.emailVerified;    
+                    $scope.emailVerified = user.emailVerified; 
+                    $scope.parentController.activeMeals = snapshot.val().activeMeals;
                     $scope.parentController.dish.location = {
                         name: snapshot.val().location,
                         lat: snapshot.val().lat,
@@ -50,6 +51,7 @@ var parentController = ['$timeout', '$scope', function($timeout, $scope) {
         }else{
             $timeout(function() {
                 $scope.parentController.user = undefined;
+                $scope.parentController.uid = undefined;
                 console.log("no user");
                 console.log($scope.parentController.user);
             });
