@@ -19,6 +19,9 @@
               {{warning.errorMessage}}
           </div>
                   <form ng-submit="login(user)">
+                      <div>
+                        {{loginError}}
+                    </div>
                       <label class="registerlabel">Email</label><input class="logintextbox" type="text" ng-model="user.email" />
                       <label class="registerlabel">Password</label><input class="logintextbox" type="password" ng-model="user.password" />
                       <button id="homelogin">Login</button>
@@ -37,6 +40,7 @@
         <span class="close2">x</span></br>
             <div id="registertitle">Join Appetite</div>
                 <form ng-submit="signup(user)">
+                    <div>{{signupError}}</div>
                                   <div id="firstnamebox"><label class="registerlabel">First Name</label><input id="firstNameregister" type="text" ng-model="user.firstName"/></div>
                                   <div id="lastnamebox"><label class="registerlabel" id="lastnamelabel">Last Name</label><input id="lastNameregister" type="text" ng-model="user.lastName"/></div></br>
                                   <label class="registerlabel">Phone</label><input class="logintextbox" type="text" ng-model="user.phone"/>
