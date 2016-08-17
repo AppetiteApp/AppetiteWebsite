@@ -175,10 +175,13 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
             var modal = document.getElementById('myModal');
             modal.style.display = "none";
         },function(error) {
-            $scope.warnings.unshift({
-                errorType   : "login",
-                errorMessage: error.message
+            $timeout(function() {
+                $scope.loginError = error.message;
             });
+            $timeout(function(){
+                $scope.loginError = undefined; 
+            }, 10000);
+            console.log(error);
         });
     };
 
@@ -219,10 +222,12 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
             var errorCode = error.code;
             var errorMessage = error.message;
             console.log(errorCode + ": " + errorMessage);
-            $scope.warnings.unshift({
-                errorType   : "signup",
-                errorMessage: error.message
+            $timeout(function(){
+                $scope.signupError = error.message;
             });
+            $timeout(function() {
+                $scope.signupError = undefined;
+            }, 10000);
         });
 
     };
