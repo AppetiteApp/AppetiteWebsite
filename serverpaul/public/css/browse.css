@@ -190,8 +190,9 @@ overflow-y: hidden;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   height: auto;
-  margin: 0;
+  margin: 4px;
   border-radius:14px;
+
 }
 
 #map{

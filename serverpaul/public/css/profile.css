@@ -672,9 +672,11 @@ animation:*/
 
 
 .rating {
-    float:left;
     border:none;
     padding:0;
+    width: 80px;
+    margin: 0 auto;
+    display: block;
 }
 
 /* :not(:checked) is a filter, so that browsers that don’t support :checked don’t
@@ -888,5 +890,32 @@ padding-right:40px;
    width:40px;
    font-size:15px;
    color:#d5bba4;
+}
+
+#activeratings{
+  background-color: orange;
+  margin: 4px;
+  color: white;
+  font-family: 'Raleway', sans-serif;
+  height: 40px;
+  width:100%;
+}
+
+#tasterating{
+float:left;
+width: 33%;
+text-align: center;
+}
+
+#valuerating{
+  float:left;
+  width: 34%;
+  text-align: center;
+}
+
+#timingrating{
+  float:right;
+  width: 33%;
+  text-align: center;
 
 }

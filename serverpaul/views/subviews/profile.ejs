@@ -81,7 +81,7 @@
 <div class="tabview" ng-show="tab == 1">
 
 <div id="repeateditemactive" ng-cloak>
-  <div ng-init="dish.edit=1" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
+  <div ng-init="dish.edit=1" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
     <div class="dishthumbnail">
       <img class="img-thumbnail" src="/imgs/gordon.jpg"/>
     </div>
@@ -135,12 +135,69 @@
 <div id="dishaddressactive" ng-show="dish.edit">4235 Rue Maine</div>
 </div>
 
-
-
-
 <hr id="activehr" ng-show="!dish.edit">
 </div>
 
+
+<!-- Active Meal Bought -->
+
+<div id="repeateditemactive" ng-cloak>
+
+      <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
+        <div class="dishthumbnail">
+          <img class="img-thumbnail" src="/imgs/gordon.jpg"/>
+        </div>
+          <div id="dishprice">$4</div>
+          <div id="pending">pending</div>
+        <div id="itembox">
+          <div id="dishtitle">Wonton Soup</div>
+          <div class="chefname">by Jones Jones</div></br>
+          <div id="dishtime">January 2 @ 6pm</div></br></br>
+        </div>
+      </div>
+
+  <div id="activeratings">
+    <div id="valuerating">
+      <fieldset class="rating">
+          <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
+          <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
+          <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
+          <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
+          <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
+      </fieldset>
+    value
+  </div>
+
+  <div id="timingrating">
+        <fieldset class="rating">
+            <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
+            <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
+            <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
+            <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
+            <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
+        </fieldset>
+      timing
+    </div>
+
+    <div id="tasterating">
+      <fieldset class="rating">
+          <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
+          <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
+          <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
+          <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
+          <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
+      </fieldset>
+    taste
+    </div>
+
+  </div>
+  <div class="slideDown" ng-hide="!dish.active" id="itemdetails">
+  <div class="dishdescription">"Super yummy wonton soup made by yaboi Jones Jones, yes that is my real name"</div>
+      <div id="dishphoneactive">514-gofuckyourself</div>
+        <div id="dishaddressactive">4235 Rue JONES JONES JONES, H2W 1V6</div>
+</div>
+</div>
+</div>
 
 <!--
           <div id="dishbanner">
@@ -176,7 +233,6 @@
                   </div>
                   <input id="submiteditprofile" type="submit" value="Save Edits" ng-click="editDish(dish)"/><div id="editsuccess">{{dish.message}}</div>
                 </div> -->
-        </div>
 
 
         <div class="tabview" ng-show="tab == 2">
