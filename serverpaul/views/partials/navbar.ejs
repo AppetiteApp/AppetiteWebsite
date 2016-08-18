@@ -87,8 +87,7 @@
                </br>
 
                <div id="logisticssubmit">
-                    <label id="whattime">Around what time?</label><br>
-                    {{dish.time.date}}<br>
+                    <label id="whattime">When are you making this dish?</label><br>
                     <label>Today</label><input type="radio" ng-model="dish.time.date" value="today"/><br>
                     <label>Tomorrow</label><input type="radio" ng-model="dish.time.date" value="tomorrow" /><br>
                     <label>Choose Date</label><input type="radio" ng-model="dish.time.date" value="custom" /><br>
@@ -97,13 +96,14 @@
                     <input class="logistictextbox" type="time" ng-model="dish.time.startTime" step="600"/><br>
                     <label id="tolabel">To:</label>
                     <input class="logistictextbox" ng-show="dish.time.date==='custom'" id="submitdate" type="date" ng-model="dish.time.endTime" />
-                    <input class="logistictextbox" type="time" ng-model="dish.time.endTime" step="600"/>
+                    <input class="logistictextbox" type="time" ng-model="dish.time.endTime" step="600"/><br>
+                    <label id="whattime">Order By</label><br>
+                    <input class="logistictextbox" type="time" ng-model="dish.orderBy" step="600"/><br>
                 </div>
                 </br>
                </br>
                </br>
                 <button class="logistictextbox" id="submit" type="submit"class="btn btn-default" ng-click="submitDish(dish)" ng-disabled="!dish.complete" ng-init="dish.complete=false">Submit</button>
-                {{dish.complete}}
               </div>
             </div>
           </form>

@@ -136,12 +136,14 @@ async defer></script>
         var markers = [];
         var currentUser = firebase.auth().currentUser;
         firebase.database().ref('dish/').on("value", function(snapshot){
-
+        var timeNow = new Date();
             snapshot.forEach(function(child) {
                 //console.log(child.val());
                 dishes.push(child.val());
+                var childEndTime = new Date(child.val().time.endTime);
+                
 
-                if (child.val().active){
+                if (!child.val().archived && childEndTime.getTime() >= timeNow.getTime()){
                     //console.log("new marker pushed!", child.val().dishName);
                     //console.log("lat", child.val().lat, "; lng:", child.val().lng);
                     console.log(child.val().time.startTime);
