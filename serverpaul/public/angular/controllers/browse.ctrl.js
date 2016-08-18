@@ -14,7 +14,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
         snapshot.forEach(function(child){
             var endTime = new Date(child.val().time.endTime);
             
-            if (child.val().active && endTime.getTime() >= timeNow.getTime()){
+            if (!child.val().archived && endTime.getTime() >= timeNow.getTime()){
                 var dish = child.val();
                 dish.key = child.key;
                 var startTime = new Date(dish.time.startTime);
