@@ -7,7 +7,7 @@ module.exports = function(app) {
 	//and push that dish key into an array in that user's mealsMade array
 	//check for latlng key in req.body, if there is, store it in the dish; if not, get latlng from user & store in dish
 	//TODO: add regex control
-	app.post('/newdish', function(req, res, next){
+	app.post('/api/newdish', function(req, res, next){
 	    console.log(req.body);
 		var data = req.body;
 		var errors = [];
@@ -104,9 +104,7 @@ module.exports = function(app) {
 		} else {
 			dishObject.price = parseFloat(data.price);
 		}
-
-		var start;
-		var end;
+		
 		//check if time is entered, regex not added yet bc I want to further change the time input
 		//into a period of time as well as only store year/month/day/hour/min
 		if (!data.time) {
@@ -116,6 +114,16 @@ module.exports = function(app) {
 			});
 		} else {
 			dishObject.time = req.body.time;
+		}
+		
+		if (!data.orderBy){
+		    warnings.push({
+		        warningType: "orderBy",
+		        warningMessage: "didn't enter when to order by"
+		    });
+		    dishObject.orderBy = req.body.time.startTime;
+		} else {
+		    dishObject.orderBy = req.body.orderBy;
 		}
 
 		//check if portions is entered, if not, set at 1
@@ -157,7 +165,6 @@ module.exports = function(app) {
 			return;
 		}
 
-		dishObject.active = true;
 		dishObject.dateMade = new Date();
 
 		//go and make a new dish under "dish" in db
@@ -167,33 +174,27 @@ module.exports = function(app) {
 		console.log(dishObject);
 		newDishRef.set(dishObject);
 
-        console.log(start);
-        console.log(end);
 
-		global.userRef.child(req.body.uid).once("value", function(snapshot){
+		global.userRef.child(req.body.uid).once("value").then(function(snapshot){
 			console.log(snapshot.val());
-			var meals;
-			if (!snapshot.val().mealsMade){
-				meals = [newDishKey];
-			} else {
-				meals = snapshot.val().mealsMade;
-				meals.push(newDishKey);
-			}
-			console.log("Meals Made: " + meals);
+			var mealsMade = [];
+			if (snapshot.val().mealsMade) mealsMade = snapshot.val().mealsMade;
+			mealsMade.push(newDishKey);
+			
+			console.log("Meals Made: " + mealsMade);
 			global.userRef.child(req.body.uid).update({
-				"mealsMade": meals
+				"mealsMade": mealsMade
 			});
-
-			// global.dishRef.child(newDishKey).once("value", function(snapshot){
-			// 	console.log(snapshot.val().firstName);
-			// });
 
 			newDishRef.update({
 				"owner": snapshot.val().firstName + " " + snapshot.val().lastName || "",
 				"ownerPic": snapshot.val().photoUrl || ""
 			});
 
+		}, function(err){
+		    console.log(err);
 		});
+		
 		res.send({
 			errors: errors,
 			warnings: warnings,
@@ -201,7 +202,6 @@ module.exports = function(app) {
 			madeMeal: true
 		});
 
-		//update user's mealsMade
 	});
 
 	//to edit a dish; checks for invalid characters and not present info
@@ -224,8 +224,8 @@ module.exports = function(app) {
 			return;
 		}
 
-		if (!req.body.active && !req.body.dishName && !req.body.location && !req.body.phone && !req.body.description &&
-			!req.body.price  && !req.body.time	   && !req.body.portion && req.body.lng	   && !req.body.lat) {
+		if (!req.body.dishName && !req.body.location && !req.body.phone && !req.body.description &&
+			!req.body.price  && !req.body.time.startTime && !req.body.time.endTime && !req.body.orderBy && !req.body.portion && req.body.lng	&& !req.body.lat) {
 			res.send({
 				errorType: 'content',
 				errorMessage: "There's nothing to change"
@@ -238,9 +238,6 @@ module.exports = function(app) {
 		var error = [];
 		var warnings = [];
 
-		if (data.active === true || data.active === false) {
-			update.active = data.active;
-		}
 
 		if (data.dishName) {
 			if (globals.dishNameRegex.test(data.dishName)){

@@ -37,22 +37,20 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                         errorType: "userinfo",
                         errorMessage: "User info incomplete: missing location."
                     });
-                    $scope.userinfoIncomplete = true;
                 }
-
-                console.log($scope.parentController);
-
-
+                
                 //create a dish object and put the user's info into it
                 $timeout(function() {
                     $scope.dish = {
                         warnings: [],
                         errors  : [],
                         time    : {
-                            startTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours(), minNow, 0),
+                            startTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 3, minNow, 0),
                             endTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 6, minNow, 0),
                             date: "today"
-                        }
+                        },
+                        orderBy : new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 1, minNow, 0)
+                        
                     };
                 });
             }); //end fetch data from firebase
@@ -60,42 +58,35 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
         }
     });
     
+    //set the year, month, and day of toBeChangedTime to referenceTime's year, month, and day
+    var setDate = function(toBeChangedTime, referenceTime){
+        toBeChangedTime.setFullYear(referenceTime.getFullYear());
+        toBeChangedTime.setMonth(referenceTime.getMonth());
+        toBeChangedTime.setDate(referenceTime.getDate());
+    };
+    
     $scope.$watch('dish.time.date', function(newValue, oldValue){
          //if today is chosen, then year/month/date should be today
         //if tomorrow is chosen, then get the year, month, and date of tomorrow and set them to the time object
         if ($scope.dish.time.date === "today"){
-            $scope.dish.time.startTime.setFullYear(timeNow.getFullYear());
-            $scope.dish.time.startTime.setMonth(timeNow.getMonth());
-            $scope.dish.time.startTime.setDate(timeNow.getDate());
-            $scope.dish.time.endTime.setFullYear(timeNow.getFullYear());
-            $scope.dish.time.endTime.setMonth(timeNow.getMonth());
-            $scope.dish.time.endTime.setDate(timeNow.getDate());
-            
-            console.log($scope.dish.time.startTime);
-            console.log($scope.dish.time.endTime);
+            setDate($scope.dish.time.startTime, timeNow);
+            setDate($scope.dish.time.endTime, timeNow);
+            setDate($scope.dish.orderBy, timeNow);
         } else if($scope.dish.time.date === "tomorrow"){
-            console.log("Tomorrow chosen!");
-            $scope.dish.time.startTime.setFullYear(tomorrow.getFullYear());
-            $scope.dish.time.startTime.setMonth(tomorrow.getMonth());
-            $scope.dish.time.startTime.setDate(tomorrow.getDate());
-            $scope.dish.time.endTime.setFullYear(tomorrow.getFullYear());
-            $scope.dish.time.endTime.setMonth(tomorrow.getMonth());
-            $scope.dish.time.endTime.setDate(tomorrow.getDate());
-            
-            console.log($scope.dish.time.startTime);
-            console.log($scope.dish.time.endTime);
-        } else if ($scope.dish.time.date === "custom"){
-            console.log("custom");
+            setDate($scope.dish.time.startTime, tomorrow);
+            setDate($scope.dish.time.endTime, tomorrow);
+            setDate($scope.dish.orderBy, tomorrow);
         }
     });
 
 
-    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone',  'dish.price', 'dish.time.startTime', 'dish.time.endTime'], function(newValues, oldValues){
+    $scope.$watchGroup(['dish.dishName', 'dish.description', 'dish.phone',  'dish.price', 'dish.time.startTime', 'dish.time.endTime', 'dish.orderBy'], function(newValues, oldValues){
         if ($scope.dish.dishName && regexService.mealRegex.test($scope.dish.dishName) &&
             $scope.dish.description && regexService.commentRegex.test($scope.dish.description) &&
             $scope.dish.price && regexService.priceRegex.test($scope.dish.price) &&
-            $scope.dish.time.endTime.getTime() - $scope.dish.time.startTime.getTime() >= 0
-            && $scope.parentController.dish.location.lat) {
+            $scope.dish.time.endTime.getTime() - $scope.dish.time.startTime.getTime() >= 0 && 
+            $scope.dish.time.startTime.getTime() - $scope.dish.orderBy.getTime() >= 0 &&
+            $scope.parentController.dish.location.lat) {
                 $timeout(function(){
                     $scope.dish.complete = true;
                 });
@@ -112,28 +103,32 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
     //on success, clear stuff and show div that says submitSuccess and go to manage
     //on fail, show div that warns that submission failed
     $scope.submitDish = function(dish){
-        if (!firebase.auth().currentUser){
+        console.log(dish);
+        if (!$scope.parentController.uid){
             $location.path('/');
             return;
         }
-        var uid = firebase.auth().currentUser.uid;
-        console.log($scope.parentController.user.location);
+        var uid = $scope.parentController.uid;
         var data = {
             dishName: dish.dishName,
-            uid: uid,
-            description: dish.description,
-            price: dish.price,
-            phone: $scope.parentController.user.phone,
+            uid     : uid,
+            description : dish.description,
+            price   : dish.price,
+            phone   : $scope.parentController.user.phone,
             location: $scope.parentController.dish.location,
             portions: dish.portions || 1,
-            ingredients: dish.ingredients || "",
-            time: dish.time
+            ingredients : dish.ingredients || "",
+            orderBy : dish.orderBy,
+            time    : {
+                        startTime: dish.time.startTime,
+                        endTime  : dish.time.endTime
+                      }
         };
 
-        $http.post('/newdish', data)
+        $http.post('/api/newdish', data)
         .then(function(res){
             $log.log(res);
-            if (res.status === 200) {
+            if (res.data.status === 200) {
                 dish.dishName = "";
                 dish.description = "";
                 dish.price = "";

@@ -26,8 +26,6 @@ global.chefReviewRef = db.ref("chefReviews");
 app.set("view engine", "ejs");
 
 var serverLogging = function(req, res, next){
-    //production
-    //res.redirect("https://www.eatappetite.com" + req.url);
 	console.log(req.method, req.url);
 	next();
 };
