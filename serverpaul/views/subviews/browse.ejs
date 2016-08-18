@@ -115,8 +115,10 @@ async defer></script>
         streetViewControl: false,
         mapTypeControl: false
     });
-
-    mapHelper(map);
+    
+    var infoWindows = {};
+    
+    mapHelper(map, infoWindows);
     google.maps.event.trigger(map, 'resize');
     //resizeMap(map);
 
@@ -131,7 +133,7 @@ async defer></script>
   }
 
 
-    var mapHelper = function(map){
+    var mapHelper = function(map, infoWindows){
         var dishes = [];
         var markers = [];
         var currentUser = firebase.auth().currentUser;
@@ -187,6 +189,7 @@ async defer></script>
 
                     //simulate a click here, using 'selector' to select the element with ng-id
                     var selector = 'div[ng-id="' + child.key + '"]';
+                    
                     $('body').on('click', selector, function () {
                         google.maps.event.trigger(marker, 'click', {});
                     });
@@ -200,11 +203,23 @@ async defer></script>
                     });
 
                     marker.addListener('click', function() {
-                        infowindow.open(map, marker);
+                        if (!infoWindows.selector){
+                            infowindow.open(map, marker);
+                            infoWindows.selector = true;
+                        } else {
+                            infowindow.close();
+                            infoWindows.selector = false;
+                        }
+                        
+                        
                     });
+                    
+                    google.maps.event.addListener(map, 'click', function() {
+				        infowindow.close();
+			        });
 
-
-
+                    
+                    infoWindows.selector = false;
                     markers.push(marker);
                     //console.log(marker);
 
