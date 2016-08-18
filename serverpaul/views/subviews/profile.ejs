@@ -82,29 +82,28 @@
 
 <div id="repeateditemactive" ng-cloak>
   <div ng-init="dish.edit=1" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
-    <div class="dishthumbnail">
+    <div class="dishthumbnailactive">
       <img class="img-thumbnail" src="/imgs/gordon.jpg"/>
     </div>
-      <div ng-show="dish.edit" id="dishprice">$7</div>
-      <input type="text" ng-show="!dish.edit" ng-model="dish.price" placeholder="7" id="dishpriceedit"/>
-
-      <div id="pending">pending</div>
+      <div ng-show="dish.edit" id="dishpriceactive">$7</div>
+      <input type="text" ng-show="!dish.edit" ng-model="dish.price" placeholder="$7" id="dishpriceedit"/>
 
       <div id="itemboxactive">
         <div ng-show="dish.edit" id="dishtitleactive">linguini</div>
         <input placeholder="linguini" ng-show="!dish.edit" id="dishtitleactiveedit" type="text" ng-model="dish.dishName"/>
 
-        <div class="chefnameactive">by Gordon Ramsey</div>
-        <textarea ng-show="!dish.edit" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></textarea>
-
-        <div ng-show="dish.edit" id="dishtime">9:00</div>
       </br>
       </br>
 
 
       </br></br>
     </div>
-    <button align="center" ng-click="dish.edit=!dish.edit">Edit</button>
+
+    <div class="chefnameactive">by Gordon Ramsey</div>
+    <input type="text" ng-show="!dish.edit" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></input>
+
+    <div ng-show="dish.edit" id="profiledishdescription">sklfjh asdlkjfh asdlkfja hsdnclkasj laksjncalsdkjcn fuckin delicious"</div>
+
 
     <div ng-show="!dish.edit" id="logisticssubmitactive">
          <label>Today</label><input type="radio" ng-model="dish.time.date" value="today"/>
@@ -117,34 +116,40 @@
          <input class="logistictextbox" ng-show="dish.time.date==='custom'" id="submitdate" type="date" ng-model="dish.time.endTime" />
          <input class="logistictextbox" type="time" ng-model="dish.time.endTime" step="600"/>
      </div>
+     <div id="profilesubmitteddate" ng-show="dish.edit">
+        Tuesday July 36, 2016
+     </div>
 
      <div ng-show="!dish.edit" class="activeaddresssearch">
-     <input ng-show="!dish.edit" type="text" ng-model="dish.queryAddress" />
-     <button ng-show="!dish.edit" id="accountsubmit" ng-click="submitAddress(dish.queryAddress, dish)">Find Address</button>
-     <div  ng-show="!dish.edit" class="addresshistory" ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
+     <input id="profileaddresssearch" placeholder="Find Address" ng-show="!dish.edit" type="text" ng-model="dish.queryAddress" />
+     <button ng-show="!dish.edit" id="activeaddresssearch" ng-click="submitAddress(dish.queryAddress, dish)"></button>
+
+     <div  class="addresseditactive" ng-show="!dish.edit" ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
          {{result.formatted_address}}
      </div>
+
      </div>
+     <div id="profilesubmittedaddress" ng-show="dish.edit">
+          627 Rue Alcatraz, newton Ma 023
+     </div>
+
 
 
   </div>
 
-<div class="slideDown" id="itemdetails">
-<div ng-show="dish.edit" class="dishdescription">"sklfjhasdlkjfhasdlkfjahsdnclkasj laksjncalsdkjcn fuckin delicious"</div>
-<div id="dishphoneactive" ng-show="dish.edit">5324443212</div>
-<div id="dishaddressactive" ng-show="dish.edit">4235 Rue Maine</div>
-</div>
+  <button ng-show="dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
+  <button ng-show="!dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
 
-<hr id="activehr" ng-show="!dish.edit">
+<hr id="activehr">
 </div>
 
 
 <!-- Active Meal Bought -->
 
-<div id="repeateditemactive" ng-cloak>
+<!-- <div id="repeateditemactive" ng-cloak>
 
       <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
-        <div class="dishthumbnail">
+        <div class="dishthumbnailactive">
           <img class="img-thumbnail" src="/imgs/gordon.jpg"/>
         </div>
           <div id="dishprice">$4</div>
@@ -196,7 +201,8 @@
       <div id="dishphoneactive">514-gofuckyourself</div>
         <div id="dishaddressactive">4235 Rue JONES JONES JONES, H2W 1V6</div>
 </div>
-</div>
+</div> -->
+
 </div>
 
 <!--
@@ -237,13 +243,25 @@
 
         <div class="tabview" ng-show="tab == 2">
 
-          <fieldset class="rating">
-              <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
-              <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
-              <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
-              <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
-              <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
-          </fieldset>
+          <div id="repeateditemactive"  ng-cloak>
+
+                <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
+                  <div class="dishthumbnailactive">
+                    <img class="img-thumbnail" src="/imgs/gordon.jpg"/>
+                  </div>
+
+                  <div id="review">
+                    I thought it was wonderfull!!!! Seriously A+ job here buy chef Ramsey.
+                  </br>
+                    <div id="reviewdate">
+                    July 22 2016
+                    </div>
+
+                  </div>
+
+                </div>
+          </div>
+
 
         </div>
 
