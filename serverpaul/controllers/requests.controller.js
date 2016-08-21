@@ -11,240 +11,164 @@ function makeCode() {
 };
 
 module.exports = function(app){
-    //when user requests a meal
-    //add to their list of activeMeals
-    //set pending to True
-    //autoset requestTime
-    // app.post('/api/requestMeal', function(req, res){
-    // 	//if no uid sent, send back err
-    // 	if (!req.body.uid || !req.body.dishid) {
-    // 		res.send({
-    //             errors: [{
-    // 			    errorType: "ids",
-    // 			    errorMessage: "no uid/dishid sent"
-    // 		    }]
-    //         });
-    // 		return;
-    // 	}
+    //when user orders a meal
+    //check orderby time and the currect time
+    //store the order under dish and under the buyer
+    app.post('/api/orderdish', function(req, res){
+    	//if no uid sent, send back err
+    	if (!req.body.uid || !req.body.dishid) {
+    		res.send({
+                errors: [{
+    			    errorType: "ids",
+    			    errorMessage: "no uid/dishid sent"
+    		    }]
+            });
+    		return;
+    	}
 
-    //     var errors = [];
-    //     var userRequest = {};
-    //     var purchaseRequest = {};
+        var errors = [];
+        var order = {};
+        var dishInfo = {};
 
-    //     //validate uid; snapshot.val() is null if uid doesn't exist
-    //     global.userRef.child(req.body.uid).once('value').then(function(snapshot){
-    //         console.log(snapshot.val());
-    //         if (!snapshot.val()){
-    //             res.send({
-    //                 errorType: 'uid',
-    //                 errorMessage: "invalid uid"
-    //             });
-    //             return;
-    //         } else if (snapshot.val().activeMeals){
-    //             if (snapshot.val().activeMeals[req.body.dishid]){
-    //                 res.send({
-    //                     errors: [{
-    //                         errorType: "request",
-    //                         errorMessage: "Cannot request the same meal twice"
-    //                     }]
-    //                 });
-    //                 return;
-    //             }
-    //         } 
-
-    //         if (snapshot.val().mealsMade){
-    //             console.log(snapshot.val().mealsMade);
-    //             console.log(snapshot.val().mealsMade.indexOf(req.body.dishid));
-    //             if (snapshot.val().mealsMade.indexOf(req.body.dishid) >=0){
-    //                 res.send({
-    //                     errors: [{
-    //                         errorType: "request",
-    //                         errorMessage: "Cannot request your own meals"
-    //                     }]
-    //                 });
-    //                 return;
-    //             }
-    //         }
-    //     }, function(err){
-    //         console.log(err);
-    //     });
-
-    //     //validate dishid; snapshot.val() is null if dishid doesn't exist
-    //     global.dishRef.child(req.body.dishid).once('value').then(function(snapshot){
-    //         //dishid must be valid
-    //         if (!snapshot.val()){
-    //             res.send({
-    //                 errorType: 'dishid',
-    //                 errorMessage: 'Invalid dishid'
-    //             });
-    //             return;
-
-    //         //should not be able to request your own meals
-    //         } else if (snapshot.val().ownerid === req.body.uid){
-    //             res.send({
-    //                 errors: [{
-    //                     errorType: "request",
-    //                     errorMessage: "Cannot request your own meals"
-    //                 }]
-    //             });
-    //             return;
-    //         }else if (snapshot.val().purchases){
-    //             if (snapshot.val().purchases[req.body.uid]){
-    //                 res.send({
-    //                     errors: [{
-    //                         errorType: "request",
-    //                         errorMessage: "Cannot request the same meal twice"
-    //                     }]
-    //                 });
-    //                 return;
-    //             }
-    //         }else {
-    //             //store dish info? or manipulate dish from here
-    //             //save stuff about the dish
-    //             userRequest.chefId = snapshot.val().ownerid;
-    //             userRequest.pending = true;
-    //             userRequest.requestTime = new Date();
-    //             purchaseRequest.pending = true;
-
-    //             var purchases = {};
-
-    //             if (snapshot.val().purchases) purchases = snapshot.val().purchases;
-    //             purchases[req.body.uid] = purchaseRequest;
+        //validate uid; snapshot.val() is null if uid doesn't exist
+        global.userRef.child(req.body.uid).once('value').then(function(snapshot){
+            
+            if (!snapshot.val()){
+                errors.push({
+                    errorType: 'uid',
+                    errorMessage: "invalid uid"
+                });
+            } else if (snapshot.val().activeMeals){
+                if (snapshot.val().activeMeals[req.body.dishid]){
+                    errors.push({
+                        errorType: "request",
+                        errorMessage: "Cannot request the same meal twice"
+                    });
+                }
+            } else if (snapshot.val().mealsMade) {
+                if (snapshot.val().mealsMade.indexOf(req.body.dishid) >=0){
+                    errors.push({
+                        errorType: "request",
+                        errorMessage: "Cannot request your own meals"
+                    });
+                }
+            }
+            if (errors.length){
+                res.send({
+                    errors: errors,
+                    message: 'Invalid Request'
+                });
+                return;
+            } //end if-else check for uid
+            
+            var buyer = {
+                name: snapshot.val().firstName + " " + snapshot.val().lastName,
+                phone: snapshot.val().phone,
+                rating: snapshot.val().buyerRating || undefined
+            };
+            
+            var activeMeals = {};
+            if (snapshot.val().activeMeals) activeMeals = snapshot.val().activeMeals;
+            
+            //validate dishid; snapshot.val() is null if dishid doesn't exist
+            global.dishRef.child(req.body.dishid).once('value').then(function(snapshot){
+                //dishid must be valid
+                errors = [];
+                var purchases = {};
+                if (!snapshot.val()){
+                    errors.push({
+                        errorType: 'dishid',
+                        errorMessage: 'Invalid dishid'
+                    });
+                //should not be able to request your own meals
+                } else if (snapshot.val().ownerid === req.body.uid){
+                    errors.push({
+                        errorType: "request",
+                        errorMessage: "Cannot request your own meals"
+                    });
+                }else if (snapshot.val().purchases){
+                    console.log("what what someone already tried to purchase this meal and there's more....?");
+                    var dishPurchases = JSON.parse(snapshot.val().purchases);
+                    if (dishPurchases[req.body.uid]){
+                        errors.push({
+                            errorType: "request",
+                            errorMessage: "Cannot request the same meal twice"
+                        });
+                    } else {
+                        purchases = dishPurchases;
+                    }
+                }
                 
-    //             global.dishRef.child(req.body.dishid).update({
-    //                 purchases: purchases
-    //             });
-
-    //             //update user's active meals
-    //             global.userRef.child(req.body.uid).once("value").then(function(snapshot){
-    //                 var activeMeals = {};
-
-    //                 //if there already exists a list of active meals, put them in array first
-    //                 if (snapshot.val().activeMeals) activeMeals = snapshot.val().activeMeals;
-    //                 activeMeals[req.body.dishid] = userRequest;
-                    
+                //should have a max portions, and check that
                 
-    //                 //update
-    //                 global.userRef.child(req.body.uid).update({activeMeals: activeMeals});
+                //if it's later than the orderby time, push err
+                var timeNow = new Date();
+                var orderBy = new Date(snapshot.val().orderBy);
+                if (orderBy.getTime() - timeNow.getTime() < 0){
+                    errors.push({
+                        errorType: "time",
+                        errorMessage: "passed orderby time"
+                    });
+                }
+                if (errors.length){
+                    res.send({
+                        errors: errors,
+                        message: "Invalid Request"
+                    });
+                    return;
+                }
+                
+                //store dish info? or manipulate dish from here
+                //save stuff about the dish
+                order.buyerid = req.body.uid;
+                order.buyerName = buyer.name;
+                order.buyerRating = buyer.rating;
+                order.buyerPhone = buyer.phone;
+                order.requestTime = new Date();
+                
+                purchases[req.body.uid] = order;
+                console.log("order");
+                console.log(order);
+                console.log("purchases");
+                purchases = JSON.stringify(purchases);
+                console.log(purchases);
+                
+                
+                
+                
+                dishInfo = {
+                    chefid: snapshot.val().ownerid,
+                    chefName: snapshot.val().owner,
+                    location: snapshot.val().location,
+                    phone   : snapshot.val().phone
+                };
+                
+                activeMeals[req.body.dishid] = dishInfo;
+                console.log("dishinfo");
+                console.log(dishInfo);
+                console.log(activeMeals);
+                
+                global.dishRef.child(req.body.dishid).update({purchases:purchases});
 
-    //                 res.send({
-    //                     message: "success"
-    //                 });
+                global.userRef.child(req.body.uid).child("activeMeals").update(activeMeals);
+                
+                res.send("success");
+                
+                
 
-    //             }, function(err){
-    //                 errors.push({
-    //                     errorType: "user",
-    //                     errorMessage: err
-    //                 });
-    //             });
-    //         }
-    //     }, function(err){
-    //         console.log(err);
-    //     });
+            
+            }, function(err){
+                console.log(err);
+            }); //end fetch data from firebase for dishid
     
-
-    // });
-
-
-    //when chef clicks accept or decline
-    //send back the requestPersonId & accept & uid & dishid
-    //change the user's pending to false
-    	//if accepted, change confirmed=true, generate confirmationCode
-    	//display the phone and the address of chef to user
-    	//display phone of buyer to chef, give confirmationCode to buyer & chef
-    // app.post('/api/requestResponse', function(req, res){
-    //     if (!req.body.uid || !req.body.requestPersonId || !(req.body.accept === true || req.body.accept === false) || !req.body.dishid){
-    //         res.send({
-    //             errors: [{
-    //                 errorType: "info",
-    //                 errorMessage: "missing info"
-    //             }]
-    //         });
-    //         return;
-    //     }
-    //     //test if requestPersonId is valid
-    //     global.userRef.child(req.body.requestPersonId).then(function(snapshot){
-    //         if (!snapshot.val()){
-    //             res.send({
-    //                 errors: [{
-    //                     errorType: "info",
-    //                     errorMessage: "invalid info"
-    //                 }]
-    //             });
-    //             return;
-    //         } else if(snapshot.val().activeMeals) {
-    //             if (!snapshot.val().activeMeals[req.body.dishid]){
-    //                 res.send({
-    //                     errors: [{
-    //                         errorType: "request",
-    //                         errorMessage: "user have not requested this meal"
-    //                     }]
-    //                 });
-    //                 return;
-    //             }
-    //         } else {
-    //             res.send({
-    //                 errors: [{
-    //                     errorType: "request",
-    //                     errorMessage: "user have not requested this meal"
-    //                 }]
-    //             });
-    //             return;
-    //         }
+             
             
-            
-            
-    //     }, function(err){
-    //       console.log(err); 
-    //     });
-        
-    //     global.dishRef.child(req.body.dishid).once("value").then(function(snapshot){
-    //         if (snapshot.val().ownerid !== req.body.uid){
-    //             res.send({
-    //                 errors: [{
-    //                     errorType: "uid",
-    //                     errorMessage: "uid not a match"
-    //                 }]
-    //             });
-    //             return;
-    //         }
-            
-    //         if (snapshot.val().purchases){
-    //             //try to find a record of 
-    //             if (!snapshot.val().purchases[req.body.requestPersonId]){
-    //                 res.send({
-    //                     errors: [{
-    //                         errorType: "request",
-    //                         errorMessage: "invalid request: the user haven't requested this meal"
-    //                     }]
-    //                 });
-    //                 return;
-    //             } else {
-    //                 var requestObj = snapshot.val().purchases[req.body.requestPersonId];
-    //                 console.log(requestObj);
-    //                 requestObj.pending = false;
-    //                 requestObj.confirmed = req.body.accept;
-    //                 //if chef accepted, then generate confirmCode & store for both people
-    //                 if (req.body.accept){
-    //                     var confirmCode = makeCode();
-    //                     requestObj.confirmCode = confirmCode;
-    //                     console.log("Confirmation code is: " + confirmCode);
-    //                 }
-    //             }
-    //         }
+        }, function(err){
+            console.log(err);
+        }); //end fetch data from firebase for uid
 
-            
+    });
 
-    //     }, function(err){
-    //         console.log(err);
-    //     });
-
-
-    // }); //end function POST /api/accept
-    
-    app.post('/api/orderDish', function(req, res){
-        
-    }); //end POST /api/orderDish
     
     //call this function to cancel a meal request,
     //calling this function doesn't remove the transaction history
