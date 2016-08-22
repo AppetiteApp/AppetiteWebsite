@@ -128,7 +128,7 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
         $http.post('/api/newdish', data)
         .then(function(res){
             $log.log(res);
-            if (res.data.status === 200) {
+            if (res.data.madeMeal === 200) {
                 dish.dishName = "";
                 dish.description = "";
                 dish.price = "";
