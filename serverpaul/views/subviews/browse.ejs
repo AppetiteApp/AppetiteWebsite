@@ -13,7 +13,7 @@
             <div id="dishprice">${{dish.price}}</div>
 
             <!-- Trigger/Open The Modal -->
-            <button ng-click="selection.selectedNode = dish" class="order" ng-if="dish.status">{{dish.status}}</button>
+            <button ng-click="openModal(dish)" class="order" ng-if="dish.status">{{dish.status}}</button>
 
             <div ng-class="{'modal4': selection.selectedNode !== dish, 'modal4select': selection.selectedNode == dish}">
 
@@ -21,11 +21,15 @@
               <div class="modal-content4">
                 <span class="close4" ng-click="selection.selectedNode = null">x</span>
 
-                  You are ordering {{dish.dishName}} from {{dish.ownerName}}. </br>
-                  It will be ready at {{dish.time}}
-
-                  <button class="orderconfirm" ng-click="order(dish)">Confirm</button>
-                  <button class="ordercancel" ng-click="selection.selectedNode = null">Cancel</button>
+                  {{dish.popupMessage}}<br>
+                  <div ng-repeat="purchase in dish.purchases" ng-if="dish.purchases && parentController.uid===dish.ownerid">
+                      {{purchase.buyerName}} has ordered your dish!<br>
+                  </div>
+                  
+                  <buton ng-if="dish.status==='manage'">See more</buton>  
+                  <button ng-click="cancelOrder(dish)" ng-if="dish.status==='ordered'">Cancel Order</button>
+                  <button class="orderconfirm" ng-click="order(dish)" ng-if="dish.status==='order'">Confirm</button>
+                  <button class="ordercancel" ng-click="selection.selectedNode = null" ng-if="dish.status==='order'">Cancel</button>
 
               </div>
 
