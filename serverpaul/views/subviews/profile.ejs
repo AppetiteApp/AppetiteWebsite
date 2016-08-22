@@ -3,7 +3,6 @@
     <li ng-class="{'profiletab': !(tab === 1),'tabclicked': tab === 1 }" ng-click="tab = 1">Active</li>
     <li ng-class="{'profiletab': !(tab === 2),'tabclicked': tab === 2 }" ng-click="tab = 2">Reviews</li>
     <li ng-class="{'profiletab': !(tab === 3),'tabclicked': tab === 3 }" ng-click="tab = 3">History</li>
-    <li ng-class="{'profiletab': !(tab === 4),'tabclicked': tab === 4 }" ng-click="tab = 4">Transactions</li>
   </ul>
 
 
@@ -102,7 +101,7 @@
     <div class="chefnameactive">by Gordon Ramsey</div>
     <input type="text" ng-show="!dish.edit" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></input>
 
-    <div ng-show="dish.edit" id="profiledishdescription">sklfjh asdlkjfh asdlkfja hsdnclkasj laksjncalsdkjcn fuckin delicious"</div>
+    <div ng-show="dish.edit" id="profiledishdescription">"sklfjh asdlkjfh asdlkfja hsdnclkasj laksjncalsdkjcn fuckin delicious"</div>
 
 
     <div ng-show="!dish.edit" id="logisticssubmitactive">
@@ -124,8 +123,10 @@
      <input id="profileaddresssearch" placeholder="Find Address" ng-show="!dish.edit" type="text" ng-model="dish.queryAddress" />
      <button ng-show="!dish.edit" id="activeaddresssearch" ng-click="submitAddress(dish.queryAddress, dish)"></button>
 
-     <div  class="addresseditactive" ng-show="!dish.edit" ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
-         {{result.formatted_address}}
+     <div id="addressresultactive">
+       <div  class="addresseditactive" ng-show="!dish.edit" ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
+           {{result.formatted_address}}
+       </div>
      </div>
 
      </div>
@@ -146,62 +147,63 @@
 
 <!-- Active Meal Bought -->
 
-<!-- <div id="repeateditemactive" ng-cloak>
+<div id="repeateditemactive" ng-cloak>
 
-      <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
+      <div id="dishbannerrating" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
         <div class="dishthumbnailactive">
           <img class="img-thumbnail" src="/imgs/gordon.jpg"/>
         </div>
           <div id="dishprice">$4</div>
-          <div id="pending">pending</div>
-        <div id="itembox">
+        <div id="itemboxrating">
           <div id="dishtitle">Wonton Soup</div>
           <div class="chefname">by Jones Jones</div></br>
-          <div id="dishtime">January 2 @ 6pm</div></br></br>
+          <div id="activeratings">
+            <div id="valuerating">
+              <label class="ratinglabel">value:</label>
+
+              <fieldset class="rating" id="valueratingfield">
+                  <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
+                  <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
+                  <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
+                  <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
+                  <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
+              </fieldset>
+          </div>
+
+          <div id="timingrating">
+            <label class="ratinglabel">timing:</label>
+
+                <fieldset class="rating" id="timingratingfield">
+                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
+                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
+                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
+                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
+                    <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
+                </fieldset>
+            </div>
+
+            <div id="tasterating">
+              <label class="ratinglabel">taste:</label>
+              <fieldset class="rating" id="tasteratingfield">
+                  <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
+                  <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
+                  <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
+                  <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
+                  <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
+              </fieldset>
+            </div>
+
+          </div>
+
         </div>
       </div>
 
-  <div id="activeratings">
-    <div id="valuerating">
-      <fieldset class="rating">
-          <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
-          <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
-          <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
-          <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
-          <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
-      </fieldset>
-    value
-  </div>
-
-  <div id="timingrating">
-        <fieldset class="rating">
-            <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
-            <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
-            <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
-            <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
-            <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
-        </fieldset>
-      timing
-    </div>
-
-    <div id="tasterating">
-      <fieldset class="rating">
-          <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
-          <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
-          <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
-          <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
-          <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
-      </fieldset>
-    taste
-    </div>
-
-  </div>
   <div class="slideDown" ng-hide="!dish.active" id="itemdetails">
   <div class="dishdescription">"Super yummy wonton soup made by yaboi Jones Jones, yes that is my real name"</div>
       <div id="dishphoneactive">514-gofuckyourself</div>
         <div id="dishaddressactive">4235 Rue JONES JONES JONES, H2W 1V6</div>
 </div>
-</div> -->
+</div>
 
 </div>
 
@@ -267,10 +269,6 @@
 
         <div class="tabview" ng-show="tab == 3">
             third
-        </div>
-
-        <div class="tabview" ng-show="tab == 4">
-            fourth
         </div>
 
 </div>

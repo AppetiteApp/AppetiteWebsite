@@ -1,3 +1,59 @@
+/* The Modal (background) */
+.modal4 {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal4select {
+    display: block; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+
+/* Modal Content/Box */
+.modal-content4 {
+    font-family: 'Raleway', sans-serif;
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding-right: 10px;
+    padding-left: 10px;
+    border: 1px solid #888;
+    width: 300px; /* Could be more or less, depending on screen size */
+    height: 200px;
+    text-align: center;
+}
+
+/* The Close Button */
+.close4 {
+    color: #aaa;
+    float: right;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.close4:hover,
+.close4:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .dishdescription{
   color: grey;
   font-family: 'Raleway', sans-serif;
@@ -31,7 +87,6 @@
   border-radius: 14px;
   margin: 0;
   height: 98px;
-  z-index: 0;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -138,7 +193,7 @@
   border-radius: 0 10px 10px 0px;
 }
 
-#order {
+.order {
   font-family: 'Raleway', sans-serif;
   font-size: 20px;
   display: inline-block;
@@ -152,9 +207,10 @@
   background-color: grey;
   border: 1px solid grey;
   border-radius: 5px;
+  cursor: pointer;
 }
 
-#order:hover{
+.order:hover{
   background-color: green;
 }
 
@@ -260,44 +316,9 @@ overflow-y: hidden;
   width: 100%;
 }
 
-#selldish {
-  float: bottom;
-  z-index: 100;
-  overflow-y: scroll;
-}
-
-#instruction{
-  position: absolute;
-  z-index: 200;
-  width: auto;
-  margin: 0;
-  padding: 4px;
-  top: 0;
-  left:0;
-  border: 1px solid black;
-  background: rgba(255, 255, 255, 0.9);
-  font-family: 'Raleway', sans-serif;
-  color: orange;
-}
-
 
 
 @media (max-width:750px){
-
-  #instruction{
-    position: absolute;
-    z-index: 200;
-    width: 100%;
-    margin: 0;
-    padding: 4px;
-    top: 0;
-    left:0;
-    border: 1px solid black;
-    background: rgba(255, 255, 255, 0.9);
-    font-family: 'Raleway', sans-serif;
-    color: red;
-    height: 50px;
-  }
 
   #dishbanner {
     overflow: visible;
@@ -306,7 +327,6 @@ overflow-y: hidden;
     margin: 0;
     border-radius: 10px;
     border:2px solid white;
-    z-index: 0;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
