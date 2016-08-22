@@ -13,7 +13,7 @@
             <div id="dishprice">${{dish.price}}</div>
 
             <!-- Trigger/Open The Modal -->
-            <button ng-click="selection.selectedNode = dish" class="order">Order</button>
+            <button ng-click="selection.selectedNode = dish" class="order" ng-if="dish.status">{{dish.status}}</button>
 
             <div ng-class="{'modal4': selection.selectedNode !== dish, 'modal4select': selection.selectedNode == dish}">
 
@@ -21,11 +21,11 @@
               <div class="modal-content4">
                 <span class="close4" ng-click="selection.selectedNode = null">x</span>
 
-                  You are ordering {{dish.dishName}} from {{dish.owner}}. </br>
+                  You are ordering {{dish.dishName}} from {{dish.ownerName}}. </br>
                   It will be ready at {{dish.time}}
 
-                  <button class="orderconfirm">Confirm</button>
-                  <button class="ordercancel">Cancel</button>
+                  <button class="orderconfirm" ng-click="order(dish)">Confirm</button>
+                  <button class="ordercancel" ng-click="selection.selectedNode = null">Cancel</button>
 
               </div>
 
@@ -36,7 +36,7 @@
 
           <div id="itembox">
             <div id="dishtitle">{{dish.dishName}}</div>
-            <div class="chefname">by {{dish.owner}}</div></br>
+            <div class="chefname">by {{dish.ownerName}}</div></br>
             <div id="dishtime">{{dish.time}}</div></br></br>
           </div>
         </div>

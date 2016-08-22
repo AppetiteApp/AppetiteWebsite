@@ -4,9 +4,9 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
 
     $scope.dishes = [];
     $scope.markers = [];
+    var timeNow = new Date();
 
     firebase.database().ref('dish/').orderByChild('time/startTime').on('value', function(snapshot){
-        var timeNow = new Date();
         var dishes = [];
 
         console.log($scope.parentController);
@@ -19,7 +19,8 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
                 var dish = child.val();
                 dish.key = child.key;
                 var startTime = new Date(dish.time.startTime);
-
+                dish.ownerName = dish.owner;
+                
                 //format time
                 if (startTime.getTime() > timeNow.getTime()){
                     dish.time = timeService.formatDate(startTime) + " " + timeService.formatAPMP(startTime);
@@ -32,12 +33,13 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
                 //if dish is my dish, set owner = 'me'
                 //else, give dish default of 'order' unless is in active meals
                 if ($scope.parentController.uid){
+                    console.log($scope.parentController.uid);
 
                     //set dish.status according to whether or not it's in activeMeals
                     var activeMeals = $scope.parentController.activeMeals;
                     var orderBy = new Date(child.val().orderBy);
                     if (dish.ownerid === $scope.parentController.uid){
-                        dish.owner = "me";
+                        dish.ownerName = "me";
                         dish.status = "manage";
                     } else if (!$scope.parentController.activeMeals && orderBy.getTime() - timeNow.getTime() >= 0){
                         dish.status = 'order';
@@ -57,14 +59,40 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
         $timeout(function() {
             $scope.dishes = dishes;
         });
+        console.log("dishes!");
+        console.log($scope.dishes);
     });
 
     //watch the $scope.parentController.uid
     $scope.$watchGroup(['parentController.uid', 'parentController.user'], function(newValues, oldValues){
         if (!$scope.parentController.uid){
             $scope.loggedIn = false;
+            $timeout(function(){
+                $scope.dishes.forEach(function(dish){
+                    dish.ownerName = dish.owner;
+                });    
+            });
         } else {
             $scope.loggedIn = true;
+            console.log("logged in!");
+            
+            $scope.dishes.forEach(function(dish){
+                dish.ownerName = dish.owner;
+                var orderBy = new Date(dish.orderBy);
+                if (dish.ownerid === $scope.parentController.uid){
+                    dish.ownerName = "me";
+                    dish.status = "manage";
+                } else if (!$scope.parentController.activeMeals && orderBy.getTime() - timeNow.getTime() >= 0){
+                    dish.status = 'order';
+                    console.log("dish.status is " + dish.status );
+                }else if ($scope.parentController.activeMeals  && orderBy.getTime() - timeNow.getTime() >= 0) {
+                    if (!activeMeals[dish.key]){
+                        dish.status = "order";
+                    } else {
+                        dish.status = "ordered";
+                    }
+                }
+            });
 
         }
     });
