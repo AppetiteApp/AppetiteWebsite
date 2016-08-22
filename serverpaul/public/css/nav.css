@@ -121,7 +121,6 @@ background-color: white;
   padding: 5px 15px 5px 15px;
   border:1px solid white;
   text-decoration: none;
-  /*color:#9b59b6;*/
   color:white;
   float:right;
   background-color:  #75d0f4;
@@ -208,13 +207,15 @@ background-color: white;
 #pricebox{
     position: relative;
     display: inline-block;
-    width: 46px;
+    width: 40px;
+    margin-left: 5px;
 }
 
 #pricetextbox{
-    width:100%;
+    width:43px;
     font-size: 16px;
     margin-top:7px;
+
 }
 
 #descriptiontextbox{
@@ -242,12 +243,24 @@ background-color: white;
     margin-top:15px;
   height:40px;
   cursor: pointer;
-  width: 100%;
+  width: calc(100% - 80px);
+  margin-left: 40px;
+  margin-right: 40px;
 }
 
 #whattime{
     color:#75d0f4;
     font-size: 20px;
+    width: 90px;
+    display: inline-block;
+}
+
+#when{
+  color:#75d0f4;
+  font-size: 20px;
+  width: auto;
+  display: block;
+
 }
 
 #logisticssubmit{
@@ -255,6 +268,10 @@ background-color: white;
     width: 100%;
     margin:0 auto;
     max-width: 320px;
+}
+
+#logisticssubmit label {
+  color: #ebd3bd;
 }
 
 #fromlabel{

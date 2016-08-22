@@ -1,33 +1,34 @@
 var browseController = function($scope, $log, $location, $http, $timeout, regexService, sessionService, timeService){
+  
     $scope.signout = sessionService.signout;
 
     $scope.dishes = [];
     $scope.markers = [];
-    
+
     firebase.database().ref('dish/').orderByChild('time/startTime').on('value', function(snapshot){
         var timeNow = new Date();
         var dishes = [];
-        
+
         console.log($scope.parentController);
-        
+
         //get dishes in ordered array
         snapshot.forEach(function(child){
             var endTime = new Date(child.val().time.endTime);
-            
+
             if (!child.val().archived && endTime.getTime() >= timeNow.getTime()){
                 var dish = child.val();
                 dish.key = child.key;
                 var startTime = new Date(dish.time.startTime);
-                
+
                 //format time
                 if (startTime.getTime() > timeNow.getTime()){
                     dish.time = timeService.formatDate(startTime) + " " + timeService.formatAPMP(startTime);
                 } else {
                     dish.time = "Pick up until " + timeService.formatAPMP(endTime);
                 }
-                
-                
-               
+
+
+
                 //if dish is my dish, set owner = 'me'
                 //else, give dish default of 'order' unless is in active meals
                 if ($scope.parentController.uid){
@@ -65,7 +66,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
 
     //watch the $scope.parentController.uid
     $scope.$watchGroup(['parentController.uid', 'parentController.user'], function(newValues, oldValues){
-        
+
     });
 
     //submits a dish
