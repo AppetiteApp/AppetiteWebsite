@@ -33,7 +33,9 @@ var parentController = ['$timeout', '$scope', function($timeout, $scope) {
                         lng: snapshot.val().lng,
                         error: undefined
                     };
-                    console.log("Logged in with: " + $scope.parentController.uid);
+                    $scope.parentController.activeMeals = snapshot.val().activeMeals;
+                    $scope.parentController.mealsMade = snapshot.val().mealsMade;
+                    console.log($scope.parentController);
                         
                     if (!snapshot.val().lng){
                         $scope.parentController.dish.location.error = "Please fill out your address before posting a dish!";

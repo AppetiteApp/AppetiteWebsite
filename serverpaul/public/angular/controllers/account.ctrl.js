@@ -8,25 +8,43 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
     $scope.user = $scope.parentController.user;
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
 
-    $scope.$watch('parentController.uid', function(newValue, oldValue){
-
-        if ($scope.parentController.uid && $scope.user){
-            if ($scope.user.activeMeals){
-                $timeout(function() {
-                    $scope.activeMeals = $scope.user.activeMeals;    
+    $scope.$watch('parentController.user', function(newValue, oldValue){
+        console.log(newValue.mealsMade);
+        console.log(oldValue.mealsMade);
+        if (newValue){
+            if (newValue.activeMeals){
+                $scope.activeMeals = newValue.activeMeals;
+            } else {
+                $scope.activeMeals = undefined;
+            }
+            if(newValue.mealsMade){
+                //for each, go to firebase & fetch data
+                var meals = [];
+                newValue.mealsMade.forEach(function(mealKey){
                     
+                    firebase.database().ref('/dish/' + mealKey).on("value", function(snapshot){
+                        if (snapshot.val()){
+                            console.log(snapshot.val());
+                            if (snapshot.val().ownerid === newValue.uid){
+                                meals.push(snapshot.val());    
+                            }
+                        }
+                        $timeout(function() {
+                            $scope.mealsMade = meals;
+                        });
+                    }); //end firebase fetch data
                 });
+                
+            } else {
+                $scope.mealsMade = undefined;
             }
         } else {
-            $timeout(function() {
-                $scope.user = undefined;
-                $scope.activeMeals = undefined;
-                $scope.mealsMade = undefined;
-            });
+            $scope.activeMeals = undefined;
+            $scope.mealsMade = undefined;
         }
+        
     });
-
-
+    
 
     $scope.updateProfile = {};
     $scope.updateProfile.changeAddress = false;

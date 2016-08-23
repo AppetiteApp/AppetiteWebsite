@@ -79,10 +79,10 @@
 
 <div id="repeateditemactive" ng-cloak>
   <div ng-init="dish.edit=1" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
-      <div ng-repeat="activeMeal in activeMeals">
+      <div ng-repeat="meal in mealsMade">
         <div class="dishthumbnailactive">
           <img class="img-thumbnail" ng-src="/img/gordon"/>
-          {{activeMeal}}
+          {{meal}}
         </div>      
       
     
@@ -100,7 +100,7 @@
         </br></br>
       </div>
 
-      <div class="chefnameactive">by Gordon Ramsey</div>
+      <div class="chefnameactive">by Ramsey</div>
       <input type="text" ng-show="!dish.edit" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></input>
 
       <div ng-show="dish.edit" id="profiledishdescription">"sklfjh asdlkjfh asdlkfja hsdnclkasj laksjncalsdkjcn fuckin delicious"</div>
