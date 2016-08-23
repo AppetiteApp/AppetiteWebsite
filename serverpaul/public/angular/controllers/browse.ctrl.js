@@ -17,6 +17,9 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
 
             if (!child.val().archived && endTime.getTime() >= timeNow.getTime()){
                 var dish = child.val();
+                
+                console.log(dish);
+                
                 dish.key = child.key;
                 var startTime = new Date(dish.time.startTime);
                 dish.ownerName = dish.owner;
@@ -38,7 +41,12 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
 
                     //set dish.status according to whether or not it's in activeMeals
                     var activeMeals = $scope.parentController.activeMeals;
-                    var orderBy = new Date(child.val().orderBy);
+                    var orderBy = new Date(dish.orderBy);
+                    console.log(dish.dishName);
+                    console.log(orderBy);
+                    console.log(timeNow);
+                    
+                    
                     if (dish.ownerid === $scope.parentController.uid){
                         dish.ownerName = "me";
                         dish.status = "manage";
@@ -59,6 +67,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
         $timeout(function() {
             $scope.dishes = dishes;
         });
+        
     });
 
     //watch the $scope.parentController.uid
@@ -78,15 +87,12 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
                 if (dish.ownerid === $scope.parentController.uid){
                     dish.ownerName = "me";
                     dish.status = "manage";
-                } else if (!$scope.parentController.activeMeals && orderBy.getTime() - timeNow.getTime() >= 0){
-                    dish.status = 'order';
-                    console.log("dish.status is " + dish.status );
-                }else if ($scope.parentController.activeMeals  && orderBy.getTime() - timeNow.getTime() >= 0) {
-                    if (!$scope.parentController.activeMeals[dish.key]){
-                        dish.status = "order";
-                    } else {
+                } else if ($scope.parentController.activeMeals && orderBy.getTime() - timeNow.getTime() >= 0){
+                    if ($scope.parentController.activeMeals[dish.key]){
                         dish.status = "ordered";
                     }
+                } else {
+                    dish.status = "order";
                 }
             });
 
@@ -138,4 +144,20 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
         
         
     };
+    
+    $scope.cancelOrder = function(dish){
+        if (dish.status === 'ordered'){
+            $http.post('/api/cancelOrder', {
+                dishid: dish.key,
+                uid   : $scope.parentController.uid,
+                personType: "buyer"
+            })
+            .then(function(res){
+                console.log(res.data);
+            },
+            function(err){
+                console.log(err);
+            });
+        }
+    }
 };

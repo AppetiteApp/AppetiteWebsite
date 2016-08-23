@@ -22,7 +22,7 @@
                 <span class="close4" ng-click="selection.selectedNode = null">x</span>
 
                   {{dish.popupMessage}}<br>
-                  <div ng-repeat="purchase in dish.purchases" ng-if="dish.purchases && parentController.uid===dish.ownerid">
+                  <div ng-repeat="purchase in dish.purchases track by $index" ng-if="dish.purchases && parentController.uid===dish.ownerid">
                       {{purchase.buyerName}} has ordered your dish!<br>
                   </div>
                   
