@@ -27,7 +27,6 @@ var parentController = ['$timeout', '$scope', function($timeout, $scope) {
                     
                     $scope.parentController.user = snapshot.val();
                     $scope.emailVerified = user.emailVerified; 
-                    $scope.parentController.activeMeals = snapshot.val().activeMeals;
                     $scope.parentController.dish.location = {
                         name: snapshot.val().location,
                         lat: snapshot.val().lat,

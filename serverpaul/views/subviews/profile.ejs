@@ -1,4 +1,4 @@
-
+<span ng-if="parentController.uid">
   <ul id="profilenav" ng-init="tab=1">
     <li ng-class="{'profiletab': !(tab === 1),'tabclicked': tab === 1 }" ng-click="tab = 1">Active</li>
     <li ng-class="{'profiletab': !(tab === 2),'tabclicked': tab === 2 }" ng-click="tab = 2">Reviews</li>
@@ -7,7 +7,7 @@
 
 
 
-<img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" ng-click="showEditProfilePic=!showEditProfilePic"/>
+<img id="profilethumbnail" border-radius="10px" ng-src="{{parentController.user.photoUrl}}" ng-click="showEditProfilePic=!showEditProfilePic"/>
 
         <a href="#/home" id="logout" ng-click="signout()">Sign Out</a>
     </div>
@@ -19,7 +19,7 @@
 
 <div id="infocontainer">
 
-  <div id="username">{{user.firstName}} {{user.lastName}}</div>
+  <div id="username">{{parentController.user.firstName}} {{parentController.user.lastName}}</div>
   <label id="editbutton" for="c1" ng-click="user.changed=true" ng-init="user.changed=false"></label>
   <fieldset id="profilerating" class="rating">
       <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
@@ -42,13 +42,13 @@
     <div id="phonebox">
 
     <div id="phoneicon" for="phone"></div>
-    <input ng-class="{'profileinputedit': !user.changed, 'profileinput':user.changed}" type='text' ng-model="user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
+    <input ng-class="{'profileinputedit': !user.changed, 'profileinput':user.changed}" type='text' ng-model="parentController.user.phone" name="phone" ng-class="{focus: focus, blur: blur}" ng-focus="focus=true;blur=false" ng-blur="focus=false;blur=true" ng-init="focus=false;blur=true"/>
   </div>
 
     <div id="addressicon" ng-show="!user.changed"></div>
 
     <div ng-class="{'profileinputeditaddress': !user.changed, 'displaynone':user.changed}">
-      {{user.location}}
+      {{parentController.user.location}}
       <input type="checkbox" class="hiddencheckbox" id="c1" ng-model="updateProfile.changeAddress"/>
     </div>
     <div id="addresssearchbox" ng-show="user.changed">
@@ -56,12 +56,12 @@
 
       <input ng-model="queryAddress" class="addressinput" placeholder="Find address"/> <button id="locationedit" ng-click="submitAddress(queryAddress, user)"></button>
       <div class="addressresult">
-        <div ng-repeat="result in user.results" class="addressedit" ng-click="assignLocation(result, user)">
+        <div ng-repeat="result in user.results" class="addressedit" ng-click="assignLocation(result, parentController.user)">
             {{result.formatted_address}}
         </div>
       </div>
     </br>
-      <input id='profileedit' type="submit" value="Save Edits" ng-click="editProfile(user)" ng-show="user.changed"/>
+      <input id='profileedit' type="submit" value="Save Edits" ng-click="editProfile(parentController.user)" ng-show="user.changed"/>
     </div>
 
     <div ng-show="!user.changed" id="feedbackform">
@@ -79,9 +79,13 @@
 
 <div id="repeateditemactive" ng-cloak>
   <div ng-init="dish.edit=1" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
-    <div class="dishthumbnailactive">
-      <img class="img-thumbnail" src="/imgs/gordon.jpg"/>
-    </div>
+      <div ng-repeat="activeMeal in activeMeals">
+        <div class="dishthumbnailactive">
+          <img class="img-thumbnail" ng-src="/img/gordon"/>
+          {{activeMeal}}
+        </div>      
+      
+    
       <div ng-show="dish.edit" id="dishpriceactive">$7</div>
       <input type="text" ng-show="!dish.edit" ng-model="dish.price" placeholder="$7" id="dishpriceedit"/>
 
@@ -89,20 +93,20 @@
         <div ng-show="dish.edit" id="dishtitleactive">linguini</div>
         <input placeholder="linguini" ng-show="!dish.edit" id="dishtitleactiveedit" type="text" ng-model="dish.dishName"/>
 
-      </br>
-      </br>
+        </br>
+        </br>
 
 
-      </br></br>
-    </div>
+        </br></br>
+      </div>
 
-    <div class="chefnameactive">by Gordon Ramsey</div>
-    <input type="text" ng-show="!dish.edit" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></input>
+      <div class="chefnameactive">by Gordon Ramsey</div>
+      <input type="text" ng-show="!dish.edit" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></input>
 
-    <div ng-show="dish.edit" id="profiledishdescription">"sklfjh asdlkjfh asdlkfja hsdnclkasj laksjncalsdkjcn fuckin delicious"</div>
+      <div ng-show="dish.edit" id="profiledishdescription">"sklfjh asdlkjfh asdlkfja hsdnclkasj laksjncalsdkjcn fuckin delicious"</div>
 
 
-    <div ng-show="!dish.edit" id="logisticssubmitactive">
+      <div ng-show="!dish.edit" id="logisticssubmitactive">
          <label>Today</label><input type="radio" ng-model="dish.time.date" value="today"/>
          <label>Tomorrow</label><input type="radio" ng-model="dish.time.date" value="tomorrow" />
          <label>Choose Date</label><input type="radio" ng-model="dish.time.date" value="custom" /><br>
@@ -112,34 +116,31 @@
          <label id="tolabelactive">To:</label>
          <input class="logistictextbox" ng-show="dish.time.date==='custom'" id="submitdate" type="date" ng-model="dish.time.endTime" />
          <input class="logistictextbox" type="time" ng-model="dish.time.endTime" step="600"/>
-     </div>
-     <div id="profilesubmitteddate" ng-show="dish.edit">
-        Tuesday July 36, 2016
-     </div>
+      </div>
+      <div id="profilesubmitteddate" ng-show="dish.edit">
+         Tuesday July 36, 2016
+      </div>
 
-     <div ng-show="!dish.edit" class="activeaddresssearch">
-     <input id="profileaddresssearch" placeholder="Find Address" ng-show="!dish.edit" type="text" ng-model="dish.queryAddress" />
-     <button ng-show="!dish.edit" id="activeaddresssearch" ng-click="submitAddress(dish.queryAddress, dish)"></button>
+      <div ng-show="!dish.edit" class="activeaddresssearch">
+       <input id="profileaddresssearch" placeholder="Find Address" ng-show="!dish.edit" type="text" ng-model="dish.queryAddress" />
+       <button ng-show="!dish.edit" id="activeaddresssearch" ng-click="submitAddress(dish.queryAddress, dish)"></button>
 
-     <div id="addressresultactive">
-       <div  class="addresseditactive" ng-show="!dish.edit" ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
+       <div id="addressresultactive">
+         <div  class="addresseditactive" ng-show="!dish.edit" ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
            {{result.formatted_address}}
+         </div>
        </div>
-     </div>
 
-     </div>
-     <div id="profilesubmittedaddress" ng-show="dish.edit">
+      </div>
+      <div id="profilesubmittedaddress" ng-show="dish.edit">
           627 Rue Alcatraz, newton Ma 023
-     </div>
-
-
-
-  </div>
-
+      </div>
+</div>
   <button ng-show="dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
   <button ng-show="!dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
 
 <hr id="activehr">
+</div>
 </div>
 
 
@@ -270,6 +271,7 @@
         </div>
 
 </div>
+</span>
 <script src="/js/classie.js"></script>
 <script src="/js/uiMorphingButton_fixed.js"></script>
 <script>
