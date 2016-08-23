@@ -176,14 +176,27 @@ module.exports = function(app){
         // cancellation (who cancelled it and for what reason?)
     // keep a log
     // only buyers can cancel (for now)
-    app.post('/api/cancelRequest', function(req, res){
+    app.post('/api/cancelOrder', function(req, res){
+        var errors = [];
         if (!req.body.uid || !req.body.personType || !req.body.dishid){
-            res.send({
-                errors: [{
-                    errorType: "info",
-                    errorMessage: "missing info"
-                }]
+            errors.push({
+                errorType: "info",
+                errorMessage: "incomplete info"
             });
+        } else if (req.body.personType === 'buyer' || req.body.personType === 'chef' || req.body.personType === 'admin'){
+            //do nothing
+        } else {
+            errors.push({
+                errorType: 'personType',
+                errorMessage: 'invalid type of person'
+            });
+        }
+        
+        if (errors.length){
+            res.send({
+                errors: errors
+            });
+            return;
         }
         
         //verify that uid is valid, user has requested said meal, chef have not responded yet
@@ -204,12 +217,8 @@ module.exports = function(app){
                     errorType: "dish",
                     errorMessage: "invalid dishid"
                 }];
-            } else if (snapshot.val().activeMeals[req.body.dishid].pending === false){
-                errors = [{
-                    errorType: "dish",
-                    errorMessage: "cannot cancel a meal after the chef responds"
-                }];
             }
+            
             if (errors.length){
                 res.send({
                     errors: errors
@@ -229,17 +238,25 @@ module.exports = function(app){
                         errorType: "dish",
                         errorMessage: "request to purchase meal doesn't exist"
                     }];
-                } else if(!snapshot.val().purchases[req.body.uid]){
+                } else if(!JSON.parse(snapshot.val().purchases)[req.body.uid]){
                     errors = [{
                         errorType: "dish",
                         errorMessage: "request to purchase meal doesn't exist"
                     }];
-                } else if (snapshot.val().purchases[req.body.uid].pending === false){
-                    errors = [{
-                        errorType: "cancellation",
-                        errorMessage: "unable to find purchase record"
-                    }];
                 }
+                
+                //should not be able to cancel after the orderBy date has passed
+                var orderBy = new Date(snapshot.val().orderBy);
+                var timeNow = new Date();
+                
+                //should be, if you cancel the order after the orderBy time, then there's some penalization
+                if (orderBy.getTime() - timeNow.getTime() < 0 ){
+                    errors.push({
+                        errorType: "time",
+                        errorMessage: "cannot cancel order after a certain time"
+                    });
+                }
+                
                 if (errors.length){
                     res.send({
                         errors: errors
@@ -255,21 +272,14 @@ module.exports = function(app){
                     dish: {
                         dishName: snapshot.val().dishName,
                         description: snapshot.val().description,
-                        id: snapshot.key
+                        id: req.body.dishid
                     },
-                    personType: req.body.personType,
-                    requestDate: snapshot.val().purchases[req.body.buyerid].requestTime
+                    personType: req.body.personType
                 });
                 
                 
                 global.dishRef.child(req.body.dishid).child('purchases').child(req.body.uid).remove();
-                global.dishRef.child(req.body.dishid).child('purchases').child(req.body.uid).set({
-                    cancelled: new Date()
-                });
                 global.userRef.child(req.body.uid).child('activeMeals').child(req.body.dishid).remove();
-                global.userRef.child(req.body.uid).child('activeMeals').child(req.body.dishid).update({
-                    canceled: new Date()
-                });
                 
                 res.send({
                     message: "success"
