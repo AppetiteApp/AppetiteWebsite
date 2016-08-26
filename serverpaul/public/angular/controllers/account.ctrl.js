@@ -1,4 +1,4 @@
-var accountController = function($scope, $log, $location, $http, $timeout, sessionService){
+var accountController = function($scope, $log, $location, $http, $timeout, sessionService, timeService){
 
     $scope.active = true;
     $scope.active1 = true;
@@ -26,7 +26,23 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
                         if (snapshot.val()){
                             console.log(snapshot.val());
                             if (snapshot.val().ownerid === newValue.uid){
-                                meals.push(snapshot.val());    
+                                var dish = snapshot.val();
+                                var startTime = new Date(snapshot.val().time.startTime);
+                                var endTime = new Date(snapshot.val().time.endTime);
+                                var orderBy = new Date(snapshot.val().orderBy);
+                                
+                                
+                                dish.time.startTimeFormatted = timeService.formatDate(startTime) + " " + timeService.formatAPMP(startTime);
+                                
+                                dish.time.endTimeFormatted = timeService.formatDate(endTime) + " " + timeService.formatAPMP(endTime);
+                                dish.orderByFormatted = timeService.formatDate(orderBy) + " " + timeService.formatAPMP(orderBy);
+                                
+                                dish.time.startTime = startTime;
+                                dish.time.endTime = endTime;
+                                dish.orderBy = orderBy;
+                                
+                                
+                                meals.push(dish);    
                             }
                         }
                         $timeout(function() {

@@ -77,20 +77,19 @@
 
 <div class="tabview" ng-show="tab == 1">
 
-<div id="repeateditemactive" ng-cloak>
-  <div ng-init="dish.edit=1" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
-      <div ng-repeat="meal in mealsMade">
+<div id="repeateditemactive" ng-cloak ng-repeat="dish in mealsMade">
+  <div ng-init="dish.edit=true" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
+      
         <div class="dishthumbnailactive">
-          <img class="img-thumbnail" ng-src="/img/gordon"/>
-          {{meal}}
+          <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"/>
         </div>      
       
     
-      <div ng-show="dish.edit" id="dishpriceactive">$7</div>
+      <div ng-show="dish.edit" id="dishpriceactive">${{dish.price}}</div>
       <input type="text" ng-show="!dish.edit" ng-model="dish.price" placeholder="$7" id="dishpriceedit"/>
 
       <div id="itemboxactive">
-        <div ng-show="dish.edit" id="dishtitleactive">linguini</div>
+        <div ng-show="dish.edit" id="dishtitleactive">{{dish.dishName}}</div>
         <input placeholder="linguini" ng-show="!dish.edit" id="dishtitleactiveedit" type="text" ng-model="dish.dishName"/>
 
         </br>
@@ -100,30 +99,31 @@
         </br></br>
       </div>
 
-      <div class="chefnameactive">by Ramsey</div>
+      <!--<div class="chefnameactive">My Dish</div>-->
       <input type="text" ng-show="!dish.edit" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></input>
 
-      <div ng-show="dish.edit" id="profiledishdescription">"sklfjh asdlkjfh asdlkfja hsdnclkasj laksjncalsdkjcn fuckin delicious"</div>
+      <div ng-show="dish.edit" id="profiledishdescription">"{{dish.description}}"</div>
 
 
       <div ng-show="!dish.edit" id="logisticssubmitactive">
-         <label>Today</label><input type="radio" ng-model="dish.time.date" value="today"/>
-         <label>Tomorrow</label><input type="radio" ng-model="dish.time.date" value="tomorrow" />
-         <label>Choose Date</label><input type="radio" ng-model="dish.time.date" value="custom" /><br>
+          <label>Order By:</label>
+          <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.orderBy" />
+         <input class="logistictextbox" type="time" ng-model="dish.orderBy" step="600"/><br>
          <label id="fromlabelactive">From:</label>
-         <input class="logistictextbox" id="submitdate" ng-show="dish.time.date==='custom'" type="date" ng-model="dish.time.startTime" />
+         <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.startTime" />
          <input class="logistictextbox" type="time" ng-model="dish.time.startTime" step="600"/>
          <label id="tolabelactive">To:</label>
-         <input class="logistictextbox" ng-show="dish.time.date==='custom'" id="submitdate" type="date" ng-model="dish.time.endTime" />
+         <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.endTime" />
          <input class="logistictextbox" type="time" ng-model="dish.time.endTime" step="600"/>
       </div>
       <div id="profilesubmitteddate" ng-show="dish.edit">
-         Tuesday July 36, 2016
+         Order By: {{dish.orderByFormatted}}<br>
+         Pickup: {{dish.time.startTimeFormatted}} to {{dish.time.endTimeFormatted}}
       </div>
 
       <div ng-show="!dish.edit" class="activeaddresssearch">
-       <input id="profileaddresssearch" placeholder="Find Address" ng-show="!dish.edit" type="text" ng-model="dish.queryAddress" />
-       <button ng-show="!dish.edit" id="activeaddresssearch" ng-click="submitAddress(dish.queryAddress, dish)"></button>
+       <input id="profileaddresssearch" placeholder="New Address" ng-show="!dish.edit" type="text" ng-model="queryAddress" />
+       <button ng-show="!dish.edit" id="activeaddresssearch" ng-click="submitAddress(queryAddress, dish)">Find New Address!</button>
 
        <div id="addressresultactive">
          <div  class="addresseditactive" ng-show="!dish.edit" ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
@@ -132,16 +132,19 @@
        </div>
 
       </div>
+      
       <div id="profilesubmittedaddress" ng-show="dish.edit">
-          627 Rue Alcatraz, newton Ma 023
+          Pickup at: {{dish.location}}
       </div>
-</div>
-  <button ng-show="dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
+      
+      <button ng-show="dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
   <button ng-show="!dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
 
+
+</div>
 <hr id="activehr">
 </div>
-</div>
+
 
 
 <!-- Active Meal Bought -->

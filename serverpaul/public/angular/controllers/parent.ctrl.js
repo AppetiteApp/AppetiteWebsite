@@ -1,9 +1,11 @@
 //this will be the parent controller, with things like uid, verifications, etc
 //user
-var parentController = ['$timeout', '$scope', function($timeout, $scope) {
+var parentController = ['$timeout', '$scope', 'sessionService', function($timeout, $scope, sessionService) {
     $scope.parentController = {
         dish: {}
     };
+    
+    $scope.parentController.signout = sessionService.signout;
     
     
     //if the person is logged in, get that person's info
