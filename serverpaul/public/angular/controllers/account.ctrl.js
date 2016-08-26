@@ -1,114 +1,66 @@
-var accountController = function($scope, $log, $location, $http, $timeout, sessionService){
+var accountController = function($scope, $log, $location, $http, $timeout, sessionService, timeService){
 
     $scope.active = true;
     $scope.active1 = true;
 
     $scope.signout = sessionService.signout;
 
-    $scope.user = firebase.auth().currentUser;
+    $scope.user = $scope.parentController.user;
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
-    console.log($scope.parentController.user);
 
-    $scope.$watch('parentController.uid', function(newValue, oldValue){
-
-        if ($scope.parentController){
-            console.log($scope.parentController);
-
-            firebase.database().ref('users/' +  $scope.parentController.uid).on('value', function(snapshot){
-                $log.log(snapshot.val());
-                if (snapshot.val()){
-                    $timeout(function(){
-                    $scope.user.firstName = snapshot.val().firstName;
-                    $scope.user.lastName  = snapshot.val().lastName;
-                    $scope.user.phone     = snapshot.val().phone;
-                    $scope.user.location  = snapshot.val().location;
-                    $scope.user.description = snapshot.val().description;
-                    $scope.user.dishes    = {};
-                    $scope.user.lat = snapshot.val().lat;
-                    $scope.user.lng = snapshot.val().lng;
-                    $scope.user.photoUrl = snapshot.val().photoUrl;
-
-                    //go and fetch meals
-                    if (snapshot.val().mealsMade){
-                        snapshot.val().mealsMade.forEach(function(mealId){
-                            firebase.database().ref('dish/' + mealId).on('value', function(snapshot){
-                                //make the date into a Date object
-                                var time = {
-                                    startTime: new Date(snapshot.val().time.startTime),
-                                    endTime: new Date(snapshot.val().time.endTime)
-                                };
-
-                                $timeout(function(){
-                                    $scope.user.dishes[mealId] = snapshot.val();
-                                    $scope.user.dishes[mealId].key = mealId;
-                                    $scope.user.dishes[mealId].time = time;
-                                });
-
-                                console.info(snapshot.val().time);
-                            });//end firebase fetch dish info
-                        });//end foreach meal
-
-                    }
-
-                }); //end $timeout
-                }
-
-            }); //end fetch user data
-        }
-    });
-
-
-
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-            $timeout(function() {
-                $scope.user = user;
-            });
-            console.log(user);
-                //getting the user's info and the user's dishes info
-    firebase.database().ref('users/' +  user.uid).on('value', function(snapshot){
-        $log.log(snapshot.val());
-        $timeout(function(){
-            $scope.user.firstName = snapshot.val().firstName;
-            $scope.user.lastName  = snapshot.val().lastName;
-            $scope.user.phone     = snapshot.val().phone;
-            $scope.user.location  = snapshot.val().location;
-            $scope.user.description = snapshot.val().description;
-            $scope.user.dishes    = {};
-            $scope.user.lat = snapshot.val().lat;
-            $scope.user.lng = snapshot.val().lng;
-            $scope.user.photoUrl = snapshot.val().photoUrl;
-
-            //go and fetch meals
-            if (snapshot.val().mealsMade){
-                snapshot.val().mealsMade.forEach(function(mealId){
-                    firebase.database().ref('dish/' + mealId).once('value', function(snapshot){
-                        //make the date into a Date object
-                        var time = {
-                            startTime: new Date(snapshot.val().time.startTime),
-                            endTime: new Date(snapshot.val().time.endTime)
-                        };
-
-                        $timeout(function(){
-                            $scope.dishes[mealId] = snapshot.val();
-                            $scope.dishes[mealId].key = mealId;
-                            $scope.dishes[mealId].time = time;
-                        });
-
-                        console.info(snapshot.val().time);
-                  });//end firebase fetch dish info
-                });//end foreach meal
-
+    $scope.$watch('parentController.user', function(newValue, oldValue){
+        console.log(newValue.mealsMade);
+        console.log(oldValue.mealsMade);
+        if (newValue){
+            if (newValue.activeMeals){
+                $scope.activeMeals = newValue.activeMeals;
+            } else {
+                $scope.activeMeals = undefined;
             }
-
-        }); //end $timeout
-    });
-        }else {
-            $timeout(function() {
-                $scope.user = undefined;
-            });
+            if(newValue.mealsMade){
+                //for each, go to firebase & fetch data
+                var meals = [];
+                newValue.mealsMade.forEach(function(mealKey){
+                    
+                    firebase.database().ref('/dish/' + mealKey).on("value", function(snapshot){
+                        if (snapshot.val()){
+                            console.log(snapshot.val());
+                            if (snapshot.val().ownerid === newValue.uid){
+                                var dish = snapshot.val();
+                                var startTime = new Date(snapshot.val().time.startTime);
+                                var endTime = new Date(snapshot.val().time.endTime);
+                                var orderBy = new Date(snapshot.val().orderBy);
+                                
+                                
+                                dish.time.startTimeFormatted = timeService.formatDate(startTime) + " " + timeService.formatAPMP(startTime);
+                                
+                                dish.time.endTimeFormatted = timeService.formatDate(endTime) + " " + timeService.formatAPMP(endTime);
+                                dish.orderByFormatted = timeService.formatDate(orderBy) + " " + timeService.formatAPMP(orderBy);
+                                
+                                dish.time.startTime = startTime;
+                                dish.time.endTime = endTime;
+                                dish.orderBy = orderBy;
+                                
+                                
+                                meals.push(dish);    
+                            }
+                        }
+                        $timeout(function() {
+                            $scope.mealsMade = meals;
+                        });
+                    }); //end firebase fetch data
+                });
+                
+            } else {
+                $scope.mealsMade = undefined;
+            }
+        } else {
+            $scope.activeMeals = undefined;
+            $scope.mealsMade = undefined;
         }
+        
     });
+    
 
     $scope.updateProfile = {};
     $scope.updateProfile.changeAddress = false;

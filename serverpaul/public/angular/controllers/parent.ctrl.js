@@ -1,9 +1,11 @@
 //this will be the parent controller, with things like uid, verifications, etc
 //user
-var parentController = ['$timeout', '$scope', function($timeout, $scope) {
+var parentController = ['$timeout', '$scope', 'sessionService', function($timeout, $scope, sessionService) {
     $scope.parentController = {
         dish: {}
     };
+    
+    $scope.parentController.signout = sessionService.signout;
     
     
     //if the person is logged in, get that person's info
@@ -27,14 +29,15 @@ var parentController = ['$timeout', '$scope', function($timeout, $scope) {
                     
                     $scope.parentController.user = snapshot.val();
                     $scope.emailVerified = user.emailVerified; 
-                    $scope.parentController.activeMeals = snapshot.val().activeMeals;
                     $scope.parentController.dish.location = {
                         name: snapshot.val().location,
                         lat: snapshot.val().lat,
                         lng: snapshot.val().lng,
                         error: undefined
                     };
-                    console.log("Logged in with: " + $scope.parentController.uid);
+                    $scope.parentController.activeMeals = snapshot.val().activeMeals;
+                    $scope.parentController.mealsMade = snapshot.val().mealsMade;
+                    console.log($scope.parentController);
                         
                     if (!snapshot.val().lng){
                         $scope.parentController.dish.location.error = "Please fill out your address before posting a dish!";

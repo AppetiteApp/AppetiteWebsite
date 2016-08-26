@@ -248,9 +248,10 @@ module.exports = function(app){
                 //should not be able to cancel after the orderBy date has passed
                 var orderBy = new Date(snapshot.val().orderBy);
                 var timeNow = new Date();
+                var startTime = new Date(snapshot.val().time.startTime);
                 
                 //should be, if you cancel the order after the orderBy time, then there's some penalization
-                if (orderBy.getTime() - timeNow.getTime() < 0 ){
+                if (orderBy.getTime() - timeNow.getTime() < 0 || startTime.getTime() - timeNow.getTime() <= 1000*60*60*2){
                     errors.push({
                         errorType: "time",
                         errorMessage: "cannot cancel order after a certain time"
