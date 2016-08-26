@@ -11,6 +11,7 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
     $scope.$watch('parentController.user', function(newValue, oldValue){
         console.log(newValue.mealsMade);
         console.log(oldValue.mealsMade);
+        console.log(newValue.activeMeals);
         if (newValue){
             if (newValue.activeMeals){
                 $scope.activeMeals = newValue.activeMeals;
@@ -41,6 +42,11 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
                                 dish.time.endTime = endTime;
                                 dish.orderBy = orderBy;
                                 
+                                if (snapshot.val().purchases){
+                                    dish.purchases = JSON.parse(dish.purchases);
+                                } else {
+                                    dish.purchases = undefined;
+                                }
                                 
                                 meals.push(dish);    
                             }
@@ -49,11 +55,31 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
                             $scope.mealsMade = meals;
                         });
                     }); //end firebase fetch data
+                    
                 });
                 
             } else {
                 $scope.mealsMade = undefined;
             }
+            
+            if(newValue.activeMeals){
+                var activeMeals = [];
+                for (var mealKey in newValue.activeMeals){
+                    firebase.database().ref('/dish/' + mealKey).on("value", function(snapshot){
+                        if (snapshot.val()){
+                            activeMeals.push(snapshot.val());    
+                        }
+                        
+                    });
+                    console.log(mealKey);
+                }
+                $timeout(function() {
+                    $scope.activeMeals = activeMeals;
+                });
+            } else {
+                $scope.activeMeals = undefined;
+            }
+            
         } else {
             $scope.activeMeals = undefined;
             $scope.mealsMade = undefined;

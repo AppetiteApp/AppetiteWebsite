@@ -137,28 +137,30 @@
           Pickup at: {{dish.location}}
       </div>
       
-      <button ng-show="dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
-  <button ng-show="!dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
-
-
 </div>
+    
+    <button ng-show="dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
+    <button ng-show="!dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
+    <div ng-if="dish.purchases">
+        Orders:
+        <p ng-repeat="(buyerid, buyerObj) in dish.purchases">{{buyerObj.buyerName}} : {{buyerObj.buyerPhone}}</p>
+    </div>
 <hr id="activehr">
 </div>
 
 
 
 <!-- Active Meal Bought -->
-
-<div id="repeateditemactive" ng-cloak>
+<div id="repeateditemactive" ng-cloak ng-repeat="activeMeal in activeMeals">
 
       <div id="dishbannerrating" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
         <div class="dishthumbnailactive">
           <img class="img-thumbnail" src="/imgs/gordon.jpg"/>
         </div>
-          <div id="dishprice">$4</div>
+          <div id="dishprice">${{activeMeal.price}}</div>
         <div id="itemboxrating">
-          <div id="dishtitle">Wonton Soup</div>
-          <div class="chefname">by Jones Jones</div></br>
+          <div id="dishtitle">{{activeMeal.dishName}}</div>
+          <div class="chefname">by {{activeMeal.owner}}</div></br>
           <div id="activeratings">
             <div id="valuerating">
               <label class="ratinglabel">value:</label>
@@ -201,9 +203,9 @@
       </div>
 
   <div class="slideDown" ng-hide="!dish.active" id="itemdetails">
-  <div class="dishdescription">"Super yummy wonton soup made by yaboi Jones Jones, yes that is my real name"</div>
-      <div id="dishphoneactive">514-gofuckyourself</div>
-        <div id="dishaddressactive">4235 Rue JONES JONES JONES, H2W 1V6</div>
+  <div class="dishdescription">"{{activeMeal.owner}}"</div>
+      <div id="dishphoneactive">{{activeMeal.phone}}</div>
+        <div id="dishaddressactive">{{activeMeal.location}}</div>
 </div>
 </div>
 
