@@ -138,10 +138,7 @@ background-color: white;
 #pricebox label {
     font-family: Source Sans Pro;
 	padding: 10px 0 0;
-	color: #d5bba4;
-	text-transform: uppercase;
-	letter-spacing: 1px;
-	font-weight: bold;
+	color: #ebd3bd;
 }
 
 .logistictextbox button {
@@ -175,14 +172,21 @@ background-color: white;
     margin: 0 auto;
 }
 
+#portionsbox{
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
 
+}
 
 .menusubmit{
     font-family:Source Sans Pro;
     width: 100%;
     height:auto;
     max-width: 320px;
-    margin: auto;
+    margin: 0 auto;
 }
 
 #dishbox{
@@ -194,6 +198,10 @@ background-color: white;
 #whatchamakin{
     color: #75d0f4;
     font-size: 20px;
+}
+
+#howmany{
+  font-size: 15px;
 }
 
 .menutextbox{
@@ -227,7 +235,7 @@ background-color: white;
 
 #descriptionlabel{
     font-size:15px;
-    color:#d5bba4;
+    color:#ebd3bd;
 }
 
 #submit{
@@ -277,13 +285,13 @@ background-color: white;
 #fromlabel{
     width:50px;
     font-size:15px;
-    color:#d5bba4;
+    color:#ebd3bd;
 }
 
 #tolabel{
    width:50px;
    font-size:15px;
-   color:#d5bba4;
+   color:#ebd3bd;
 }
 
 .secondarylabel{

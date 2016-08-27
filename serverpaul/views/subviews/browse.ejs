@@ -5,7 +5,6 @@
     <div id="submitsuccess" ng-cloak>{{message}}</div>
   <div id="innercontainer" ng-init="selection = { selectedNode:  null }">
   <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak>
-
         <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
           <div class="dishthumbnail">
             <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"/>
@@ -48,7 +47,9 @@
     <div class="slideDown" ng-hide="!dish.active" id="itemdetails">
         <div class="dishdescription">"{{dish.description}}"</div>
     </div>
+
   </div>
+
 </div>
 </div>
 
