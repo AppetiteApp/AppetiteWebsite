@@ -9,11 +9,9 @@
 
 <img id="profilethumbnail" border-radius="10px" ng-src="{{user.photoUrl}}" ng-click="showEditProfilePic=!showEditProfilePic"/>
 
-        <a href="#/home" id="logout" ng-click="signout()">Sign Out</a>
     </div>
 
 
-  <a href="#/home" id="logout" ng-click="signout()">Sign Out</a>
 
 
 
@@ -66,11 +64,13 @@
       <input id='profileedit' type="submit" value="Save Edits" ng-click="editProfile(user)" ng-show="user.changed"/>
     </div>
 
-    <div ng-show="!user.changed" id="feedbackform">
+    <!-- <div ng-show="!user.changed" id="feedbackform">
       <textarea id="feedback" rows="10" cols="2" ng-model="feedback"></textarea>
-        <!--<label>Leave feedback anonymously by ticking this checkbox: </label><input type="checkbox" ng-model="anonymous" />-->
       <button id="feedbackbutton" ng-click="submitFeedback()">Send Us Your Feedback!</button>
-    </div>
+    </div> -->
+  </br>
+    <button href="#/home" id="logout" ng-click="signout()">Sign Out</button>
+
 </div>
 
 
@@ -101,7 +101,7 @@
     <div class="chefnameactive">by Gordon Ramsey</div>
     <input type="text" ng-show="!dish.edit" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></input>
 
-    <div ng-show="dish.edit" id="profiledishdescription">"sklfjh asdlkjfh asdlkfja hsdnclkasj laksjncalsdkjcn fuckin delicious"</div>
+    <div ng-show="dish.edit" class="profiledishdescription">"sklfjh asdlkjfh asdlkfja hsdnclkasj laksjncalsdkjcn fuckin delicious"</div>
 
 
     <div ng-show="!dish.edit" id="logisticssubmitactive">
@@ -140,6 +140,8 @@
 
   <button ng-show="dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
   <button ng-show="!dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
+  <button ng-show="!dish.edit" class="activecancelbutton" ng-click="dish.edit=!dish.edit">Cancel</button>
+
 
 <hr id="activehr">
 </div>
@@ -150,18 +152,40 @@
 <div id="repeateditemactive" ng-cloak>
 
       <div id="dishbannerrating" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
-        <div class="dishthumbnailactive">
+        <div class="dishthumbnailactivereview">
           <img class="img-thumbnail" src="/imgs/gordon.jpg"/>
         </div>
-          <div id="dishprice">$4</div>
         <div id="itemboxrating">
-          <div id="dishtitle">Wonton Soup</div>
+          <div id="dishtitlerating">Wonton Soup</div>
           <div class="chefname">by Jones Jones</div></br>
-          <div id="activeratings">
-            <div id="valuerating">
-              <label class="ratinglabel">value:</label>
+        </div>
+        <div class="profiledishdescription">"sklfjh asdlkjfh asdlkfja hsdnclkasj laksjncalsdkjcn fuckin delicious"</div>
 
-              <fieldset class="rating" id="valueratingfield">
+        <br>
+        <div class="rateandreview">
+        <div class="pleaserate">Please rate or review your experience!</div>
+
+        <div id="activeratings">
+
+          <div id="valueratingbox">
+          <div id="valuerating">
+            <label class="ratinglabel">value:</label>
+
+            <fieldset class="rating" id="valueratingfield">
+                <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
+                <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
+                <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
+                <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
+                <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
+            </fieldset>
+        </div>
+      </div>
+
+        <div id="timingratingbox">
+        <div id="timingrating">
+          <label class="ratinglabel">timing:</label>
+
+              <fieldset class="rating" id="timingratingfield">
                   <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
                   <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
                   <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
@@ -169,40 +193,30 @@
                   <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
               </fieldset>
           </div>
+        </div>
 
-          <div id="timingrating">
-            <label class="ratinglabel">timing:</label>
-
-                <fieldset class="rating" id="timingratingfield">
-                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
-                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
-                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
-                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
-                    <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
-                </fieldset>
-            </div>
-
-            <div id="tasterating">
-              <label class="ratinglabel">taste:</label>
-              <fieldset class="rating" id="tasteratingfield">
-                  <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
-                  <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
-                  <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
-                  <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
-                  <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
-              </fieldset>
-            </div>
-
+          <div id="tasteratingbox">
+          <div id="tasterating">
+            <label class="ratinglabel">taste:</label>
+            <fieldset class="rating" id="tasteratingfield">
+                <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
+                <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
+                <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
+                <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
+                <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
+            </fieldset>
           </div>
+        </div>
+        </div>
+
+        <textarea class="reviewbox">
+        </textarea>
+        <button id="submitreview">Submit Review</button>
+
 
         </div>
       </div>
 
-  <div class="slideDown" ng-hide="!dish.active" id="itemdetails">
-  <div class="dishdescription">"Super yummy wonton soup made by yaboi Jones Jones, yes that is my real name"</div>
-      <div id="dishphoneactive">514-gofuckyourself</div>
-        <div id="dishaddressactive">4235 Rue JONES JONES JONES, H2W 1V6</div>
-</div>
 </div>
 
 </div>
@@ -252,7 +266,19 @@
                     <img class="img-thumbnail" src="/imgs/gordon.jpg"/>
                   </div>
 
+
+
+
                   <div id="review">
+
+                    <fieldset class="rating" id="valueratingfield">
+                        <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
+                        <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
+                        <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
+                        <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
+                        <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
+                    </fieldset>
+
                     I thought it was wonderfull!!!! Seriously A+ job here buy chef Ramsey.
                   </br>
                     <div id="reviewdate">

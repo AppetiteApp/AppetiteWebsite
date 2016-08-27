@@ -499,9 +499,6 @@ input[type="checkbox"]:checked + label {
 
 
 #logout {
-    position:absolute;
-    right:20px;
-    top:17px;
     border-radius:5px;
     border:none;
     color:white;
@@ -509,9 +506,16 @@ input[type="checkbox"]:checked + label {
     background-color: #9b59b6;
     font-size:14px;
     font-family: 'Raleway', sans-serif;
-    padding: 5px 5px 5px 5px;
+    padding: 5px;
     text-decoration: none;
-}
+    display: block;
+    position: absolute;
+    bottom: 10px;
+    width: calc(100% - 100px);
+    margin-left: 50px;
+    margin-right: 50px;
+
+    }
 
 #feedback{
     width:calc(100% - 26px) !important;
@@ -765,6 +769,20 @@ animation:*/
 }
 
 
+#dishtitlerating {
+  color: black;
+  font-family: 'Raleway', sans-serif;
+  font-size: 25px;
+  height: auto;
+  width: auto;
+  margin-right: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left:5px;
+
+}
+
 
 #dishpriceedit{
   font-family: 'Raleway', sans-serif;
@@ -922,12 +940,16 @@ margin-bottom: 0px;
 
 #activeratings{
   margin: 4px;
-  color: orange;
-  font-family: 'Raleway', sans-serif;
-  height: auto;
-  width:165px;
-  float:right;
+  height: 41px;
+  width:100%;
+}
 
+.rateandreview{
+  width: 100%;
+  height: 200px;
+  position: relative;
+  padding-top: 5px;
+  text-align: center;
 }
 
 .ratinglabel{
@@ -939,36 +961,75 @@ margin-bottom: 0px;
 #tasterating{
 border: 1px solid orange;
 border-radius: 5px;
-float:right;
 text-align: center;
-margin: 5px;
-display: inline-block;
+display: block;
 height: 29px;
 width: 150px;
+color: orange;
+font-family: 'Raleway', sans-serif;
+margin: 0 auto;
+margin-bottom: 5px;
+margin-top: 5px;
+
+}
+
+#tasteratingbox{
+  height: auto;
+  width: 33%;
+  float:left;
+  position: relative;
+  min-width: 162px;
+  display: inline-block;
 }
 
 #valuerating{
   border: 1px solid orange;
   border-radius: 5px;
-  float:right;
   text-align: center;
-  margin: 5px;
-  display: inline-block;
+  display: block;
   height: 29px;
   width: 150px;
-
+  color: orange;
+  font-family: 'Raleway', sans-serif;
+  margin: 0 auto;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
+
+#valueratingbox{
+  height: auto;
+  width: 33%;
+  float:left;
+  position: relative;
+  min-width: 162px;
+  display: inline-block;
+}
+
 
 #timingrating{
   border: 1px solid orange;
   border-radius: 5px;
-  float:right;
   text-align: center;
-  margin: 5px;
-  display: inline-block;
+  display: block;
   height: 29px;
   width: 150px;
+  color: orange;
+  font-family: 'Raleway', sans-serif;
+  margin: 0 auto;
+  margin-bottom: 5px;
+  margin-top: 5px;
+
 }
+
+#timingratingbox{
+  height: auto;
+  width: 33%;
+  float:left;
+  position: relative;
+  min-width: 162px;
+  display: inline-block;
+}
+
 
 #review{
   font-family: 'Raleway', sans-serif;
@@ -985,7 +1046,7 @@ width: 150px;
   color: grey;
 }
 
-#profiledishdescription{
+.profiledishdescription{
   color: gray;
   font-family: 'Raleway', sans-serif;
   width:auto;
@@ -1047,10 +1108,11 @@ width: 150px;
   border:none;
 }
 
-.dishthumbnailactive {
+.dishthumbnailactivereview {
   display: inline-block;
   float:left;
   margin: 5px;
+  margin-left:9%;
   height:90px;
 }
 
@@ -1071,7 +1133,7 @@ width: 150px;
 }
 
 .activeeditbutton{
-display: block;
+display: inline-block;
 margin: 0 auto;
 height: auto;
 padding: 5px 10px 5px 10px;
@@ -1084,6 +1146,22 @@ font-size: 16px;
 outline: none;
 cursor: pointer;
 border-radius: 5px;
+}
+
+.activecancelbutton{
+  display: inline-block;
+  margin: 0 auto;
+  height: auto;
+  padding: 5px 10px 5px 10px;
+  border: 1px solid white;
+  color: white;
+  font-family: 'Raleway', sans-serif;
+  background-color: red;
+  width: auto;
+  font-size: 16px;
+  outline: none;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 #addressresultactive{
@@ -1124,15 +1202,11 @@ margin-bottom: 0px;
 }
 
 #dishbannerrating {
-  overflow: hidden;
-
   position:relative;
   width: auto;
   border: 2px solid white;
   border-radius: 14px;
   margin: 0;
-  height: auto;
-  z-index: 0;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -1141,4 +1215,38 @@ margin-bottom: 0px;
   text-align: left;
   cursor: pointer;
   text-overflow: ellipsis;
+}
+
+.pleaserate{
+  font-family: 'Raleway', sans-serif;
+  height: auto;
+  word-wrap: break-word;
+  display: inline-block;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   padding-left:5px;
+   color:orange;
+}
+
+.reviewbox{
+  width: calc(100% - 20px);
+  height: 100px;
+  margin: 10px;
+  border: 1px solid orange;
+  border-radius: 5px;
+  outline: none;
+}
+
+#submitreview{
+  width: auto;
+  height: auto;
+  color: white;
+  background-color: orange;
+  margin: 0 auto;
+  border-radius: 5px;
+  font-family: 'Raleway', sans-serif;
+  font-size:15px;
+  border:none;
+  padding:5px;
 }
