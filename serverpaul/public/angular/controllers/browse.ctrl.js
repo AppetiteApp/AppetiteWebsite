@@ -38,8 +38,8 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
                     console.log($scope.parentController.uid);
 
                     //set dish.status according to whether or not it's in activeMeals
-                    var activeMeals = $scope.parentController.activeMeals;
                     var orderBy = new Date(dish.orderBy);
+                    dish.orderByTime = timeService.formatDate(orderBy) + " " + timeService.formatAPMP(orderBy);
                     console.log(dish.dishName);
                     console.log(orderBy);
                     console.log(timeNow);

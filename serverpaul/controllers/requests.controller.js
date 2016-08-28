@@ -89,6 +89,7 @@ module.exports = function(app){
                 }else if (snapshot.val().purchases){
                     console.log("what what someone already tried to purchase this meal and there's more....?");
                     var dishPurchases = JSON.parse(snapshot.val().purchases);
+                    //var dishPurchases = snapshot.val().purchases;
                     if (dishPurchases[req.body.uid]){
                         errors.push({
                             errorType: "request",
@@ -148,7 +149,7 @@ module.exports = function(app){
                 console.log(dishInfo);
                 console.log(activeMeals);
                 
-                global.dishRef.child(req.body.dishid).update({purchases:purchases});
+                global.dishRef.child(req.body.dishid).update({purchases: purchases});
 
                 global.userRef.child(req.body.uid).child("activeMeals").update(activeMeals);
                 
@@ -309,6 +310,121 @@ module.exports = function(app){
         });
     }); //end function POST /api/cancelMeal
 
+
+    //buyer confirms that s/he has picked up the dish
+    //buyer's uid, dish's id, chef's name
+    app.post('/api/pickedUp', function(req, res){
+        console.log(req.body);
+        if (!req.body.uid || !req.body.dishid){
+            res.send({
+                errors: [{
+                    errorType: "api",
+                    errorMessage: "invalid user of api"
+                }]
+            });
+            return;
+        }
+        
+        var errors = [];
+        
+        
+        global.userRef.child(req.body.uid).once('value').then(function(snapshot){
+            if (!snapshot.val()){
+                errors.push({
+                    errorType: "database",
+                    errorMessage: "invalid use of database"
+                });
+            } else if (!snapshot.val().activeMeals){
+                errors.push({
+                    errorType: "database",
+                    errorMessage: "invalid use of database"
+                });
+            } else if (!snapshot.val().activeMeals[req.body.dishid]){
+                errors.push({
+                    errorType: "database",
+                    errorMessage: "invalid use of database"
+                });
+            } else {
+                var requestInfo = snapshot.val().activeMeals[req.body.dishid];
+                if (requestInfo.pickedUp){
+                    errors.push({
+                        errorType: "database",
+                        errorMessage: "invalid use of database"
+                    });
+                }
+            }
+            if (errors.length){
+                res.send({
+                    message: "request unsuccessful, invalid use of api"
+                });
+                return;
+            }
+            
+            //get info from database
+            global.dishRef.child(req.body.dishid).once('value').then(function(snapshot){
+                var purchases;
+                if (!snapshot.val()){
+                    errors.push({
+                        errorType: "database",
+                        errorMessage: "invalid use of database"
+                    });
+                } else if (!snapshot.val().purchases){
+                    errors.push({
+                        errorType: "database",
+                        errorMessage: "invalid use of database"
+                    });
+                } else {
+                    purchases = JSON.parse(snapshot.val().purchases);
+                    if (!purchases[req.body.uid]){
+                        errors.push({
+                            errorType: "database",
+                            errorMessage: "invalid use of database"
+                        });    
+                    } else if (purchases[req.body.uid]["pickedUp"]){
+                        errors.push({
+                            errorType: "purchase",
+                            errorMessage: "already picked up"
+                        });
+                    }
+                }
+                if (errors.length){
+                    res.send({
+                        message: "request unsuccessful, invalid use of api"
+                    });
+                    console.log(errors);
+                    return;
+                }
+                
+                //checks done, update and save info
+                requestInfo.pickedUp = true;
+                console.log("requestInfo");
+                console.log(requestInfo);
+                
+                global.userRef.child(req.body.uid).child("activeMeals").child(req.body.dishid).update(requestInfo);
+                
+                console.log("purchases");
+                console.log(purchases);
+                
+                purchases[req.body.uid]["pickedUp"] = true;
+                purchases = JSON.stringify(purchases);
+                global.dishRef.child(req.body.dishid).update({purchases: purchases});
+                
+                res.send("success");
+                
+            }, function(err){
+                errors.push({
+                    errorType: "database",
+                    errorMessage: "invalid use of database"
+                });
+            }); // end fetch firebase data for dish
+        }, function(err){
+            errors.push({
+                errorType: "database",
+                errorMessage: "invalid use of database"
+            });
+        }); // end fetch firebase data for user
+        
+    });
 };
 
 
