@@ -77,7 +77,7 @@
 
 <div class="tabview" ng-show="tab == 1">
 
-<div id="repeateditemactive" ng-cloak ng-repeat="dish in mealsMade">
+<div id="repeateditemactive" ng-cloak ng-repeat="dish in currentlyCooking">
   <div ng-init="dish.edit=true" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
 
         <div class="dishthumbnailactive">
@@ -180,6 +180,7 @@
 
         <div id="activeratings">
 
+<<<<<<< HEAD
           <div id="valueratingbox">
           <div id="valuerating">
             <label class="ratinglabel">value:</label>
@@ -197,6 +198,16 @@
         <div id="timingratingbox">
         <div id="timingrating">
           <label class="ratinglabel">timing:</label>
+=======
+                <fieldset class="rating" id="timingratingfield">
+                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
+                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4">4 stars</label>
+                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
+                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
+                    <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
+                </fieldset>
+            </div>
+>>>>>>> cherylserver
 
               <fieldset class="rating" id="timingratingfield">
                   <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>

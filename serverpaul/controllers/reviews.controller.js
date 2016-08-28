@@ -19,6 +19,8 @@ module.exports = function(app){
         //review: free for all answer
     //review has type 'chef' or 'buyer'
     //store review as a separate object, but link a reference of it to the reviewer & reviewee
+    //once finishes reviewing someone, dish should be moved to a pastPurchases list
+    //once all buyers reviews a dish or 2 days has past since the dish was 'ready', put dish in a pastMade list
     app.post('/api/reviewChef', function(req, res){
         if (!req.body.uid || !req.body.dishid || !req.body.rating || !req.body.chefid){
             res.send({
@@ -223,7 +225,7 @@ module.exports = function(app){
                     }]
                 });
                 return;
-            } else if (!snapshot.val().mealsMade) {
+            } else if (!snapshot.val().currentlyCooking) {
                 res.send({
                     errors: [{
                         errorType: "dish",
@@ -231,7 +233,7 @@ module.exports = function(app){
                     }]
                 });
                 return;
-            } else if (snapshot.val().mealsMade.indexOf(req.body.dishid) === -1){
+            } else if (snapshot.val().currentlyCooking.indexOf(req.body.dishid) === -1){
                 res.send({
                     errors: [{
                         errorType: "dish",

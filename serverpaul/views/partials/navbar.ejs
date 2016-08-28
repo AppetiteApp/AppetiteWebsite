@@ -49,7 +49,7 @@
                                   <label class="registerlabel">Confirm</label><input class="logintextbox" type="password" ng-model="user.confirmpassword" />
                                   <div id="termsconsent">By joining you agree to these <a href="#/terms">Terms</a></div>
                                   <button id="homeregister" ng-disabled=" (user.signuppassword!==user.confirmpassword) || (!user.signuppassword)">Join Appetite</button>
-                            </form>
+                </form>
       </div>
   </div>
 
@@ -92,6 +92,7 @@
 
 
                <div id="logisticssubmit">
+<<<<<<< HEAD
                   <div id="when">When are you making this dish?</div>
 
                   <div class="datebutton">
@@ -119,14 +120,30 @@
                     <input class="logistictextbox" type="time" ng-model="dish.time.startTime" step="600"/><br>
                   </div>
                   <div id="whattimebox">
+=======
+                    <div id="portionsbox">
+                    <label id="howmany">Portions:</label>
+                    <input type="number" name="portions" min="1" max="20"></div>
+                    </br>
+
+                    <div id="when">When are you making this dish?</div>
+                    <label>Today</label><input type="radio" ng-model="dish.time.date" value="today"/>
+                    <label>Tomorrow</label><input type="radio" ng-model="dish.time.date" value="tomorrow" />
+                    <label>Choose Date</label><input type="radio" ng-model="dish.time.date" value="custom" /></br></br>
+                    <label id="fromlabel">Pickup At:</label>
+                    <input class="logistictextbox" id="submitdate" ng-if="dish.time.date==='custom'" type="date" ng-model="dish.time.pickupTime" />
+                    <input class="logistictextbox" type="time" ng-model="dish.time.pickupTime" step="600"/><br><br>
+>>>>>>> d92cc112ef46f1977bbe8bf2fe40aabcb451b975
                     <div id="whattime">Order By:</div>
-                    <input class="logistictextbox" id="submitdate" ng-show="dish.time.date==='custom'" type="date" ng-model="dish.orderBy" />
+                    <input class="logistictextbox" id="submitdate" ng-if="dish.time.date==='custom'" type="date" ng-model="dish.orderBy" />
                     <input class="logistictextbox" type="time" ng-model="dish.orderBy" step="600"/><br>
                 </div>
               </div>
                 </br>
                </br>
                </br>
+               {{dish.complete}}
+                {{dish.orderBy}} - {{dish.time.pickupTime}}
                 <button class="logistictextbox" id="submit" type="submit"class="btn btn-default" ng-click="submitDish(dish)" ng-disabled="!dish.complete" ng-init="dish.complete=false">Submit</button>
               </div>
             </div>

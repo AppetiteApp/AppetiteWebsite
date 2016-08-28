@@ -32,7 +32,7 @@ $stateProvider
   })
   .state('terms', {
       templateUrl: '/terms',
-      url:'terms'
+      url:'/terms'
   })
   .state('cheryl/test', {
       templateUrl: '/cheryl/test',

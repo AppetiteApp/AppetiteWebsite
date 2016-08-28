@@ -45,8 +45,8 @@ module.exports = function(app){
                         errorMessage: "Cannot request the same meal twice"
                     });
                 }
-            } else if (snapshot.val().mealsMade) {
-                if (snapshot.val().mealsMade.indexOf(req.body.dishid) >=0){
+            } else if (snapshot.val().currentlyCooking) {
+                if (snapshot.val().currentlyCooking.indexOf(req.body.dishid) >=0){
                     errors.push({
                         errorType: "request",
                         errorMessage: "Cannot request your own meals"
