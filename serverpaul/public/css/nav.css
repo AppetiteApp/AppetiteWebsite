@@ -139,7 +139,6 @@ background-color: white;
     font-family: Source Sans Pro;
 	color: #ebd3bd;
   width: 100%;
-  text-align: center;
 }
 
 .logistictextbox{
@@ -186,12 +185,13 @@ background-color: white;
     height:auto;
     max-width: 320px;
     margin: 0 auto;
+    margin-top: 10px;
 }
 
 #dishbox{
     position: relative;
     display: inline-block;
-    width: 60%;
+    width: calc(70% - 2px);
 }
 
 #aroundbox{
@@ -222,7 +222,6 @@ background-color: white;
   font-size: 15px;
   color:#ebd3bd;
   width: 100%;
-  text-align: center;
 }
 
 .menutextbox{
@@ -236,13 +235,12 @@ background-color: white;
 #pricebox{
     position: relative;
     display: inline-block;
-    width: 18%;
+    width: calc(13% - 3px);
     margin-top: 5px;
     margin-bottom: 5px;
 }
 
 #pricetextbox{
-    width:43px;
     font-size: 16px;
     margin: 0 auto;
     margin-top:5px;
@@ -252,7 +250,6 @@ background-color: white;
 }
 
 #portiontextbox{
-    width:43px;
     font-size: 16px;
     margin: 0 auto;
     margin-top:5px;
@@ -261,7 +258,7 @@ background-color: white;
 }
 
 #portionsbox{
-    width: 20%;
+    width: calc(17% - 2px);
     font-size: 16px;
     height: auto;
     display: inline-block;
@@ -273,10 +270,10 @@ background-color: white;
 
 #descriptiontextbox{
     height: 70px;
-    width:calc(100% - 11px);
+    width:calc(100% - 6px);
     border: 1px solid #ebd3bd;
     font-size:14px;
-    margin-right: 5px;
+    margin-right: 6px;
 }
 
 #descriptionlabel{
@@ -287,6 +284,7 @@ background-color: white;
 }
 
 #submit{
+  border-radius: 5px;
   padding: .5em;
   border: none;
   background: #75d0f4;
@@ -426,21 +424,32 @@ background-color: white;
 }
 
 .datebutton{
-background-color:#EFEFEF;
+background-color:white;
 border-radius:5px;
 overflow:auto;
 display: inline-block;
 width: auto;
-padding: 5px;
+margin-right: 10px;
+border: 1px solid #ebd3bd;
+
 }
+
+.datebutton label{
+  padding:  5px 0 5px 0;
+}
+
 
 .datebutton input {
   position: absolute;
   top: -30px;
 }
+.datebutton span {
+  padding: 5px;
+  cursor: pointer;
+}
+
 
 .datebutton input:checked + span {
-    padding: 5px;
     background-color:#75d0f4;
     color:white;
     width: 100%;

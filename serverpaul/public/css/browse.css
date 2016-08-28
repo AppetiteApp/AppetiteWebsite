@@ -257,7 +257,7 @@ overflow-y: hidden;
   position: absolute;
   right: 0;
   overflow: auto;
-  width: 59%;
+  width: 60%;
   display: inline-block;
   height:calc(100% - 60px);
 
@@ -278,8 +278,7 @@ overflow-y: hidden;
     margin: 0;
     border-radius: 10px;
     display:inline-block;
-  object-fit: cover;
-
+    object-fit: cover;
 }
 
 #itemscontainer {
@@ -287,17 +286,30 @@ overflow-y: hidden;
   width:40%;
   height:calc(100% - 60px);
   top: 60px;
-  padding:3px;
   background-color: white;
   overflow-y: scroll;
   overflow: auto;
   margin:0;
 }
 
+#boughtseparate{
+  font-family: 'Raleway', sans-serif;
+}
+
+
+#browserseparate{
+  font-family: 'Raleway', sans-serif;
+}
+
 
 #innercontainer {
-  bottom: 80px;
-  top: 50px;
+  position: relative;
+  }
+
+#activeboughtcontainer  {
+  background-color: green;
+  width: 100%;
+  height:100px;
 }
 
 #repeateditem {
