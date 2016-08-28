@@ -172,7 +172,7 @@ module.exports = function(app) {
 	    });
 	    
 	    //update the user's dishes photoUrl
-	    global.userRef.child(req.body.uid).child('mealsMade').once("value", function(snapshot){
+	    global.userRef.child(req.body.uid).child('currentlyCooking').once("value", function(snapshot){
 	        //snapshot.val() is a list of meals that the user has made
 	        //NOTE TO SELF: maybe create a local copy of profile pic using 
 	        console.log(snapshot.val());

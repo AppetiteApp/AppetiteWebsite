@@ -110,7 +110,7 @@ module.exports = function(app) {
 		if (!data.time) {
 			errors.push({
 				errorType		: "time",
-				errorMessage	: "No time entered"
+				errorMessage	: "No pickup time entered"
 			});
 		} else {
 			dishObject.time = req.body.time;
@@ -139,7 +139,7 @@ module.exports = function(app) {
 				errorMessage	: "Invalid characters in prportionice"
 			});
 		} else {
-			dishObject.portion = data.portions;
+			dishObject.portions = data.portions;
 		}
 
 		//check if ingredients are there
@@ -176,20 +176,22 @@ module.exports = function(app) {
 
 
 		global.userRef.child(req.body.uid).once("value").then(function(snapshot){
-			console.log(snapshot.val());
-			var mealsMade = [];
-			if (snapshot.val().mealsMade) mealsMade = snapshot.val().mealsMade;
-			mealsMade.push(newDishKey);
+			if (snapshot.val()){
+		        var currentlyCooking = [];
+			    if (snapshot.val().currentlyCooking) currentlyCooking = snapshot.val().currentlyCooking;
+			    currentlyCooking.push(newDishKey);
 			
-			console.log("Meals Made: " + mealsMade);
-			global.userRef.child(req.body.uid).update({
-				"mealsMade": mealsMade
-			});
+			    console.log("Meals Made: " + currentlyCooking);
+			    global.userRef.child(req.body.uid).update({
+				    "currentlyCooking": currentlyCooking
+			    });
 
-			newDishRef.update({
-				"owner": snapshot.val().firstName + " " + snapshot.val().lastName || "",
-				"ownerPic": snapshot.val().photoUrl || ""
-			});
+		    	newDishRef.update({
+			    	"owner": snapshot.val().firstName + " " + snapshot.val().lastName || "",
+				    "ownerPic": snapshot.val().photoUrl || ""
+			    });    
+			}
+			
 
 		}, function(err){
 		    console.log(err);
@@ -225,7 +227,7 @@ module.exports = function(app) {
 		}
 
 		if (!req.body.dishName && !req.body.location && !req.body.phone && !req.body.description &&
-			!req.body.price  && !req.body.time.startTime && !req.body.time.endTime && !req.body.orderBy && !req.body.portion && req.body.lng	&& !req.body.lat) {
+			!req.body.price  && !req.body.time.pickupTime && !req.body.orderBy && !req.body.portions && req.body.lng	&& !req.body.lat) {
 			res.send({
 				errorType: 'content',
 				errorMessage: "There's nothing to change"
@@ -301,7 +303,7 @@ module.exports = function(app) {
 
 		if (data.portions) {
 			if (globals.onlyIntsRegex.test(data.portions)){
-				update.portions = parseInt(data.portions);
+				update.portions = parseInt(data.portions, 10);
 			} else {
 				error.push({
 					warningType: "portion",
@@ -326,20 +328,22 @@ module.exports = function(app) {
 		update.dateUpdated = Date();
 		console.log(update);
 		global.dishRef.child(data.key).once("value", function(snapshot){
-			if (snapshot.val().ownerid !== data.uid) {
-				res.send({
-					errorType: "dishkey",
-					errorMessage: "dish in question does not belong to you"
-				});
-				return;
-			} else {
-				global.dishRef.child(data.key).update(update);
-				res.send({
-					error: error,
-					warnings: warnings,
-					message: "updated"
-				});
-			}
+		    if (snapshot.val()){
+		        if (snapshot.val().ownerid !== data.uid) {
+			    	res.send({
+    					errorType: "dishkey",
+	    				errorMessage: "dish in question does not belong to you"
+		    		});
+			    	return;
+			    } else {
+    				global.dishRef.child(data.key).update(update);
+	    			res.send({
+		    			error: error,
+			    		warnings: warnings,
+				    	message: "updated"
+    				});
+	    		}    
+		    }
 		});
 
 
