@@ -72,7 +72,7 @@
 </div>
 
 
-<div id="dishcontainer">
+<div id="dishcontainer" ng-init="tab=1">
 
 
 <div class="tabview" ng-show="tab == 1">
@@ -80,17 +80,13 @@
 <div id="repeateditemactive" ng-cloak ng-repeat="dish in currentlyCooking">
   <div ng-init="dish.edit=true" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
 
-        <div class="dishthumbnailactive">
-          <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"/>
-        </div>
-
 
       <div ng-show="dish.edit" id="dishpriceactive">${{dish.price}}</div>
-      <input type="text" ng-show="!dish.edit" ng-model="dish.price" placeholder="$7" id="dishpriceedit"/>
+      <input type="text" ng-show="!dish.edit" ng-if="dish.editable" ng-model="dish.price" placeholder="$7" id="dishpriceedit"/>
 
       <div id="itemboxactive">
         <div ng-show="dish.edit" id="dishtitleactive">{{dish.dishName}}</div>
-        <input placeholder="linguini" ng-show="!dish.edit" id="dishtitleactiveedit" type="text" ng-model="dish.dishName"/>
+        <input placeholder="linguini" ng-show="!dish.edit" ng-if="dish.editable" id="dishtitleactiveedit" type="text" ng-model="dish.dishName"/>
 
         </br>
         </br>
@@ -100,28 +96,25 @@
       </div>
 
       <!--<div class="chefnameactive">My Dish</div>-->
-      <input type="text" ng-show="!dish.edit" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></input>
+      <input type="text" ng-show="!dish.edit" ng-if="dish.editable" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></input>
 
       <div ng-show="dish.edit" id="profiledishdescription">"{{dish.description}}"</div>
 
 
-      <div ng-show="!dish.edit" id="logisticssubmitactive">
+      <div ng-show="!dish.edit" ng-if="dish.editable" id="logisticssubmitactive">
           <label>Order By:</label>
           <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.orderBy" />
          <input class="logistictextbox" type="time" ng-model="dish.orderBy" step="600"/><br>
-         <label id="fromlabelactive">From:</label>
-         <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.startTime" />
-         <input class="logistictextbox" type="time" ng-model="dish.time.startTime" step="600"/>
-         <label id="tolabelactive">To:</label>
-         <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.endTime" />
-         <input class="logistictextbox" type="time" ng-model="dish.time.endTime" step="600"/>
+         <label id="fromlabelactive">Ready at:</label>
+         <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.pickupTime" />
+         <input class="logistictextbox" type="time" ng-model="dish.time.pickupTime" step="600"/>
       </div>
       <div id="profilesubmitteddate" ng-show="dish.edit">
          Order By: {{dish.orderByFormatted}}<br>
-         Pickup: {{dish.time.startTimeFormatted}} to {{dish.time.endTimeFormatted}}
+         Ready Around: {{dish.time.pickupTimeFormatted}}
       </div>
 
-      <div ng-show="!dish.edit" class="activeaddresssearch">
+      <div ng-show="!dish.edit" ng-if="dish.editable" class="activeaddresssearch">
        <input id="profileaddresssearch" placeholder="New Address" ng-show="!dish.edit" type="text" ng-model="queryAddress" />
        <button ng-show="!dish.edit" id="activeaddresssearch" ng-click="submitAddress(queryAddress, dish)">Find New Address!</button>
 
@@ -131,26 +124,25 @@
          </div>
        </div>
       </div>
-
-     </div>
-  </div>
-
-  <button ng-show="dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
-  <button ng-show="!dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
-  <button ng-show="!dish.edit" class="activecancelbutton" ng-click="dish.edit=!dish.edit">Cancel</button>
-
-
-      </div>
-
       <div id="profilesubmittedaddress" ng-show="dish.edit">
           Pickup at: {{dish.location}}
       </div>
 
-</div>
 
-    <button ng-show="dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
-    <button ng-show="!dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
-    <div ng-if="dish.purchases">
+
+
+  <button ng-show="dish.edit" ng-if="dish.editable" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
+  <button ng-show="!dish.edit" ng-if="dish.editable" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
+  <button ng-show="!dish.edit" ng-if="dish.editable" class="activecancelbutton" ng-click="dish.edit=!dish.edit">Cancel</button>
+
+
+      </div>
+
+
+
+
+
+   <div ng-if="dish.purchases">
         Orders:
         <p ng-repeat="(buyerid, buyerObj) in dish.purchases">{{buyerObj.buyerName}} : {{buyerObj.buyerPhone}}</p>
     </div>
@@ -162,118 +154,47 @@
 <!-- Active Meal Bought -->
 <div id="repeateditemactive" ng-cloak ng-repeat="activeMeal in activeMeals">
 
-      <div id="dishbannerrating" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
+     <div id="dishbannerrating" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="activeMeal.active = !activeMeal.active" >
         <div class="dishthumbnailactivereview">
-          <img class="img-thumbnail" src="/imgs/gordon.jpg"/>
+          <img class="img-thumbnail" ng-src="{{activeMeal.ownerPic}}"/>
         </div>
+
           <div id="dishprice">${{activeMeal.price}}</div>
-        <div id="itemboxrating">
           <div id="dishtitlerating">{{activeMeal.dishName}}</div>
           <div class="chefname">by {{activeMeal.owner}}</div></br>
+          <div>{{activeMeal.location}}</div>
+          <div>{{activeMeal.phone}}</div>
+          <button ng-if="!activeMeal.pickedUp" ng-click="pickedUp(activeMeal)">Picked Up</button>
+        <div id="itemboxrating" ng-if="activeMeal.pickedUp">
+
           <div id="activeratings">
             <div id="valuerating">
               <label class="ratinglabel">value:</label>
-
-        <br>
-        <div class="rateandreview">
-        <div class="pleaserate">Please rate or review your experience!</div>
-
-        <div id="activeratings">
-
-<<<<<<< HEAD
-          <div id="valueratingbox">
-          <div id="valuerating">
-            <label class="ratinglabel">value:</label>
-
-            <fieldset class="rating" id="valueratingfield">
+              <fieldset class="rating" id="valueratingfield">
                 <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
                 <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
                 <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
                 <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
                 <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
-            </fieldset>
-        </div>
-      </div>
-
-        <div id="timingratingbox">
-        <div id="timingrating">
-          <label class="ratinglabel">timing:</label>
-
-              <fieldset class="rating" id="timingratingfield">
-                  <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
-                  <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
-                  <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
-                  <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
-                  <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
               </fieldset>
-          </div>
-        </div>
 
-          <div id="tasteratingbox">
-          <div id="tasterating">
-            <label class="ratinglabel">taste:</label>
-            <fieldset class="rating" id="tasteratingfield">
-                <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
-                <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
-                <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
-                <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
-                <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
-            </fieldset>
-          </div>
-        </div>
-        </div>
-
-        <textarea class="reviewbox">
-        </textarea>
-        <button id="submitreview">Submit Review</button>
+              <br>
+              <div class="rateandreview">
+                <div class="pleaserate">Please rate or review your experience!</div>
 
 
-        </div>
-      </div>
+                <textarea class="reviewbox"></textarea>
+                <button id="submitreview">Submit Review</button>
 
-  <div class="slideDown" ng-hide="!dish.active" id="itemdetails">
-  <div class="dishdescription">"{{activeMeal.owner}}"</div>
-      <div id="dishphoneactive">{{activeMeal.phone}}</div>
-        <div id="dishaddressactive">{{activeMeal.location}}</div>
-</div>
-</div>
 
-</div>
-</div>
-<!--
-          <div id="dishbanner">
-            <div class="dishthumbnail">
-              <img class="img-thumbnail" src="/imgs/gordon.jpg"/>
+              </div>
             </div>
-            <div id="profiledishname">Example Dishname</div>
 
           </div>
-
-                <div id="itemdetails">
-                    <label class="accountdishlabel">Dish name:</label>
-                    </br>
-                    <label class="accountdishlabel">Active:</label> <input type="checkbox" ng-model="dish.active"/></br>
-                    <label class="accountdishlabel">Price:</label>
-                    <br>
-                    <label class="accountdishlabel">Pickup time:</label>
-                    <input id="accountpickup" type="date" ng-model="dish.time.startTime"/>
-                    <input type="time" step="600" ng-model="dish.time.startTime"/><br>
-                    <label class="accountdishlabel">To:</label>
-                    <input id="accountto" type="date" ng-model="dish.time.endTime" />
-                    <input type="time" step="600" ng-model="dish.time.endTime" /><br>
-                    <label class="accountdishlabel">Description:</label>
-                  <br>
-                  <label class="accountdishlabel">Phone:</label>
-                  <input type="text" ng-model="dish.phone"/><br>
-                  <label class="accountdishlabel">Address:</label>
-                  <input type="text" ng-model="dish.location"/><br>
-                  <label class="accountdishlabel">New Address:</label>
-                  <input type="text" ng-model="dish.queryAddress" /><button id="accountsubmit" ng-click="submitAddress(dish.queryAddress, dish)">Find Address</button>
-                  <div class="addresshistory" ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
-                      {{result.formatted_address}}
-                  </div>
-                  <input id="submiteditprofile" type="submit" value="Save Edits" ng-click="editDish(dish)"/><div id="editsuccess">{{dish.message}}</div>
-                </div> -->
+        </div>
+    </div>
+</div>
+</div>
 
 
         <div class="tabview" ng-show="tab == 2">
