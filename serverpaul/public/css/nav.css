@@ -137,8 +137,15 @@ background-color: white;
 
 #pricebox label {
     font-family: Source Sans Pro;
-	padding: 10px 0 0;
 	color: #ebd3bd;
+  width: 100%;
+  text-align: center;
+}
+
+.logistictextbox{
+  border: 1px solid #ebd3bd;
+  height: 20px;
+
 }
 
 .logistictextbox button {
@@ -172,14 +179,6 @@ background-color: white;
     margin: 0 auto;
 }
 
-#portionsbox{
-  width: auto;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-  text-align: center;
-
-}
 
 .menusubmit{
     font-family:Source Sans Pro;
@@ -192,7 +191,26 @@ background-color: white;
 #dishbox{
     position: relative;
     display: inline-block;
-    width: calc(100% - 49px);
+    width: 60%;
+}
+
+#aroundbox{
+  position: relative;
+  display: inline-block;
+  height: auto;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#whattimebox{
+  position: relative;
+  display: inline-block;
+  height: auto;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+
 }
 
 #whatchamakin{
@@ -202,12 +220,15 @@ background-color: white;
 
 #howmany{
   font-size: 15px;
+  color:#ebd3bd;
+  width: 100%;
+  text-align: center;
 }
 
 .menutextbox{
     height: 35px;
     border: 1px solid #ebd3bd;
-    width: 100%;
+    width: calc(100% - 4px);
     margin-top:5px;
     font-size: 16px;
 }
@@ -215,27 +236,54 @@ background-color: white;
 #pricebox{
     position: relative;
     display: inline-block;
-    width: 40px;
-    margin-left: 5px;
+    width: 18%;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 #pricetextbox{
     width:43px;
     font-size: 16px;
-    margin-top:7px;
+    margin: 0 auto;
+    margin-top:5px;
+    outline: none;
+    display: block;
+
+}
+
+#portiontextbox{
+    width:43px;
+    font-size: 16px;
+    margin: 0 auto;
+    margin-top:5px;
+    outline: none;
+    display: block;
+}
+
+#portionsbox{
+    width: 20%;
+    font-size: 16px;
+    height: auto;
+    display: inline-block;
+    position: relative;
+    margin-top: 5px;
+    margin-bottom: 5px;
 
 }
 
 #descriptiontextbox{
     height: 70px;
-    width:100%;
+    width:calc(100% - 11px);
     border: 1px solid #ebd3bd;
     font-size:14px;
+    margin-right: 5px;
 }
 
 #descriptionlabel{
     font-size:15px;
     color:#ebd3bd;
+    width: 100%;
+    text-align: center;
 }
 
 #submit{
@@ -257,10 +305,10 @@ background-color: white;
 }
 
 #whattime{
-    color:#75d0f4;
-    font-size: 20px;
-    width: 90px;
-    display: inline-block;
+  font-size:15px;
+  color:#ebd3bd;
+  display: inline-block;
+  width: 60px;
 }
 
 #when{
@@ -268,6 +316,7 @@ background-color: white;
   font-size: 20px;
   width: auto;
   display: block;
+  margin-bottom: 10px;
 
 }
 
@@ -283,7 +332,7 @@ background-color: white;
 }
 
 #fromlabel{
-    width:50px;
+    width:60px;
     font-size:15px;
     color:#ebd3bd;
 }
@@ -374,4 +423,25 @@ background-color: white;
 
 #submitdishbutton{
     margin:0;
+}
+
+.datebutton{
+background-color:#EFEFEF;
+border-radius:5px;
+overflow:auto;
+display: inline-block;
+width: auto;
+padding: 5px;
+}
+
+.datebutton input {
+  position: absolute;
+  top: -30px;
+}
+
+.datebutton input:checked + span {
+    padding: 5px;
+    background-color:#75d0f4;
+    color:white;
+    width: 100%;
 }
