@@ -72,6 +72,11 @@
                   <label id="whatchamakin">What are you making?</label>
                   <input class="menutextbox" type="text" ng-model="dish.dishName" />
                 </div>
+
+                <div id="portionsbox">
+                <label  class="secondarylabel" id="howmany">Portions</label>
+                <input class="menutextbox" id="portiontextbox" type="number" name="portions" min="1" max="20"></div>
+
                 <div id="pricebox">
                   <label class="secondarylabel">Price</label>
                   <input class="menutextbox" id="pricetextbox" ng-model="dish.price" />
@@ -87,25 +92,38 @@
 
 
                <div id="logisticssubmit">
-                    <div id="portionsbox">
-                    <label id="howmany">Portions:</label>
-                    <input type="number" name="portions" min="1" max="20"></div>
-                    </br>
+                  <div id="when">When are you making this dish?</div>
 
-                    <div id="when">When are you making this dish?</div>
-                    <label>Today</label><input type="radio" ng-model="dish.time.date" value="today"/>
-                    <label>Tomorrow</label><input type="radio" ng-model="dish.time.date" value="tomorrow" />
-                    <label>Choose Date</label><input type="radio" ng-model="dish.time.date" value="custom" /></br></br>
-                    <label id="fromlabel">From:</label>
+                  <div class="datebutton">
+                    <label>
+                      <input type="radio" ng-model="dish.time.date" value="today">
+                      <span>Today</span>
+                    </label>
+                  </div>
+                  <div class="datebutton">
+                    <label>
+                      <input type="radio" ng-model="dish.time.date" value="tomorrow">
+                      <span>Tomorrow<span>
+                    </label>
+                  </div>
+                  <div class="datebutton">
+                    <label>
+                      <input type="radio" ng-model="dish.time.date" value="custom">
+                      <span>Choose Date</span>
+                    </label>
+                  </div>  
+                    </br></br>
+                  <div id="aroundbox">
+                    <label id="fromlabel">Around:</label>
                     <input class="logistictextbox" id="submitdate" ng-show="dish.time.date==='custom'" type="date" ng-model="dish.time.startTime" />
                     <input class="logistictextbox" type="time" ng-model="dish.time.startTime" step="600"/><br>
-                    <label id="tolabel">To:</label>
-                    <input class="logistictextbox" ng-show="dish.time.date==='custom'" id="submitdate" type="date" ng-model="dish.time.endTime" />
-                    <input class="logistictextbox" type="time" ng-model="dish.time.endTime" step="600"/><br><br>
+                  </div>
+                  <div id="whattimebox">
                     <div id="whattime">Order By:</div>
                     <input class="logistictextbox" id="submitdate" ng-show="dish.time.date==='custom'" type="date" ng-model="dish.orderBy" />
                     <input class="logistictextbox" type="time" ng-model="dish.orderBy" step="600"/><br>
                 </div>
+              </div>
                 </br>
                </br>
                </br>
