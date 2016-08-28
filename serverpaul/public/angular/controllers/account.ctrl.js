@@ -21,6 +21,7 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
             if(newValue.currentlyCooking){
                 //for each, go to firebase & fetch data
                 var meals = [];
+                var timeNow = new Date();
                 newValue.currentlyCooking.forEach(function(mealKey){
                     
                     firebase.database().ref('/dish/' + mealKey).on("value", function(snapshot){
@@ -28,10 +29,18 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
                             console.log(snapshot.val());
                             if (snapshot.val().ownerid === newValue.uid){
                                 var dish = snapshot.val();
-                                var pickupTime = new Date(snapshot.val().time.pickupTime);
                                 
+                                
+                                var pickupTime = new Date(snapshot.val().time.pickupTime);
                                 var orderBy = new Date(snapshot.val().orderBy);
                                 
+                                
+                                
+                                if (orderBy.getTime() >= timeNow.getTime()){
+                                    dish.editable = true;
+                                } else {
+                                    dish.editable = false;
+                                }
                                 
                                 dish.time.pickupTimeFormatted = timeService.formatDate(pickupTime) + " " + timeService.formatAPMP(pickupTime);
                                 

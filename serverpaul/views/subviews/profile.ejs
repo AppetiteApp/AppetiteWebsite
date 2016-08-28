@@ -80,17 +80,13 @@
 <div id="repeateditemactive" ng-cloak ng-repeat="dish in currentlyCooking">
   <div ng-init="dish.edit=true" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
 
-        <div class="dishthumbnailactive">
-          <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"/>
-        </div>
-
 
       <div ng-show="dish.edit" id="dishpriceactive">${{dish.price}}</div>
-      <input type="text" ng-show="!dish.edit" ng-model="dish.price" placeholder="$7" id="dishpriceedit"/>
+      <input type="text" ng-show="!dish.edit" ng-if="dish.editable" ng-model="dish.price" placeholder="$7" id="dishpriceedit"/>
 
       <div id="itemboxactive">
         <div ng-show="dish.edit" id="dishtitleactive">{{dish.dishName}}</div>
-        <input placeholder="linguini" ng-show="!dish.edit" id="dishtitleactiveedit" type="text" ng-model="dish.dishName"/>
+        <input placeholder="linguini" ng-show="!dish.edit" ng-if="dish.editable" id="dishtitleactiveedit" type="text" ng-model="dish.dishName"/>
 
         </br>
         </br>
@@ -100,28 +96,25 @@
       </div>
 
       <!--<div class="chefnameactive">My Dish</div>-->
-      <input type="text" ng-show="!dish.edit" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></input>
+      <input type="text" ng-show="!dish.edit" ng-if="dish.editable" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></input>
 
       <div ng-show="dish.edit" id="profiledishdescription">"{{dish.description}}"</div>
 
 
-      <div ng-show="!dish.edit" id="logisticssubmitactive">
+      <div ng-show="!dish.edit" ng-if="dish.editable" id="logisticssubmitactive">
           <label>Order By:</label>
           <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.orderBy" />
          <input class="logistictextbox" type="time" ng-model="dish.orderBy" step="600"/><br>
-         <label id="fromlabelactive">From:</label>
-         <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.startTime" />
-         <input class="logistictextbox" type="time" ng-model="dish.time.startTime" step="600"/>
-         <label id="tolabelactive">To:</label>
-         <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.endTime" />
-         <input class="logistictextbox" type="time" ng-model="dish.time.endTime" step="600"/>
+         <label id="fromlabelactive">Ready at:</label>
+         <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.pickupTime" />
+         <input class="logistictextbox" type="time" ng-model="dish.time.pickupTime" step="600"/>
       </div>
       <div id="profilesubmitteddate" ng-show="dish.edit">
          Order By: {{dish.orderByFormatted}}<br>
-         Pickup: {{dish.time.startTimeFormatted}} to {{dish.time.endTimeFormatted}}
+         Ready Around: {{dish.time.pickupTimeFormatted}}
       </div>
 
-      <div ng-show="!dish.edit" class="activeaddresssearch">
+      <div ng-show="!dish.edit" ng-if="dish.editable" class="activeaddresssearch">
        <input id="profileaddresssearch" placeholder="New Address" ng-show="!dish.edit" type="text" ng-model="queryAddress" />
        <button ng-show="!dish.edit" id="activeaddresssearch" ng-click="submitAddress(queryAddress, dish)">Find New Address!</button>
 
@@ -131,27 +124,25 @@
          </div>
        </div>
       </div>
-
-     </div>
-  </div>
-
-  <button ng-show="dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
-  <button ng-show="!dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
-  <button ng-show="!dish.edit" class="activecancelbutton" ng-click="dish.edit=!dish.edit">Cancel</button>
-
->>>>>>> paul
-
-      </div>
-
       <div id="profilesubmittedaddress" ng-show="dish.edit">
           Pickup at: {{dish.location}}
       </div>
 
-</div>
+     </div>
+  
 
-    <button ng-show="dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
-    <button ng-show="!dish.edit" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
-    <div ng-if="dish.purchases">
+  <button ng-show="dish.edit" ng-if="dish.editable" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
+  <button ng-show="!dish.edit" ng-if="dish.editable" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
+  <button ng-show="!dish.edit" ng-if="dish.editable" class="activecancelbutton" ng-click="dish.edit=!dish.edit">Cancel</button>
+
+
+      </div>
+
+      
+
+
+
+   <div ng-if="dish.purchases">
         Orders:
         <p ng-repeat="(buyerid, buyerObj) in dish.purchases">{{buyerObj.buyerName}} : {{buyerObj.buyerPhone}}</p>
     </div>
@@ -181,7 +172,6 @@
 
         <div id="activeratings">
 
-<<<<<<< HEAD
           <div id="valueratingbox">
           <div id="valuerating">
             <label class="ratinglabel">value:</label>
@@ -199,16 +189,7 @@
         <div id="timingratingbox">
         <div id="timingrating">
           <label class="ratinglabel">timing:</label>
-=======
-                <fieldset class="rating" id="timingratingfield">
-                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
-                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4">4 stars</label>
-                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
-                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
-                    <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
-                </fieldset>
-            </div>
->>>>>>> cherylserver
+
 
               <fieldset class="rating" id="timingratingfield">
                   <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
