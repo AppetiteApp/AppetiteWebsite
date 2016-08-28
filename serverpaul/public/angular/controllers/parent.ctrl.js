@@ -36,7 +36,7 @@ var parentController = ['$timeout', '$scope', 'sessionService', function($timeou
                         error: undefined
                     };
                     $scope.parentController.activeMeals = snapshot.val().activeMeals;
-                    $scope.parentController.mealsMade = snapshot.val().mealsMade;
+                    $scope.parentController.currentlyCooking = snapshot.val().currentlyCooking;
                     console.log($scope.parentController);
                         
                     if (!snapshot.val().lng){

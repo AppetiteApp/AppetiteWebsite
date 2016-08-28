@@ -9,8 +9,8 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
 
     $scope.$watch('parentController.user', function(newValue, oldValue){
-        console.log(newValue.mealsMade);
-        console.log(oldValue.mealsMade);
+        console.log(newValue.currentlyCooking);
+        console.log(oldValue.currentlyCooking);
         console.log(newValue.activeMeals);
         if (newValue){
             if (newValue.activeMeals){
@@ -18,28 +18,28 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
             } else {
                 $scope.activeMeals = undefined;
             }
-            if(newValue.mealsMade){
+            if(newValue.currentlyCooking){
                 //for each, go to firebase & fetch data
                 var meals = [];
-                newValue.mealsMade.forEach(function(mealKey){
+                newValue.currentlyCooking.forEach(function(mealKey){
                     
                     firebase.database().ref('/dish/' + mealKey).on("value", function(snapshot){
                         if (snapshot.val()){
                             console.log(snapshot.val());
                             if (snapshot.val().ownerid === newValue.uid){
                                 var dish = snapshot.val();
-                                var startTime = new Date(snapshot.val().time.startTime);
-                                var endTime = new Date(snapshot.val().time.endTime);
+                                var pickupTime = new Date(snapshot.val().time.pickupTime);
+                                
                                 var orderBy = new Date(snapshot.val().orderBy);
                                 
                                 
-                                dish.time.startTimeFormatted = timeService.formatDate(startTime) + " " + timeService.formatAPMP(startTime);
+                                dish.time.pickupTimeFormatted = timeService.formatDate(pickupTime) + " " + timeService.formatAPMP(pickupTime);
                                 
-                                dish.time.endTimeFormatted = timeService.formatDate(endTime) + " " + timeService.formatAPMP(endTime);
+                                
                                 dish.orderByFormatted = timeService.formatDate(orderBy) + " " + timeService.formatAPMP(orderBy);
                                 
-                                dish.time.startTime = startTime;
-                                dish.time.endTime = endTime;
+                                dish.time.pickupTime = pickupTime;
+                                
                                 dish.orderBy = orderBy;
                                 
                                 if (snapshot.val().purchases){
@@ -52,14 +52,14 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
                             }
                         }
                         $timeout(function() {
-                            $scope.mealsMade = meals;
+                            $scope.currentlyCooking = meals;
                         });
                     }); //end firebase fetch data
                     
                 });
                 
             } else {
-                $scope.mealsMade = undefined;
+                $scope.currentlyCooking = undefined;
             }
             
             if(newValue.activeMeals){
@@ -82,7 +82,7 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
             
         } else {
             $scope.activeMeals = undefined;
-            $scope.mealsMade = undefined;
+            $scope.currentlyCooking = undefined;
         }
         
     });

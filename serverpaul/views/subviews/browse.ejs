@@ -6,9 +6,7 @@
   <div id="innercontainer" ng-init="selection = { selectedNode:  null }">
   <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak>
         <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
-          <div class="dishthumbnail">
-            <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"/>
-          </div>
+          
             <div id="dishprice">${{dish.price}}</div>
 
             <!-- Trigger/Open The Modal -->
@@ -25,7 +23,7 @@
                       {{purchase.buyerName}} has ordered your dish!<br>
                   </div>
                   
-                  <buton ng-if="dish.status==='manage'">See more</buton>  
+                  <button ng-if="dish.status==='manage'">See more</button>  
                   <button ng-click="cancelOrder(dish)" ng-if="dish.status==='ordered'">Cancel Order</button>
                   <button class="orderconfirm" ng-click="order(dish)" ng-if="dish.status==='order'">Confirm</button>
                   <button class="ordercancel" ng-click="selection.selectedNode = null" ng-if="dish.status==='order'">Cancel</button>
@@ -40,7 +38,7 @@
           <div id="itembox">
             <div id="dishtitle">{{dish.dishName}}</div>
             <div class="chefname">by {{dish.ownerName}}</div></br>
-            <div id="dishtime">{{dish.time}}</div></br></br>
+            <div id="dishtime">Ready {{dish.time}}</div></br></br>
           </div>
         </div>
 
@@ -167,101 +165,102 @@ async defer></script>
         var dishes = [];
         var markers = [];
         var currentUser = firebase.auth().currentUser;
+        
         firebase.database().ref('dish/').on("value", function(snapshot){
-        var timeNow = new Date();
-            snapshot.forEach(function(child) {
-                //console.log(child.val());
-                dishes.push(child.val());
-                var childEndTime = new Date(child.val().time.endTime);
+            if (snapshot.val()){
+                var timeNow = new Date();
+                    snapshot.forEach(function(child) {
+                    //console.log(child.val());
+                    dishes.push(child.val());
+                    
+                    var childPickupTime = new Date(child.val().time.pickupTime);
+                    var orderBy = new Date(child.val().orderBy);
 
-
-                if (!child.val().archived && childEndTime.getTime() >= timeNow.getTime()){
-                    //console.log("new marker pushed!", child.val().dishName);
-                    //console.log("lat", child.val().lat, "; lng:", child.val().lng);
-                    console.log(child.val().time.startTime);
-                    var date = new Date(child.val().time.startTime);
-
-                    var time = makeTime(date);
-                    if (currentUser && child.val().ownerid === currentUser.uid){
-                        child.val().owner = "me";
-                    }
-
-                    var infoContent = "<div class='infoDiv'><h2>" +
+                    if (!child.val().archived && childPickupTime.getTime() - 1000*60*60*3 >= timeNow.getTime()){
+                        
+                        if (currentUser && child.val().ownerid === currentUser.uid){
+                            child.val().owner = "me";
+                        }
+                    
+                        var infoContent = "<div class='infoDiv'><h2>" +
                                       child.val().dishName + "<span class='right'>$" + child.val().price.toString() + "</span></h2><h2><span class='faded'> by " +
                                       child.val().owner +
                                       "</span></h2><p>" +
                                       child.val().description +
-                                      "</p><p>Available @ " +
-                                      time +
+                                      "</p><p>Order By" +
+                                      makeTime(orderBy) +
+                                  "</p><p>Available ~ " +
+                                      makeTime(childPickupTime) +
                                       "</p></div>";
 
-                    var infowindow = new google.maps.InfoWindow({
-                        content: infoContent
-                    });
+                        var infowindow = new google.maps.InfoWindow({
+                            content: infoContent
+                        });
 
+    
+                        var marker = new google.maps.Marker({
+                            position: {
+                                lat: child.val().lat,
+                                lng: child.val().lng
+                            },
+                            title: child.val().dishName
+                        });
 
-                    var marker = new google.maps.Marker({
-                        position: {
-                            lat: child.val().lat,
-                            lng: child.val().lng
-                        },
-                        title: child.val().dishName
-                    });
-
-                    //function for bouncing
-                          function toggleBounce() {
-        if (marker.getAnimation() !== null) {
-          marker.setAnimation(null);
-        } else {
-          marker.setAnimation(google.maps.Animation.BOUNCE);
-        }
-      }
-
-                    //simulate a click here, using 'selector' to select the element with ng-id
-                    var selector = 'div[ng-id="' + child.key + '"]';
-                    var modal4 = document.getElementById("dish-{{$index}}");
-                    var span4 = document.getElementsByClassName("close4")[0];
-
-                    $('body').on('click', selector, function () {
-                        google.maps.event.trigger(marker, 'click', {});
-                    });
-
-                    $('body').on('mouseover', selector, function(){
-                        marker.setAnimation(google.maps.Animation.BOUNCE);
-                    });
-
-                    $('body').on('mouseout', selector, function(){
-                        marker.setAnimation(null);
-                    });
-
-                    marker.addListener('click', function() {
-                        if (!infoWindows.selector){
-                            infowindow.open(map, marker);
-                            infoWindows.selector = true;
-                        } else {
-                            infowindow.close();
-                            infoWindows.selector = false;
+                        //function for bouncing
+                        function toggleBounce() {
+                            if (marker.getAnimation() !== null) {
+                                marker.setAnimation(null);
+                            } else {
+                                marker.setAnimation(google.maps.Animation.BOUNCE);
+                            }
                         }
 
+                        //simulate a click here, using 'selector' to select the element with ng-id
+                        var selector = 'div[ng-id="' + child.key + '"]';
+                        var modal4 = document.getElementById("dish-{{$index}}");
+                        var span4 = document.getElementsByClassName("close4")[0];
 
-                    });
+                        $('body').on('click', selector, function () {
+                            google.maps.event.trigger(marker, 'click', {});
+                        });
 
-                    google.maps.event.addListener(map, 'click', function() {
-				        infowindow.close();
-			        });
+                        $('body').on('mouseover', selector, function(){
+                            marker.setAnimation(google.maps.Animation.BOUNCE);
+                        });
+
+                        $('body').on('mouseout', selector, function(){
+                            marker.setAnimation(null);
+                        });
+
+                        marker.addListener('click', function() {
+                            if (!infoWindows.selector){
+                                infowindow.open(map, marker);
+                                infoWindows.selector = true;
+                            } else {
+                                infowindow.close();
+                                infoWindows.selector = false;
+                            }
+    
+
+                        });
+
+                        google.maps.event.addListener(map, 'click', function() {
+	    			        infowindow.close();
+    			        });
 
 
-                    infoWindows.selector = false;
-                    markers.push(marker);
-                    //console.log(marker);
+                        infoWindows.selector = false;
+                        markers.push(marker);
+                        //console.log(marker);
 
-                } //end if
+                    } //end if
 
-            });
+                });
 
-            markers.forEach(function(pin){
-                pin.setMap(map);
-            });
+                markers.forEach(function(pin){
+                    pin.setMap(map);
+                });
+            }
         });
     }; //end mapHelper function
 
