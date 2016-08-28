@@ -74,9 +74,15 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
             if(newValue.activeMeals){
                 var activeMeals = [];
                 for (var mealKey in newValue.activeMeals){
+                    var data = newValue.activeMeals[mealKey];
                     firebase.database().ref('/dish/' + mealKey).on("value", function(snapshot){
                         if (snapshot.val()){
-                            activeMeals.push(snapshot.val());    
+                            data.price = snapshot.val().price;
+                            data.ownerPic = snapshot.val().ownerPic;
+                            data.owner = snapshot.val().owner;
+                            data.dishName = snapshot.val().dishName;
+                            data.description = snapshot.val().description;
+                            activeMeals.push(data);
                         }
                         
                     });
@@ -99,6 +105,22 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
 
     $scope.updateProfile = {};
     $scope.updateProfile.changeAddress = false;
+    
+    $scope.pickedUp = function(dish){
+        if ($scope.parentController.uid){
+            $http.post('/api/pickedUp', {
+                uid: $scope.parentController.uid,
+                dishid: dish.key
+            }).then(function(res){
+                console.log(res);
+                $timeout(function() {
+                    dish.pickedUp = true;
+                })
+            }, function(err){
+                console.log(err);
+            });
+        }    
+    };
 
     //assign location
     $scope.assignLocation = function(result, obj){

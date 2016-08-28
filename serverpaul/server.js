@@ -20,6 +20,7 @@ var db = firebase.database();
 global.userRef = db.ref("users");
 global.dishRef = db.ref("dish");
 global.commentRef = db.ref("comments");
+global.pastDishRef = db.ref("pastDishes");
 global.cancelRef = db.ref("cancellations");
 global.buyerReviewRef = db.ref("buyerReviews");
 global.chefReviewRef = db.ref("chefReviews");
