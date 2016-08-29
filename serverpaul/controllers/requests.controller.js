@@ -87,13 +87,12 @@ module.exports = function(app){
                         errorMessage: "Cannot request your own meals"
                     });
                 }else if (snapshot.val().purchases){
-                    console.log("what what someone already tried to purchase this meal and there's more....?");
                     var dishPurchases = JSON.parse(snapshot.val().purchases);
-                    var dishPurchases = snapshot.val().purchases;
+                    //purchases = snapshot.val().purchases;
                     if (dishPurchases[req.body.uid]){
                         errors.push({
-                            errorType: "request",
-                            errorMessage: "Cannot request the same meal twice"
+                            errorType: "purchase",
+                            errorMessage: "Cannot order a meal you've already ordered"
                         });
                     } else {
                         purchases = dishPurchases;
@@ -121,6 +120,7 @@ module.exports = function(app){
                 
                 //store dish info? or manipulate dish from here
                 //save stuff about the dish
+                
                 order.buyerid = req.body.uid;
                 order.buyerName = buyer.name;
                 order.buyerRating = buyer.rating;
@@ -128,31 +128,17 @@ module.exports = function(app){
                 order.requestTime = new Date();
                 
                 purchases[req.body.uid] = order;
-                console.log("order");
-                console.log(order);
-                console.log("purchases");
                 purchases = JSON.stringify(purchases);
-                console.log(purchases);
                 
                 
-                
-                
-                dishInfo = {
+                activeMeals[req.body.dishid] = {
                     chefid: snapshot.val().ownerid,
                     chefName: snapshot.val().owner,
                     location: snapshot.val().location,
                     phone   : snapshot.val().phone
                 };
                 
-                activeMeals[req.body.dishid] = dishInfo;
-                console.log("dishinfo");
-                console.log(dishInfo);
-                console.log(activeMeals);
-                
-                global.dishRef.child(req.body.dishid).update({purchases:purchases});
-                
-                console.log("hi");
-                
+                global.dishRef.child(req.body.dishid).child("purchases").set(purchases);
                 global.userRef.child(req.body.uid).child("activeMeals").update(activeMeals);
                 
                 res.send("success");

@@ -55,6 +55,11 @@ module.exports = function(app){
                         errorType: "review",
                         errorMessage: "cannot review dish before picking up"
                     });
+                } else if (activeMeals[req.body.dishid]["reviewedChef"]){
+                    errors.push({
+                        errorType: "review",
+                        errorMessage: "already reviewed dish"
+                    });
                 }
             }
             
@@ -112,6 +117,11 @@ module.exports = function(app){
                         errors.push({
                             errorType: "review",
                             errorMessage: "cannot review chef before picking up the meal"
+                        });
+                    } else if (purchases[req.body.uid]["reviewedChef"]){
+                        errors.push({
+                            errorType: "review",
+                            errorMessage: "cannot review twice"
                         });
                     }
                 
@@ -256,6 +266,16 @@ module.exports = function(app){
                         errors.push({
                             errorType: "dish",
                             errorMessage: "buyer didn't purchase this dish"
+                        });
+                    } else if (!purchases[req.body.buyerid]["pickedUp"]){
+                        errors.push({
+                            errorType: "pickup",
+                            errorMessage: "cannot review buyer before s/he picked up dish"
+                        });
+                    } else if (purchases[req.body.buyerid]["reviewedBuyer"]){
+                        errors.push({
+                            errorType: "review",
+                            errorMessage: "cannot review twice"
                         });
                     }
                 }
