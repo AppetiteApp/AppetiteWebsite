@@ -144,7 +144,17 @@
 
    <div ng-if="dish.purchases">
         Orders:
-        <p ng-repeat="(buyerid, buyerObj) in dish.purchases">{{buyerObj.buyerName}} : {{buyerObj.buyerPhone}}</p>
+        <div ng-repeat="(buyerid, buyerObj) in dish.purchases">
+            <p>{{buyerObj.buyerName}} : {{buyerObj.buyerPhone}}</p>
+            <div ng-if="buyerObj.pickedUp">Review Cheryl:
+                <p>
+                    <textarea ng-model="buyerObj.unprocessedReview">
+                    
+                    </textarea>
+                    <button>Submit Review!</button>
+                </p>
+            </div>
+        </div>
     </div>
 <hr id="activehr">
 </div>
@@ -167,30 +177,23 @@
           <button ng-if="!activeMeal.pickedUp" ng-click="pickedUp(activeMeal)">Picked Up</button>
         <div id="itemboxrating" ng-if="activeMeal.pickedUp">
 
-          <div id="activeratings">
-            <div id="valuerating">
-              <label class="ratinglabel">value:</label>
-              <fieldset class="rating" id="valueratingfield">
-                <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
-                <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
-                <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
-                <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
-                <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
-              </fieldset>
 
-              <br>
               <div class="rateandreview">
-                <div class="pleaserate">Please rate or review your experience!</div>
-
-
-                <textarea class="reviewbox"></textarea>
-                <button id="submitreview">Submit Review</button>
+                <div class="pleaserate">Please rate or review your experience!</div><br>
+                <fieldset class="rating" id="valueratingfield">
+                    <input type="radio" id="star5" value="5" /><label for="star5" ng-click="activeMeal.review.rating=5">5 stars</label>
+                    <input type="radio" id="star4" value="4" /><label for="star4" ng-click="activeMeal.review.rating=4">4 stars</label>
+                    <input type="radio" id="star3" value="3"/><label for="star3" ng-click="activeMeal.review.rating=3">3 stars</label>
+                    <input type="radio" id="star2" value="2"/><label for="star2" ng-click="activeMeal.review.rating=2">2 stars</label>
+                    <input type="radio" id="star1" value="1"/><label for="star1" ng-click="activeMeal.review.rating=1">1 star</label>
+                </fieldset>
+                {{activeMeal.review}}
+                <textarea class="reviewbox" ng-model="activeMeal.review.review"></textarea>
+                <button id="submitreview" ng-click="submitReviewChef(activeMeal)">Submit Review</button>
 
 
               </div>
-            </div>
 
-          </div>
         </div>
     </div>
 </div>
