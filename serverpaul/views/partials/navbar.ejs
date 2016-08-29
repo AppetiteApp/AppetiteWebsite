@@ -86,15 +86,41 @@
                   <label id="descriptionlabel">Description</label>
                   <textarea id="descriptiontextbox" ng-model="dish.description"></textarea>
                 </div>
-                
-                <div id="logisticssubmit">
-                    <div id="when">When are you making this dish?</div>
-                    <label>Today</label><input type="radio" ng-model="dish.time.date" value="today"/>
-                    <label>Tomorrow</label><input type="radio" ng-model="dish.time.date" value="tomorrow" />
-                    <label>Choose Date</label><input type="radio" ng-model="dish.time.date" value="custom" /></br></br>
-                    <label id="fromlabel">Pickup At:</label>
-                    <input class="logistictextbox" id="submitdate" ng-if="dish.time.date==='custom'" type="date" ng-model="dish.time.pickupTime" />
-                    <input class="logistictextbox" type="time" ng-model="dish.time.pickupTime" step="600"/><br><br>
+
+               </div>
+               </br>
+
+
+
+               <div id="logisticssubmit">
+                  <div id="when">When are you making this dish?</div>
+
+                  <div class="datebutton">
+                    <label>
+                      <input type="radio" ng-model="dish.time.date" value="today">
+                      <span>Today</span>
+                    </label>
+                  </div>
+                  <div class="datebutton">
+                    <label>
+                      <input type="radio" ng-model="dish.time.date" value="tomorrow">
+                      <span>Tomorrow</span>
+                    </label>
+                  </div>
+                  <div class="datebutton">
+                    <label>
+                      <input type="radio" ng-model="dish.time.date" value="custom">
+                      <span>Choose Date</span>
+                    </label>
+                  </div>
+                    </br></br>
+                  <div id="aroundbox">
+                    <label id="fromlabel">Around:</label>
+                    <input class="logistictextbox" id="submitdate" ng-show="dish.time.date==='custom'" type="date" ng-model="dish.time.pickupTime" />
+                    <input class="logistictextbox" type="time" ng-model="dish.time.pickupTime" step="600"/><br>
+                  </div>
+                  <div id="whattimebox">
+
                     <div id="whattime">Order By:</div>
                     <input class="logistictextbox" id="submitdate" ng-if="dish.time.date==='custom'" type="date" ng-model="dish.orderBy" />
                     <input class="logistictextbox" type="time" ng-model="dish.orderBy" step="600"/><br>

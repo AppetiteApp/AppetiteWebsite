@@ -2,11 +2,19 @@
 
 
 <div id="itemscontainer">
-    <div id="submitsuccess" ng-cloak>{{message}}</div>
+  <div id="submitsuccess" ng-cloak>{{message}}</div>
+  <div id="activeboughtcontainer">
+    <div id="boughtseparate">-----Bought---------------------------------------</div>
+    <div id=""></div>
+
+  </div>
   <div id="innercontainer" ng-init="selection = { selectedNode:  null }">
+  <div id="browserseparate">-----Browse---------------------------------------</div>
   <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak>
         <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
-          
+            <div class="dishthumbnail">
+              <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
+            </div>
             <div id="dishprice">${{dish.price}}</div>
 
             <!-- Trigger/Open The Modal -->
@@ -22,8 +30,8 @@
                   <div ng-repeat="purchase in dish.purchases track by $index" ng-if="dish.purchases && parentController.uid===dish.ownerid">
                       {{purchase.buyerName}} has ordered your dish!<br>
                   </div>
-                  
-                  <button ng-if="dish.status==='manage'">See more</button>  
+
+                  <button ng-if="dish.status==='manage'">See more</button>
                   <button ng-click="cancelOrder(dish)" ng-if="dish.status==='ordered'">Cancel Order</button>
                   <button class="orderconfirm" ng-click="order(dish)" ng-if="dish.status==='order'">Confirm</button>
                   <button class="ordercancel" ng-click="selection.selectedNode = null" ng-if="dish.status==='order'">Cancel</button>
@@ -166,23 +174,23 @@ async defer></script>
         var dishes = [];
         var markers = [];
         var currentUser = firebase.auth().currentUser;
-        
+
         firebase.database().ref('dish/').on("value", function(snapshot){
             if (snapshot.val()){
                 var timeNow = new Date();
                     snapshot.forEach(function(child) {
                     //console.log(child.val());
                     dishes.push(child.val());
-                    
+
                     var childPickupTime = new Date(child.val().time.pickupTime);
                     var orderBy = new Date(child.val().orderBy);
 
                     if (!child.val().archived && childPickupTime.getTime() - 1000*60*60*3 >= timeNow.getTime()){
-                        
+
                         if (currentUser && child.val().ownerid === currentUser.uid){
                             child.val().owner = "me";
                         }
-                    
+
                         var infoContent = "<div class='infoDiv'><h2>" +
                                       child.val().dishName + "<span class='right'>$" + child.val().price.toString() + "</span></h2><h2><span class='faded'> by " +
                                       child.val().owner +
@@ -198,7 +206,7 @@ async defer></script>
                             content: infoContent
                         });
 
-    
+
                         var marker = new google.maps.Marker({
                             position: {
                                 lat: child.val().lat,
@@ -241,7 +249,7 @@ async defer></script>
                                 infowindow.close();
                                 infoWindows.selector = false;
                             }
-    
+
 
                         });
 

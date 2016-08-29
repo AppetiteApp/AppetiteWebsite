@@ -128,8 +128,8 @@
           Pickup at: {{dish.location}}
       </div>
 
-     
-  
+
+
 
   <button ng-show="dish.edit" ng-if="dish.editable" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
   <button ng-show="!dish.edit" ng-if="dish.editable" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
@@ -138,7 +138,7 @@
 
       </div>
 
-      
+
 
 
 
@@ -168,7 +168,7 @@
         <div class="dishthumbnailactivereview">
           <img class="img-thumbnail" ng-src="{{activeMeal.ownerPic}}"/>
         </div>
-       
+
           <div id="dishprice">${{activeMeal.price}}</div>
           <div id="dishtitlerating">{{activeMeal.dishName}}</div>
           <div class="chefname">by {{activeMeal.owner}}</div></br>
@@ -176,7 +176,13 @@
           <div>{{activeMeal.phone}}</div>
           {{activeMeal.systemMessage}}
           <button ng-if="!activeMeal.pickedUp" ng-click="pickedUp(activeMeal)">Picked Up</button>
+<<<<<<< HEAD
         <div id="itemboxrating" ng-if="activeMeal.pickedUp&&!activeMeal.reviewedChef">
+=======
+        <div id="itemboxrating" ng-if="activeMeal.pickedUp">
+
+
+>>>>>>> master
               <div class="rateandreview">
                 <div class="pleaserate">Please rate or review your experience!</div><br>
                 <fieldset class="rating" id="valueratingfield">
