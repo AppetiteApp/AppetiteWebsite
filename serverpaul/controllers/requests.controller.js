@@ -89,7 +89,7 @@ module.exports = function(app){
                 }else if (snapshot.val().purchases){
                     console.log("what what someone already tried to purchase this meal and there's more....?");
                     var dishPurchases = JSON.parse(snapshot.val().purchases);
-                    //var dishPurchases = snapshot.val().purchases;
+                    var dishPurchases = snapshot.val().purchases;
                     if (dishPurchases[req.body.uid]){
                         errors.push({
                             errorType: "request",
@@ -150,7 +150,9 @@ module.exports = function(app){
                 console.log(activeMeals);
                 
                 global.dishRef.child(req.body.dishid).update({purchases:purchases});
-
+                
+                console.log("hi");
+                
                 global.userRef.child(req.body.uid).child("activeMeals").update(activeMeals);
                 
                 res.send("success");

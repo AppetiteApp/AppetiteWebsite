@@ -20,11 +20,11 @@
   <div id="username">{{parentController.user.firstName}} {{parentController.user.lastName}}</div>
   <label id="editbutton" for="c1" ng-click="user.changed=true" ng-init="user.changed=false"></label>
   <fieldset id="profilerating" class="rating">
-      <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
-      <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
-      <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
-      <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
-      <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
+      <input type="radio" id="star5" value="5" /><label for="star5">5 stars</label>
+      <input type="radio" id="star4" value="4" /><label for="star4" >4 stars</label>
+      <input type="radio" id="star3" value="3" /><label for="star3">3 stars</label>
+      <input type="radio" id="star2" value="2" /><label for="star2">2 stars</label>
+      <input type="radio" id="star1" value="1" /><label for="star1">1 star</label>
   </fieldset>
 
 
@@ -62,10 +62,6 @@
       <input id='profileedit' type="submit" value="Save Edits" ng-click="editProfile(parentController.user)" ng-show="user.changed"/>
     </div>
 
-    <!-- <div ng-show="!user.changed" id="feedbackform">
-      <textarea id="feedback" rows="10" cols="2" ng-model="feedback"></textarea>
-      <button id="feedbackbutton" ng-click="submitFeedback()">Send Us Your Feedback!</button>
-    </div> -->
   </br>
     <button href="#/home" id="logout" ng-click="signout()">Sign Out</button>
 
@@ -148,15 +144,26 @@
             <p>{{buyerObj.buyerName}} : {{buyerObj.buyerPhone}}</p>
             <div ng-if="buyerObj.pickedUp">Review Cheryl:
                 <p>
-                    <textarea ng-model="buyerObj.unprocessedReview">
+                    {{buyerObj}}
+                    {{dish.key}}
+                    <div class="rating">
+                        <label for="star5" ng-click="buyerObj.unprocessedReview.rating=5">5 stars</label>
+                        <label for="star4" ng-click="buyerObj.unprocessedReview.rating=4">4 stars</label>
+                        <label for="star3" ng-click="buyerObj.unprocessedReview.rating=3">3 stars</label>
+                        <label for="star2" ng-click="buyerObj.unprocessedReview.rating=2">2 stars</label>
+                        <label for="star1" ng-click="buyerObj.unprocessedReview.rating=1">1 star</label>
+                    </div>
+                    
+                    <textarea ng-model="buyerObj.unprocessedReview.review">
                     
                     </textarea>
-                    <button>Submit Review!</button>
+                    <button ng-click="submitBuyerReview(buyerObj, dish.key)">Submit Review!</button>
                 </p>
             </div>
+            <hr id="activehr">
         </div>
     </div>
-<hr id="activehr">
+
 </div>
 
 
@@ -176,13 +183,9 @@
           <div>{{activeMeal.phone}}</div>
           {{activeMeal.systemMessage}}
           <button ng-if="!activeMeal.pickedUp" ng-click="pickedUp(activeMeal)">Picked Up</button>
-<<<<<<< HEAD
+
         <div id="itemboxrating" ng-if="activeMeal.pickedUp&&!activeMeal.reviewedChef">
-=======
-        <div id="itemboxrating" ng-if="activeMeal.pickedUp">
 
-
->>>>>>> master
               <div class="rateandreview">
                 <div class="pleaserate">Please rate or review your experience!</div><br>
                 <fieldset class="rating" id="valueratingfield">
@@ -192,9 +195,8 @@
                     <input type="radio" id="star2" value="2"/><label for="star2" ng-click="activeMeal.review.rating=2">2 stars</label>
                     <input type="radio" id="star1" value="1"/><label for="star1" ng-click="activeMeal.review.rating=1">1 star</label>
                 </fieldset>
-                {{activeMeal.review}}
                 <textarea class="reviewbox" ng-model="activeMeal.review.review"></textarea>
-                <button id="submitreview" ng-click="submitReviewChef(activeMeal)">Submit Review</button>
+                <button id="submitreview" ng-click="submitChefReview(activeMeal)">Submit Review</button>
 
 
               </div>
