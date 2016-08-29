@@ -141,11 +141,9 @@
    <div ng-if="dish.purchases">
         Orders:
         <div ng-repeat="(buyerid, buyerObj) in dish.purchases">
-            <p>{{buyerObj.buyerName}} : {{buyerObj.buyerPhone}}</p>
-            <div ng-if="buyerObj.pickedUp">Review Cheryl:
+            <p>{{buyerObj.buyerName}} : {{buyerObj.buyerPhone}} <span ng-if="buyerObj.pickedUp && buyerObj.reviewedBuyer">[picked up and reviewed buyer]</span></p>
+            <div ng-if="buyerObj.pickedUp && !buyerObj.reviewedBuyer">Review {{buyerObj.buyerName}}:
                 <p>
-                    {{buyerObj}}
-                    {{dish.key}}
                     <div class="rating">
                         <label for="star5" ng-click="buyerObj.unprocessedReview.rating=5">5 stars</label>
                         <label for="star4" ng-click="buyerObj.unprocessedReview.rating=4">4 stars</label>
