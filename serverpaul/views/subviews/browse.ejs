@@ -4,12 +4,86 @@
 <div id="itemscontainer">
   <div id="submitsuccess" ng-cloak>{{message}}</div>
   <div id="activeboughtcontainer">
-    <div id="boughtseparate">-----Bought---------------------------------------</div>
-    <div id=""></div>
+    <div id="boughtseparate">Bought</div>
+    <div id="dishbannerbought">
+        <div class="dishthumbnail">
+          <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
+        </div>
+        <div id="dishprice">$7</div>
+
+      <div id="itembox">
+        <div id="dishtitle">dish.dishName}}</div>
+        <div class="chefname">by dish.ownerName}}</div></br>
+        <div id="dishtime">Ready dish.time}}</div>
+        <div id="reviewbutton">Review!</div>
+
+
+        <button ng-click="openModal(dish)" class="order" ng-if="dish.status">{{dish.status}}</button>
+
+        <!-- <div ng-class="{'modalreview': selection.selectedNode !== dish, 'modalreviewselect': selection.selectedNode == dish}"> -->
+
+          <!-- Modal content -->
+          <div class="modal-contentreview">
+            <span class="close4" ng-click="selection.selectedNode = null">x</span>
+
+              {{dish.popupMessage}}<br>
+              <div ng-repeat="purchase in dish.purchases track by $index" ng-if="dish.purchases && parentController.uid===dish.ownerid">
+                  {{purchase.buyerName}} has ordered your dish!<br>
+              </div>
+
+              <button ng-if="dish.status==='manage'">See more</button>
+              <button ng-click="cancelOrder(dish)" ng-if="dish.status==='ordered'">Cancel Order</button>
+              <button class="orderconfirm" ng-click="order(dish)" ng-if="dish.status==='order'">Confirm</button>
+              <button class="ordercancel" ng-click="selection.selectedNode = null" ng-if="dish.status==='order'">Cancel</button>
+
+          </div>
+
+        <!-- </div> -->
+
+
+      </div>
+
+      <button ng-click="openModal(dish)" class="order" ng-if="dish.status">{{dish.status}}</button>
+
+
+    <div id="boughtaddress">
+      Dish address @ something street 02345
+    </div>
+
+    <div id="boughtphone">
+      617-333-2345
+    </div>
+
+  </div>
+
+  <div id="dishbannerbought">
+      <div class="dishthumbnail">
+        <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
+      </div>
+      <div id="dishprice">$7</div>
+
+    <div id="itembox">
+      <div id="dishtitle">dish.dishName}}</div>
+      <div class="chefname">by dish.ownerName}}</div></br>
+      <div id="dishtime">Ready dish.time}}</div>
+      <div id="boughtcode"><div id="codelabel">CODE:</div> H32-D34</div>
+    </div>
+
+  <div id="boughtaddress">
+    Dish address @ something street 02345
+  </div>
+
+  <div id="boughtphone">
+    617-333-2345
+  </div>
+
+</div>
+
+
 
   </div>
   <div id="innercontainer" ng-init="selection = { selectedNode:  null }">
-  <div id="browserseparate">-----Browse---------------------------------------</div>
+  <div id="browserseparate">Browse</div>
   <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak>
         <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
             <div class="dishthumbnail">
@@ -82,9 +156,6 @@
         font-weight: lighter;
         font-size: 0.7em;
     }
-
-
-
 
   button.accordion {
       background-color: #eee;
@@ -226,8 +297,6 @@ async defer></script>
 
                         //simulate a click here, using 'selector' to select the element with ng-id
                         var selector = 'div[ng-id="' + child.key + '"]';
-                        var modal4 = document.getElementById("dish-{{$index}}");
-                        var span4 = document.getElementsByClassName("close4")[0];
 
                         $('body').on('click', selector, function () {
                             google.maps.event.trigger(marker, 'click', {});
