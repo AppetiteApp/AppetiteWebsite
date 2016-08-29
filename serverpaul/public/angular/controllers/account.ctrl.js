@@ -51,6 +51,7 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
                                 
                                 if (snapshot.val().purchases){
                                     dish.purchases = JSON.parse(dish.purchases);
+                                    
                                 } else {
                                     dish.purchases = undefined;
                                 }
@@ -105,7 +106,7 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
     $scope.updateProfile = {};
     $scope.updateProfile.changeAddress = false;
     
-    $scope.pickedUp = function(dish){
+    $scope.pickedUp = function(dish, dishid){
         if ($scope.parentController.uid){
             $http.post('/api/pickedUp', {
                 uid: $scope.parentController.uid,
@@ -124,9 +125,8 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
         }    
     };
     
-    //for submiting a review for the chef
-    $scope.submitReviewChef = function(meal){
-        console.log(meal);
+    //for submitting a review for the chef
+    $scope.submitChefReview = function(meal){
         if (meal.review.rating){
             var rating = parseInt(meal.review.rating, 10);
             if (rating > 0 && rating <= 5){
@@ -136,22 +136,44 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
                 reviewObj.uid = $scope.parentController.uid;
                 reviewObj.dishid = meal.key;
                 if (meal.review.review) reviewObj.review = meal.review.review;
-                console.log("send http request");
-                    $http.post('/api/reviewChef', reviewObj).then(function(res) {
-                        console.log(res);
-                        if (res.data=="success"){
-                            $timeout(function(){
-                                meal.systemMessage = "Thank you for reviewing " + meal.ownerName + "!";
-                            });
-                            $timeout(function(){
-                                meal.systemMessage = undefined;
-                            }, 10000);
-                        }
-                    }, function(err){
-                        console.log(err); 
-                    });
+                
+                $http.post('/api/reviewChef', reviewObj).then(function(res) {
+                    if (res.data=="success"){
+                        $timeout(function(){
+                            meal.systemMessage = "Thank you for reviewing " + meal.ownerName + "!";
+                            meal.reviewedChef = true;
+                        });
+                        $timeout(function(){
+                            meal.systemMessage = undefined;
+                        }, 10000);
+                    }
+                }, function(err){
+                    console.log(err); 
+                });
             } // end if rating in range
         }
+    };
+    
+    //for submitting a review for the buyer
+    $scope.submitBuyerReview = function(buyerObj, dishid){
+        if (buyerObj.unprocessedReview.rating){
+            var rating = parseInt(buyerObj.unprocessedReview.rating, 10);
+            if (rating>0 && rating<=5){
+                var reviewObj = {rating: rating};
+                if (buyerObj.unprocessedReview.review) reviewObj.review = buyerObj.unprocessedReview.review;
+                reviewObj.uid = $scope.parentController.uid;
+                reviewObj.dishid = dishid;
+                reviewObj.buyerid = buyerObj.buyerid;
+                
+                $http.post('/api/reviewBuyer', reviewObj).then(function(res){
+                    console.log(res);
+                }, function(err){
+                    console.log(err);    
+                });
+            }
+        }
+      
+        
     };
 
     //assign location
