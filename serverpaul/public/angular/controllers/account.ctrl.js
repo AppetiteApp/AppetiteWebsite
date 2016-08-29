@@ -46,6 +46,7 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
                                 
                                 dish.time.pickupTime = pickupTime;
                                 
+                                
                                 dish.orderBy = orderBy;
                                 
                                 if (snapshot.val().purchases){
@@ -125,17 +126,27 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
     
     //for submiting a review for the chef
     $scope.submitReviewChef = function(meal){
+        console.log(meal);
         if (meal.review.rating){
             var rating = parseInt(meal.review.rating, 10);
-            if (rating > 0 && rating < 5){
+            if (rating > 0 && rating <= 5){
                 var reviewObj = {
                     rating: rating
                 };
                 reviewObj.uid = $scope.parentController.uid;
                 reviewObj.dishid = meal.key;
                 if (meal.review.review) reviewObj.review = meal.review.review;
+                console.log("send http request");
                     $http.post('/api/reviewChef', reviewObj).then(function(res) {
                         console.log(res);
+                        if (res.data=="success"){
+                            $timeout(function(){
+                                meal.systemMessage = "Thank you for reviewing " + meal.ownerName + "!";
+                            });
+                            $timeout(function(){
+                                meal.systemMessage = undefined;
+                            }, 10000);
+                        }
                     }, function(err){
                         console.log(err); 
                     });

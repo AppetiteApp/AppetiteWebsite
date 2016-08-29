@@ -174,8 +174,9 @@
           <div class="chefname">by {{activeMeal.owner}}</div></br>
           <div>{{activeMeal.location}}</div>
           <div>{{activeMeal.phone}}</div>
+          {{activeMeal.systemMessage}}
           <button ng-if="!activeMeal.pickedUp" ng-click="pickedUp(activeMeal)">Picked Up</button>
-        <div id="itemboxrating" ng-if="activeMeal.pickedUp">
+        <div id="itemboxrating" ng-if="activeMeal.pickedUp&&!activeMeal.reviewedChef">
               <div class="rateandreview">
                 <div class="pleaserate">Please rate or review your experience!</div><br>
                 <fieldset class="rating" id="valueratingfield">
