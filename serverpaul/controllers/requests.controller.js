@@ -1,14 +1,14 @@
-function makeCode() {
-    var text = "";
-    //var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    //we may have people manually entering the code, so make it less difficult for them
-    var possible = "0123456789";
+// function makeCode() {
+//     var text = "";
+//     //var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+//     //we may have people manually entering the code, so make it less difficult for them
+//     var possible = "0123456789";
 
-    for( var i=0; i < 5; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
+//     for( var i=0; i < 5; i++ )
+//         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    return text;
-};
+//     return text;
+// };
 
 module.exports = function(app){
     //when user orders a meal
@@ -149,7 +149,7 @@ module.exports = function(app){
                 console.log(dishInfo);
                 console.log(activeMeals);
                 
-                global.dishRef.child(req.body.dishid).update({purchases: purchases});
+                global.dishRef.child(req.body.dishid).update({purchases:purchases});
 
                 global.userRef.child(req.body.uid).child("activeMeals").update(activeMeals);
                 
@@ -239,6 +239,8 @@ module.exports = function(app){
                         errorType: "dish",
                         errorMessage: "request to purchase meal doesn't exist"
                     }];
+                
+                    
                 } else if(!JSON.parse(snapshot.val().purchases)[req.body.uid]){
                     errors = [{
                         errorType: "dish",
@@ -279,8 +281,12 @@ module.exports = function(app){
                     personType: req.body.personType
                 });
                 
-                
-                global.dishRef.child(req.body.dishid).child('purchases').child(req.body.uid).remove();
+                var purchases = {};
+                if (snapshot.val().purchases) {
+                    purchases = snapshot.val().purchases;
+                }
+                purchases[req.body.uid] = undefined;
+                global.dishRef.child(req.body.dishid).child('purchases').update(purchases);
                 global.userRef.child(req.body.uid).child('activeMeals').child(req.body.dishid).remove();
                 
                 res.send({
@@ -395,6 +401,10 @@ module.exports = function(app){
                     return;
                 }
                 
+                purchases[req.body.uid]["pickedUp"] = true;
+                purchases = JSON.stringify(purchases);
+                global.dishRef.child(req.body.dishid).update({purchases: purchases});
+                
                 //checks done, update and save info
                 requestInfo.pickedUp = true;
                 console.log("requestInfo");
@@ -404,10 +414,6 @@ module.exports = function(app){
                 
                 console.log("purchases");
                 console.log(purchases);
-                
-                purchases[req.body.uid]["pickedUp"] = true;
-                purchases = JSON.stringify(purchases);
-                global.dishRef.child(req.body.dishid).update({purchases: purchases});
                 
                 res.send("success");
                 

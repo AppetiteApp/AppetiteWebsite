@@ -150,6 +150,17 @@ module.exports = function(app){
                     reviewsForChef: reviewsForChef
                 });
                 
+                //update the dish listings to reflect that person has reviewed the chef
+                global.userRef.child(req.body.uid).child("activeMeals").child(req.body.dishid).update({
+                    reviewedChef: true,
+                    reviewForChef: newChefReviewKey
+                });
+                
+                purchases[req.body.uid].reviewedChef = true;
+                purchases[req.body.uid].reviewForChef = newChefReviewKey;
+                purchases = JSON.stringify(purchases);
+                global.dishRef.child(req.body.dishid).update({purchases: purchases});
+                
                 //save for the chef who's been reviewed
                 global.userRef.child(chefid).once("value").then(function(snapshot){
                     if (snapshot.val()){
@@ -236,6 +247,7 @@ module.exports = function(app){
                 return;
             }
             
+    
             var reviewsForBuyer = [];
             if (snapshot.val().reviewsForBuyer) reviewsForBuyer = snapshot.val().reviewsForBuyer;
             
@@ -299,6 +311,7 @@ module.exports = function(app){
                         global.userRef.child(req.body.buyerid).update({
                             reviewsAsBuyer: reviewsAsBuyer
                         });
+                        
                     }    
                 }, function(err){
                     res.send({
