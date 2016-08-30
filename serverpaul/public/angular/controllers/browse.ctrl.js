@@ -28,7 +28,9 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
                 //format time
                 
                 dish.time = timeService.formatDate(pickupTime) + " ~ " + timeService.formatAPMP(pickupTime);
-                
+                //set dish.status according to whether or not it's in activeMeals
+                var orderBy = new Date(dish.orderBy);
+                dish.orderByTime = timeService.formatDate(orderBy) + " " + timeService.formatAPMP(orderBy);
 
 
 
@@ -37,9 +39,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
                 if ($scope.parentController.uid){
                     console.log($scope.parentController.uid);
 
-                    //set dish.status according to whether or not it's in activeMeals
-                    var orderBy = new Date(dish.orderBy);
-                    dish.orderByTime = timeService.formatDate(orderBy) + " " + timeService.formatAPMP(orderBy);
+                    
                     console.log(dish.dishName);
                     console.log(orderBy);
                     console.log(timeNow);

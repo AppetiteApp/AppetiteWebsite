@@ -22,31 +22,17 @@ module.exports = function(app){
     //once finishes reviewing someone, dish should be moved to a pastPurchases list
     //once all buyers reviews a dish or 2 days has past since the dish was 'ready', put dish in a pastMade list
     app.post('/api/reviewChef', function(req, res){
-        if (!req.body.uid || !req.body.dishid || !req.body.rating || !req.body.chefid){
-            res.send({
-                errors: [{
-                    errorType: "info",
-                    errorMessage: "missing info"
-                }]
-            });
+        console.log("received request");
+        console.log(req.body);
+        if (!req.body.uid || !req.body.dishid || !req.body.rating){
+            res.send("invalid");
             return;
-        }
-        if (!req.body.rating.taste || !req.body.rating.value || !req.body.rating.timing){
-            //check if the taste, value & timing are ints 
-            res.send({
-                errors: [{
-                    errorType: 'info',
-                    errorMessage: 'missing info'
-                }]
-            });
-            return;
-        } else {
-            
         }
         
         var errors = [];
         //check that reviewer purchased the meal
         global.userRef.child(req.body.uid).once('value').then(function(snapshot){
+            console.log("fetched data from userRef");
             if (!snapshot.val()){
                 errors.push({
                     errorType: "uid",
@@ -57,37 +43,56 @@ module.exports = function(app){
                     errorType: "purchases",
                     errorMessage: "purchase does not exist"
                 });
-            } else if (!snapshot.val().activeMeals[req.body.dishid] || snapshot.val().activeMeals[req.body.dishid].pending === true){
-                errors.push({
-                    errorType: "purchases",
-                    errorMessage: "purchase doesn't exist or status pending"
-                });
+            } else {
+                var activeMeals = snapshot.val().activeMeals;
+                if (!activeMeals[req.body.dishid]){
+                    errors.push({
+                        errorType: "purchases",
+                        errorMessage: "User didn't purchase meal"
+                    });
+                } else if (!activeMeals[req.body.dishid]["pickedUp"]){
+                    errors.push({
+                        errorType: "review",
+                        errorMessage: "cannot review dish before picking up"
+                    });
+                } else if (activeMeals[req.body.dishid]["reviewedChef"]){
+                    errors.push({
+                        errorType: "review",
+                        errorMessage: "already reviewed dish"
+                    });
+                }
             }
             
             //verify ratings are integers between 0 and 5
-            if (verifyRating(req.body.rating.taste) === -1 || verifyRating(req.body.rating.value) === -1 || verifyRating(req.body.rating.timing) === -1){
+            if (verifyRating(req.body.rating) === -1){
                 errors.push({
                     errorType: "rating",
                     errorMessage: "ratings not valid numbers"
                 });
-            }
+            }    
+            
+            //if there is a review, verify that it's valid
             if (req.body.review){
-                if (!globals.commentRegex(req.body.review)){
-                    errors.push({
-                        errorType: 'review',
-                        errorMessage: "invalid characters in review"
-                    });
-                }
-            }
-            if (errors.length){
-                res.send({
-                    errors: errors
-                });
-                return;
+                console.log(req.body.review);
+                // console.log(globals.commentRegex(req.body.review));
+                // if (!globals.commentRegex(req.body.review)){
+                //     errors.push({
+                //         errorType: 'review',
+                //         errorMessage: "invalid characters in review"
+                //     });
+                // }
             }
             
+            if (errors.length){
+                console.log(errors);
+                res.send("invalid request");
+                return;
+            }
+            console.log("hi");
             var reviewsForChef = [];
-            if (snapshot.val().reviewsForChef) reviewsForChef = snapshot.val().reviewsForChef;
+            if (snapshot.val().reviewsForChef) {
+                reviewsForChef = snapshot.val().reviewsForChef;
+            }
             
             //verify dish
             global.dishRef.child(req.body.dishid).once("value").then(function(snapshot){
@@ -101,37 +106,49 @@ module.exports = function(app){
                         errorType: 'purchases',
                         errorMessage: 'no purchases made under your name'
                     });
-                } else if (!snapshot.val().purchases[req.body.uid]){
-                    errors.push({
-                        errorType: 'purchases',
-                        errorMessage: 'no purchases made under your name'
-                    });
-                } else if (snapshot.val().purchases[req.body.uid].pending === true){
-                    errors.push({
-                        errorType: 'purchase',
-                        errorMessage: 'cannot review meal if request to purchase is pending'
-                    });
+                } else {
+                    var purchases = JSON.parse(snapshot.val().purchases);
+                    if (!purchases[req.body.uid]){
+                        errors.push({
+                            errorType: "purchases",
+                            errorMessage: "no purchases made under your name"
+                        });
+                    } else if (!purchases[req.body.uid]["pickedUp"]){
+                        errors.push({
+                            errorType: "review",
+                            errorMessage: "cannot review chef before picking up the meal"
+                        });
+                    } else if (purchases[req.body.uid]["reviewedChef"]){
+                        errors.push({
+                            errorType: "review",
+                            errorMessage: "cannot review twice"
+                        });
+                    }
+                
                 }
                 if (errors.length){
-                    res.send({
-                        errors: errors
-                    });
+                    res.send("invalid request");
+                    console.log(errors);
                     return;
                 }
+                console.log("chefid");
                 var chefid = snapshot.val().ownerid;
                 //make rating object and store it
                 var rating = {
-                    review: req.body.review,
-                    value: parseInt(req.body.rating.value, 10),
-                    taste: parseInt(req.body.rating.taste, 10),
-                    timing: parseInt(req.body.rating.timing, 10),
+                    rating: verifyRating(req.body.rating),
                     dish: {
                         dishid: req.body.dishid,
-                        chefid: req.body.chefid,
+                        chefid: snapshot.val().ownerid,
                         buyerid: req.body.uid
                     },
                     date: new Date()
                 };
+                console.log("rating");
+                console.log(rating);
+                
+                if (req.body.review) {
+                    rating.review = req.body.review;
+                }
                 
                 var newChefReviewRef = global.chefReviewRef.push();
                 var newChefReviewKey = newChefReviewRef.key;
@@ -143,134 +160,130 @@ module.exports = function(app){
                     reviewsForChef: reviewsForChef
                 });
                 
+                
+                //update the dish listings to reflect that person has reviewed the chef
+                global.userRef.child(req.body.uid).child("activeMeals").child(req.body.dishid).update({
+                    reviewedChef: true,
+                    reviewForChef: newChefReviewKey
+                });
+                
+                purchases[req.body.uid].reviewedChef = true;
+                purchases[req.body.uid].reviewForChef = newChefReviewKey;
+                purchases = JSON.stringify(purchases);
+                global.dishRef.child(req.body.dishid).update({purchases: purchases});
+                
                 //save for the chef who's been reviewed
                 global.userRef.child(chefid).once("value").then(function(snapshot){
                     if (snapshot.val()){
                         var reviewsAsChef = [];
-                        if (snapshot.val().reviewsAsChef) reviewsAsChef = snapshot.val().reviewsAsChef;
+                        if (snapshot.val().reviewsAsChef) {
+                            reviewsAsChef = snapshot.val().reviewsAsChef;
+                        }
+                        reviewsAsChef.push(newChefReviewKey);
                         global.userRef.child(chefid).update({
                             reviewsAsChef: reviewsAsChef
                         });
-                        res.send({
-                            message: 'Review Submitted! Thank you for your feedback!'
-                        });
+                        res.send("success");
                         return;
                     }
                 }, function(err){
-                    res.send({
-                        errors: [{
-                            errorType: 'firebase',
-                            errorMessage: err
-                        }]
-                    });
+                    res.send("invalid request");
                 });
                 
             }, function(err){
-                res.send({
-                    errors: [{
-                        errorType: 'firebase',
-                        errorMessage: err
-                    }]
-                });
+                res.send("invalid request");
             });
             
         }, function(err){
-            res.send({
-                errors: [{
-                    errorType: 'firebase',
-                    errorMessage: err
-                }]
-            });
+            res.send("invalid request");
         });
     });
     
     //review the buyer
     app.post('/api/reviewBuyer', function(req, res){
+        console.log(req.body);
+        var errors = [];
         if (!req.body.uid || !req.body.buyerid || !req.body.dishid || !req.body.rating){
-            res.send({
-                errors: [{
-                    errorType: "info",
-                    errorMessage: "missing info"
-                }]
-            });
+            res.send("invalid request");
             return;
         }
-        var rating = parseInt(req.body.rating, 10);
-        if (!rating){
-            res.send({
-                errors: [{
-                    errorType: "rating",
-                    errorMessage: "no rating"
-                }]
+        
+        var rating = verifyRating(req.body.rating, 10);
+        if (rating === -1){
+            errors.push({
+                errorType: "rating",
+                errorMessage: "invalid rating format"
             });
-            return;
-        } else if (rating < 0 || rating > 5 || !Number.isInteger(rating)){
-            res.send({
-                errors: [{
-                    errorType: 'rating',
-                    errorMessage: 'invalid rating'
-                }]
-            });
-            return;
         }
         
         //verify that owner has cooked dish and the buyer has bought the dish
         global.userRef.child(req.body.uid).once("value").then(function(snapshot){
             //if snapshot.val() isn't null
+            
             if (!snapshot.val()){
-                res.send({
-                    errors: [{
-                        errorType: "uid",
-                        errorMessage: "invalid uid"
-                    }]
+                errors.push({
+                    errorType: "uid",
+                    errorMessage: "invalid uid"
                 });
-                return;
             } else if (!snapshot.val().currentlyCooking) {
-                res.send({
-                    errors: [{
+                errors.push({
                         errorType: "dish",
                         errorMessage: "user didn't post this dish"
-                    }]
                 });
-                return;
             } else if (snapshot.val().currentlyCooking.indexOf(req.body.dishid) === -1){
-                res.send({
-                    errors: [{
-                        errorType: "dish",
-                        errorMessage: "user didn't post this dish"
-                    }]
+                errors.push({
+                    errorType: "dish",
+                    errorMessage: "user didn't post this dish"
                 });
+            }
+            
+            if (errors.length) {
+                res.send("invalid request");
+                console.log(errors);
                 return;
             }
             
+    
             var reviewsForBuyer = [];
             if (snapshot.val().reviewsForBuyer) reviewsForBuyer = snapshot.val().reviewsForBuyer;
             
             //verify that buyer bought the dish
             global.dishRef.child(req.body.dishid).once("value").then(function(snapshot){
+                var purchases;
                 if (!snapshot.val()){
-                    res.send({
-                        errors: [{
-                            errorType: "dish",
-                            errorMessage: "dish doesn't exist"
-                        }]
+                    errors.push({
+                        errorType: "dish",
+                        errorMessage: "dish doesn't exist"
                     });
-                    return;
                 } else if (!snapshot.val().purchases) {
-                    res.send({
-                        errors: [{
+                    errors.push({
+                        errorType: "dish",
+                        errorMessage: "buyer didn't purchase  dish"
+                    });
+                } else{
+                    purchases = JSON.parse(snapshot.val().purchases);
+                    if (!purchases[req.body.buyerid]){
+                        errors.push({
                             errorType: "dish",
                             errorMessage: "buyer didn't purchase this dish"
-                        }]
-                    });
-                    return;
-                } else if (snapshot.val().purchases.indexOf(req.body.buyerid) !== -1){
-                    res.send({
-                        errors: [{
-                            errorType: "dish",
-                            errorMessage: "buyer didn't purchase this dish"
-                        }]
-                    });
+                        });
+                    } else if (!purchases[req.body.buyerid]["pickedUp"]){
+                        errors.push({
+                            errorType: "pickup",
+                            errorMessage: "cannot review buyer before s/he picked up dish"
+                        });
+                    } else if (purchases[req.body.buyerid]["reviewedBuyer"]){
+                        errors.push({
+                            errorType: "review",
+                            errorMessage: "cannot review twice"
+                        });
+                    }
+                }
+                
+                
+                if (errors.length){
+                    res.send("invalid request");
+                    console.log(errors);
                     return;
                 }
                 
@@ -281,12 +294,17 @@ module.exports = function(app){
                     dish: {
                         buyer: req.body.buyerid,
                         chef : req.body.uid,
+                        dishid: req.body.dishid
                     }
-                   
                 };
+                
+                
                 if (req.body.review){
                     ratingObj.review = req.body.review;
                 }
+                
+                console.log(ratingObj);
+                
                 var newBuyerReviewRef = global.buyerReviewRef.push();
                 var newBuyerReviewKey = newBuyerReviewRef.key;
                 newBuyerReviewRef.set(ratingObj);
@@ -297,6 +315,14 @@ module.exports = function(app){
                     reviewsForBuyer: reviewsForBuyer
                 });
                 
+                //change reviewedBuyer & reviewForBuyer
+                purchases[req.body.buyerid].reviewedBuyer = true;
+                purchases[req.body.buyerid].reviewForBuyer = newBuyerReviewKey;
+                
+                purchases = JSON.stringify(purchases);
+                console.log(purchases);
+                global.dishRef.child(req.body.dishid).child("purchases").set(purchases);
+                console.log("hi");
                 
                 global.userRef.child(req.body.buyerid).once("value").then(function(snapshot){
                     if (snapshot.val()){
@@ -306,6 +332,13 @@ module.exports = function(app){
                         global.userRef.child(req.body.buyerid).update({
                             reviewsAsBuyer: reviewsAsBuyer
                         });
+                        
+                        var activeMeals = snapshot.val().activeMeals;
+                        activeMeals[req.body.dishid].reviewedBuyer = true;
+                        activeMeals[req.body.dishid].reviewForBuyer = newBuyerReviewKey;
+                        global.userRef.child(req.body.buyerid).child("activeMeals").update(activeMeals);
+                        res.send("success");
+                        
                     }    
                 }, function(err){
                     res.send({

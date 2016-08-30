@@ -9,9 +9,6 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
 
     $scope.$watch('parentController.user', function(newValue, oldValue){
-        console.log(newValue.currentlyCooking);
-        console.log(oldValue.currentlyCooking);
-        console.log(newValue.activeMeals);
         if (newValue){
             if (newValue.activeMeals){
                 $scope.activeMeals = newValue.activeMeals;
@@ -29,7 +26,7 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
                             console.log(snapshot.val());
                             if (snapshot.val().ownerid === newValue.uid){
                                 var dish = snapshot.val();
-                                
+                                dish.key = mealKey;
                                 
                                 var pickupTime = new Date(snapshot.val().time.pickupTime);
                                 var orderBy = new Date(snapshot.val().orderBy);
@@ -49,10 +46,12 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
                                 
                                 dish.time.pickupTime = pickupTime;
                                 
+                                
                                 dish.orderBy = orderBy;
                                 
                                 if (snapshot.val().purchases){
                                     dish.purchases = JSON.parse(dish.purchases);
+                                    
                                 } else {
                                     dish.purchases = undefined;
                                 }
@@ -82,6 +81,7 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
                             data.owner = snapshot.val().owner;
                             data.dishName = snapshot.val().dishName;
                             data.description = snapshot.val().description;
+                            data.key = mealKey;
                             activeMeals.push(data);
                         }
                         
@@ -106,20 +106,74 @@ var accountController = function($scope, $log, $location, $http, $timeout, sessi
     $scope.updateProfile = {};
     $scope.updateProfile.changeAddress = false;
     
-    $scope.pickedUp = function(dish){
+    $scope.pickedUp = function(dish, dishid){
         if ($scope.parentController.uid){
             $http.post('/api/pickedUp', {
                 uid: $scope.parentController.uid,
                 dishid: dish.key
             }).then(function(res){
                 console.log(res);
-                $timeout(function() {
-                    dish.pickedUp = true;
-                })
+                if (res.data === 'success'){
+                    $timeout(function() {
+                        dish.pickedUp = true;
+                    });
+                    
+                }
             }, function(err){
                 console.log(err);
             });
         }    
+    };
+    
+    //for submitting a review for the chef
+    $scope.submitChefReview = function(meal){
+        if (meal.review.rating){
+            var rating = parseInt(meal.review.rating, 10);
+            if (rating > 0 && rating <= 5){
+                var reviewObj = {
+                    rating: rating
+                };
+                reviewObj.uid = $scope.parentController.uid;
+                reviewObj.dishid = meal.key;
+                if (meal.review.review) reviewObj.review = meal.review.review;
+                
+                $http.post('/api/reviewChef', reviewObj).then(function(res) {
+                    if (res.data=="success"){
+                        $timeout(function(){
+                            meal.systemMessage = "Thank you for reviewing " + meal.ownerName + "!";
+                            meal.reviewedChef = true;
+                        });
+                        $timeout(function(){
+                            meal.systemMessage = undefined;
+                        }, 10000);
+                    }
+                }, function(err){
+                    console.log(err); 
+                });
+            } // end if rating in range
+        }
+    };
+    
+    //for submitting a review for the buyer
+    $scope.submitBuyerReview = function(buyerObj, dishid){
+        if (buyerObj.unprocessedReview.rating){
+            var rating = parseInt(buyerObj.unprocessedReview.rating, 10);
+            if (rating>0 && rating<=5){
+                var reviewObj = {rating: rating};
+                if (buyerObj.unprocessedReview.review) reviewObj.review = buyerObj.unprocessedReview.review;
+                reviewObj.uid = $scope.parentController.uid;
+                reviewObj.dishid = dishid;
+                reviewObj.buyerid = buyerObj.buyerid;
+                
+                $http.post('/api/reviewBuyer', reviewObj).then(function(res){
+                    console.log(res);
+                }, function(err){
+                    console.log(err);    
+                });
+            }
+        }
+      
+        
     };
 
     //assign location
