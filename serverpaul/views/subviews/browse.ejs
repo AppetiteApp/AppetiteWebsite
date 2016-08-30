@@ -4,8 +4,108 @@
 <div id="itemscontainer">
   <div id="submitsuccess" ng-cloak>{{message}}</div>
 
-  <div id="activeboughtcontainer">
+  <div id="activemealscontainer">
     <div id="boughtseparate">Current Meals</div>
+
+    <div id="repeateditemactive" ng-cloak ng-repeat="dish in currentlyCooking">
+      <div ng-init="dish.edit=true" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
+
+
+          <div ng-show="dish.edit" id="dishpriceactive">${{dish.price}}</div>
+          <input type="text" ng-show="!dish.edit" ng-if="dish.editable" ng-model="dish.price" placeholder="$7" id="dishpriceedit"/>
+
+          <div id="itemboxactive">
+            <div ng-show="dish.edit" id="dishtitleactive">{{dish.dishName}}</div>
+            <input placeholder="linguini" ng-show="!dish.edit" ng-if="dish.editable" id="dishtitleactiveedit" type="text" ng-model="dish.dishName"/>
+
+            </br>
+            </br>
+
+
+            </br></br>
+          </div>
+
+          <!--<div class="chefnameactive">My Dish</div>-->
+          <input type="text" ng-show="!dish.edit" ng-if="dish.editable" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></input>
+
+          <div ng-show="dish.edit" id="profiledishdescription">"{{dish.description}}"</div>
+
+
+          <div ng-show="!dish.edit" ng-if="dish.editable" id="logisticssubmitactive">
+              <label>Order By:</label>
+              <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.orderBy" />
+             <input class="logistictextbox" type="time" ng-model="dish.orderBy" step="600"/><br>
+             <label id="fromlabelactive">Ready at:</label>
+             <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.time.pickupTime" />
+             <input class="logistictextbox" type="time" ng-model="dish.time.pickupTime" step="600"/>
+          </div>
+          <div id="profilesubmitteddate" ng-show="dish.edit">
+             Order By: {{dish.orderByFormatted}}<br>
+             Ready Around: {{dish.time.pickupTimeFormatted}}
+          </div>
+
+          <div ng-show="!dish.edit" ng-if="dish.editable" class="activeaddresssearch">
+           <input id="profileaddresssearch" placeholder="New Address" ng-show="!dish.edit" type="text" ng-model="queryAddress" />
+           <button ng-show="!dish.edit" id="activeaddresssearch" ng-click="submitAddress(queryAddress, dish)">Find New Address!</button>
+
+           <div id="addressresultactive">
+             <div  class="addresseditactive" ng-show="!dish.edit" ng-repeat="result in dish.results" ng-click="assignLocation(result, dish)">
+               {{result.formatted_address}}
+             </div>
+           </div>
+          </div>
+          <div id="profilesubmittedaddress" ng-show="dish.edit">
+              Pickup at: {{dish.location}}
+          </div>
+
+
+
+
+      <button ng-show="dish.edit" ng-if="dish.editable" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Edit Dish</button>
+      <button ng-show="!dish.edit" ng-if="dish.editable" class="activeeditbutton" ng-click="dish.edit=!dish.edit">Save Edits</button>
+      <button ng-show="!dish.edit" ng-if="dish.editable" class="activecancelbutton" ng-click="dish.edit=!dish.edit">Cancel</button>
+
+
+          </div>
+
+
+
+
+
+       <div ng-if="dish.purchases">
+            Orders:
+            <div ng-repeat="(buyerid, buyerObj) in dish.purchases">
+                <p>{{buyerObj.buyerName}} : {{buyerObj.buyerPhone}} <span ng-if="buyerObj.pickedUp && buyerObj.reviewedBuyer">[picked up and reviewed buyer]</span></p>
+                <div ng-if="buyerObj.pickedUp && !buyerObj.reviewedBuyer">Review {{buyerObj.buyerName}}:
+                    <p>
+                        <div class="rating">
+                            <label for="star5" ng-click="buyerObj.unprocessedReview.rating=5">5 stars</label>
+                            <label for="star4" ng-click="buyerObj.unprocessedReview.rating=4">4 stars</label>
+                            <label for="star3" ng-click="buyerObj.unprocessedReview.rating=3">3 stars</label>
+                            <label for="star2" ng-click="buyerObj.unprocessedReview.rating=2">2 stars</label>
+                            <label for="star1" ng-click="buyerObj.unprocessedReview.rating=1">1 star</label>
+                        </div>
+
+                        <textarea ng-model="buyerObj.unprocessedReview.review">
+
+                        </textarea>
+                        <button ng-click="submitBuyerReview(buyerObj, dish.key)">Submit Review!</button>
+                    </p>
+                </div>
+                <hr id="activehr">
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div id="dishbannersold">
+      <div class="dishthumbnail">
+        <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
+      </div>
+    </div>
+
     <div id="dishbannerbought">
         <div class="dishthumbnail">
           <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
@@ -36,9 +136,6 @@
         </textarea>
         <button id="submitreviewprofile">Submit
         </button>
-
-
-      <button ng-click="openModal(dish)" class="order" ng-if="dish.status">{{dish.status}}</button>
   </div>
 
   <div id="dishbannerbought">

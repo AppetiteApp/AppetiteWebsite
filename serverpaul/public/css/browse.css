@@ -155,6 +155,24 @@
   text-overflow: ellipsis;
 }
 
+#dishbannersold {
+  overflow: hidden;
+  position:relative;
+  margin: 20px 10px 20px 10px;
+  width: auto;
+  border: 2px solid white;
+  border-radius: 14px;
+  height: auto;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  min-height: 60px;
+  background-color: white;
+  text-align: left;
+  text-overflow: ellipsis;
+}
+
+
 #boughtaddress{
   font-family: 'Raleway', sans-serif;
   display: block;
@@ -511,7 +529,7 @@ overflow-y: hidden;
   display: block;
   }
 
-#activeboughtcontainer  {
+#activemealscontainer  {
   background-color: green;
   width: 100%;
   height:auto;
