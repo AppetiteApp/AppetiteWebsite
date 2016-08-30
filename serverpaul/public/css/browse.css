@@ -211,6 +211,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   padding-left:5px;
+  margin-top:5px;
 
 }
 
@@ -227,6 +228,21 @@
     padding-left:5px;
     min-width: 0;
     font-size: 13px;
+}
+
+#orderby{
+  color: grey;
+  font-family: 'Raleway', sans-serif;
+  width:auto;
+  height: auto;
+  margin-right: 0px;
+  width:auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left:5px;
+  min-width: 0;
+  font-size: 13px;
 }
 
 #boughtcode{
@@ -246,7 +262,6 @@
 #reviewbutton{
   width: auto;
   margin: 0 auto;
-  text-align: center;
   font-family: 'Raleway', sans-serif;
   margin-top: 5px;
   border: 1px solid orange;
@@ -255,9 +270,73 @@
   font-weight: bold;
   font-size: 16px;
   border-radius: 5px;
-  margin-left: 5px;
+  margin-left: 100px;
+  margin-right: 5px;
   cursor: pointer;
+  height: 30px;
 }
+
+#totalratingfield{
+  display:block;
+  margin: 0 auto;
+  margin-top: 5px;
+  margin-bottom: 6px;
+  }
+
+#ratelabel{
+  float: left;
+  margin-left: 5px;
+  margin-top:5px;
+  margin-bottom:6px;
+}
+
+#ratebox{
+  position:relative;
+  height: auto;
+  width: auto;
+  margin-left: 40px;
+}
+
+.reviewboxprofile{
+  width: calc(100% - 80px);
+  height: 75px;
+  margin: 10px;
+  margin-left:5px;
+  border: 1px solid orange;
+  border-radius: 5px;
+  outline: none;
+  padding-left:65px;
+  margin-bottom: 5px;
+}
+
+#submitreviewprofile{
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  color: white;
+  background-color: green;
+  border-radius: 5px;
+  font-family: 'Raleway', sans-serif;
+  font-size:15px;
+  border:none;
+  padding:5px;
+  margin-bottom: 5px;
+}
+
+
+
+#reviewlabel{
+  position: absolute;
+  top:105px;
+  left:5px;
+  padding:5px;
+  font-family: 'Raleway', sans-serif;
+  color: white;
+  background-color: orange;
+  border-radius: 5px 0 0 0;
+}
+
 
 #codelabel{
   width: auto;
@@ -358,6 +437,9 @@ display: block;
 overflow-y: hidden;
 }
 
+
+
+
 #itemdetails {
   background-color: #75d0f4;
   color: white;
@@ -419,12 +501,11 @@ overflow-y: hidden;
 }
 
 
-#browserseparate{
+#browseseparate{
   font-family: 'Raleway', sans-serif;
   padding-left: 15px;
   padding-top: 5px;
 }
-
 
 #innercontainer {
   display: block;
@@ -434,8 +515,9 @@ overflow-y: hidden;
   background-color: green;
   width: 100%;
   height:auto;
-  padding-bottom:10px;
+  padding-bottom:1px;
 }
+
 
 #repeateditem {
   height: auto;
