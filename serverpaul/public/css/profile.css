@@ -940,7 +940,6 @@ margin-bottom: 0px;
 
 #activeratings{
   margin: 4px;
-  height: 41px;
   width:100%;
 }
 
@@ -1196,7 +1195,6 @@ border-radius: 5px;
 width:auto;
 height:auto;
 display: block;
-overflow-y: hidden;
 margin: 5px;
 margin-bottom: 0px;
 }
@@ -1211,6 +1209,7 @@ margin-bottom: 0px;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   min-height: 60px;
+  height:100%;
   background-color: white;
   text-align: left;
   cursor: pointer;

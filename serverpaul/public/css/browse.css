@@ -25,6 +25,33 @@
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
+.modalreview {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modalreviewselect {
+    display: block; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+
 
 /* Modal Content/Box */
 .modal-content4 {
@@ -38,6 +65,19 @@
     height: 200px;
     text-align: center;
 }
+
+.modal-contentreview {
+    font-family: 'Raleway', sans-serif;
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding-right: 10px;
+    padding-left: 10px;
+    border: 1px solid #888;
+    width: 300px; /* Could be more or less, depending on screen size */
+    height: 200px;
+    text-align: center;
+}
+
 
 /* The Close Button */
 .close4 {
@@ -68,6 +108,7 @@
     background-color: white;
     padding: 5px 20px 5px 20px;
     text-align: center;
+    font-size: 13px;
   }
 
 #submitform{
@@ -97,6 +138,49 @@
   text-overflow: ellipsis;
 }
 
+#dishbannerbought {
+  overflow: hidden;
+  position:relative;
+  margin: 20px 10px 20px 10px;
+  width: auto;
+  border: 2px solid white;
+  border-radius: 14px;
+  height: auto;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  min-height: 60px;
+  background-color: white;
+  text-align: left;
+  text-overflow: ellipsis;
+}
+
+#boughtaddress{
+  font-family: 'Raleway', sans-serif;
+  display: block;
+  width: calc(100% - 12px);
+  margin: 5px;
+  text-align: center;
+  border-radius: 5px;
+  border: 1px solid #ebd3bd;
+  height: auto;
+  font-size:13px;
+}
+
+#boughtphone{
+  font-family: 'Raleway', sans-serif;
+  display: block;
+  width: calc(100% - 12px);
+  margin: 5px;
+  text-align: center;
+  border-radius: 5px;
+  border: 1px solid #ebd3bd;
+  height: auto;
+  font-size:13px;
+}
+
+
+
 .dishselect{
     border: 2px solid white;
 }
@@ -119,7 +203,7 @@
 #dishtitle {
   color: black;
   font-family: 'Raleway', sans-serif;
-  font-size: 25px;
+  font-size: 20px;
   height: auto;
   width: auto;
   margin-right: 0px;
@@ -127,14 +211,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   padding-left:5px;
+  margin-top:5px;
 
 }
 
 #dishtime {
-  color: #75d0f4;
-  font-family: 'Raleway', sans-serif;
-  width:auto;
-  height: auto;
+    color: #75d0f4;
+    font-family: 'Raleway', sans-serif;
+    width:auto;
+    height: auto;
     margin-right: 0px;
     width:auto;
     white-space: nowrap;
@@ -142,7 +227,121 @@
     text-overflow: ellipsis;
     padding-left:5px;
     min-width: 0;
+    font-size: 13px;
+}
 
+#orderby{
+  color: grey;
+  font-family: 'Raleway', sans-serif;
+  width:auto;
+  height: auto;
+  margin-right: 0px;
+  width:auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left:5px;
+  min-width: 0;
+  font-size: 13px;
+}
+
+#boughtcode{
+  width: auto;
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Raleway', sans-serif;
+  margin-top: 5px;
+  border: 1px solid green;
+  color: green;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+
+#reviewbutton{
+  width: auto;
+  margin: 0 auto;
+  font-family: 'Raleway', sans-serif;
+  margin-top: 5px;
+  border: 1px solid orange;
+  background-color: orange;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-left: 100px;
+  margin-right: 5px;
+  cursor: pointer;
+  height: 30px;
+}
+
+#totalratingfield{
+  display:block;
+  margin: 0 auto;
+  margin-top: 5px;
+  margin-bottom: 6px;
+  }
+
+#ratelabel{
+  float: left;
+  margin-left: 5px;
+  margin-top:5px;
+  margin-bottom:6px;
+}
+
+#ratebox{
+  position:relative;
+  height: auto;
+  width: auto;
+  margin-left: 40px;
+}
+
+.reviewboxprofile{
+  width: calc(100% - 80px);
+  height: 75px;
+  margin: 10px;
+  margin-left:5px;
+  border: 1px solid orange;
+  border-radius: 5px;
+  outline: none;
+  padding-left:65px;
+  margin-bottom: 5px;
+}
+
+#submitreviewprofile{
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  color: white;
+  background-color: green;
+  border-radius: 5px;
+  font-family: 'Raleway', sans-serif;
+  font-size:15px;
+  border:none;
+  padding:5px;
+  margin-bottom: 5px;
+}
+
+
+
+#reviewlabel{
+  position: absolute;
+  top:105px;
+  left:5px;
+  padding:5px;
+  font-family: 'Raleway', sans-serif;
+  color: white;
+  background-color: orange;
+  border-radius: 5px 0 0 0;
+}
+
+
+#codelabel{
+  width: auto;
+  padding-right:10px;
+  display: inline-block;
 }
 
 .chefname{
@@ -154,6 +353,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     padding-left:5px;
+    font-size: 13px;
+    color: grey;
 }
 
 
@@ -183,26 +384,24 @@
   display: inline-block;
   color: green;
   position: absolute;
-  padding: 5px;
-  padding-right:15px;
-  padding-left: 5px;
   margin: auto;
   top: 0; right: 0;
   height: auto;
+  min-width: 40px;
   background-color: white;
   border-radius: 0 10px 10px 0px;
+  text-align: center;
 }
 
 .order {
   font-family: 'Raleway', sans-serif;
-  font-size: 20px;
+  font-size: 13px;
   display: inline-block;
   color:white;
-  font-size: 14px;
   position: absolute;
   padding: 2px;
   margin: auto;
-  top: 32px; right: 0;
+  top: 28px; right: 0;
   height: auto;
   background-color: grey;
   border: 1px solid grey;
@@ -219,7 +418,6 @@
   font-size: 20px;
   display: inline-block;
   color:blue;
-  font-size: 14px;
   position: absolute;
   padding: 2px;
   margin: auto;
@@ -228,6 +426,7 @@
   background-color: white;
   border: 1px solid white;
   border-radius: 5px;
+  font-size: 13px;
 }
 
 #itembox{
@@ -237,6 +436,9 @@ height:90px;
 display: block;
 overflow-y: hidden;
 }
+
+
+
 
 #itemdetails {
   background-color: #75d0f4;
@@ -294,23 +496,28 @@ overflow-y: hidden;
 
 #boughtseparate{
   font-family: 'Raleway', sans-serif;
+  padding-left: 15px;
+  padding-top: 5px;
 }
 
 
-#browserseparate{
+#browseseparate{
   font-family: 'Raleway', sans-serif;
+  padding-left: 15px;
+  padding-top: 5px;
 }
-
 
 #innercontainer {
-  position: relative;
+  display: block;
   }
 
 #activeboughtcontainer  {
   background-color: green;
   width: 100%;
-  height:100px;
+  height:auto;
+  padding-bottom:1px;
 }
+
 
 #repeateditem {
   height: auto;
@@ -366,11 +573,8 @@ overflow-y: hidden;
     overflow-y: scroll;
     top: 360px;
     bottom: 0;
-    padding:3px;
     background-color: white;
-    padding-bottom: 80px;
     flex: 1 1 auto;
-    border: 2px solid #75d0f4;
   }
 
 
