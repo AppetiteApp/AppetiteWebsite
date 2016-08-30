@@ -12,6 +12,7 @@ var adminController = require('./controllers/admin.controller');
 var reviewController = require('./controllers/reviews.controller');
 var twilio = require('twilio');
 var cfg = require('./configs/config.json');
+var httpToHttps = require('./middleware/httpToHttps');
 
 firebase.initializeApp({
   serviceAccount: "./configs/firebase.json",
@@ -33,22 +34,22 @@ var authToken = cfg.twilioTestAuthToken;   // Your Auth Token from www.twilio.co
 
 var client = new twilio.RestClient(accountSid, authToken);
 
-client.messages.create({
-    body: 'Hello from Cheryl',
-    to: '+15145608462',  // Text this number
-    from: '+15005550006' // From a valid Twilio number
-}, function(err, message) {
-    console.log(err);
-    console.log(message);
-});
+// client.messages.create({
+//     body: 'Hello from Cheryl',
+//     to: '+15145608462',  // Text this number
+//     from: '+15005550006' // From a valid Twilio number
+// }, function(err, message) {
+//     console.log(err);
+//     console.log(message);
+// });
 
 var serverLogging = function(req, res, next){
 	console.log(req.method, req.url);
 	next();
 };
 
-
 app.use(cors());
+httpToHttps(app);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
