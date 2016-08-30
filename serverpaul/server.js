@@ -10,6 +10,8 @@ var dishController = require('./controllers/dish.controller');
 var requestController = require('./controllers/requests.controller');
 var adminController = require('./controllers/admin.controller');
 var reviewController = require('./controllers/reviews.controller');
+var twilio = require('twilio');
+var cfg = require('./configs/config.json');
 
 firebase.initializeApp({
   serviceAccount: "./configs/firebase.json",
@@ -25,6 +27,20 @@ global.cancelRef = db.ref("cancellations");
 global.buyerReviewRef = db.ref("buyerReviews");
 global.chefReviewRef = db.ref("chefReviews");
 app.set("view engine", "ejs");
+
+var accountSid = cfg.twilioTestAccountSID;
+var authToken = cfg.twilioTestAuthToken;   // Your Auth Token from www.twilio.com/console
+
+var client = new twilio.RestClient(accountSid, authToken);
+
+client.messages.create({
+    body: 'Hello from Cheryl',
+    to: '+15145608462',  // Text this number
+    from: '+15005550006' // From a valid Twilio number
+}, function(err, message) {
+    console.log(err);
+    console.log(message);
+});
 
 var serverLogging = function(req, res, next){
 	console.log(req.method, req.url);
