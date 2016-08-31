@@ -38,6 +38,7 @@ firebase.initializeApp({
 
 //set variables
 var db = firebase.database();
+global.firebase= firebase;
 global.userRef = db.ref("users");
 global.dishRef = db.ref("dish");
 global.commentRef = db.ref("comments");

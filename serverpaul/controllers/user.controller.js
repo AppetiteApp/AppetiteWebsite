@@ -189,4 +189,33 @@ module.exports = function(app) {
 	    res.send("coolio");
 	});
 	
+	
+	//upon login, authenticates and starts express-session
+	app.post('/api/customTokenAuth', function(req, res){
+	    if (!req.body.token){
+	        res.send("invalid request");
+	        return;
+	    }
+	    global.firebase.auth().verifyIdToken(req.body.token).then(function(decodedToken) {
+            var uid = decodedToken["user_id"];
+            console.log(decodedToken);
+            console.log("uid: " + uid);
+            
+            //destory pre-exisiting sessions
+            if (req.session.user){
+                req.session.destroy(function(err){});
+            }
+            
+            req.session.user = {
+                uid: uid,
+                emailVerified: decodedToken["email_verified"],
+                email: decodedToken["email"]
+            };
+
+            res.send("success");
+        }).catch(function(error) {
+            // Handle error
+        });
+	});
+	
 };

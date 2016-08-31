@@ -167,6 +167,14 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
             //stop displaying the login modal
             var modal = document.getElementById('myModal');
             modal.style.display = "none";
+            firebase.auth().currentUser.getToken(true).then(function(token) {
+                console.log(token);
+                startSession(token);
+                // Send token to your backend via HTTPS
+                // ...
+            }).catch(function(error) {
+                console.log(error);
+            });
         },function(error) {
             $timeout(function() {
                 $scope.loginError = error.message;
@@ -194,6 +202,15 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                     lastName: $scope.user.lastName,
                     phone: $scope.user.phone
                 };
+                
+                firebase.auth().currentUser.getToken(true).then(function(token) {
+                    console.log(token);
+                    startSession(token);
+                    // Send token to your backend via HTTPS
+                    // ...
+                }).catch(function(error) {
+                    console.log(error);
+                });
 
                 console.log(user);
 
@@ -224,6 +241,18 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
         });
 
     };
+    
+    var startSession = function(token){
+        $http.post('/api/customTokenAuth', {token: token}).then(function(res){
+            // if res.data = success then session started
+            console.log(res.data);
+            if (res.data="success"){
+                document.location.reload(true);
+            }
+        }, function(err){
+            console.log(err);
+        })
+    }
 
 
 };

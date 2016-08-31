@@ -7,10 +7,6 @@ var serverLogging = function(req, res, next){
 	next();
 };
 
-
-
-
-
 module.exports = {
     serverLogging: serverLogging,
 };
