@@ -24,7 +24,7 @@ $stateProvider
   .state('login', {
       templateUrl: '/home',
       controller: 'homeController',
-      url:'/login'
+      url:'/home'
   })
   .state('aboutus', {
       templateUrl: '/aboutus',

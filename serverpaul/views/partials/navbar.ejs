@@ -1,9 +1,11 @@
 <ul class="nav" ng-controller="navController">
+
   <a href="#/home"><div class="navlogo"><img height="50px" src="/imgs/betalogo.png"></div></a>
 
 
+
   <a href="#/aboutus"><li class="navelements">About Us</li></a>
-  <a href="#/login"><li class="navelements">Home</li></a>
+  <a href="#/home"><li class="navelements">Home</li></a>
   <a href="#/account"><li class="navelements" ng-show="parentController.uid">Profile</li></a>
   <button class="welcomebuttonright" id="myBtn" ng-show="!parentController.uid">Login</button>
   </div>

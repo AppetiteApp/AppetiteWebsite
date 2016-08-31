@@ -19,11 +19,14 @@ var sessionService = function(){
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             self.currentUser = user;
+
+            
         } else {
             //$log.log("onAuthStateChanged: no user");
             $route.reload();
             $location.path('/login');
             self.currentUser = undefined;
+            
         }
     });
     
@@ -31,6 +34,14 @@ var sessionService = function(){
     self.signout = function(){
         firebase.auth().signOut().then(function(){
             self.currentUser = undefined;
+            $http.post('/api/signout', {}).then(function(res){
+                if (res.data === "success"){
+                    $scope.parentController.serverCookie = 0;
+                    document.location.reload(true);
+                }
+            }, function(err){
+                console.log(err);
+            });
             //console.log("signed out!");
         }, function(err){
             //console.log(err);
