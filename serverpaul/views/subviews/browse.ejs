@@ -100,11 +100,29 @@
 
 
 
+
     <div id="dishbannersold">
-      <div class="dishthumbnail">
-        <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
-      </div>
-    </div>
+        <div class="dishthumbnail">
+          <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
+        </div>
+        <div id="dishprice">$7</div>
+
+        <div id="dishtitle">dish.dishName}}</div>
+        <div class="dishtime">Ready at</div>
+        <div id="ordersnumber">__ ORDER</div>
+
+        <div class="orderedbox">
+          <div class="guestordered">
+              <img class="img-thumbnailsmall" ng-src="{{dish.ownerPic}}"></img>
+
+              <div id="whoordered">{{This person} ordered</div>
+              <div id="whoorderedphone">617-their-num</div>
+          </div>
+        </div>
+  </div>
+
+
+
 
     <div id="dishbannerbought">
         <div class="dishthumbnail">
@@ -147,7 +165,7 @@
     <div id="itembox">
       <div id="dishtitle">dish.dishName}}</div>
       <div class="chefname">by dish.ownerName}}</div></br>
-      <div id="dishtime">Ready dish.time}}</div>
+      <div class="dishtime">Ready dish.time}}</div>
       <div id="boughtcode"><div id="codelabel">CODE:</div> H32-D34</div>
     </div>
 
@@ -202,7 +220,7 @@
           <div id="itembox">
             <div id="dishtitle">{{dish.dishName}} x{{dish.portions}}</div>
             <div class="chefname">by {{dish.ownerName}}</div></br>
-            <div id="dishtime">Ready {{dish.time}}</div>
+            <div class="dishtime">Ready {{dish.time}}</div>
             <div id="orderby">Order By {{dish.orderByTime}}</div>
 
           </div>
