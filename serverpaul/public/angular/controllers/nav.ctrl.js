@@ -247,12 +247,13 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
             // if res.data = success then session started
             console.log(res.data);
             if (res.data="success"){
+                $scope.parentController.serverCookie = 1;
                 document.location.reload(true);
             }
         }, function(err){
             console.log(err);
-        })
-    }
+        });
+    };
 
 
 };

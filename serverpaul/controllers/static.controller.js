@@ -31,7 +31,7 @@ module.exports = function(app) {
     //when the request url is "/about", render the page in views called 'about.ejs'
     app.get('/about', function(req, res){
         //if (!req.session.inSession) {
-            res.render(__dirname + '/../views/about');
+        res.render(__dirname + '/../views/about');
         //}
     });
 

@@ -203,7 +203,14 @@ module.exports = function(app) {
             
             //destory pre-exisiting sessions
             if (req.session.user){
-                req.session.destroy(function(err){});
+                if (req.session.user.uid !== uid){
+                    req.session.destroy(function(err){});
+                } else {
+                    req.session.reload = false;
+                    res.send("alreadyReloaded");
+                    return;
+                }
+                
             }
             
             req.session.user = {
@@ -216,6 +223,19 @@ module.exports = function(app) {
         }).catch(function(error) {
             // Handle error
         });
+	});
+	
+	app.post('/api/signout', function(req, res) {
+	    req.session.destroy(function(err){
+	        if (err) {
+	            console.log(err);
+	            res.send("invalid");
+	        } else {
+	            res.send("success");
+	        }
+	        console.log(req.session);
+	    });
+	    
 	});
 	
 };

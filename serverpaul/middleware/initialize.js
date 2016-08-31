@@ -1,9 +1,9 @@
 var urlList = ['/browse', '/home', '/', '/account', '/history', '/newdish', '/terms', '/aboutus'];
 
 var serverLogging = function(req, res, next){
-    if (urlList.indexOf(req.url) !== -1){
+    if ((req.method==="GET" && urlList.indexOf(req.url) !== -1) || req.method==="POST"){
         console.log(req.method, req.url);    
-    }
+    } 
 	next();
 };
 
