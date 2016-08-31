@@ -2,6 +2,7 @@ var express     = require('express');
 var bodyParser  = require('body-parser');
 var path        = require('path');
 var firebase    = require('firebase');
+var session = require('express-session');
 
 
 var httpToHttps = require('../middleware/httpToHttps');
@@ -15,6 +16,18 @@ var reviewController = require('../controllers/reviews.controller');
 var twilio = require('twilio');
 var cfg = require('./config.json');
 
+var sess   = {
+	name: "ohIkgFh3KKxSS57",
+	secret: "1430FrontenacIsMyHome",
+	cookie: {
+		secure: true
+	},
+	httpOnly: true,
+	resave: false,
+    saveUninitialized: false
+};
+
+
 
 
 //initialize app
@@ -24,14 +37,14 @@ firebase.initializeApp({
 });
 
 //set variables
-    var db = firebase.database();
-    global.userRef = db.ref("users");
-    global.dishRef = db.ref("dish");
-    global.commentRef = db.ref("comments");
-    global.pastDishRef = db.ref("pastDishes");
-    global.cancelRef = db.ref("cancellations");
-    global.buyerReviewRef = db.ref("buyerReviews");
-    global.chefReviewRef = db.ref("chefReviews");    
+var db = firebase.database();
+global.userRef = db.ref("users");
+global.dishRef = db.ref("dish");
+global.commentRef = db.ref("comments");
+global.pastDishRef = db.ref("pastDishes");
+global.cancelRef = db.ref("cancellations");
+global.buyerReviewRef = db.ref("buyerReviews");
+global.chefReviewRef = db.ref("chefReviews");    
 
 
 
@@ -59,11 +72,16 @@ module.exports = function(){
     app.set("view engine", "ejs");
     //MIDDLEWARE
     httpToHttps(app);
-    initialize(app);
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
+    app.use(initialize.serverLogging);
     app.use(express.static(path.join(__dirname, '../public')));
-    app.set("view engine", "ejs");
+    app.set("view engine", "ejs");    
+    
+    //sessions
+    app.set('trust proxy', 1);
+    app.use(session(sess));
+
 
     staticController(app);
     userController(app);
