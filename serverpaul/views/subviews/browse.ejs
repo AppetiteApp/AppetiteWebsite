@@ -10,7 +10,6 @@
     <div id="repeateditemactive" ng-cloak ng-repeat="dish in currentlyCooking">
       <div ng-init="dish.edit=true" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
 
-
           <div ng-show="dish.edit" id="dishpriceactive">${{dish.price}}</div>
           <input type="text" ng-show="!dish.edit" ng-if="dish.editable" ng-model="dish.price" placeholder="$7" id="dishpriceedit"/>
 
@@ -118,6 +117,37 @@
               <div id="whoordered">{{This person} ordered</div>
               <div id="whoorderedphone">617-their-num</div>
           </div>
+          <div class="orderedtextbox">
+            Code:
+          <input type="textbox" class="orderedtextboxinput"></input>
+          <button class="codesubmit">Submit</button>
+          </div>
+
+          <div class="guestordered">
+              <img class="img-thumbnailsmall" ng-src="{{dish.ownerPic}}"></img>
+
+              <div id="whoordered">{{This person} ordered</div>
+              <div id="whoorderedphone">617-their-num</div>
+          </div>
+          <div class="orderedtextbox">
+            Code:
+          <input type="textbox" class="orderedtextboxinput"></input>
+          <button class="codesubmit">Submit</button>
+          </div>
+
+          <div class="guestordered">
+              <img class="img-thumbnailsmall" ng-src="{{dish.ownerPic}}"></img>
+
+              <div id="whoordered">{{This person} ordered</div>
+              <div id="whoorderedphone">617-their-num</div>
+          </div>
+          <div class="orderedtextbox">
+            Code:
+          <input type="textbox" class="orderedtextboxinput"></input>
+          <button class="codesubmit">Submit</button>
+          </div>
+
+
         </div>
   </div>
 

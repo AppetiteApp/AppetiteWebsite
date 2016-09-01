@@ -165,3 +165,38 @@ margin: 0 0 10px 0;
     height: 0;
     overflow: hidden;
   }
+
+@media (max-width:750px){
+  .modal-content{
+    width: 100%;
+    height: 100%;
+  }
+
+  .modal-content2{
+    width: 100%;
+    height: 100%;
+
+  }
+
+  .modal-content3{
+    width: 100%;
+    height: 100%;
+  }
+
+  .modal{
+    padding:0;
+  }
+
+  .modal2{
+    padding:0;
+  }
+
+  .modal3{
+    padding:0;
+  }
+
+
+
+
+
+}

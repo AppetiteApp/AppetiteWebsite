@@ -1,0 +1,15 @@
+<h1>Testing stuff, Paul don't change this</h1>
+
+
+<h1 ng-click="logout()">Logout</h1>
+
+
+<br>
+<hr><br>
+<h2 ng-if="!parentController.user">You're not logged in...boo</h2>
+<div ng-if="parentController.user">
+    <h2>Logged in as {{parentController.user.firstName}} {{parentController.user.lastName}}</h2>
+<button ng-click="createStripeAccount()">Create Stripe Managed Account</button>
+<p>{{res}}</p>    
+    
+</div>

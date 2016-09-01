@@ -2,12 +2,29 @@
 
   <a href="#/home"><div class="navlogo"><img height="50px" src="/imgs/betalogo.png"></div></a>
 
+  <div ng-init"hamclicked=true"  id="hamicon" ng-click="hamclicked=!hamclicked">
+  <div ng-class="{'dropdown-content': hamclicked, 'dropdown-contentnone': !hamclicked}">
+    <ul id="mobilepop">
+      <a href="#/aboutus" class="noline"><li class="navelementsmobile">About Us</li></a>
+      <a href="#/home" class="noline"><li class="navelementsmobile">Home</li></a>
+      <div class="navelementsmobile" id="myBtnmobile" ng-show="!parentController.uid">Login</div>
+
+      <div class="navelementsmobile" id="myBtn2mobile" ng-show="!parentController.uid">Join</div>
+      <div class="navelementsmobile" id="myBtn3mobile" ng-show="parentController.uid">Cook</div>
+
+
+    </ul>
+  </div>
+</div>
+
+
 
 
   <a href="#/aboutus"><li class="navelements">About Us</li></a>
   <a href="#/account"><li class="navelements" ng-show="parentController.uid">Profile</li></a>
   <a href="#/browse"><li class="navelements">Browse</li></a>
   <button class="welcomebuttonright" id="myBtn" ng-show="!parentController.uid">Login</button>
+
   </div>
   <!-- The Modal -->
   <div id="myModal" class="modal" ng-show="!parentController.uid">
@@ -16,11 +33,11 @@
     <div class="modal-content">
       <span class="close">x</span></br>
       <div id="registertitle2">Log in</div>
-          <div ng-repeat="warning in warinings">
+          <div class="loginwarning" ng-repeat="warning in warinings">
               {{warning.errorMessage}}
           </div>
                   <form ng-submit="login(user)">
-                      <div>
+                    <div class="loginerror">
                         {{loginError}}
                     </div>
                       <label class="registerlabel">Email</label><input class="logintextbox" type="text" ng-model="user.email" />
@@ -41,7 +58,7 @@
         <span class="close2">x</span></br>
             <div id="registertitle">Join Appetite</div>
                 <form ng-submit="signup(user)">
-                    <div>{{signupError}}</div>
+                    <div class="registererror">{{signupError}}</div>
                                   <div id="firstnamebox"><label class="registerlabel">First Name</label><input id="firstNameregister" type="text" ng-model="user.firstName"/></div>
                                   <div id="lastnamebox"><label class="registerlabel" id="lastnamelabel">Last Name</label><input id="lastNameregister" type="text" ng-model="user.lastName"/></div></br>
                                   <label class="registerlabel">Phone</label><input class="logintextbox" type="text" ng-model="user.phone"/>
@@ -134,23 +151,27 @@
         </div>
         </div>
 
-
-
 </ul>
 
 
 <script>
+
 // Get the modal
 var modal = document.getElementById('myModal');
 
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
+var btnmobile = document.getElementById("myBtnmobile");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks the button, open the modal
 btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+btnmobile.onclick = function() {
     modal.style.display = "block";
 }
 
@@ -180,12 +201,17 @@ var modal2 = document.getElementById('myModal2');
 
 // Get the button that opens the modal
 var btn2 = document.getElementById("myBtn2");
+var btn2mobile = document.getElementById("myBtn2mobile");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close2")[0];
 
 // When the user clicks the button, open the modal
 btn2.onclick = function() {
+    modal2.style.display = "block";
+}
+
+btn2mobile.onclick = function() {
     modal2.style.display = "block";
 }
 
@@ -200,6 +226,7 @@ var modal3 = document.getElementById('myModal3');
 
 // Get the button that opens the modal
 var btn3 = document.getElementById("myBtn3");
+var btn3mobile = document.getElementById("myBtn3mobile");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close3")[0];
@@ -208,6 +235,11 @@ var span = document.getElementsByClassName("close3")[0];
 btn3.onclick = function() {
     modal3.style.display = "block";
 }
+
+btn3mobile.onclick = function() {
+    modal3.style.display = "block";
+}
+
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {

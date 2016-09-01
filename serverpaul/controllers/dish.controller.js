@@ -13,20 +13,19 @@ module.exports = function(app) {
 		var errors = [];
 		var warnings = [];
 
-		if (!data.uid) {
-			res.send({
-				errors: [{
-					errorType	: "uid",
-					errorMessage: "You didn't send the userid."
-					}],
-				madeMeal: true
-			});
+		if (!req.session) {
+		    console.log("Session does not exist for this user");
+			res.send("invalid request");
 			return;
+		} else if (!req.session.uid){
+		    console.log("Session does not exist for this user");
+		    res.send("invalid request");
+		    return;
 		}
 
 		var dishObject = {
 			dateUpdated	: Date(),
-			ownerid		: data.uid
+			ownerid		: req.session.uid
 		};
 
 		//check if dishName is present and valid
@@ -104,7 +103,7 @@ module.exports = function(app) {
 		} else {
 			dishObject.price = parseFloat(data.price);
 		}
-		
+
 		//check if time is entered, regex not added yet bc I want to further change the time input
 		//into a period of time as well as only store year/month/day/hour/min
 		if (!data.time) {
@@ -115,7 +114,7 @@ module.exports = function(app) {
 		} else {
 			dishObject.time = req.body.time;
 		}
-		
+
 		if (!data.orderBy){
 		    warnings.push({
 		        warningType: "orderBy",
@@ -175,28 +174,28 @@ module.exports = function(app) {
 		newDishRef.set(dishObject);
 
 
-		global.userRef.child(req.body.uid).once("value").then(function(snapshot){
+		global.userRef.child(req.session.uid).once("value").then(function(snapshot){
 			if (snapshot.val()){
 		        var currentlyCooking = [];
 			    if (snapshot.val().currentlyCooking) currentlyCooking = snapshot.val().currentlyCooking;
 			    currentlyCooking.push(newDishKey);
-			
+
 			    console.log("Meals Made: " + currentlyCooking);
-			    global.userRef.child(req.body.uid).update({
+			    global.userRef.child(req.session.uid).update({
 				    "currentlyCooking": currentlyCooking
 			    });
 
 		    	newDishRef.update({
 			    	"owner": snapshot.val().firstName + " " + snapshot.val().lastName || "",
 				    "ownerPic": snapshot.val().photoUrl || ""
-			    });    
+			    });
 			}
-			
+
 
 		}, function(err){
-		    console.log(err);
+		    console.log(err);2
 		});
-		
+
 		res.send({
 			errors: errors,
 			warnings: warnings,
@@ -208,13 +207,15 @@ module.exports = function(app) {
 
 	//to edit a dish; checks for invalid characters and not present info
 	app.post('/api/dish/edit', function(req, res){
-		//if no uid sent, return error
-		if (!req.body.uid) {
-			res.send({
-				errorType: "uid",
-				errorMessage: "No uid sent"
-			});
+		//if session, return error
+		if (!req.session) {
+		    console.log("No session for user");
+			res.send("invalid request");
 			return;
+		} else if (!req.session.uid){
+		    console.log("No session for user");
+		    res.send("invalid request");
+		    return;
 		}
 
 		//if no uid sent, return error
@@ -329,7 +330,7 @@ module.exports = function(app) {
 		console.log(update);
 		global.dishRef.child(data.key).once("value", function(snapshot){
 		    if (snapshot.val()){
-		        if (snapshot.val().ownerid !== data.uid) {
+		        if (snapshot.val().ownerid !== req.session.uid) {
 			    	res.send({
     					errorType: "dishkey",
 	    				errorMessage: "dish in question does not belong to you"
@@ -342,7 +343,7 @@ module.exports = function(app) {
 			    		warnings: warnings,
 				    	message: "updated"
     				});
-	    		}    
+	    		}
 		    }
 		});
 

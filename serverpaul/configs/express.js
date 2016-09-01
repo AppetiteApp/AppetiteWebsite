@@ -13,6 +13,7 @@ var dishController = require('../controllers/dish.controller');
 var requestController = require('../controllers/requests.controller');
 var adminController = require('../controllers/admin.controller');
 var reviewController = require('../controllers/reviews.controller');
+var stripeController = require('../controllers/stripe.controller');
 var twilio = require('twilio');
 var cfg = require('./config.json');
 
@@ -40,18 +41,20 @@ firebase.initializeApp({
 var db = firebase.database();
 global.firebase= firebase;
 global.userRef = db.ref("users");
+global.sensitiveUserRef = db.ref("sensitiveUsers");
 global.dishRef = db.ref("dish");
 global.commentRef = db.ref("comments");
 global.pastDishRef = db.ref("pastDishes");
 global.cancelRef = db.ref("cancellations");
 global.buyerReviewRef = db.ref("buyerReviews");
-global.chefReviewRef = db.ref("chefReviews");    
+global.chefReviewRef = db.ref("chefReviews");
+
 
 
 
 //TWILIO
 var accountSid = cfg.twilioTestAccountSID;
-var authToken = cfg.twilioTestAuthToken; 
+var authToken = cfg.twilioTestAuthToken;
 
 var client = new twilio.RestClient(accountSid, authToken);
 
@@ -69,16 +72,17 @@ var client = new twilio.RestClient(accountSid, authToken);
 
 module.exports = function(){
     var app = express();
-    
+
     app.set("view engine", "ejs");
     //MIDDLEWARE
+    //comment out httpToHttps when using localhost
     httpToHttps(app);
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.use(initialize.serverLogging);
     app.use(express.static(path.join(__dirname, '../public')));
-    app.set("view engine", "ejs");    
-    
+    app.set("view engine", "ejs");
+
     //sessions
     app.set('trust proxy', 1);
     app.use(session(sess));
@@ -90,8 +94,8 @@ module.exports = function(){
     adminController(app);
     requestController(app);
     reviewController(app);
+    stripeController(app);
 
 
-    
-    return app;  
+    return app;
 };
