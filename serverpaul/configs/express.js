@@ -31,13 +31,13 @@ firebase.initializeApp({
     global.pastDishRef = db.ref("pastDishes");
     global.cancelRef = db.ref("cancellations");
     global.buyerReviewRef = db.ref("buyerReviews");
-    global.chefReviewRef = db.ref("chefReviews");    
+    global.chefReviewRef = db.ref("chefReviews");
 
 
 
 //TWILIO
 var accountSid = cfg.twilioTestAccountSID;
-var authToken = cfg.twilioTestAuthToken; 
+var authToken = cfg.twilioTestAuthToken;
 
 var client = new twilio.RestClient(accountSid, authToken);
 
@@ -55,9 +55,10 @@ var client = new twilio.RestClient(accountSid, authToken);
 
 module.exports = function(){
     var app = express();
-    
+
     app.set("view engine", "ejs");
     //MIDDLEWARE
+    //comment out httpToHttps when using localhost
     httpToHttps(app);
     initialize(app);
     app.use(bodyParser.urlencoded({ extended: true }));
@@ -73,6 +74,6 @@ module.exports = function(){
     reviewController(app);
 
 
-    
-    return app;  
+
+    return app;
 };
