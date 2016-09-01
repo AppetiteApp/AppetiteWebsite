@@ -5,14 +5,10 @@ module.exports = function(app) {
 	//edit a user's account
 	//check if the a valid change is in req.body, if yes then update
 	app.post('/api/account/edit', function(req, res, next){
-		console.log("received");
-		console.log(req.body);
-		//if frontend didn't send uid, return error
-		if (!req.body.uid) {
-			res.send({
-				errorType: "uid",
-				errorMessage: "No uid sent"
-			});
+		//if no session cookie, return error
+		if (!req.session.uid) {
+			res.send("invalid request");
+			console.log("No session");
 			return;
 		}
 		
@@ -100,13 +96,13 @@ module.exports = function(app) {
 		
 		//updates stuff and sends info regarding success and errors in to browser
 		if (errors.length == 0 ) {
-			global.userRef.child(req.body.uid).update(update);
+			global.userRef.child(req.session.uid).update(update);
 			res.send({
 				status: 200,
 				message: "Successfully updated profile"
 			});
 		} else if (update){
-			global.userRef.child(req.body.uid).update(update);
+			global.userRef.child(req.session.uid).update(update);
 			res.send({
 				status: 201,
 				message: "Update unsuccessful",
@@ -154,7 +150,7 @@ module.exports = function(app) {
 	    } else {
 	        updateObj = {
 	            message: req.body.message,
-	            ownerid: req.body.uid
+	            ownerid: req.session.uid || ""
 	        };
 	    }
 	    newCommentRef.set(updateObj);
@@ -202,8 +198,8 @@ module.exports = function(app) {
             console.log("uid: " + uid);
             
             //destory pre-exisiting sessions
-            if (req.session.user){
-                if (req.session.user.uid !== uid){
+            if (req.session.uid){
+                if (req.session.uid !== uid){
                     req.session.destroy(function(err){});
                 } else {
                     req.session.reload = false;
@@ -212,7 +208,7 @@ module.exports = function(app) {
                 }
                 
             }
-            
+            req.session.uid = uid;
             req.session.user = {
                 uid: uid,
                 emailVerified: decodedToken["email_verified"],

@@ -205,23 +205,15 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                 
                 firebase.auth().currentUser.getToken(true).then(function(token) {
                     console.log(token);
-                    startSession(token);
+                    startSession(token, user);
                     // Send token to your backend via HTTPS
                     // ...
+                    
                 }).catch(function(error) {
                     console.log(error);
                 });
 
                 console.log(user);
-
-                //server-side code: assigns email, uid, and random profile pic
-                $http.post('/api/newaccount', user)
-                .then(function(res){
-                    console.log(res.data);
-                },
-                function(err){
-                    console.log(err);
-                });
 
                 $log.log(firebase.auth().currentUser);
                 $route.reload();
@@ -242,13 +234,22 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
 
     };
     
-    var startSession = function(token){
+    var startSession = function(token, user){
         $http.post('/api/customTokenAuth', {token: token}).then(function(res){
             // if res.data = success then session started
             console.log(res.data);
             if (res.data="success"){
                 $scope.parentController.serverCookie = 1;
                 document.location.reload(true);
+                $http.post('/api/newaccount', user)
+                .then(function(res){
+                    console.log(res.data);
+                },
+                function(err){
+                    console.log(err);
+                });
+                
+                
             }
         }, function(err){
             console.log(err);
