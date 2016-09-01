@@ -16,13 +16,12 @@ module.exports = function(app){
     //store the order under dish and under the buyer
     app.post('/api/orderdish', function(req, res){
     	//if no uid sent, send back err
-    	if (!req.body.uid || !req.body.dishid) {
-    		res.send({
-                errors: [{
-    			    errorType: "ids",
-    			    errorMessage: "no uid/dishid sent"
-    		    }]
-            });
+    	if (!req.session){
+    	    res.send("invalid request");
+    	    console.log("No session");
+    	} else if (!req.session.uid || !req.body.dishid) {
+    		res.send("invalid request");
+    		console.log("No session");
     		return;
     	}
 
@@ -31,7 +30,7 @@ module.exports = function(app){
         var dishInfo = {};
 
         //validate uid; snapshot.val() is null if uid doesn't exist
-        global.userRef.child(req.body.uid).once('value').then(function(snapshot){
+        global.userRef.child(req.session.uid).once('value').then(function(snapshot){
             
             if (!snapshot.val()){
                 errors.push({
@@ -81,7 +80,7 @@ module.exports = function(app){
                         errorMessage: 'Invalid dishid'
                     });
                 //should not be able to request your own meals
-                } else if (snapshot.val().ownerid === req.body.uid){
+                } else if (snapshot.val().ownerid === req.session.uid){
                     errors.push({
                         errorType: "request",
                         errorMessage: "Cannot request your own meals"
@@ -121,13 +120,13 @@ module.exports = function(app){
                 //store dish info? or manipulate dish from here
                 //save stuff about the dish
                 
-                order.buyerid = req.body.uid;
+                order.buyerid = req.session.uid;
                 order.buyerName = buyer.name;
                 order.buyerRating = buyer.rating;
                 order.buyerPhone = buyer.phone;
                 order.requestTime = new Date();
                 
-                purchases[req.body.uid] = order;
+                purchases[req.session.uid] = order;
                 purchases = JSON.stringify(purchases);
                 
                 
@@ -139,7 +138,7 @@ module.exports = function(app){
                 };
                 
                 global.dishRef.child(req.body.dishid).child("purchases").set(purchases);
-                global.userRef.child(req.body.uid).child("activeMeals").update(activeMeals);
+                global.userRef.child(req.session.uid).child("activeMeals").update(activeMeals);
                 
                 res.send("success");
                 
@@ -167,7 +166,11 @@ module.exports = function(app){
     // only buyers can cancel (for now)
     app.post('/api/cancelOrder', function(req, res){
         var errors = [];
-        if (!req.body.uid || !req.body.personType || !req.body.dishid){
+        if (!req.session){
+            res.send("invalid request");
+            console.log("No session");
+            return;
+        } else if (!req.session.uid || !req.body.personType || !req.body.dishid){
             errors.push({
                 errorType: "info",
                 errorMessage: "incomplete info"
@@ -182,14 +185,13 @@ module.exports = function(app){
         }
         
         if (errors.length){
-            res.send({
-                errors: errors
-            });
+            res.send("invalid request");
+            console.log(errors);
             return;
         }
         
         //verify that uid is valid, user has requested said meal, chef have not responded yet
-        global.userRef.child(req.body.uid).once("value").then(function(snapshot){
+        global.userRef.child(req.session.uid).once("value").then(function(snapshot){
             var errors = [];
             if (!snapshot.val()) {
                 errors = [{
@@ -229,7 +231,7 @@ module.exports = function(app){
                     }];
                 
                     
-                } else if(!JSON.parse(snapshot.val().purchases)[req.body.uid]){
+                } else if(!JSON.parse(snapshot.val().purchases)[req.session.uid]){
                     errors = [{
                         errorType: "dish",
                         errorMessage: "request to purchase meal doesn't exist"
@@ -259,7 +261,7 @@ module.exports = function(app){
                 var newCancelRef = global.cancelRef.push();
                 newCancelRef.set({
                     date: new Date(),
-                    buyerid: req.body.uid,
+                    buyerid: req.session.uid,
                     chefid: snapshot.val().ownerid,
                     dish: {
                         dishName: snapshot.val().dishName,
@@ -273,9 +275,9 @@ module.exports = function(app){
                 if (snapshot.val().purchases) {
                     purchases = snapshot.val().purchases;
                 }
-                purchases[req.body.uid] = undefined;
+                purchases[req.session.uid] = undefined;
                 global.dishRef.child(req.body.dishid).child('purchases').update(purchases);
-                global.userRef.child(req.body.uid).child('activeMeals').child(req.body.dishid).remove();
+                global.userRef.child(req.session.uid).child('activeMeals').child(req.body.dishid).remove();
                 
                 res.send({
                     message: "success"
@@ -308,8 +310,10 @@ module.exports = function(app){
     //buyer confirms that s/he has picked up the dish
     //buyer's uid, dish's id, chef's name
     app.post('/api/pickedUp', function(req, res){
-        console.log(req.body);
-        if (!req.body.uid || !req.body.dishid){
+        if (!req.session){
+            res.send("invalid request");
+            return;
+        } else if (!req.session.uid || !req.body.dishid){
             res.send({
                 errors: [{
                     errorType: "api",
@@ -322,7 +326,7 @@ module.exports = function(app){
         var errors = [];
         
         
-        global.userRef.child(req.body.uid).once('value').then(function(snapshot){
+        global.userRef.child(req.session.uid).once('value').then(function(snapshot){
             if (!snapshot.val()){
                 errors.push({
                     errorType: "database",
@@ -369,12 +373,12 @@ module.exports = function(app){
                     });
                 } else {
                     purchases = JSON.parse(snapshot.val().purchases);
-                    if (!purchases[req.body.uid]){
+                    if (!purchases[req.session.uid]){
                         errors.push({
                             errorType: "database",
                             errorMessage: "invalid use of database"
                         });    
-                    } else if (purchases[req.body.uid]["pickedUp"]){
+                    } else if (purchases[req.session.uid]["pickedUp"]){
                         errors.push({
                             errorType: "purchase",
                             errorMessage: "already picked up"
@@ -389,7 +393,7 @@ module.exports = function(app){
                     return;
                 }
                 
-                purchases[req.body.uid]["pickedUp"] = true;
+                purchases[req.session.uid]["pickedUp"] = true;
                 purchases = JSON.stringify(purchases);
                 global.dishRef.child(req.body.dishid).update({purchases: purchases});
                 
@@ -398,7 +402,7 @@ module.exports = function(app){
                 console.log("requestInfo");
                 console.log(requestInfo);
                 
-                global.userRef.child(req.body.uid).child("activeMeals").child(req.body.dishid).update(requestInfo);
+                global.userRef.child(req.session.uid).child("activeMeals").child(req.body.dishid).update(requestInfo);
                 
                 console.log("purchases");
                 console.log(purchases);

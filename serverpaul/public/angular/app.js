@@ -24,7 +24,7 @@ $stateProvider
   .state('login', {
       templateUrl: '/home',
       controller: 'homeController',
-      url:'/login'
+      url:'/home'
   })
   .state('aboutus', {
       templateUrl: '/aboutus',
@@ -74,19 +74,25 @@ myApp.controller('parentController', parentController);
 //testing: right now testing google api
 //on the assumption that we're including jquery as of now
 myApp.controller('testController', function($scope, $timeout, $http, $log, sessionService, regexService){
-    const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
-    $scope.user = firebase.auth().currentUser;
-    $scope.time = {};
-
-    $scope.dish = {};
     
     $scope.logout = sessionService.signout;
-
+    $scope.createStripeAccount = function(){
+        $http.post('/api/createStripeAccount', {}).then(function(res){
+            console.log(res);
+            $timeout(function() {
+                $scope.res = res.data;
+            });    
+        }, function(err){
+            if (err) {
+                $timeout(function(){
+                    $scope.res = "fail";
+                });
+            }
+        });
+    };
 
 });
-
-
-        //upload file
+//upload file
          myApp.directive('fileModel', ['$parse', function ($parse) {
             return {
                restrict: 'A',

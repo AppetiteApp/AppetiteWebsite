@@ -24,14 +24,18 @@ module.exports = function(app){
     app.post('/api/reviewChef', function(req, res){
         console.log("received request");
         console.log(req.body);
-        if (!req.body.uid || !req.body.dishid || !req.body.rating){
+        if (!req.session){
+            res.send("invalid");
+            return;
+        }
+        if (!req.session.uid || !req.body.dishid || !req.body.rating){
             res.send("invalid");
             return;
         }
         
         var errors = [];
         //check that reviewer purchased the meal
-        global.userRef.child(req.body.uid).once('value').then(function(snapshot){
+        global.userRef.child(req.session.uid).once('value').then(function(snapshot){
             console.log("fetched data from userRef");
             if (!snapshot.val()){
                 errors.push({
@@ -108,17 +112,17 @@ module.exports = function(app){
                     });
                 } else {
                     var purchases = JSON.parse(snapshot.val().purchases);
-                    if (!purchases[req.body.uid]){
+                    if (!purchases[req.session.uid]){
                         errors.push({
                             errorType: "purchases",
                             errorMessage: "no purchases made under your name"
                         });
-                    } else if (!purchases[req.body.uid]["pickedUp"]){
+                    } else if (!purchases[req.session.uid]["pickedUp"]){
                         errors.push({
                             errorType: "review",
                             errorMessage: "cannot review chef before picking up the meal"
                         });
-                    } else if (purchases[req.body.uid]["reviewedChef"]){
+                    } else if (purchases[req.session.uid]["reviewedChef"]){
                         errors.push({
                             errorType: "review",
                             errorMessage: "cannot review twice"
@@ -139,7 +143,7 @@ module.exports = function(app){
                     dish: {
                         dishid: req.body.dishid,
                         chefid: snapshot.val().ownerid,
-                        buyerid: req.body.uid
+                        buyerid: req.session.uid
                     },
                     date: new Date()
                 };
@@ -156,19 +160,19 @@ module.exports = function(app){
                 
                 reviewsForChef.push(newChefReviewKey);
                 //save to list of reviews given to chefs
-                global.userRef.child(req.body.uid).update({
+                global.userRef.child(req.session.uid).update({
                     reviewsForChef: reviewsForChef
                 });
                 
                 
                 //update the dish listings to reflect that person has reviewed the chef
-                global.userRef.child(req.body.uid).child("activeMeals").child(req.body.dishid).update({
+                global.userRef.child(req.session.uid).child("activeMeals").child(req.body.dishid).update({
                     reviewedChef: true,
                     reviewForChef: newChefReviewKey
                 });
                 
-                purchases[req.body.uid].reviewedChef = true;
-                purchases[req.body.uid].reviewForChef = newChefReviewKey;
+                purchases[req.session.uid].reviewedChef = true;
+                purchases[req.session.uid].reviewForChef = newChefReviewKey;
                 purchases = JSON.stringify(purchases);
                 global.dishRef.child(req.body.dishid).update({purchases: purchases});
                 
@@ -203,7 +207,11 @@ module.exports = function(app){
     app.post('/api/reviewBuyer', function(req, res){
         console.log(req.body);
         var errors = [];
-        if (!req.body.uid || !req.body.buyerid || !req.body.dishid || !req.body.rating){
+        if (!req.session){
+            res.send("invalid request");
+            return;
+        }
+        if (!req.session.uid || !req.body.buyerid || !req.body.dishid || !req.body.rating){
             res.send("invalid request");
             return;
         }
@@ -217,7 +225,7 @@ module.exports = function(app){
         }
         
         //verify that owner has cooked dish and the buyer has bought the dish
-        global.userRef.child(req.body.uid).once("value").then(function(snapshot){
+        global.userRef.child(req.session.uid).once("value").then(function(snapshot){
             //if snapshot.val() isn't null
             
             if (!snapshot.val()){
@@ -293,7 +301,7 @@ module.exports = function(app){
                     date: new Date(),
                     dish: {
                         buyer: req.body.buyerid,
-                        chef : req.body.uid,
+                        chef : req.session.uid,
                         dishid: req.body.dishid
                     }
                 };
@@ -311,7 +319,7 @@ module.exports = function(app){
                 
                 //store the id for the newBuyerReivewRef to the reviewer & reviewee
                 reviewsForBuyer.push(newBuyerReviewKey);
-                global.userRef.child(req.body.uid).update({
+                global.userRef.child(req.session.uid).update({
                     reviewsForBuyer: reviewsForBuyer
                 });
                 

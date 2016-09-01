@@ -1,9 +1,10 @@
 //this will be the parent controller, with things like uid, verifications, etc
 //user
-var parentController = ['$timeout', '$scope', 'sessionService', function($timeout, $scope, sessionService) {
+var parentController = ['$timeout', '$scope', 'sessionService', '$http', function($timeout, $scope, sessionService, $http) {
     $scope.parentController = {
         dish: {}
     };
+
     
     $scope.parentController.signout = sessionService.signout;
     
@@ -11,6 +12,8 @@ var parentController = ['$timeout', '$scope', 'sessionService', function($timeou
     //if the person is logged in, get that person's info
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
+
+            
             //put info about user into scope
             $timeout(function() {
                 $scope.parentController.user = {
@@ -58,4 +61,10 @@ var parentController = ['$timeout', '$scope', 'sessionService', function($timeou
             });
         }
     }); //end auth function
+    
+
+
+    
+    
 }];
+

@@ -1,5 +1,6 @@
 {
     "googleApiKey": "AIzaSyD8G6W3OqiD1DripTAZlwCUJGqGmRqrLjo",
     "twilioTestAccountSID": "AC29c214d4298d60fb940a79291d5c4ce1",
-    "twilioTestAuthToken": "7c55cf29fd643da305de0f727bbca896"
+    "twilioTestAuthToken": "7c55cf29fd643da305de0f727bbca896",
+    "stripeTestPlatformSecretKey": "sk_test_NlR0bPYIFbwzsq7NmpUZjqGN"
 }
