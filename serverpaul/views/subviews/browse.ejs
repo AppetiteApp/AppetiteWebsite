@@ -4,7 +4,7 @@
 <div id="itemscontainer">
   <div id="submitsuccess" ng-cloak>{{message}}</div>
 
-  <div id="activemealscontainer">
+  <div id="activemealscontainer" ng-if="hide">
     <div id="boughtseparate">Current Meals</div>
 
     <div id="repeateditemactive" ng-cloak ng-repeat="dish in currentlyCooking">
@@ -124,7 +124,7 @@
 
 
 
-    <div id="dishbannerbought">
+    <div id="dishbannerbought" ng-if="hide">
         <div class="dishthumbnail">
           <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
         </div>
@@ -183,7 +183,7 @@
 
   </div>
   <div id="innercontainer" ng-init="selection = { selectedNode:  null }">
-  <div id="browseseparate">Browse</div>
+  <div id="browseseparate"></div>
   <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak>
         <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
             <div class="dishthumbnail">

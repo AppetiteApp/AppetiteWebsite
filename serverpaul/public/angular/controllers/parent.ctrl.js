@@ -81,7 +81,7 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
             console.log(res.data);
             if (res.data==="success"){
                 $scope.parentController.serverCookie += 1;
-                document.location.reload(true);
+                
             }
         }, function(err){
             console.log(err);

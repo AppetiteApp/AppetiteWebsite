@@ -54,11 +54,7 @@ module.exports = function(app) {
     });
 
     app.get('/account', function(req, res){
-        if (!req.session.user){
-            res.render(__dirname + '/../views/subviews/404');
-        } else {
             res.render(__dirname + '/../views/subviews/profile');    
-        }
         
     });
 
@@ -77,10 +73,6 @@ module.exports = function(app) {
     app.get('/aboutus', function(req, res){
         res.render(__dirname + '/../views/subviews/aboutus');
         
-    });
-
-    app.get('/cheryl/test', function(req, res){
-        res.render(__dirname + '/../views/subviews/test');
     });
 
     app.get('/', function(req, res){
