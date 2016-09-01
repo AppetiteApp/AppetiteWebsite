@@ -33,4 +33,4 @@ stripe.createNewStripeAccountWithUid = function(uid){
 
 module.exports = function(){
     return stripe;
-}
+};

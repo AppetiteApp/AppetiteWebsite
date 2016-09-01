@@ -54,12 +54,8 @@ module.exports = function(app) {
     });
 
     app.get('/account', function(req, res){
-        if (!req.session.user){
-            res.render(__dirname + '/../views/subviews/404');
-        } else {
-            res.render(__dirname + '/../views/subviews/profile');    
-        }
-        
+            res.render(__dirname + '/../views/subviews/profile');
+   
     });
 
     app.get('/history', function(req, res){

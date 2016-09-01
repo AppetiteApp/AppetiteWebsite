@@ -4,8 +4,7 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
     $scope.parentController = {
         dish: {}
     };
-    
-    $scope.parentController.serverCookie = 0;
+
     
     $scope.parentController.signout = sessionService.signout;
     
@@ -13,19 +12,7 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
     //if the person is logged in, get that person's info
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-            //tell firebase
-            if ($scope.parentController.serverCookie === 0){
-                firebase.auth().currentUser.getToken(true).then(function(token) {
-                    console.log(token);
-                    startSession(token);
-                    // Send token to your backend via HTTPS
-                    // ...
-                }).catch(function(error) {
-                    console.log(error);
-                });    
-            }
-            
-            
+
             
             //put info about user into scope
             $timeout(function() {
@@ -75,18 +62,7 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
         }
     }); //end auth function
     
-    var startSession = function(token){
-        $http.post('/api/customTokenAuth', {token: token}).then(function(res){
-            // if res.data = success then session started
-            console.log(res.data);
-            if (res.data==="success"){
-                $scope.parentController.serverCookie += 1;
-                document.location.reload(true);
-            }
-        }, function(err){
-            console.log(err);
-        });
-    };
+
 
     
     
