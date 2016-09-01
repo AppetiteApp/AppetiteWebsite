@@ -24,6 +24,10 @@ module.exports = function(app){
     app.post('/api/reviewChef', function(req, res){
         console.log("received request");
         console.log(req.body);
+        if (!req.session){
+            res.send("invalid");
+            return;
+        }
         if (!req.session.uid || !req.body.dishid || !req.body.rating){
             res.send("invalid");
             return;
@@ -203,6 +207,10 @@ module.exports = function(app){
     app.post('/api/reviewBuyer', function(req, res){
         console.log(req.body);
         var errors = [];
+        if (!req.session){
+            res.send("invalid request");
+            return;
+        }
         if (!req.session.uid || !req.body.buyerid || !req.body.dishid || !req.body.rating){
             res.send("invalid request");
             return;
