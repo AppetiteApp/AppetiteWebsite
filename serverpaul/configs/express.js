@@ -76,7 +76,7 @@ module.exports = function(){
     app.set("view engine", "ejs");
     //MIDDLEWARE
     //comment out httpToHttps when using localhost
-    httpToHttps(app);
+    //httpToHttps(app);
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.use(initialize.serverLogging);
