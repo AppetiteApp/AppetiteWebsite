@@ -4,7 +4,7 @@ module.exports = function(app) {
     //for when we have a external store for sessions
     //for now, don't cramp up memory in case of memory leaks
     
-    // app.get('*', function(req, res, next){
+    app.get('*', function(req, res, next){
     //     if (urlList.indexOf(req.url) !== -1){
     //         if (!req.session.visit) {
     //             req.session.visit = {pageView:1};
@@ -23,10 +23,11 @@ module.exports = function(app) {
     //     } else {
     //         next();    
     //     }
-    //     console.log(req.session);
+        console.log(req.session);
+        next();
         
         
-    // });
+    });
 
     //when the request url is "/about", render the page in views called 'about.ejs'
     app.get('/about', function(req, res){
@@ -54,12 +55,8 @@ module.exports = function(app) {
     });
 
     app.get('/account', function(req, res){
-        if (!req.session.user){
-            res.render(__dirname + '/../views/subviews/404');
-        } else {
-            res.render(__dirname + '/../views/subviews/profile');    
-        }
-        
+            res.render(__dirname + '/../views/subviews/profile');
+   
     });
 
     app.get('/history', function(req, res){

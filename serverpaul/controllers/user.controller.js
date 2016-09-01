@@ -5,14 +5,14 @@ module.exports = function(app) {
 	//edit a user's account
 	//check if the a valid change is in req.body, if yes then update
 	app.post('/api/account/edit', function(req, res, next){
-		console.log("received");
-		console.log(req.body);
-		//if frontend didn't send uid, return error
-		if (!req.body.uid) {
-			res.send({
-				errorType: "uid",
-				errorMessage: "No uid sent"
-			});
+		//if no session cookie, return error
+		if (!req.session){
+            res.send("invalid request");
+            return;
+        }
+		if (!req.session.uid) {
+			res.send("invalid request");
+			console.log("No session");
 			return;
 		}
 		
@@ -100,13 +100,13 @@ module.exports = function(app) {
 		
 		//updates stuff and sends info regarding success and errors in to browser
 		if (errors.length == 0 ) {
-			global.userRef.child(req.body.uid).update(update);
+			global.userRef.child(req.session.uid).update(update);
 			res.send({
 				status: 200,
 				message: "Successfully updated profile"
 			});
 		} else if (update){
-			global.userRef.child(req.body.uid).update(update);
+			global.userRef.child(req.session.uid).update(update);
 			res.send({
 				status: 201,
 				message: "Update unsuccessful",
@@ -124,14 +124,21 @@ module.exports = function(app) {
 
 	app.post('/api/newaccount', function(req, res, next){
         console.log("Creating new user with email", req.body.email, "at", Date());
+        if (!req.session){
+            res.send("invalid request");
+            return;
+        } if (!req.session.uid){
+            res.send("invalid request");
+            return;
+        }
         console.log(req.body);
         var photos = ["https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat2.jpg?alt=media&token=c2f11652-534e-408b-9bad-b3b16b18132a", "https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat3.jpg?alt=media&token=17ebcf03-93e9-4659-97f8-de8fc723d793", "https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat4.jpg?alt=media&token=241c91ae-fc59-4cc3-bcd9-a19ec11b2247"];
         var randInt = Math.floor(Math.random(3));
         console.log(randInt);
         var photoUrl = photos[randInt];
         
-        global.userRef.child(req.body.uid).set({
-            uid: req.body.uid,
+        global.userRef.child(req.session.uid).set({
+            uid: req.session.uid,
             email: req.body.email,
             photoUrl: photoUrl,
             firstName: req.body.firstName,
@@ -154,8 +161,12 @@ module.exports = function(app) {
 	    } else {
 	        updateObj = {
 	            message: req.body.message,
-	            ownerid: req.body.uid
 	        };
+	        if (req.session){
+	            if (req.session.uid){
+	                updateObj.ownerid = req.session.uid;
+	            }
+	        }
 	    }
 	    newCommentRef.set(updateObj);
 	    res.send({
@@ -166,13 +177,21 @@ module.exports = function(app) {
 	
 	app.post('/api/profileImg', function(req, res){
 	    console.log(req.body);
+	    if (!req.session){
+	        res.send('invalid request');
+	        return;
+	    } else if (!req.session.uid){
+	        res.send("invalid request");
+	        return;
+	    }
+	    
 	    //update the user's photoUrl
-	    global.userRef.child(req.body.uid).update({
+	    global.userRef.child(req.session.uid).update({
 	        photoUrl: req.body.photoUrl
 	    });
 	    
 	    //update the user's dishes photoUrl
-	    global.userRef.child(req.body.uid).child('currentlyCooking').once("value", function(snapshot){
+	    global.userRef.child(req.session.uid).child('currentlyCooking').once("value", function(snapshot){
 	        //snapshot.val() is a list of meals that the user has made
 	        //NOTE TO SELF: maybe create a local copy of profile pic using 
 	        console.log(snapshot.val());
@@ -186,7 +205,7 @@ module.exports = function(app) {
 	        }
 	        
 	    });
-	    res.send("coolio");
+	    res.send("success");
 	});
 	
 	
@@ -202,22 +221,25 @@ module.exports = function(app) {
             console.log("uid: " + uid);
             
             //destory pre-exisiting sessions
-            if (req.session.user){
-                if (req.session.user.uid !== uid){
-                    req.session.destroy(function(err){});
-                } else {
-                    req.session.reload = false;
-                    res.send("alreadyReloaded");
-                    return;
-                }
+            // if (req.session){
+            //     if (req.session.uid !== uid){
+            //         req.session.destroy(function(err){});
+            //     } //else {
+            //         //req.session.reload = false;
+            //         //res.send("alreadyReloaded");
+            //         //return;
+            //     //}
                 
+            // }
+            if (!req.session.uid){
+                req.session.uid = uid;
+                req.session.emailVerified = decodedToken["email_verified"];
+                req.session.email = decodedToken["email"];
+                req.session.regenerate(function(err){});
+            console.log(req.session.uid);    
             }
             
-            req.session.user = {
-                uid: uid,
-                emailVerified: decodedToken["email_verified"],
-                email: decodedToken["email"]
-            };
+            
 
             res.send("success");
         }).catch(function(error) {

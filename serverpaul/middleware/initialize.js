@@ -2,7 +2,7 @@ var urlList = ['/browse', '/home', '/', '/account', '/history', '/newdish', '/te
 
 var serverLogging = function(req, res, next){
     if ((req.method==="GET" && urlList.indexOf(req.url) !== -1) || req.method==="POST"){
-        console.log(req.method, req.url);    
+        console.log(req.method, req.url);
     } 
 	next();
 };
