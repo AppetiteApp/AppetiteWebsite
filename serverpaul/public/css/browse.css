@@ -1,4 +1,122 @@
-/* The Modal (background) */
+
+
+#dishbannersold {
+      position: relative;
+      margin: 20px 10px 20px 10px;
+      width: auto;
+      border: 2px solid white;
+      border-radius: 14px;
+      height: auto;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      background-color: white;
+      text-align: left;
+      text-overflow: ellipsis;
+      overflow-y: auto;
+  }
+
+#ordersnumber{
+  color: black;
+  font-family: 'Raleway', sans-serif;
+  width:auto;
+  height: auto;
+  margin-right: 0px;
+  width:auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left:5px;
+  min-width: 0;
+  font-size: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.orderedbox{
+  width: 100%;
+  height: auto;
+  margin-top: 25px;
+  outline: none;
+  margin-bottom: 5px;
+}
+
+.guestordered{
+  width: 100%;
+  height: 20px;
+  display: block;
+  font-family: 'Raleway', sans-serif;
+  font-size: 13px;
+}
+
+.orderedtextbox{
+  width: 100%;
+  height: 20px;
+  display: block;
+  font-family: 'Raleway', sans-serif;
+  font-size: 13px;
+  margin-left: 5px;
+}
+
+.orderedtextboxinput{
+  height: 18px;
+  border: 1px solid #ebd3bd;
+  padding: 0;
+  margin-left: 5px;
+}
+
+.codesubmit {
+  display: inline-block;
+  width: auto;
+  position: absolute;
+  margin-left: 10px;
+  right: 0;
+  margin-right: 5px;
+  height: 20px;
+  background-color: green;
+  outline: none;
+  color: white;
+  font-family: 'Raleway', sans-serif;
+  border: none;
+  border-radius: 5px;
+}
+
+.img-thumbnailsmall {
+    width: 15px;
+    height: 15px;
+    padding: 0;
+    margin: 0;
+    border-radius: 5px;
+    display:inline-block;
+    object-fit: cover;
+    margin-left: 5px;
+    margin-top:3px;
+    margin-bottom: 2px;
+}
+
+#whoordered{
+  display: inline-block;
+  width: auto;
+  margin-top: 3px;
+  position: absolute;
+  margin-left: 28px;
+  font-weight: bold;
+}
+
+#whoorderedphone{
+  display: inline-block;
+  width: auto;
+  margin-top: 3px;
+  position: absolute;
+  margin-left: 10px;
+  right: 0;
+  margin-right: 5px;
+}
+
+
+
+
 .modal4 {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -155,24 +273,6 @@
   text-overflow: ellipsis;
 }
 
-#dishbannersold {
-  overflow: hidden;
-  position:relative;
-  margin: 20px 10px 20px 10px;
-  width: auto;
-  border: 2px solid white;
-  border-radius: 14px;
-  height: auto;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  min-height: 60px;
-  background-color: white;
-  text-align: left;
-  text-overflow: ellipsis;
-}
-
-
 #boughtaddress{
   font-family: 'Raleway', sans-serif;
   display: block;
@@ -233,7 +333,7 @@
 
 }
 
-#dishtime {
+.dishtime {
     color: #75d0f4;
     font-family: 'Raleway', sans-serif;
     width:auto;

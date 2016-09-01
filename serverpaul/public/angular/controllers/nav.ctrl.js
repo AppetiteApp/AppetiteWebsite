@@ -1,10 +1,10 @@
 var navController = function($scope, $location, $http, $timeout, regexService, sessionService, timeService, $log){
     const QUERYSTRINGBASE = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDrhD4LOU25zT-2Vu8zSSuL8AnvMn2GEJ0";
-    
+
     var timeNow = new Date();
     var tomorrow = new Date(timeNow.getTime() + 24*60*60*1000);
     var minNow = 30 * Math.ceil(timeNow.getMinutes() / 30);
-    
+
     //watch $scope.parentController.uid, user.uid, user.email, user.emailVerified, dish.location
     $scope.$watch('parentController.uid', function(newValue, oldValue){
         //if $scope.parentController.uid isn't undefined or null, then there is a user logged in
@@ -14,7 +14,7 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                 //if user has phone num, then use that as the dish's phone num
                 //else, error and cannot submit dish
                 console.log("users/" + newValue);
-                
+
                 if (snapshot.val().phone) {
                     $scope.dish.phone = snapshot.val().phone;
                 } else {
@@ -38,7 +38,7 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                         errorMessage: "User info incomplete: missing location."
                     });
                 }
-                
+
                 //create a dish object and put the user's info into it
                 $timeout(function() {
                     $scope.dish = {
@@ -49,21 +49,21 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                             date: "today"
                         },
                         orderBy : new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 1, minNow, 0)
-                        
+
                     };
                 });
             }); //end fetch data from firebase
 
         }
     });
-    
+
     //set the year, month, and day of toBeChangedTime to referenceTime's year, month, and day
     var setDate = function(toBeChangedTime, referenceTime){
         toBeChangedTime.setFullYear(referenceTime.getFullYear());
         toBeChangedTime.setMonth(referenceTime.getMonth());
         toBeChangedTime.setDate(referenceTime.getDate());
     };
-    
+
     $scope.$watch('dish.time', function(newValue, oldValue){
          //if today is chosen, then year/month/date should be today
         //if tomorrow is chosen, then get the year, month, and date of tomorrow and set them to the time object
@@ -86,7 +86,7 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                 $timeout(function(){
                     $scope.dish.complete = true;
                 });
-                
+
         } else {
             $scope.dish.complete = false;
         }
@@ -151,7 +151,7 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
         //user can submit signup form by typing ENTER into the confim password box, but only if the two passwords match
     $scope.$watch('user.confirmpassword', function(newValue, oldValue){
         if (newValue){
-            
+
             if (oldValue.keyCode == 13 && $scope.user.signuppassword === $scope.user.confirmpassword) {
                 $scope.signup($scope.user);
 
@@ -169,10 +169,10 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
             modal.style.display = "none";
         },function(error) {
             $timeout(function() {
-                $scope.loginError = error.message;
+                $scope.loginError = "Invalid Email or Password";
             });
             $timeout(function(){
-                $scope.loginError = undefined; 
+                $scope.loginError = undefined;
             }, 10000);
             console.log(error);
         });

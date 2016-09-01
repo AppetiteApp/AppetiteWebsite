@@ -104,7 +104,7 @@ module.exports = function(app) {
 		} else {
 			dishObject.price = parseFloat(data.price);
 		}
-		
+
 		//check if time is entered, regex not added yet bc I want to further change the time input
 		//into a period of time as well as only store year/month/day/hour/min
 		if (!data.time) {
@@ -115,7 +115,7 @@ module.exports = function(app) {
 		} else {
 			dishObject.time = req.body.time;
 		}
-		
+
 		if (!data.orderBy){
 		    warnings.push({
 		        warningType: "orderBy",
@@ -180,7 +180,7 @@ module.exports = function(app) {
 		        var currentlyCooking = [];
 			    if (snapshot.val().currentlyCooking) currentlyCooking = snapshot.val().currentlyCooking;
 			    currentlyCooking.push(newDishKey);
-			
+
 			    console.log("Meals Made: " + currentlyCooking);
 			    global.userRef.child(req.body.uid).update({
 				    "currentlyCooking": currentlyCooking
@@ -189,14 +189,14 @@ module.exports = function(app) {
 		    	newDishRef.update({
 			    	"owner": snapshot.val().firstName + " " + snapshot.val().lastName || "",
 				    "ownerPic": snapshot.val().photoUrl || ""
-			    });    
+			    });
 			}
-			
+
 
 		}, function(err){
-		    console.log(err);
+		    console.log(err);2
 		});
-		
+
 		res.send({
 			errors: errors,
 			warnings: warnings,
@@ -342,7 +342,7 @@ module.exports = function(app) {
 			    		warnings: warnings,
 				    	message: "updated"
     				});
-	    		}    
+	    		}
 		    }
 		});
 
