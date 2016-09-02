@@ -4,19 +4,24 @@ module.exports = function(app){
     
     //function called to create stripe account
     app.post('/api/createStripeAccount', function(req, res){
+        console.log(req.body);
+        console.log(req.session);
         if (req.session){
-            if (req.session.user){
-                if (req.session.user.emailVerified === false){
+            if (req.session.uid){
+                if (!req.session.emailVerified ){
                     res.send("Email not verified");
                 } else {
-                    var stripeAccountInfo = stripe.createNewStripeAccountWithUid(req.session.user.uid);
-                    if (!stripeAccountInfo){
-                        console.log(stripeAccountInfo);
-                        res.send("success");
-                    } else {
-                        console.log("Error in creating new stripe account");
-                        res.send("invalid request");
-                    }
+                    console.log("create Stripe account");
+                    stripe.createNewStripeAccountWithUid(req.session.uid, function(account){
+                        if (account){
+                            res.send("success");
+                            console.log(account);
+                            return;
+                        } else {
+                            res.send("invalid request");
+                            return;
+                        }
+                    });
                 }
             }
         } else {
@@ -28,24 +33,43 @@ module.exports = function(app){
 
     });
     
-    app.post('/api/getAccount', function(req, res){
-        // if (!req.session){
-        //     res.send("invalid request");
-        //     return;
-        // } else if (!req.session.uid){
-        //     res.send("invalid request");
-        //     return;
-        // }
+    app.post('/api/getMyAccount', function(req, res){
+        if (!req.session){
+            res.send("invalid request");
+            return;
+        } else if (!req.session.uid){
+            res.send("invalid request");
+            return;
+        }
+        
         console.log("got request");
-        if (req.body.accountNum){
-            stripe.accounts.retrieve(req.body.accountNum, function(err, account){
-                if (err) {
-                    console.log(err);
+        if (req.session.uid){
+            //find the accountId of the person, if s/he has one, 
+            global.sensitiveUserRef.child(req.session.uid).once("value", function(snapshot){
+                if (!snapshot.val()) {
+                    res.send("invalid request");
+                } else if (!snapshot.val().stripe){
+                    res.send("invalid request");
+                } else if (snapshot.val().stripe.id){
+                    //call the getAccountByAccountId function on stripe and pass function to process returned account on it
+                    stripe.getAccountByAccountId(req.body.accountNum, function(account){
+                        if (account){
+                            console.log("got account");
+                            console.log(account);
+                            res.send(account);
+                        } else {
+                            console.log("failed to retrieve data from stripe");
+                            res.send("invalid request");
+                        }    
+                    }); //end stripe getAccountByAccountId function
                 } else {
-                    res.send(account);
+                    res.send("invalid request");
                 }
                 
             });
+            
+            
+            
         }
     });
 };

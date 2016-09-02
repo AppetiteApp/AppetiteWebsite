@@ -231,12 +231,12 @@ module.exports = function(app) {
             //     //}
                 
             // }
-            if (!req.session.uid){
+            //if (!req.session.uid){
                 req.session.uid = uid;
                 req.session.emailVerified = decodedToken["email_verified"];
                 req.session.email = decodedToken["email"];
                 req.session.regenerate(function(err){});
-            }
+            //}
             
             
 
@@ -246,6 +246,7 @@ module.exports = function(app) {
         });
 	});
 	
+	//remove express-session
 	app.post('/api/signout', function(req, res) {
 	    req.session.destroy(function(err){
 	        if (err) {

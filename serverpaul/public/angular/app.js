@@ -90,6 +90,20 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
             }
         });
     };
+    $scope.getMyAccount = function(){
+        $http.post('/api/getMyAccount', {accountNum: "acct_18pM5MAnGrPhpDw8"}).then(function(res){
+            $timeout(function(){
+                $scope.getAccount = res;
+            });
+            console.log(res);
+        }, function(err){
+            if (err){
+                $timeout(function() {
+                    $scope.getAccount = "fail";
+                });
+            }
+        });
+    }
 
 });
 //upload file

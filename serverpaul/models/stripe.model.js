@@ -1,8 +1,7 @@
 var cfg = require('../configs/config.json');
 var stripe = require('stripe')(cfg.stripeTestPlatformSecretKey);
 
-
-stripe.createNewStripeAccountWithUid = function(uid){
+stripe.createNewStripeAccountWithUid= function(uid, processAccount){
     if (uid){
         global.sensitiveUserRef.child(uid).once('value').then(function(snapshot){
             var user = {};
@@ -10,7 +9,7 @@ stripe.createNewStripeAccountWithUid = function(uid){
                 user = snapshot.val();
                 //if user already has a stripe account, return 0
                 if (user.stripe){
-                    return 0;
+                    processAccount(0);
                 }
             }
             //if user doesn't have a stripe account, create stripe account with country
@@ -24,15 +23,24 @@ stripe.createNewStripeAccountWithUid = function(uid){
                 console.log(account);
                 user.stripe = account;
                 global.sensitiveUserRef.child(uid).set(user);
-                return user.stripe;
+                processAccount(account);
             });
             
         }, function(err){return 0;});
     }
 };
 
-
-
-module.exports = function(){
-    return stripe;
+stripe.getAccountByAccountId = function(accountNum, processAccount){
+    stripe.accounts.retrieve(accountNum, function(err, account){
+            if (err) {
+                console.log(err);
+                console.log(err);
+                processAccount(0);
+            } else {
+                processAccount(account);
+            }
+        });
 };
+
+
+module.exports = stripe;
