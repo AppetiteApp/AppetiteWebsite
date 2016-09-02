@@ -32,7 +32,8 @@ module.exports = function(app) {
     //when the request url is "/about", render the page in views called 'about.ejs'
     app.get('/about', function(req, res){
         //if (!req.session.inSession) {
-        res.render(__dirname + '/../views/about');
+            res.render(__dirname + '/../views/subviews/launch');
+        // res.render(__dirname + '/../views/about');
         //}
     });
 
@@ -47,16 +48,18 @@ module.exports = function(app) {
     //although right now it's ordered by ascending order of the date...need to fix it
     //also need to fix it for '/browse:num' and limit the number of meals on one page
     app.get('/browse', function(req, res){
-	   res.render(__dirname + '/../views/subviews/browse');
+	   //res.render(__dirname + '/../views/subviews/browse');
+       res.render(__dirname + '/../views/subviews/launch');
     });
 
     app.get('/home', function(req, res){
-        res.render(__dirname + '/../views/subviews/home');
+        res.render(__dirname + '/../views/subviews/launch');
+        //res.render(__dirname + '/../views/subviews/home');
     });
 
     app.get('/account', function(req, res){
-
-            res.render(__dirname + '/../views/subviews/profile');
+            res.render(__dirname + '/../views/subviews/launch');
+            //res.render(__dirname + '/../views/subviews/profile');
 
     });
 
@@ -73,7 +76,8 @@ module.exports = function(app) {
     });
 
     app.get('/aboutus', function(req, res){
-        res.render(__dirname + '/../views/subviews/aboutus');
+        res.render(__dirname + '/../views/subviews/launch');
+        //res.render(__dirname + '/../views/subviews/aboutus');
 
     });
 
