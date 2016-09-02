@@ -1,9 +1,9 @@
-var urlList = ['/browse', '/home', '/', '/account', '/history', '/newdish', '/terms', '/aboutus', '/cheryl/test'];
+var urlList = ['/browse', '/home','/launch', '/', '/account', '/history', '/newdish', '/terms', '/aboutus', '/cheryl/test'];
 
 module.exports = function(app) {
     //for when we have a external store for sessions
     //for now, don't cramp up memory in case of memory leaks
-    
+
     app.get('*', function(req, res, next){
     //     if (urlList.indexOf(req.url) !== -1){
     //         if (!req.session.visit) {
@@ -21,12 +21,12 @@ module.exports = function(app) {
     //         next();
     // //req.session.regenerate(function(err){});
     //     } else {
-    //         next();    
+    //         next();
     //     }
         console.log(req.session);
         next();
-        
-        
+
+
     });
 
     //when the request url is "/about", render the page in views called 'about.ejs'
@@ -56,7 +56,7 @@ module.exports = function(app) {
 
     app.get('/account', function(req, res){
             res.render(__dirname + '/../views/subviews/profile');
-   
+
     });
 
     app.get('/history', function(req, res){
@@ -73,7 +73,7 @@ module.exports = function(app) {
 
     app.get('/aboutus', function(req, res){
         res.render(__dirname + '/../views/subviews/aboutus');
-        
+
     });
 
     app.get('/cheryl/test', function(req, res){
@@ -82,6 +82,11 @@ module.exports = function(app) {
 
     app.get('/', function(req, res){
         res.render(__dirname + '/../views/frame');
-        
+
     });
+
+    app.get('/launch', function(req, res){
+        res.render(__dirname + '/../views/subviews/launch');
+    });
+
 };
