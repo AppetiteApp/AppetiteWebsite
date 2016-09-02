@@ -236,7 +236,6 @@ module.exports = function(app) {
                 req.session.emailVerified = decodedToken["email_verified"];
                 req.session.email = decodedToken["email"];
                 req.session.regenerate(function(err){});
-            console.log(req.session.uid);    
             }
             
             
