@@ -21,7 +21,8 @@ stripe.createNewStripeAccountWithUid= function(uid, processAccount){
             }, function(err, account){
                 if (err) console.log(err);
                 console.log(account);
-                user.stripe = account;
+                user.stripe = {};
+                user.stripe.id = account.id;
                 global.sensitiveUserRef.child(uid).set(user);
                 processAccount(account);
             });

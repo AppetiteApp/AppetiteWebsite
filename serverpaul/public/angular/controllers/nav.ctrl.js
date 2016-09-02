@@ -67,13 +67,16 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
     $scope.$watch('dish.time', function(newValue, oldValue){
          //if today is chosen, then year/month/date should be today
         //if tomorrow is chosen, then get the year, month, and date of tomorrow and set them to the time object
-        if ($scope.dish.time.date === "today"){
-            setDate($scope.dish.time.pickupTime, timeNow);
-            setDate($scope.dish.orderBy, timeNow);
-        } else if($scope.dish.time.date === "tomorrow"){
-            setDate($scope.dish.time.pickupTime, tomorrow);
-            setDate($scope.dish.orderBy, tomorrow);
+        if ($scope.dish.time){
+            if ($scope.dish.time.date === "today"){
+                setDate($scope.dish.time.pickupTime, timeNow);
+                setDate($scope.dish.orderBy, timeNow);
+            } else if($scope.dish.time.date === "tomorrow"){
+                setDate($scope.dish.time.pickupTime, tomorrow);
+                setDate($scope.dish.orderBy, tomorrow);
+            }    
         }
+        
     });
 
 
