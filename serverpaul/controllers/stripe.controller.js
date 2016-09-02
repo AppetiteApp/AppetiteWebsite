@@ -27,4 +27,25 @@ module.exports = function(app){
         
 
     });
+    
+    app.post('/api/getAccount', function(req, res){
+        // if (!req.session){
+        //     res.send("invalid request");
+        //     return;
+        // } else if (!req.session.uid){
+        //     res.send("invalid request");
+        //     return;
+        // }
+        console.log("got request");
+        if (req.body.accountNum){
+            stripe.accounts.retrieve(req.body.accountNum, function(err, account){
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.send(account);
+                }
+                
+            });
+        }
+    });
 };

@@ -26,6 +26,7 @@
     "express": "^4.14.0",
     "express-session": "^1.14.1",
     "firebase": "^3.0.5",
+    "stripe": "^4.10.0",
     "twilio": "^2.9.2"
   }
 }
