@@ -1,7 +1,7 @@
 var cfg = require('../configs/config.json');
 var stripe = require('stripe')(cfg.stripeTestPlatformSecretKey);
 
-stripe.createNewStripeAccountWithUid= function(uid, processAccount){
+stripe.createNewStripeAccountWithUid= function(uid, dob, firstName, lastName, tosIp, callback){
     if (uid){
         global.sensitiveUserRef.child(uid).once('value').then(function(snapshot){
             var user = {};
@@ -9,7 +9,7 @@ stripe.createNewStripeAccountWithUid= function(uid, processAccount){
                 user = snapshot.val();
                 //if user already has a stripe account, return 0
                 if (user.stripe){
-                    processAccount(0);
+                    callback(0);
                 }
             }
             //if user doesn't have a stripe account, create stripe account with country
@@ -17,14 +17,33 @@ stripe.createNewStripeAccountWithUid= function(uid, processAccount){
             user.stripe = {};
             stripe.accounts.create({
                 country: "CA",
-                managed: true
+                managed: true,
+                default_currency: "cad",
+                legal_entity: {
+                    type: "individual",
+                    dob: {
+                        day: dob.day,
+                        month: dob.month,
+                        year: dob.year
+                    },
+                    first_name: firstName,
+                    last_name: lastName
+                },
+                tos_acceptance: {
+                    date: Math.floor(Date.now() / 1000),
+                    ip: tosIp
+                }
             }, function(err, account){
-                if (err) console.log(err);
+                if (err) {
+                    console.log(err);
+                    callback(account);
+                }else {
                 console.log(account);
-                user.stripe = {};
-                user.stripe.id = account.id;
-                global.sensitiveUserRef.child(uid).set(user);
-                processAccount(account);
+                    user.stripe = {};
+                    user.stripe.id = account.id;
+                    global.sensitiveUserRef.child(uid).set(user);
+                    callback(account);
+                }
             });
             
         }, function(err){return 0;});
