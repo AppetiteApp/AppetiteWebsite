@@ -86,8 +86,7 @@ module.exports = function(app){
                         errorMessage: "Cannot request your own meals"
                     });
                 }else if (snapshot.val().purchases){
-                    var dishPurchases = JSON.parse(snapshot.val().purchases);
-                    //purchases = snapshot.val().purchases;
+                    var dishPurchases = snapshot.val().purchases;
                     if (dishPurchases[req.body.uid]){
                         errors.push({
                             errorType: "purchase",
@@ -122,12 +121,13 @@ module.exports = function(app){
                 
                 order.buyerid = req.session.uid;
                 order.buyerName = buyer.name;
-                order.buyerRating = buyer.rating;
+                order.buyerRating = buyer.rating || -1;
                 order.buyerPhone = buyer.phone;
-                order.requestTime = new Date();
+                order.requestTime = (new Date())+"";
                 
                 purchases[req.session.uid] = order;
-                purchases = JSON.stringify(purchases);
+                
+                console.log(purchases);
                 
                 
                 activeMeals[req.body.dishid] = {
@@ -137,7 +137,7 @@ module.exports = function(app){
                     phone   : snapshot.val().phone
                 };
                 
-                global.dishRef.child(req.body.dishid).child("purchases").set(purchases);
+                global.dishRef.child(req.body.dishid).child("purchases").update(purchases);
                 global.userRef.child(req.session.uid).child("activeMeals").update(activeMeals);
                 
                 res.send("success");
@@ -231,7 +231,7 @@ module.exports = function(app){
                     }];
                 
                     
-                } else if(!JSON.parse(snapshot.val().purchases)[req.session.uid]){
+                } else if(!(snapshot.val().purchases)[req.session.uid]){
                     errors = [{
                         errorType: "dish",
                         errorMessage: "request to purchase meal doesn't exist"
@@ -372,7 +372,7 @@ module.exports = function(app){
                         errorMessage: "invalid use of database"
                     });
                 } else {
-                    purchases = JSON.parse(snapshot.val().purchases);
+                    purchases = snapshot.val().purchases;
                     if (!purchases[req.session.uid]){
                         errors.push({
                             errorType: "database",
@@ -394,7 +394,6 @@ module.exports = function(app){
                 }
                 
                 purchases[req.session.uid]["pickedUp"] = true;
-                purchases = JSON.stringify(purchases);
                 global.dishRef.child(req.body.dishid).update({purchases: purchases});
                 
                 //checks done, update and save info

@@ -111,7 +111,7 @@ module.exports = function(app){
                         errorMessage: 'no purchases made under your name'
                     });
                 } else {
-                    var purchases = JSON.parse(snapshot.val().purchases);
+                    var purchases = snapshot.val().purchases;
                     if (!purchases[req.session.uid]){
                         errors.push({
                             errorType: "purchases",
@@ -173,7 +173,6 @@ module.exports = function(app){
                 
                 purchases[req.session.uid].reviewedChef = true;
                 purchases[req.session.uid].reviewForChef = newChefReviewKey;
-                purchases = JSON.stringify(purchases);
                 global.dishRef.child(req.body.dishid).update({purchases: purchases});
                 
                 //save for the chef who's been reviewed
@@ -269,7 +268,7 @@ module.exports = function(app){
                         errorMessage: "buyer didn't purchase  dish"
                     });
                 } else{
-                    purchases = JSON.parse(snapshot.val().purchases);
+                    purchases = snapshot.val().purchases;
                     if (!purchases[req.body.buyerid]){
                         errors.push({
                             errorType: "dish",
@@ -327,7 +326,6 @@ module.exports = function(app){
                 purchases[req.body.buyerid].reviewedBuyer = true;
                 purchases[req.body.buyerid].reviewForBuyer = newBuyerReviewKey;
                 
-                purchases = JSON.stringify(purchases);
                 console.log(purchases);
                 global.dishRef.child(req.body.dishid).child("purchases").set(purchases);
                 console.log("hi");
