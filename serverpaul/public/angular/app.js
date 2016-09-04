@@ -77,7 +77,6 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
     
     $scope.logout = sessionService.signout;
     $scope.createStripeAccount = function(accountInfo){
-    
         $http.post('/api/createStripeAccount', accountInfo).then(function(res){
             console.log(res);
             if (res.data === "success"){
@@ -111,7 +110,14 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
                 });
             }
         });
-    }
+    };
+    $scope.updateAddress = function(stripeAddress){
+        $http.post('/api/updateStripeAddress', stripeAddress).then(function(res){
+            console.log(res);
+        }, function(err){
+            console.log(err);
+        });
+    };
 
 });
 //upload file

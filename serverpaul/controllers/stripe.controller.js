@@ -109,6 +109,32 @@ module.exports = function(app){
         }
     }); //end POST /api/getMyAccount
     
+    //update address for stripe
+    app.post("/api/updateStripeAddress", function(req, res){
+        var timeNow = new Date();
+        //check that person is signed in
+        if (!req.session.uid){
+            res.send("invalid request");
+            console.log("Update Stripe Address fail: no session - " + timeNow.toDateString());
+            return;
+        } 
+        if (!req.body.city || !req.body.addLine1 || !req.body.postal || !req.body.state){
+            res.send("invalid request");
+            console.log("Update Stripe Address fail: incomplete info - " + timeNow.toDateString());
+            return;
+        } 
+        var addLine2 = req.body.addLine2 || undefined;
+        stripe.updateAccountAddress(req.body.city, req.body.addLine1, addLine2, req.body.postal, req.body.state, req.session.uid, function(account){
+                if (account === 0){
+                    res.send("invalid request");
+                } else {
+                    res.send(account);
+                    console.log("Update Stripe Address success for " + req.session.uid + " at " + timeNow.toDateString());
+                }
+                
+        });
+    });
+    
 
     
 };

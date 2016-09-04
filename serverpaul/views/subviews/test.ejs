@@ -16,7 +16,16 @@
     I accept the terms of services <input type="checkbox" ng-model="accountInfo.tos"><br>
     Legal first name: <input type="text" ng-model="accountInfo.firstName"><br>
     Legal last name: <input type='text' ng-model="accountInfo.lastName"><br>
-<button ng-click="createStripeAccount(accountInfo)">Create Stripe Managed Account</button>
+<button ng-click="createStripeAccount(accountInfo)">Create Stripe Managed Account</button><br>
+Address Line 1:<input type="text" ng-model="stripeAddress.addLine1"><br>
+Address Line 2:<input type="text" ng-model="stripeAddress.addLine2"><br>
+City: <input type="text" ng-model="stripeAddress.city"><br>
+State: <input type="text" ng-model="stripeAddress.state"><br>
+Country: Cananda<br>
+Postal Code: <input type="text" ng-model="stripeAddress.postal"><br>
+<button ng-click="updateAddress(stripeAddress)">Update Stripe Address</button>
+
+
 <p>{{res}}</p>    
 <button ng-click="getMyAccount()">Get Account info</button>
 <p>{{getAccount}}</p>
