@@ -54,7 +54,7 @@ global.chefReviewRef = db.ref("chefReviews");
 
 //TWILIO
 var accountSid = cfg.twilioTestAccountSID;
-var authToken = cfg.twilioTestAuthToken; 
+var authToken = cfg.twilioTestAuthToken;
 
 var client = new twilio.RestClient(accountSid, authToken);
 
@@ -72,16 +72,17 @@ var client = new twilio.RestClient(accountSid, authToken);
 
 module.exports = function(){
     var app = express();
-    
+
     app.set("view engine", "ejs");
     //MIDDLEWARE
-    httpToHttps(app);
+    //comment out httpToHttps when using localhost
+    //httpToHttps(app);
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.use(initialize.serverLogging);
     app.use(express.static(path.join(__dirname, '../public')));
-    app.set("view engine", "ejs");    
-    
+    app.set("view engine", "ejs");
+
     //sessions
     app.set('trust proxy', 1);
     app.use(session(sess));
@@ -95,6 +96,6 @@ module.exports = function(){
     reviewController(app);
     stripeController(app);
 
-    
-    return app;  
+
+    return app;
 };

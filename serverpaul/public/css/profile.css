@@ -106,6 +106,17 @@ label {
   object-fit:cover;
 }
 
+#profphotobox{
+  width: 200px;
+  height: 200px;
+  left: 50px;
+  position: fixed;
+  display:block;
+  margin:auto;
+  top:80px;
+  border-radius: 5px;
+}
+
 #profileinfo{
   top:0;
   left:0;
@@ -392,6 +403,29 @@ input[type="checkbox"]:checked + label {
     right:0px;
 }
 
+#photobutton{
+    width:16px;
+    height:16px;
+    background:url(/imgs/photo.png) left top no-repeat;
+    cursor:pointer;
+    position:absolute;
+    float:right;
+    margin:10px;
+    margin-left: 17px;
+    margin-right: 17px;
+    bottom: 0px;
+    right:0px;
+}
+
+#photophile{
+  display: none;
+}
+
+#hideinput{
+  display: none;
+}
+
+
 #phoneicon{
     width:16px;
     height:16px;
@@ -497,26 +531,11 @@ input[type="checkbox"]:checked + label {
     margin-left: 5px;
 }
 
+#profileid{
+  width: 45px;
+  text-align: center;
 
-#logout {
-    border-radius:5px;
-    border:none;
-    color:white;
-    cursor: pointer;
-    background-color: #9b59b6;
-    font-size:14px;
-    font-family: 'Raleway', sans-serif;
-    padding: 5px;
-    text-decoration: none;
-    display: block;
-    position: absolute;
-    bottom: 10px;
-    width: calc(100% - 100px);
-    margin-left: 50px;
-    margin-right: 50px;
-
-    }
-
+}
 #feedback{
     width:calc(100% - 26px) !important;
     height:75px;

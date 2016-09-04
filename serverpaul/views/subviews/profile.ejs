@@ -6,14 +6,12 @@
   </ul>
 
 
-
-<img id="profilethumbnail" border-radius="10px" ng-src="{{parentController.user.photoUrl}}" ng-click="showEditProfilePic=!showEditProfilePic"/>
-
+    <div id="profphotobox">
+      <img id="profilethumbnail" border-radius="10px" ng-src="{{parentController.user.photoUrl}}" ng-click="showEditProfilePic=!showEditProfilePic">
+        <label id="photobutton" for="photophile">
+        </label>
+      </img>
     </div>
-
-
-
-
 
 <div id="infocontainer">
 
@@ -29,13 +27,13 @@
 
 
 
-  <div ng-controller="profileImgController" ng-show="showEditProfilePic">
-    <input type="file" file-model="myFile"/>
+  <div ng-controller="profileImgController">
+    <input id="photophile" type="file" file-model="myFile"/>
     <button ng-click="uploadProfile()">Change Profile Picture</button>
   </div>
 
 
-  <div id="profilestatus"font-family="Source Sans Pro">{{updateProfile.statusMessage}}</div>
+  <div id="profilestatus" font-family="Source Sans Pro">{{updateProfile.statusMessage}}</div>
 
     <div id="phonebox">
 
@@ -132,7 +130,7 @@
   <button ng-show="!dish.edit" ng-if="dish.editable" class="activecancelbutton" ng-click="dish.edit=!dish.edit">Cancel</button>
 
 
-      </div>
+  </div>
 
 
 

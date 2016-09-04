@@ -10,7 +10,6 @@
     <div id="repeateditemactive" ng-cloak ng-repeat="dish in currentlyCooking">
       <div ng-init="dish.edit=true" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
 
-
           <div ng-show="dish.edit" id="dishpriceactive">${{dish.price}}</div>
           <input type="text" ng-show="!dish.edit" ng-if="dish.editable" ng-model="dish.price" placeholder="$7" id="dishpriceedit"/>
 
@@ -28,7 +27,7 @@
           <!--<div class="chefnameactive">My Dish</div>-->
           <input type="text" ng-show="!dish.edit" ng-if="dish.editable" ng-model="dish.description" id="dishdescriptionactiveedit" placeholder="description"></input>
 
-          <div ng-show="dish.edit" id="profiledishdescription">"{{dish.description}}"</div>
+          <div ng-show="dish.edit" id="profiledishdescription">{{dish.description}}</div>
 
 
           <div ng-show="!dish.edit" ng-if="dish.editable" id="logisticssubmitactive">
@@ -118,6 +117,37 @@
               <div id="whoordered">{{This person} ordered</div>
               <div id="whoorderedphone">617-their-num</div>
           </div>
+          <div class="orderedtextbox">
+            Code:
+          <input type="textbox" class="orderedtextboxinput"></input>
+          <button class="codesubmit">Submit</button>
+          </div>
+
+          <div class="guestordered">
+              <img class="img-thumbnailsmall" ng-src="{{dish.ownerPic}}"></img>
+
+              <div id="whoordered">{{This person} ordered</div>
+              <div id="whoorderedphone">617-their-num</div>
+          </div>
+          <div class="orderedtextbox">
+            Code:
+          <input type="textbox" class="orderedtextboxinput"></input>
+          <button class="codesubmit">Submit</button>
+          </div>
+
+          <div class="guestordered">
+              <img class="img-thumbnailsmall" ng-src="{{dish.ownerPic}}"></img>
+
+              <div id="whoordered">{{This person} ordered</div>
+              <div id="whoorderedphone">617-their-num</div>
+          </div>
+          <div class="orderedtextbox">
+            Code:
+          <input type="textbox" class="orderedtextboxinput"></input>
+          <button class="codesubmit">Submit</button>
+          </div>
+
+
         </div>
   </div>
 
@@ -185,14 +215,15 @@
   <div id="innercontainer" ng-init="selection = { selectedNode:  null }">
   <div id="browseseparate">Browse</div>
   <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak>
-        <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" ng-click="dish.active = !dish.active" >
+        <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
             <div class="dishthumbnail">
               <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
             </div>
             <div id="dishprice">${{dish.price}}</div>
 
             <!-- Trigger/Open The Modal -->
-            <button ng-click="openModal(dish)" class="order" ng-if="dish.status">{{dish.status}}</button>
+            <button ng-click="openModal(dish)" class="order">order</button>
+            <div id="downarrow" ng-click="dish.active = !dish.active"></div>
 
             <div ng-class="{'modal4': selection.selectedNode !== dish, 'modal4select': selection.selectedNode == dish}">
 
@@ -200,15 +231,22 @@
               <div class="modal-content4">
                 <span class="close4" ng-click="selection.selectedNode = null">x</span>
 
-                  {{dish.popupMessage}}<br>
-                  <div ng-repeat="purchase in dish.purchases track by $index" ng-if="dish.purchases && parentController.uid===dish.ownerid">
+                  <div class="confirmdeats"><label class="confirmdeatslabel">Dish:</label>{{dish.dishName}}</div>
+                  <div class="confirmdeats"><label class="confirmdeatslabel">Chef:</label>{{dish.ownerName}}</div>
+                  <div class="confirmdeats"><label class="confirmdeatslabel">Time:</label>{{dish.time}}</div>
+                  <div id="areyousure">Are you sure you want to buy this dish?</div>
+                  <div id="confirmbuttons">
+                    <button id="orderconfirm">Confirm</button>
+                    <button id="ordercancel">Cancel</button>
+                  </div>
+                  <!-- <div ng-repeat="purchase in dish.purchases track by $index" ng-if="dish.purchases && parentController.uid===dish.ownerid">
                       {{purchase.buyerName}} has ordered your dish!<br>
                   </div>
 
                   <button ng-if="dish.status==='manage'">See more</button>
                   <button ng-click="cancelOrder(dish)" ng-if="dish.status==='ordered'">Cancel Order</button>
                   <button class="orderconfirm" ng-click="order(dish)" ng-if="dish.status==='order'">Confirm</button>
-                  <button class="ordercancel" ng-click="selection.selectedNode = null" ng-if="dish.status==='order'">Cancel</button>
+                  <button class="ordercancel" ng-click="selection.selectedNode = null" ng-if="dish.status==='order'">Cancel</button> -->
 
               </div>
 
@@ -218,16 +256,20 @@
 
 
           <div id="itembox">
-            <div id="dishtitle">{{dish.dishName}} x{{dish.portions}}</div>
+            <div id="dishtitle">{{dish.dishName}}</div>
             <div class="chefname">by {{dish.ownerName}}</div></br>
-            <div class="dishtime">Ready {{dish.time}}</div>
-            <div id="orderby">Order By {{dish.orderByTime}}</div>
+            <div class="dishtime"><div id="readyat">Ready at:</div> {{dish.time}}</div>
 
           </div>
         </div>
 
-    <div class="slideDown" ng-hide="!dish.active" id="itemdetails">
+    <div class="slideDown" ng-hide="!dish.active">
         <div class="dishdescription">"{{dish.description}}"</div>
+        <hr id="descriptionhr">
+        <div id="orderby"><div id="orderbylab">Order by:</div> {{dish.orderByTime}}
+        <div id="portionslab"><div id="portionslab0">Portions:</div>{{dish.portions}}</div>
+        </div>
+
     </div>
 
   </div>
@@ -384,7 +426,9 @@ async defer></script>
                                 lat: child.val().lat,
                                 lng: child.val().lng
                             },
-                            title: child.val().dishName
+                            title: child.val().dishName,
+                            icon: '../imgs/MapPin.png'
+
                         });
 
                         //function for bouncing

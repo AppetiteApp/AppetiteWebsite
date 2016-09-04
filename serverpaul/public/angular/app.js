@@ -11,16 +11,15 @@ $stateProvider
     controller: 'browseController',
     url: "/browse"
   })
+  .state('launch', {
+    templateUrl: '/launch',
+    url: "/launch"
+  })
   .state('account', {
       templateUrl: '/account',
       controller: 'accountController',
       url: "/account"
   })
-      .state('account.history', {
-          templateUrl: '/history',
-          controller: 'accountController',
-          url:'/account.history'
-      })
   .state('login', {
       templateUrl: '/home',
       controller: 'homeController',
@@ -74,7 +73,7 @@ myApp.controller('parentController', parentController);
 //testing: right now testing google api
 //on the assumption that we're including jquery as of now
 myApp.controller('testController', function($scope, $timeout, $http, $log, sessionService, regexService){
-    
+
     $scope.logout = sessionService.signout;
     $scope.createStripeAccount = function(accountInfo){
         $http.post('/api/createStripeAccount', accountInfo).then(function(res){
