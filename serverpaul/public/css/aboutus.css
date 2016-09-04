@@ -1,0 +1,142 @@
+.aboutus {
+  padding:3%;
+  margin-top: 60px;
+}
+
+.mainpic {
+  width:100%;
+  min-width: 1100px;
+  position:absolute;
+}
+
+.aboutbackground {
+  background-image: url(imgs\spread-min.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% 50%;
+  margin: 0;
+  padding: 0;
+  height: 800px;
+  background-position:center;
+  padding:10% 0;
+}
+
+.aboutuspictures {
+  text-align: center;
+}
+
+.table {
+  text-align: center;
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:20px;
+  color:#7f7f7f;
+  font-family: 'Raleway';
+  font-size:20px;
+  vertical-align: middle;
+}
+
+.tableimage {
+  text-align:center;
+}
+
+.subtable {
+  text-align: center;
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:0px;
+  color:#a5a5a5;
+  font-family: 'Raleway';
+  font-size:15px;
+}
+
+.paratext {
+    text-align: center;
+    padding-left:50px;
+    padding-right:50px;
+    padding-top:0px;
+    padding-bottom:50px;
+    margin-top:0px;
+    margin-bottom:0px;
+    color:#a5a5a5;
+    font-family: 'Raleway';
+    font-size:15px;
+    background-color: #ebf8fe;
+}
+
+.teamtext {
+  text-align: center;
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:0px;
+  padding-bottom:50px;
+  margin-top:0px;
+  margin-bottom:0px;
+  color:#a5a5a5;
+  font-family: 'Raleway';
+  font-size:20px;
+  background-color: #ebf8fe;
+  font-style:italic;
+}
+.header {
+  text-align: center;
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:50px;
+  padding-bottom:50px;
+  color:black;
+  font-family: 'Raleway';
+  font-size:25px;
+  vertical-align: middle;
+  background-color:#ebf8fe;
+  margin-top:0;
+  margin-bottom:0;
+}
+
+.partnertext {
+  text-align: center;
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:50px;
+  padding-bottom:50px;
+  color:black;
+  font-family: 'Raleway';
+  font-size:25px;
+  vertical-align: middle;
+  margin-top:0;
+  margin-bottom:0;
+}
+
+.meetsomeone {
+  display:inline-block;
+  vertical-align: middle;
+  width:33%;
+  min-width: 200px;
+}
+
+.food {
+  display:inline-block;
+  vertical-align: middle;
+  width:33%;
+  min-width: 200px;
+}
+
+.money {
+  display:inline-block;
+  vertical-align: middle;
+  width:33%;
+  min-width: 200px;
+}
+
+.column {
+  display: inline-block;
+  float:inherit;
+  padding-top: 60px;
+  padding-bottom:60px;
+}
+
+.teamphoto {
+  width:100%;
+  opacity: 50%;
+  -webkit-filter: grayscale(20%); /* Chrome, Safari, Opera */
+  filter: grayscale(20%);
+}
