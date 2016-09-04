@@ -24,6 +24,15 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
                 $scope.parentController.uid = user.uid;
             });
             
+            firebase.auth().currentUser.getToken(true).then(function(token) {
+                console.log(token);
+                startSession(token);
+                // Send token to your backend via HTTPS
+                // ...
+            }).catch(function(error) {
+                console.log(error);
+            });
+            
             //retrieve person's info, autoreferesh if anything changes
             firebase.database().ref('users/' + user.uid).on('value', function(snapshot){
                 //check for null/undefined
@@ -59,12 +68,26 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
                 console.log("no user");
                 
             });
+            $http.post('/api/signout', {}).then(function(res){
+                console.log(res.data);
+            }, function(err){console.log(err)});
         }
     }); //end auth function
     
+    var startSession = function(token, user){
+        $http.post('/api/customTokenAuth', {token: token}).then(function(res){
+            // if res.data = success then session started
+            console.log(res.data);
+            if (res.data==="success"){
+                document.location.reload(true);
+            } else if (res.data ==="cookie-in-place"){
+                
+            }
+        }, function(err){
+            console.log(err);
+        });
+    };
 
-
-    
     
 }];
 

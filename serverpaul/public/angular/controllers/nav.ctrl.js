@@ -67,13 +67,16 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
     $scope.$watch('dish.time', function(newValue, oldValue){
          //if today is chosen, then year/month/date should be today
         //if tomorrow is chosen, then get the year, month, and date of tomorrow and set them to the time object
-        if ($scope.dish.time.date === "today"){
-            setDate($scope.dish.time.pickupTime, timeNow);
-            setDate($scope.dish.orderBy, timeNow);
-        } else if($scope.dish.time.date === "tomorrow"){
-            setDate($scope.dish.time.pickupTime, tomorrow);
-            setDate($scope.dish.orderBy, tomorrow);
+        if ($scope.dish.time){
+            if ($scope.dish.time.date === "today"){
+                setDate($scope.dish.time.pickupTime, timeNow);
+                setDate($scope.dish.orderBy, timeNow);
+            } else if($scope.dish.time.date === "tomorrow"){
+                setDate($scope.dish.time.pickupTime, tomorrow);
+                setDate($scope.dish.orderBy, tomorrow);
+            }    
         }
+        
     });
 
 
@@ -167,14 +170,14 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
             //stop displaying the login modal
             var modal = document.getElementById('myModal');
             modal.style.display = "none";
-            firebase.auth().currentUser.getToken(true).then(function(token) {
-                console.log(token);
-                startSession(token);
-                // Send token to your backend via HTTPS
-                // ...
-            }).catch(function(error) {
-                console.log(error);
-            });
+            // firebase.auth().currentUser.getToken(true).then(function(token) {
+            //     console.log(token);
+            //     startSession(token);
+            //     // Send token to your backend via HTTPS
+            //     // ...
+            // }).catch(function(error) {
+            //     console.log(error);
+            // });
         },function(error) {
             $timeout(function() {
                 $scope.loginError = "Invalid Email or Password";
@@ -203,14 +206,12 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                     phone: $scope.user.phone
                 };
                 
-                firebase.auth().currentUser.getToken(true).then(function(token) {
-                    console.log(token);
-                    startSession(token, user);
-                    // Send token to your backend via HTTPS
-                    // ...
-                    
-                }).catch(function(error) {
-                    console.log(error);
+                $http.post('/api/newaccount', user)
+                .then(function(res){
+                    console.log(res.data);
+                },
+                function(err){
+                    console.log(err);
                 });
 
                 console.log(user);

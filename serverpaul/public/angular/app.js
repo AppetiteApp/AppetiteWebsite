@@ -75,18 +75,46 @@ myApp.controller('parentController', parentController);
 myApp.controller('testController', function($scope, $timeout, $http, $log, sessionService, regexService){
 
     $scope.logout = sessionService.signout;
-    $scope.createStripeAccount = function(){
-        $http.post('/api/createStripeAccount', {}).then(function(res){
+    $scope.createStripeAccount = function(accountInfo){
+        $http.post('/api/createStripeAccount', accountInfo).then(function(res){
             console.log(res);
-            $timeout(function() {
-                $scope.res = res.data;
-            });
+            if (res.data === "success"){
+                $timeout(function() {
+                    $scope.res = res.data;
+                });     
+            } else {
+                $timeout(function(){
+                    $scope.res = "fail";
+                });
+            }
+               
         }, function(err){
             if (err) {
                 $timeout(function(){
                     $scope.res = "fail";
                 });
             }
+        });
+    };
+    $scope.getMyAccount = function(){
+        $http.post('/api/getMyAccount', {accountNum: "acct_18pM5MAnGrPhpDw8"}).then(function(res){
+            $timeout(function(){
+                $scope.getAccount = res;
+            });
+            console.log(res);
+        }, function(err){
+            if (err){
+                $timeout(function() {
+                    $scope.getAccount = "fail";
+                });
+            }
+        });
+    };
+    $scope.updateAddress = function(stripeAddress){
+        $http.post('/api/updateStripeAddress', stripeAddress).then(function(res){
+            console.log(res);
+        }, function(err){
+            console.log(err);
         });
     };
 

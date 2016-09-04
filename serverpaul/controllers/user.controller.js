@@ -220,32 +220,25 @@ module.exports = function(app) {
             console.log(decodedToken);
             console.log("uid: " + uid);
             
-            //destory pre-exisiting sessions
-            // if (req.session){
-            //     if (req.session.uid !== uid){
-            //         req.session.destroy(function(err){});
-            //     } //else {
-            //         //req.session.reload = false;
-            //         //res.send("alreadyReloaded");
-            //         //return;
-            //     //}
-                
-            // }
             if (!req.session.uid){
                 req.session.uid = uid;
                 req.session.emailVerified = decodedToken["email_verified"];
                 req.session.email = decodedToken["email"];
                 req.session.regenerate(function(err){});
+                res.send("success");
+            } else if (req.session.uid === uid){
+                res.send("cookie-in-place");
             }
             
             
 
-            res.send("success");
+            
         }).catch(function(error) {
             // Handle error
         });
 	});
 	
+	//remove express-session
 	app.post('/api/signout', function(req, res) {
 	    req.session.destroy(function(err){
 	        if (err) {
