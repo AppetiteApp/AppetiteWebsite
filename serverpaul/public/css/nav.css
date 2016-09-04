@@ -129,6 +129,7 @@
 }
 
 .navelements {
+  border-radius: 5px;
   cursor: pointer;
   text-align: right;
   text-decoration: none;
@@ -154,6 +155,8 @@
 .navelementsmobile:hover{
   color: #75d0f4;
   background-color: white;
+  border-radius: 5px;
+
 }
 
 #hamicon{
