@@ -417,6 +417,10 @@ input[type="checkbox"]:checked + label {
     right:0px;
 }
 
+#photophile{
+  display: none;
+}
+
 #hideinput{
   display: none;
 }
