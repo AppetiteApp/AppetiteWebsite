@@ -1,7 +1,7 @@
 var cfg = require('../configs/config.json');
 var stripe = require('stripe')(cfg.stripeTestPlatformSecretKey);
 
-stripe.createNewStripeAccountWithUid= function(uid, dob, firstName, lastName, tosIp, callback){
+stripe.createNewStripeAccount= function(uid, dob, firstName, lastName, tosIp, callback){
     if (uid){
         global.sensitiveUserRef.child(uid).once('value').then(function(snapshot){
             var user = {};
@@ -50,16 +50,21 @@ stripe.createNewStripeAccountWithUid= function(uid, dob, firstName, lastName, to
     }
 };
 
-stripe.getAccountByAccountId = function(accountNum, processAccount){
+//get a managed account from stripe by account id
+stripe.getAccountByAccountId = function(accountNum, callback){
     stripe.accounts.retrieve(accountNum, function(err, account){
             if (err) {
                 console.log(err);
                 console.log(err);
-                processAccount(0);
+                callback(0);
             } else {
-                processAccount(account);
+                callback(account);
             }
         });
+};
+
+stripe.updateAccountAddress = function(accountNum, callback){
+    
 };
 
 

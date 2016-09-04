@@ -49,7 +49,7 @@ module.exports = function(app){
                     res.send("Email not verified");
                 } else {
                     console.log("create Stripe account");
-                    stripe.createNewStripeAccountWithUid(req.session.uid, dob, req.body.firstName, req.body.lastName, tosIp, function(account){
+                    stripe.createNewStripeAccount(req.session.uid, dob, req.body.firstName, req.body.lastName, tosIp, function(account){
                         if (account){
                             res.send("success");
                             console.log(account);
