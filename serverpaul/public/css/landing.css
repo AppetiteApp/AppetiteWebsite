@@ -1,0 +1,174 @@
+.aboutus {
+  padding:3%;
+}
+
+.aboutbackground {
+  background-image: url(imgs\spread-min.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% 50%;
+  margin: 0;
+  padding: 0;
+  height: 800px;
+  background-position:center;
+  padding:10% 0;
+}
+
+.aboutuspictures {
+  text-align: center;
+}
+
+.table {
+  text-align: center;
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:10px;
+  color:#4f4f4f;
+  font-family: 'Raleway';
+  font-size:20px;
+  vertical-align: middle;
+}
+
+.tableimage {
+  text-align:center;
+}
+
+.subtable {
+  text-align: center;
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:0px;
+  color:#a5a5a5;
+  font-family: 'Raleway';
+  font-size:15px;
+}
+
+.header {
+  text-align: center;
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:20px;
+  padding-bottom:20px;
+  color:#4f4f4f;
+  font-family: 'Raleway';
+  font-size:25px;
+  vertical-align: middle;
+}
+
+.meetsomeone {
+  display:inline-block;
+  vertical-align: middle;
+  width:33%;
+  min-width: 200px;
+  background-color:white;
+  padding-top:10px;
+}
+
+.food {
+  display:inline-block;
+  vertical-align: middle;
+  width:33%;
+  min-width: 200px;
+  background-color:white;
+  padding-top:10px;
+}
+
+.money {
+  display:inline-block;
+  vertical-align: middle;
+  width:33%;
+  min-width: 200px;
+  background-color: white;
+  padding-top:10px;
+}
+
+.column {
+  position: absolute;
+  top: 580px;
+  display: inline-block;
+  float:inherit;
+
+}
+
+.myvideo {
+  position:fixed;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 820px;
+  /*-ms-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);*/
+  background-size:cover;
+  margin-bottom: 0px;
+}
+
+.info {
+  background-color: white;
+  width: 100%;
+  padding-bottom: 30px;
+  padding-top: 20px;
+}
+
+/*.myvideo{
+  width:560px;
+  height:315px;
+  text-align: center;
+  vertical-align: middle;
+  z-index: 4;
+  background-size: cover;
+}*/
+
+#title{
+  position: absolute;
+  top: 50px;
+  width: 100%;
+}
+
+.maintext {
+  color:white;
+  font-family:'Raleway';
+  font-size:50px;
+  font-weight: bold;
+  position: relative;
+  text-align: center;
+}
+
+@media (max-width: 1260px) and (min-width: 890px){
+  .myvideo{
+    height: 500px;
+  }
+  .column{
+    top: 500px;
+  }
+}
+
+@media (max-width: 890px) and (min-width: 750px){
+  .myvideo{
+    height: 450px;
+  }
+  .column{
+    top: 440px;
+  }
+}
+
+@media (max-width: 750px) and (min-width: 600px){
+  .myvideo{
+    height: 400px;
+  }
+  .column{
+    top: 380px;
+  }
+}
+
+@media (max-width: 600px) {
+  .myvideo{
+    height: 300px;
+  }
+  .column{
+    top: 260px;
+  }
+  .maintext{
+    font-size: 20px;
+  }
+}
