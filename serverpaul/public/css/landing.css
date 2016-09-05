@@ -86,7 +86,9 @@
   top: 580px;
   display: inline-block;
   float:inherit;
-
+  padding-bottom: 10px;
+  padding-top: 20px;
+  background-color: white;
 }
 
 .myvideo {
@@ -148,7 +150,7 @@
     height: 450px;
   }
   .column{
-    top: 440px;
+    top: 420px;
   }
 }
 
@@ -157,16 +159,28 @@
     height: 400px;
   }
   .column{
-    top: 380px;
+    top: 370px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 600px) and (min-width: 530px){
   .myvideo{
     height: 300px;
   }
   .column{
     top: 260px;
+  }
+  .maintext{
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 530px) {
+  .myvideo{
+    height: 200px;
+  }
+  .column{
+    top: 200px;
   }
   .maintext{
     font-size: 20px;
