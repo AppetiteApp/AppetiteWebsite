@@ -87,6 +87,39 @@
             <span class="close3">x</span></br>
             <div class="warning" ng-repeat="error in dish.errors">{{error.errorMessage}}</div>
 
+            <div class="cardsubmit">
+
+              <div ng-if="!parentController.user">You're not logged in...boo</div>
+              <div ng-if="parentController.user">
+                  Logged in as {{parentController.user.firstName}} {{parentController.user.lastName}}
+                  {{dobDay}} {{dobMonth}} {{dobYear}} {{tos}} {{legalFirstName}} {{legalLastName}}<br>
+                  Legal birth day: <input type="number" ng-model="accountInfo.day" min="1" max="31"><br>
+                  Legal birth month: <input type="number" ng-model="accountInfo.month" min="1" max="12"><br>
+                  Legal birth year: <input type="number" ng-model="accountInfo.year" min="1900" max="2016"><br>
+                  I accept the terms of services <input type="checkbox" ng-model="accountInfo.tos"><br>
+                  Legal first name: <input type="text" ng-model="accountInfo.firstName"><br>
+                  Legal last name: <input type='text' ng-model="accountInfo.lastName"><br>
+              <button ng-click="createStripeAccount(accountInfo)">Create Stripe Managed Account</button><br>
+              Address Line 1:<input type="text" ng-model="stripeAddress.addLine1"><br>
+              Address Line 2:<input type="text" ng-model="stripeAddress.addLine2"><br>
+              City: <input type="text" ng-model="stripeAddress.city"><br>
+              State: <input type="text" ng-model="stripeAddress.state"><br>
+              Country: Cananda<br>
+              Postal Code: <input type="text" ng-model="stripeAddress.postal"><br>
+              <button ng-click="updateAddress(stripeAddress)">Update Stripe Address</button>
+
+
+              <p>{{res}}</p>
+              <button ng-click="getMyAccount()">Get Account info</button>
+              <p>{{getAccount}}</p>
+
+              </div>
+
+
+
+            </div>
+
+
             <div id="fullformsubmit">
             <form>
 
@@ -155,7 +188,10 @@
                </br>
           </form>
         </div>
-        </div>
+    <div class="one">Click me to reveal new div</div>
+
+
+
 
 </ul>
 
@@ -272,4 +308,19 @@ function growDiv() {
 document.getElementById("more-button").value=document.getElementById("more-button").value=='Read more'?'Read less':'Read more';
 }
 
+
+
+var clicked=true;
+$(".one").on('click', function(){
+    if(clicked)
+    {
+        clicked=false;
+        $(".cardsubmit").css({"left": 0});
+    }
+    else
+    {
+        clicked=true;
+        $(".cardsubmit").css({"left": "400px"});
+    }
+});
 </script>

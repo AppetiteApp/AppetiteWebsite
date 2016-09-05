@@ -148,9 +148,11 @@
     margin: auto;
     border: 1px solid #888;
     width: 400px;
-    height: auto;
+    height: 450px;
     padding-bottom: 40px;
+    overflow: hidden;
 }
+
 
 .close3 {
     margin-right:10px;

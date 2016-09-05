@@ -25,6 +25,57 @@
   margin-top: 15px;
 }
 
+#photoeditcover{
+    width: 75px;
+    height: 20px;
+    position: absolute;
+    background-color: white;
+    z-index: 4;
+}
+#photoedittick{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    background-color: white;
+    z-index: 4;
+    bottom: 0;
+    right: 20px;
+}
+
+
+#photocover{
+  display: block;
+  margin: 0 auto;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+#ticksubmit{
+  display: none;
+
+}
+#editprof{
+  background-color: white;
+  height: auto;
+  width: auto;
+  position: absolute;
+  opacity: .7;
+  bottom: 0;
+  left: -20px;
+}
+
+#photophile{
+  outline: none;
+  height: 20px;
+}
+
+input[type='file']::-webkit-file-upload-button{
+  cursor:pointer;
+  outline: none;
+  border: none;
+  overflow: hidden;
+}
+
 #profilerating{
   text-align: center;
   font-family: 'Raleway', sans-serif;
@@ -482,13 +533,14 @@ input[type="checkbox"]:checked + label {
   color: white;
   display:table-cell;
   position:absolute;
-  bottom:0;
+  top:167px;
+  border-radius: 5px;
   border:none;
   cursor:pointer;
   font-family: 'Raleway', sans-serif;
   font-size:15px;
-  width: calc(100% - 10px);
-  margin: 5px;
+  width: calc(100% - 20px);
+  margin: 10px;
   height:35px;
   padding: 0;
 }
