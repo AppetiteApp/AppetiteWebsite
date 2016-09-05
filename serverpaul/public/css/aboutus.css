@@ -5,7 +5,6 @@
 
 .mainpic {
   width:100%;
-  min-width: 1100px;
   position:absolute;
 }
 
@@ -65,63 +64,95 @@
 }
 
 #facebookicon{
-  display: block;
+  display: inline-block;
+  width:32px;
+
     font-size:14px;
     line-height: 40px;
-    width:150px;
     height:32px;
     background:url(/imgs/facebook.png) left top no-repeat;
     margin:5px;
-    padding-left: 40px;
     text-align: left;
+    cursor: pointer;
+
 }
 
 #envelopeicon{
   display: block;
   font-size:14px;
-  line-height: 45px;
-
-
-  width:150px;
+  line-height: 46px;
+  margin: 0 auto;
+  width:396px;
   height:32px;
     background:url(/imgs/envelope.png) left bottom no-repeat;
-    margin:5px;
     margin-top: 4px;
-    margin-bottom: 6px;
     margin-bottom: 6px;
         text-indent: 32px;
         padding-left: 0px;
-        margin-left: 13px;}
-
-#instaicon{
-  display: block;
-  font-size:14px;
-  line-height: 40px;
-
-  width:150px;
-
-  height:32px;
-    background:url(/imgs/Instagram.png) left top no-repeat;
-    margin:5px;
-    padding-left: 40px;
-    text-align: left;
+        cursor: pointer;
 
 }
 
-#linkedinicon{
-  display: block;
+#instaicon{
+  display: inline-block;
   font-size:14px;
   line-height: 40px;
-  padding-left: 40px;
+
+  width:32px;
+  height:32px;
+    background:url(/imgs/Instagram.png) left top no-repeat;
+    margin:5px;
+    text-align: left;
+    cursor: pointer;
+}
+
+#termsaboutus{
+  display: inline-block;
+  font-size:14px;
+  line-height: 40px;
+  height: auto;
+  width:auto;
+  position: relative;
+  top:-10px;
+  text-decoration: none;
+  color: black;
+
+}
+
+#privacyaboutus{
+  display: inline-block;
+  font-size:14px;
+  position: relative;
+  top:-10px;
+  height: auto;
+  width:auto;
+padding-left: 10px;
+text-decoration: none;
+color: black;
 
 
-  width:150px;
+
+}
+
+
+#linkedinicon{
+  display: inline-block;
+  font-size:14px;
+  line-height: 40px;
+
+  width:32px;
+
   height:32px;
     background:url(/imgs/linkedin.png) left top no-repeat;
     margin:5px;
     text-align: left;
 }
 
+  #footerhr{
+    border-bottom: none;
+    color: grey;
+
+  }
 
 
 .paratext {
@@ -170,6 +201,14 @@
   margin-top:0;
   margin-bottom:0;
   height: 100%;
+  width: calc(100% - 40px);
+}
+
+.aboutusvideo{
+  padding-left: 40px;
+  padding-right: 20px;
+  width: calc(100% - 80px);
+  min-height: 400px;
 }
 
 .partnertext {
