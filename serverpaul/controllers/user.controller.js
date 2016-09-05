@@ -123,30 +123,52 @@ module.exports = function(app) {
 	});
 
 	app.post('/api/newaccount', function(req, res, next){
-        console.log("Creating new user with email", req.body.email, "at", Date());
-        if (!req.session){
-            res.send("invalid request");
-            return;
-        } if (!req.session.uid){
-            res.send("invalid request");
-            return;
-        }
-        console.log(req.body);
-        var photos = ["https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat2.jpg?alt=media&token=c2f11652-534e-408b-9bad-b3b16b18132a", "https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat3.jpg?alt=media&token=17ebcf03-93e9-4659-97f8-de8fc723d793", "https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat4.jpg?alt=media&token=241c91ae-fc59-4cc3-bcd9-a19ec11b2247"];
-        var randInt = Math.floor(Math.random(3));
-        console.log(randInt);
-        var photoUrl = photos[randInt];
-        
-        global.userRef.child(req.session.uid).set({
-            uid: req.session.uid,
-            email: req.body.email,
-            photoUrl: photoUrl,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            phone: req.body.phone,
-            location: "Please update your address by clicking the edit icon!"
+        console.log("Creating new user with email", req.body.signupemail, "at", Date());
+        	 
             
+            var photos = ["https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat2.jpg?alt=media&token=c2f11652-534e-408b-9bad-b3b16b18132a", "https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat3.jpg?alt=media&token=17ebcf03-93e9-4659-97f8-de8fc723d793", "https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat4.jpg?alt=media&token=241c91ae-fc59-4cc3-bcd9-a19ec11b2247"];
+        var randInt = Math.floor(Math.random(3));
+        //console.log(randInt);
+        var photoUrl = photos[randInt];
+        global.globalRef.child("number").once("value").then(function(snapshot){
+            console.log(snapshot.val());
+            var idNum = snapshot.val();
+            global.userRef.child(req.body.uid).set({
+                uid: req.body.uid,
+                email: req.body.signupemail,
+                photoUrl: photoUrl,
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                phone: req.body.phone,
+                location: "Please update your address by clicking the edit icon!",
+                number: idNum
+            });      
+            idNum = parseInt(idNum, 10);
+            console.log(idNum);
+            //generate idNum string
+            idNum += 1;
+            idNum = idNum.toString();
+            console.log(idNum);
+            var lenNeeded = 9-idNum.length;
+            var finalIdNum = "";
+            while (lenNeeded > 0){
+                finalIdNum += '0';
+                lenNeeded -= 1;
+            }
+            finalIdNum += idNum;
+            console.log("final id: " + finalIdNum);
+            global.globalRef.update({
+                number: finalIdNum
+            });
+            res.send("success");
+        }, function(err){
+            console.log(err);
+            res.send("invalid request");
         });
+            
+        
+        
+        
         
 	});
 	

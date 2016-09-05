@@ -4,7 +4,9 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
     var timeNow = new Date();
     var tomorrow = new Date(timeNow.getTime() + 24*60*60*1000);
     var minNow = 30 * Math.ceil(timeNow.getMinutes() / 30);
-
+    $scope.dish = {
+        errors: []
+    };
     //watch $scope.parentController.uid, user.uid, user.email, user.emailVerified, dish.location
     $scope.$watch('parentController.uid', function(newValue, oldValue){
         //if $scope.parentController.uid isn't undefined or null, then there is a user logged in
@@ -37,13 +39,13 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                         errorType: "userinfo",
                         errorMessage: "User info incomplete: missing location."
                     });
+                    console.log("no address");
                 }
 
                 //create a dish object and put the user's info into it
                 $timeout(function() {
                     $scope.dish = {
-                        warnings: [],
-                        errors  : [],
+                        errors  : $scope.dish.errors,
                         time    : {
                             pickupTime: new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), timeNow.getHours() + 3, minNow, 0),
                             date: "today"
@@ -155,7 +157,7 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
     $scope.$watch('user.confirmpassword', function(newValue, oldValue){
         if (newValue){
 
-            if (oldValue.keyCode == 13 && $scope.user.signuppassword === $scope.user.confirmpassword) {
+            if (newValue.keyCode == 13 && $scope.user.signuppassword === $scope.user.confirmpassword) {
                 $scope.signup($scope.user);
 
             }
@@ -192,33 +194,30 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
     //after successfully creating a new user: create node in users/, and redirect to /account to fill more info
     $scope.signup = function(user){
         console.log("signup");
-
-        //TODO: control: can only signup with @mail.mcgill.ca
+        $scope.parentController.newUser = true;
+        console.log(user);
 
         firebase.auth().createUserWithEmailAndPassword(user.signupemail, user.signuppassword).then(
-            function(){
+            function(userInfo){
+                user.uid = userInfo.uid;
                 firebase.auth().currentUser.sendEmailVerification();
-                var user = {
-                    uid : firebase.auth().currentUser.uid,
-                    email: firebase.auth().currentUser.email,
-                    firstName: $scope.user.firstName,
-                    lastName: $scope.user.lastName,
-                    phone: $scope.user.phone
-                };
-                
-                $http.post('/api/newaccount', user)
-                .then(function(res){
-                    console.log(res.data);
+                $http.post('/api/newaccount', user).then(function(res){
+                    if (res.data ==='success'){
+                        $timeout(function(){
+                            $scope.parentController.newUser = false;    
+                        });
+                        firebase.auth().currentUser.getToken(true).then(function(token) {
+                            console.log(token);
+                            startSession(token);
+                        }).catch(function(error) {
+                            console.log(error);
+                        });
+                        
+                    }
                 },
                 function(err){
                     console.log(err);
                 });
-
-                console.log(user);
-
-                $log.log(firebase.auth().currentUser);
-                $route.reload();
-                $location.path('/account');
             },
             function(error) {
         // Handle Errors here. omg why isn't this code running...
@@ -239,17 +238,9 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
         $http.post('/api/customTokenAuth', {token: token}).then(function(res){
             // if res.data = success then session started
             console.log(res.data);
-            if (res.data="success"){
-                $scope.parentController.serverCookie = 1;
-                document.location.reload(true);
-                $http.post('/api/newaccount', user)
-                .then(function(res){
-                    console.log(res.data);
-                },
-                function(err){
-                    console.log(err);
-                });
-                
+            if (res.data==="success"){
+                //document.location.reload(true);
+            } else if (res.data ==="cookie-in-place"){
                 
             }
         }, function(err){

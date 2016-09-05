@@ -106,5 +106,22 @@ stripe.updateAccountAddress = function(city, addLine1, addLine2, postal, state, 
     }); //end retrieve accountNum from firebase with uid
 };
 
+stripe.updateStripePersonalId = function(accountid, id, uid, callback){
+    var update = {
+        legal_entity: {
+            personal_id_number: id
+        }
+    };
+    stripe.accounts.update(accountid, update).then(function(account){
+        console.log(account);
+        if (account){
+            callback(account);
+        } else {callback(0);}
+    }, function(err){
+        console.log(err);
+        callback(0);    
+    });    
+};
+    
 
 module.exports = stripe;

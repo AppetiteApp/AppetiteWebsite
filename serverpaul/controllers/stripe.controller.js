@@ -133,8 +133,49 @@ module.exports = function(app){
                 }
                 
         });
-    });
+    }); //end post /api/updateStripeAddress
     
+    app.post('/api/updateStripePersonalId', function(req, res){
+        if (!req.session.uid){
+            res.send("invalid request");
+            return;
+        }
+        console.log(req.body.response);
+        if (req.body.response.error){
+            res.send("invalid resposne");
+            return;
+        }
+        global.sensitiveUserRef.child(req.session.uid).once("value").then(function(snapshot){
+            //cannot set pii if the user doesn't have a stripe managed account or already have a pii number
+            if (!snapshot.val()){
+                res.send("invalid request");
+                return;
+            }
+            if (!snapshot.val().stripe){
+                res.send('invalid request');
+                return;
+            }
+            if (snapshot.val().stripe.pii){
+                res.send("invalid request");
+                return;
+            }
+            var accountid = snapshot.val().stripe.id;
+            stripe.updateStripePersonalId(accountid, req.body.response.id, req.session.uid, function(responseCode){
+                console.log(responseCode);
+                if (responseCode!== 0){
+                    global.sensitiveUserRef.child(req.session.uid).child("stripe").update({
+                        pii: req.body.response.id
+                    });  
+                    res.send("success"); 
+                } else {
+                    res.send("invalid request"); 
+                }
+            });
+            
+        }, function(err){
+            res.send('invalid request');
+        })
+    }); //end post /api/updateStripePersonalId
 
     
 };

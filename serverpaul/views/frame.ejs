@@ -36,6 +36,7 @@
     <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.0.5/firebase-storage.js"></script>
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 
     <script>
       // Initialize Firebase
@@ -46,6 +47,7 @@
         storageBucket: "appetite-8827f.appspot.com",
       };
       firebase.initializeApp(config);
+      Stripe.setPublishableKey('pk_test_LwMMQNfb3CoPtTHOXTJ8RpVt');
     </script>
 
     <script src='/angular/controllers/parent.ctrl.js'></script>
