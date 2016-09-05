@@ -106,7 +106,7 @@
 .info {
   background-color: white;
   width: 100%;
-  padding-bottom: 25px;
+  padding-bottom: 30px;
   padding-top: 20px;
 }
 
@@ -142,7 +142,26 @@
     top: 500px;
   }
 }
-@media (max-width: 890px) {
+
+@media (max-width: 890px) and (min-width: 750px){
+  .myvideo{
+    height: 450px;
+  }
+  .column{
+    top: 440px;
+  }
+}
+
+@media (max-width: 750px) and (min-width: 600px){
+  .myvideo{
+    height: 400px;
+  }
+  .column{
+    top: 380px;
+  }
+}
+
+@media (max-width: 600px) {
   .myvideo{
     height: 300px;
   }
