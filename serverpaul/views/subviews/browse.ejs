@@ -114,7 +114,7 @@
           <div class="guestordered">
               <img class="img-thumbnailsmall" ng-src="{{dish.ownerPic}}"></img>
 
-              <div id="whoordered">{{This person} ordered</div>
+              <div id="whoordered">This person ordered</div>
               <div id="whoorderedphone">617-their-num</div>
           </div>
           <div class="orderedtextbox">
@@ -126,7 +126,7 @@
           <div class="guestordered">
               <img class="img-thumbnailsmall" ng-src="{{dish.ownerPic}}"></img>
 
-              <div id="whoordered">{{This person} ordered</div>
+              <div id="whoordered">This person ordered</div>
               <div id="whoorderedphone">617-their-num</div>
           </div>
           <div class="orderedtextbox">
@@ -138,7 +138,7 @@
           <div class="guestordered">
               <img class="img-thumbnailsmall" ng-src="{{dish.ownerPic}}"></img>
 
-              <div id="whoordered">{{This person} ordered</div>
+              <div id="whoordered">This person ordered</div>
               <div id="whoorderedphone">617-their-num</div>
           </div>
           <div class="orderedtextbox">
@@ -193,9 +193,9 @@
       <div id="dishprice">$7</div>
 
     <div id="itembox">
-      <div id="dishtitle">dish.dishName}}</div>
-      <div class="chefname">by dish.ownerName}}</div></br>
-      <div class="dishtime">Ready dish.time}}</div>
+      <div id="dishtitle">{{dish.dishName}}</div>
+      <div class="chefname">by {{dish.ownerName}}</div></br>
+      <div class="dishtime">Ready {{dish.time}}</div>
       <div id="boughtcode"><div id="codelabel">CODE:</div> H32-D34</div>
     </div>
 
@@ -236,7 +236,7 @@
                   <div class="confirmdeats"><label class="confirmdeatslabel">Time:</label>{{dish.time}}</div>
                   <div id="areyousure">Are you sure you want to buy this dish?</div>
                   <div id="confirmbuttons">
-                    <button id="orderconfirm">Confirm</button>
+                    <button id="orderconfirm" ng-click="order(dish)">Confirm</button>
                     <button id="ordercancel">Cancel</button>
                   </div>
                   <!-- <div ng-repeat="purchase in dish.purchases track by $index" ng-if="dish.purchases && parentController.uid===dish.ownerid">

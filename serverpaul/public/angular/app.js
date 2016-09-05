@@ -118,6 +118,18 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
             console.log(err);
         });
     };
+    
+    $scope.updatePersonalId = function(){
+        Stripe.piiData.createToken({
+            personal_id_number: $scope.parentController.number
+        }, function(status, response){
+            $http.post('/api/updateStripePersonalId', {response: response}).then(function(res){
+                console.log(res.data);
+            }, function(err){
+                console.log(err);
+            });
+        });
+    };
 
 });
 //upload file

@@ -4,6 +4,10 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
     $scope.parentController = {
         dish: {}
     };
+    $scope.parentController.newUser = false;
+    $scope.parentController.signupUser;
+
+
 
 
     $scope.parentController.signout = sessionService.signout;
@@ -11,7 +15,7 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
 
     //if the person is logged in, get that person's info
     firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
+        if (user && !$scope.parentController.newUser) {
 
 
             //put info about user into scope
@@ -41,6 +45,7 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
 
                     $scope.parentController.user = snapshot.val();
                     $scope.emailVerified = user.emailVerified;
+                    $scope.parentController.number = snapshot.val().number;
                     $scope.parentController.dish.location = {
                         name: snapshot.val().location,
                         lat: snapshot.val().lat,
@@ -61,10 +66,14 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
                     $scope.parentController.user.phone      = snapshot.val().phone;
                 }
             }); //end fetch user data from firebase
-        }else{
+        }else if (user && $scope.parentController.newUser){
+
+
+        }else if (!user){
             $timeout(function() {
                 $scope.parentController.user = undefined;
                 $scope.parentController.uid = undefined;
+                $scope.parentController.number = undefined;
                 console.log("no user");
 
             });
@@ -79,7 +88,6 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
             // if res.data = success then session started
             console.log(res.data);
             if (res.data==="success"){
-                // document.location.reload(true);
             } else if (res.data ==="cookie-in-place"){
 
             }

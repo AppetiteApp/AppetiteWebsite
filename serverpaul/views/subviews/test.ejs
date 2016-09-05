@@ -3,6 +3,9 @@
 
 <h1 ng-click="logout()">Logout</h1>
 
+{{parentController.newUser}}
+
+
 
 <br>
 <hr><br>
@@ -29,5 +32,8 @@ Postal Code: <input type="text" ng-model="stripeAddress.postal"><br>
 <p>{{res}}</p>    
 <button ng-click="getMyAccount()">Get Account info</button>
 <p>{{getAccount}}</p>
+
+{{parentController.number}}
+<p><button ng-click="updatePersonalId()">Get Personal Id</button></p>
     
 </div>
