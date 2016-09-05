@@ -16,20 +16,6 @@ var sessionService = function(){
     var self = this;
     self.currentUser;
     
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-            self.currentUser = user;
-
-            
-        } else {
-            //$log.log("onAuthStateChanged: no user");
-            $route.reload();
-            $location.path('/login');
-            self.currentUser = undefined;
-            
-        }
-    });
-    
     
     self.signout = function(){
         firebase.auth().signOut().then(function(){

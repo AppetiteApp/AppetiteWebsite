@@ -4,30 +4,30 @@ module.exports = function(app) {
     //for when we have a external store for sessions
     //for now, don't cramp up memory in case of memory leaks
 
-    app.get('*', function(req, res, next){
-    //     if (urlList.indexOf(req.url) !== -1){
-    //         if (!req.session.visit) {
-    //             req.session.visit = {pageView:1};
-    //             req.session.regenerate(function(err){});
-    //         } else if (req.url =='/'){
-    //             req.session.visit.pageView += 1;
-    //         } else if (urlList.indexOf(req.url) !== -1){
-    //             if (!req.session.visit[req.url]){
-    //                 req.session.visit[req.url] = 1;
-    //             } else {
-    //                 req.session.visit[req.url] += 1;
-    //             }
-    //         }
-    //         next();
-    // //req.session.regenerate(function(err){});
-    //     } else {
-    //         next();
-    //     }
-        console.log(req.session);
-        next();
+    // app.get('*', function(req, res, next){
+    // //     if (urlList.indexOf(req.url) !== -1){
+    // //         if (!req.session.visit) {
+    // //             req.session.visit = {pageView:1};
+    // //             req.session.regenerate(function(err){});
+    // //         } else if (req.url =='/'){
+    // //             req.session.visit.pageView += 1;
+    // //         } else if (urlList.indexOf(req.url) !== -1){
+    // //             if (!req.session.visit[req.url]){
+    // //                 req.session.visit[req.url] = 1;
+    // //             } else {
+    // //                 req.session.visit[req.url] += 1;
+    // //             }
+    // //         }
+    // //         next();
+    // // //req.session.regenerate(function(err){});
+    // //     } else {
+    // //         next();
+    // //     }
+    //     console.log(req.session);
+    //     next();
 
 
-    });
+    // });
 
     //when the request url is "/about", render the page in views called 'about.ejs'
     app.get('/about', function(req, res){

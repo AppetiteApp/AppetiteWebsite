@@ -63,16 +63,17 @@
     <div class="modal-content2">
         <span class="close2">x</span></br>
             <div id="registertitle">Join Appetite</div>
-                <form ng-submit="signup(user)">
+                <form ng-submit="signup(signupUser)">
+                    {{signupUser}}
                     <div class="registererror">{{signupError}}</div>
-                                  <div id="firstnamebox"><label class="registerlabel">First Name</label><input id="firstNameregister" type="text" ng-model="user.firstName"/></div>
-                                  <div id="lastnamebox"><label class="registerlabel" id="lastnamelabel">Last Name</label><input id="lastNameregister" type="text" ng-model="user.lastName"/></div></br>
-                                  <label class="registerlabel">Phone</label><input class="logintextbox" type="text" ng-model="user.phone"/>
-                                  <label class="registerlabel" id="emailspec">UniversityEmail</label><input class="logintextbox" type="text" ng-model="user.signupemail"/>
-                                  <label class="registerlabel">Password</label><input class="logintextbox" type="password" ng-model="user.signuppassword"/>
-                                  <label class="registerlabel">Confirm</label><input class="logintextbox" type="password" ng-model="user.confirmpassword" />
+                                  <div id="firstnamebox"><label class="registerlabel">First Name</label><input id="firstNameregister" type="text" ng-model="signupUser.firstName"/></div>
+                                  <div id="lastnamebox"><label class="registerlabel" id="lastnamelabel">Last Name</label><input id="lastNameregister" type="text" ng-model="signupUser.lastName"/></div></br>
+                                  <label class="registerlabel">Phone</label><input class="logintextbox" type="text" ng-model="signupUser.phone"/>
+                                  <label class="registerlabel" id="emailspec">UniversityEmail</label><input class="logintextbox" type="text" ng-model="signupUser.signupemail"/>
+                                  <label class="registerlabel">Password</label><input class="logintextbox" type="password" ng-model="signupUser.signuppassword"/>
+                                  <label class="registerlabel">Confirm</label><input class="logintextbox" type="password" ng-model="signupUser.confirmpassword" />
                                   <div id="termsconsent">By joining you agree to these <a href="#/terms">Terms</a></div>
-                                  <button id="homeregister" ng-disabled=" (user.signuppassword!==user.confirmpassword) || (!user.signuppassword)">Join Appetite</button>
+                                  <button id="homeregister" ng-disabled=" (signupUser.signuppassword!==signupUser.confirmpassword) || (!signupUser.signuppassword)">Join Appetite</button>
                 </form>
       </div>
   </div>
@@ -84,7 +85,6 @@
     <!-- Modal content -->
     <div class="modal-content3">
             <span class="close3">x</span></br>
-            <div class="warning" ng-repeat="warning in dish.warnings">{{warning.warningMessage}}</div>
             <div class="warning" ng-repeat="error in dish.errors">{{error.errorMessage}}</div>
 
             <div id="fullformsubmit">

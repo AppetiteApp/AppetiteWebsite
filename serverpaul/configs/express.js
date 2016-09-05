@@ -48,6 +48,7 @@ global.pastDishRef = db.ref("pastDishes");
 global.cancelRef = db.ref("cancellations");
 global.buyerReviewRef = db.ref("buyerReviews");
 global.chefReviewRef = db.ref("chefReviews");
+global.globalRef = db.ref("globals");
 
 
 
@@ -65,7 +66,7 @@ var client = new twilio.RestClient(accountSid, authToken);
 // }, function(err, message) {
 //     console.log(err);
 //     console.log(message);
-// });
+// });s
 
 
 
