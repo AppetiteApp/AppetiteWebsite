@@ -2,6 +2,7 @@
 /* global firebase*/
 var myApp = angular.module('myApp', ['ngDialog', 'ui.router', 'ngAnimate']);
 
+
 myApp.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $urlRouterProvider){
 
 //testing to see if this works
@@ -81,13 +82,13 @@ myApp.controller('testController', function($scope, $timeout, $http, $log, sessi
             if (res.data === "success"){
                 $timeout(function() {
                     $scope.res = res.data;
-                });     
+                });
             } else {
                 $timeout(function(){
                     $scope.res = "fail";
                 });
             }
-               
+
         }, function(err){
             if (err) {
                 $timeout(function(){
