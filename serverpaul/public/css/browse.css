@@ -102,7 +102,7 @@
 }
 
 .orderedbox{
-  width: 100%;
+  width: calc(100% - 5px);
   height: auto;
   margin-top: 25px;
   outline: none;

@@ -265,7 +265,154 @@ background-color: white;
     width:100%;
     height:auto;
     margin: 0 auto;
+    position: relative;
+    top: -428px;
 }
+
+#cardsubmit{
+  width:100%;
+  margin: 0 auto;
+  color: black;
+  height: 100%;
+  position: relative;
+top: -40px;
+background-color: yellow;
+z-index: 1;
+-webkit-transition: top 1s;
+-moz-transition: top 1s;
+-o-transition: top 1s;
+transition: top 1s;
+
+}
+
+#cardaccountform input{
+  border: 1px solid #ebd3bd;
+  height: 35px;
+  font-size: 16px;
+  width: calc(100% - 4px);
+  margin-bottom: 5px;
+}
+
+#fnamebox{
+  position: relative;
+  display: inline-block;
+  width: 49%;
+}
+#lnamebox{
+  position: relative;
+  display: inline-block;
+  width: 50%;
+}
+
+#citystripe{
+  position: relative;
+  display: inline-block;
+  width: 48%;
+}
+
+#statestripe{
+  position: relative;
+  display: inline-block;
+  width: 25%;
+}
+
+#countrystripe{
+  position: relative;
+  display: inline-block;
+  width: 20%;
+}
+
+#postalstripe{
+  position: relative;
+  display: inline-block;
+  width: 25%;
+}
+
+#stripeday{
+  position: relative;
+  display: inline-block;
+  width: 13% !important;
+}
+
+#stripeyear{
+  position: relative;
+  display: inline-block;
+  width: 25% !important;
+}
+
+#stripemonth{
+  position: relative;
+  display: inline-block;
+  width: 13% !important;
+}
+
+#termsagree{
+  display: inline-block;
+  width: 16px !important;
+}
+
+#Iagree{
+  width: auto !important;
+  top: -11px;
+  position: relative;
+}
+
+.cardlabels{
+  font-size: 15px;
+    color: #ebd3bd;
+    width: 100%;
+}
+
+
+.one {
+    width:calc(100% - 40px);
+    height:16px;
+    background:url(/imgs/credit-card.png) left top no-repeat;
+    position: relative;
+    top: -428px;
+    z-index: 1;
+    cursor:pointer;
+    margin-left: 40px;
+    font-size: 15px;
+    color: black;
+    text-indent: 40px;
+    line-height: 16px;
+    text-decoration: underline;
+}
+
+#createstripebutton{
+  background-color: #75d0f4;
+    border: none;
+    color: white;
+    height: 30px;
+    border-radius: 5px;
+    font-family: 'Raleway', sans-serif;
+}
+
+#stripearrow{
+  text-decoration: none !important;
+  display: inline-block;
+  width: 10px;
+
+}
+
+
+.cardsubmit {
+    position: relative;
+    left: 400px;
+    height: 428px;
+    background-color: white;
+    z-index: 1;
+    -webkit-transition: left 1s;
+    -moz-transition: left 1s;
+    -o-transition: left 1s;
+    transition: left 1s;
+    top:10px;
+    color: black;
+    padding-left: 40px;
+    padding-right:40px;
+}
+
 
 
 .menusubmit{
@@ -529,7 +676,7 @@ border: 1px solid #ebd3bd;
 
 .datebutton input {
   position: absolute;
-  top: -30px;
+  top: -300px;
 }
 .datebutton span {
   padding: 5px;
@@ -574,7 +721,7 @@ border: 1px solid #ebd3bd;
 
 
 
-@media (max-width:530px){
+@media (max-width:540px){
   .welcomebuttonright{
     display: none;
   }
