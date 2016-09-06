@@ -202,7 +202,7 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                 user.uid = userInfo.uid;
                 firebase.auth().currentUser.sendEmailVerification();
                 $http.post('/api/newaccount', user).then(function(res){
-                    if (res.data ==='success'){
+                    if (res.data ==='success' || res.data==="cookie-in-place"){
                         $timeout(function(){
                             $scope.parentController.newUser = false;    
                         });
@@ -234,19 +234,6 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
 
     };
     
-    var startSession = function(token, user){
-        $http.post('/api/customTokenAuth', {token: token}).then(function(res){
-            // if res.data = success then session started
-            console.log(res.data);
-            if (res.data==="success"){
-                //document.location.reload(true);
-            } else if (res.data ==="cookie-in-place"){
-                
-            }
-        }, function(err){
-            console.log(err);
-        });
-    };
 
 
 };

@@ -6,6 +6,7 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
     };
     $scope.parentController.newUser = false;
     $scope.parentController.signupUser;
+    $scope.parentController.hasSession = false;
     
 
 
@@ -15,7 +16,21 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
     
     //if the person is logged in, get that person's info
     firebase.auth().onAuthStateChanged(function(user) {
-        if (user && !$scope.parentController.newUser) {
+        if (user && !$scope.parentController.hasSession){
+            if (!$scope.parentController.hasSession){
+                firebase.auth().currentUser.getToken(true).then(function(token) {
+                console.log(token);
+                startSession(token);
+                // Send token to your backend via HTTPS
+                // ...
+            }).catch(function(error) {
+                console.log(error);
+            });    
+            }
+        }
+        
+        
+        if (user) {
 
             
             //put info about user into scope
@@ -28,14 +43,8 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
                 $scope.parentController.uid = user.uid;
             });
             
-            firebase.auth().currentUser.getToken(true).then(function(token) {
-                console.log(token);
-                startSession(token);
-                // Send token to your backend via HTTPS
-                // ...
-            }).catch(function(error) {
-                console.log(error);
-            });
+            
+            
             
             //retrieve person's info, autoreferesh if anything changes
             firebase.database().ref('users/' + user.uid).on('value', function(snapshot){
@@ -66,37 +75,32 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
                     $scope.parentController.user.phone      = snapshot.val().phone;
                 }
             }); //end fetch user data from firebase 
-        }else if (user && $scope.parentController.newUser){
-
             
         }else if (!user){
             $timeout(function() {
                 $scope.parentController.user = undefined;
                 $scope.parentController.uid = undefined;
                 $scope.parentController.number = undefined;
-                console.log("no user");
-                
+
             });
             $http.post('/api/signout', {}).then(function(res){
-                console.log(res.data);
             }, function(err){console.log(err)});
         }
     }); //end auth function
     
     var startSession = function(token, user){
         $http.post('/api/customTokenAuth', {token: token}).then(function(res){
-            // if res.data = success then session started
-            console.log(res.data);
+            
             if (res.data==="success"){
+                $scope.parentController.hasSession = true;
                 //document.location.reload(true);
             } else if (res.data ==="cookie-in-place"){
-                
+                $scope.parentController.hasSession = true;
             }
         }, function(err){
             console.log(err);
         });
     };
-
     
 }];
 

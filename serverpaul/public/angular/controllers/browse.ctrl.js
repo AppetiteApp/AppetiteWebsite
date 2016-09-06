@@ -1,13 +1,16 @@
 var browseController = function($scope, $log, $location, $http, $timeout, regexService, sessionService, timeService){
 
     $scope.signout = sessionService.signout;
-
+    $scope.myMeals = [];
+    $scope.orderedMeals = [];
     $scope.dishes = [];
     $scope.markers = [];
     var timeNow = new Date();
 
     firebase.database().ref('dish/').orderByChild('time/pickupTime').on('value', function(snapshot){
         var dishes = [];
+        var myMeals = [];
+        var orderedMeals = [];
 
         console.log($scope.parentController);
 
@@ -48,22 +51,28 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
                     if (dish.ownerid === $scope.parentController.uid){
                         dish.ownerName = "me";
                         dish.status = "manage";
+                        myMeals.push(dish);
                     } else if (!$scope.parentController.activeMeals && orderBy.getTime() >= timeNow.getTime()){
                         dish.status = 'order';
+                        dishes.push(dish);
                     }else if ($scope.parentController.activeMeals  && orderBy.getTime() >= timeNow.getTime()) {
                         if (!$scope.parentController.activeMeals[dish.key]){
                             dish.status = "order";
+                            dishes.push(dish);
                         } else {
                             dish.status = "ordered";
+                            orderedMeals.push(dish);
                         }
                     }
                 } //end if $scope.parentController.uid
-                dishes.push(dish);
+                
             }
         }); //end forEach iteration of snapshot
 
         $timeout(function() {
             $scope.dishes = dishes;
+            $scope.myMeals = myMeals;
+            $scope.orderedMeals = orderedMeals;
         });
         
     });
@@ -77,7 +86,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
                 });    
             });
         } else {
-            console.log("logged in!");
+            
             
             $scope.dishes.forEach(function(dish){
                 dish.ownerName = dish.owner;
@@ -158,4 +167,11 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
             });
         }
     };
+    
+    $scope.$watch('parentController.currentlyCooking', function(newValue, oldValue){
+        if (newValue){
+            console.log(newValue);    
+        }
+        
+    });
 };

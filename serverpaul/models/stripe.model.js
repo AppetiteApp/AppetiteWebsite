@@ -27,7 +27,14 @@ stripe.createNewStripeAccount= function(uid, dob, firstName, lastName, tosIp, ca
                         year: dob.year
                     },
                     first_name: firstName,
-                    last_name: lastName
+                    last_name: lastName,
+                    address: {
+                        city: "Monteral",
+                        country: "CA",
+                        line1: "4235 Rue St. Urban",
+                        postal_code: "H2W 1V6",
+                        state: "Qc"
+                    }
                 },
                 tos_acceptance: {
                     date: Math.floor(Date.now() / 1000),
@@ -70,7 +77,7 @@ stripe.updateAccountAddress = function(city, addLine1, addLine2, postal, state, 
         if (snapshot.val()){
             var updateAddress = {
                 legal_entity: {
-                    address: {
+                    personal_address: {
                         city: city,
                         line1: addLine1,
                         postal_code: postal,
