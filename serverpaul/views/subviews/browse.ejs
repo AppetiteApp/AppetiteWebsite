@@ -181,7 +181,7 @@
   </div>
 
   <div id="boughtphone">
-    617-333-2345
+    {{dish.phone}}
   </div>
 
 </div>
@@ -191,7 +191,7 @@
   </div>
   <div id="innercontainer" ng-init="selection = { selectedNode:  null }">
   <div id="browseseparate">Browse</div>
-  <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak>
+  <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak ng-if="dish.status==='order'">
         <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
             <div class="dishthumbnail">
               <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
@@ -234,7 +234,7 @@
 
           <div id="itembox">
             <div id="dishtitle">{{dish.dishName}}</div>
-            <div class="chefname">by {{dish.ownerName}}</div></br>
+            <div class="chefname">by {{dish.owner}}</div></br>
             <div class="dishtime"><div id="readyat">Ready at:</div> {{dish.time}}</div>
 
           </div>
