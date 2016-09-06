@@ -1,6 +1,6 @@
 //this will be the parent controller, with things like uid, verifications, etc
 //user
-var parentController = ['$timeout', '$scope', 'sessionService', '$http', function($timeout, $scope, sessionService, $http) {
+var parentController = ['$timeout', '$scope', 'sessionService', 'timeService', '$http', function($timeout, $scope, sessionService, timeService, $http) {
     $scope.parentController = {
         dish: {}
     };
@@ -60,9 +60,6 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
                         lng: snapshot.val().lng,
                         error: undefined
                     };
-                    $scope.parentController.activeMeals = snapshot.val().activeMeals;
-                    $scope.parentController.currentlyCooking = snapshot.val().currentlyCooking;
-                    console.log($scope.parentController);
 
                     if (!snapshot.val().lng){
                         $scope.parentController.dish.location.error = "Please fill out your address before posting a dish!";
@@ -104,5 +101,96 @@ var parentController = ['$timeout', '$scope', 'sessionService', '$http', functio
         });
     };
 
+       $scope.$watch('parentController.user', function(newValue, oldValue){
+        if (newValue){
+            if(newValue.currentlyCooking){
+                //for each, go to firebase & fetch data
+                var meals = [];
+                var timeNow = new Date();
+                newValue.currentlyCooking.forEach(function(mealKey){
+                    
+                    firebase.database().ref('/dish/' + mealKey).on("value", function(snapshot){
+                        if (snapshot.val()){
+                            console.log(snapshot.val());
+                            if (snapshot.val().ownerid === newValue.uid){
+                                var dish = snapshot.val();
+                                dish.key = mealKey;
+                                
+                                var pickupTime = new Date(snapshot.val().time.pickupTime);
+                                var orderBy = new Date(snapshot.val().orderBy);
+                                
+                                
+                                
+                                if (orderBy.getTime() >= timeNow.getTime()){
+                                    dish.editable = true;
+                                } else {
+                                    dish.editable = false;
+                                }
+                                
+                                dish.time.pickupTimeFormatted = timeService.formatDate(pickupTime) + " " + timeService.formatAPMP(pickupTime);
+                                
+                                
+                                dish.orderByFormatted = timeService.formatDate(orderBy) + " " + timeService.formatAPMP(orderBy);
+                                
+                                dish.time.pickupTime = pickupTime;
+                                
+                                
+                                dish.orderBy = orderBy;
+                                
+                                if (snapshot.val().purchases){
+                                    dish.purchases = snapshot.val().purchases;
+                                    
+                                } else {
+                                    dish.purchases = undefined;
+                                }
+                                
+                                meals.push(dish);    
+                            }
+                        }
+                        $timeout(function() {
+                            $scope.parentController.currentlyCooking = meals;
+                        });
+                    }); //end firebase fetch data
+                    
+                });
+                
+            } else {
+                $scope.parentController.currentlyCooking = undefined;
+            }
+            
+            if(newValue.activeMeals){
+                var activeMeals = {};
+                for (var mealKey in newValue.activeMeals){
+                    var data = newValue.activeMeals[mealKey];
+                    firebase.database().ref('/dish/' + mealKey).on("value", function(snapshot){
+                        if (snapshot.val()){
+                            var pickupTime = new Date(snapshot.val().time.pickupTime);
+                            data.price = snapshot.val().price;
+                            data.ownerPic = snapshot.val().ownerPic;
+                            data.owner = snapshot.val().owner;
+                            data.dishName = snapshot.val().dishName;
+                            data.description = snapshot.val().description;
+                            data.key = mealKey;
+                            data.pickupTime = timeService.formatDate(pickupTime) + " " + timeService.formatAPMP(pickupTime);
+                            data.address = snapshot.val().location;
+                            activeMeals[data.key] = data;
+                        }
+                        
+                    });
+                    console.log(mealKey);
+                }
+                $timeout(function() {
+                    $scope.parentController.activeMeals = activeMeals;
+                });
+            } else {
+                $scope.parentController.activeMeals = undefined;
+            }
+            
+        } else {
+            $scope.parentController.activeMeals = undefined;
+            $scope.parentController.currentlyCooking = undefined;
+        }
+        
+    });
     
 }];

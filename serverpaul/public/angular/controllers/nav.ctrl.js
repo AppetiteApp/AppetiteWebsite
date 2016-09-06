@@ -15,7 +15,7 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
             firebase.database().ref('users/' + newValue).on('value', function(snapshot){
                 //if user has phone num, then use that as the dish's phone num
                 //else, error and cannot submit dish
-                console.log("users/" + newValue);
+                
 
                 if (snapshot.val().phone) {
                     $scope.dish.phone = snapshot.val().phone;
