@@ -10,51 +10,38 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
 
     firebase.database().ref('dish/').orderByChild('time/pickupTime').on('value', function(snapshot){
         var dishes = [];
-        var myMeals = [];
-        var orderedMeals = [];
 
         //get dishes in ordered array
         snapshot.forEach(function(child){
             var dish = child.val();
+            var pickupTime = new Date(dish.time.pickupTime);
+            var orderBy = new Date(dish.orderBy);
             
-            
-            if (dish.ownerid === $scope.parentController.uid){
-                
-            }
-            
-            console.log(dish);
-            var pickupTime = new Date(child.val().time.pickupTime);
-            //format time
-            
-            dish.time = timeService.formatDate(pickupTime) + " ~ " + timeService.formatAPMP(pickupTime);
-                //set dish.status according to whether or not it's in activeMeals
-                var orderBy = new Date(dish.orderBy);
-                dish.orderByTime = timeService.formatDate(orderBy) + " " + timeService.formatAPMP(orderBy);
-                dish.key = child.key;
-                dish.ownerName = dish.owner;
-            
-            
-            //will put 'deleted' dishes under an archived list
             if (pickupTime.getTime() >= timeNow.getTime() && orderBy.getTime() >= timeNow.getTime()){
                 
-                
-
-                //if dish is my dish, set owner = 'me'
+            
+                //format dish's pickup & orderBy time
+                dish.time = timeService.formatDate(pickupTime) + " ~ " + timeService.formatAPMP(pickupTime);
+                    //set dish.status according to whether or not it's in activeMeals
+                    dish.orderByTime = timeService.formatDate(orderBy) + " " + timeService.formatAPMP(orderBy);
+                    dish.key = child.key;
+                    
+                //if dish is my dish, ignore
                 //else, give dish default of 'order' unless is in active meals
                 if ($scope.parentController.uid){
 
                     console.log($scope.parentController.activeMeals);
-                    if (!$scope.parentController.activeMeals && orderBy.getTime() >= timeNow.getTime()){
-                        dish.status = 'order';
-                        console.log("no active meals");
-                        dishes.push(dish);
-                        
-                    }else if (!$scope.parentController.activeMeals[dish.key]  && orderBy.getTime() >= timeNow.getTime()) {
-                        console.log("yes active meals");
-                        console.log($scope.parentController.activeMeals);
-                            dish.status = "order";
+                    if ($scope.parentController.uid === dish.key){
+                        dish.status = "cannot order";
+                    } else if ($scope.parentController.activeMeals){
+                        if ($scope.parentController.activeMeals[dish.key]){
+                            dish.status = 'cannot order';
+                        }else {
+                            dish.status = 'order';    
                             dishes.push(dish);
-                         
+                        }
+                    }else {
+                        dish.status = 'order';
                     }
                 } //end if $scope.parentController.uid
                 
@@ -85,11 +72,15 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
                 
                 $timeout(function() {
                     $scope.dishes.forEach(function(dish){
-                        if ($scope.parentController.activeMeals && orderBy.getTime() >= timeNow.getTime()){
+                        if ($scope.parentController.uid === dish.key){
+                            dish.status = "manage";
+                        } else if (!$scope.parentController.activeMeals && orderBy.getTime() >= timeNow.getTime()){
                             dish.status = 'order';
-                        } else if (!$scope.parentController.activeMeals[dish.key]){
+                        } else if (!$scope.parentController.activeMeals[dish.key] && orderBy.getTime() >= timeNow.getTime()){
                             dish.status = 'order';
-                        }    
+                        } else if ($scope.parentController.activeMeals[dish.key] && !$scope.parentController.activeMeals[dish.key].pickedUp){
+                            dish.status = 'ordered';
+                        }
                     });
                 });
                 
