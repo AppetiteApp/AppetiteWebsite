@@ -7,7 +7,7 @@
   <div id="activemealscontainer">
     <div id="boughtseparate">Current Meals</div>
 
-    <div id="repeateditemactive" ng-cloak ng-repeat="dish in currentlyCooking">
+    <div id="repeateditemactive" ng-cloak ng-repeat="dish in parentController.currentlyCooking" ng-if="false">
       <div ng-init="dish.edit=true" id="dishbanneractive" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
 
           <div ng-show="dish.edit" id="dishpriceactive">${{dish.price}}</div>
@@ -100,51 +100,28 @@
 
 
 
-    <div id="dishbannersold">
+    <div id="dishbannersold" ng-repeat="dish in parentController.currentlyCooking" ng-cloak>
         <div class="dishthumbnail">
           <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
         </div>
-        <div id="dishprice">$7</div>
+        <div id="dishprice">${{dish.price}}</div>
 
-        <div id="dishtitle">dish.dishName}}</div>
-        <div class="dishtime">Ready at</div>
-        <div id="ordersnumber">__ ORDER</div>
+        <div id="dishtitle">{{dish.dishName}}</div>
+        <div class="dishtime">Ready at {{dish.orderByTime}}</div>
+        <div id="ordersnumber">{{dish.order}} orders</div>
 
-        <div class="orderedbox">
-          <div class="guestordered">
-              <img class="img-thumbnailsmall" ng-src="{{dish.ownerPic}}"></img>
+        <div class="orderedbox" ng-repeat="(key, buyer) in dish.purchases">
+          <div class="guestordered" ng-if="!buyer.pickedUp && !buyer.reviewedChef">
+              <img class="img-thumbnailsmall" ng-src="{{nothing}}"></img>
 
-              <div id="whoordered">This person ordered</div>
-              <div id="whoorderedphone">617-their-num</div>
+              <div id="whoordered">{{buyer.buyerName}} ordered</div>
+              <div id="whoorderedphone">{{buyer.buyerPhone}}</div>
           </div>
           <div class="orderedtextbox">
-            Code:
-          <input type="textbox" class="orderedtextboxinput"></input>
-          <button class="codesubmit">Submit</button>
-          </div>
-
-          <div class="guestordered">
-              <img class="img-thumbnailsmall" ng-src="{{dish.ownerPic}}"></img>
-
-              <div id="whoordered">This person ordered</div>
-              <div id="whoorderedphone">617-their-num</div>
-          </div>
-          <div class="orderedtextbox">
-            Code:
-          <input type="textbox" class="orderedtextboxinput"></input>
-          <button class="codesubmit">Submit</button>
-          </div>
-
-          <div class="guestordered">
-              <img class="img-thumbnailsmall" ng-src="{{dish.ownerPic}}"></img>
-
-              <div id="whoordered">This person ordered</div>
-              <div id="whoorderedphone">617-their-num</div>
-          </div>
-          <div class="orderedtextbox">
-            Code:
-          <input type="textbox" class="orderedtextboxinput"></input>
-          <button class="codesubmit">Submit</button>
+          <!--  Code:-->
+          <!--<input type="textbox" class="orderedtextboxinput"></input>-->
+          <!--<button class="codesubmit">Submit</button>-->
+          <button class="codesubmit" >Picked Up</button>
           </div>
 
 
@@ -184,11 +161,11 @@
         </button>
   </div>
 
-  <div id="dishbannerbought">
+  <div id="dishbannerbought" ng-if="parentController.activeMeals" ng-repeat="(key, dish) in parentController.activeMeals">
       <div class="dishthumbnail">
         <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
       </div>
-      <div id="dishprice">$7</div>
+      <div id="dishprice">${{dish.price}}</div>
 
     <div id="itembox">
       <div id="dishtitle">linguini</div>
@@ -198,11 +175,11 @@
     </div>
 
   <div id="boughtaddress">
-    Dish address @ something street 02345
+    Dish address @ {{dish.address}}
   </div>
 
   <div id="boughtphone">
-    617-333-2345
+    {{dish.phone}}
   </div>
 
 </div>
@@ -212,7 +189,7 @@
   </div>
   <div id="innercontainer" ng-init="selection = { selectedNode:  null }">
   <div id="browseseparate">Browse</div>
-  <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak>
+  <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak ng-if="dish.status==='order'">
         <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
             <div class="dishthumbnail">
               <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
@@ -255,7 +232,7 @@
 
           <div id="itembox">
             <div id="dishtitle">{{dish.dishName}}</div>
-            <div class="chefname">by {{dish.ownerName}}</div></br>
+            <div class="chefname">by {{dish.owner}}</div></br>
             <div class="dishtime"><div id="readyat">Ready at:</div> {{dish.time}}</div>
 
           </div>

@@ -174,7 +174,7 @@ module.exports = function(app){
             
         }, function(err){
             res.send('invalid request');
-        })
+        });
     }); //end post /api/updateStripePersonalId
 
     

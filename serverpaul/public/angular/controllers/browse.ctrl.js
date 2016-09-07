@@ -1,103 +1,116 @@
 var browseController = function($scope, $log, $location, $http, $timeout, regexService, sessionService, timeService){
 
     $scope.signout = sessionService.signout;
-
+    $scope.myMeals = [];
+    $scope.orderedMeals = [];
     $scope.dishes = [];
+    $scope.mySoldMeals = [];
     $scope.markers = [];
     var timeNow = new Date();
 
     firebase.database().ref('dish/').orderByChild('time/pickupTime').on('value', function(snapshot){
         var dishes = [];
 
-        console.log($scope.parentController);
-
         //get dishes in ordered array
         snapshot.forEach(function(child){
-            var pickupTime = new Date(child.val().time.pickupTime);
-
-            //will put 'deleted' dishes under an archived list
-            if (pickupTime.getTime() - 1000*60*60*3>= timeNow.getTime()){
-                var dish = child.val();
+            var dish = child.val();
+            var pickupTime = new Date(dish.time.pickupTime);
+            var orderBy = new Date(dish.orderBy);
+            
+            if (pickupTime.getTime() >= timeNow.getTime() && orderBy.getTime() >= timeNow.getTime()){
                 
-                console.log(dish);
-                
-                dish.key = child.key;
-                dish.ownerName = dish.owner;
-                dish.popupMessage = "dummy message brought to you by Cheryl!";
-                
-                //format time
-                
+            
+                //format dish's pickup & orderBy time
                 dish.time = timeService.formatDate(pickupTime) + " ~ " + timeService.formatAPMP(pickupTime);
-                //set dish.status according to whether or not it's in activeMeals
-                var orderBy = new Date(dish.orderBy);
-                dish.orderByTime = timeService.formatDate(orderBy) + " " + timeService.formatAPMP(orderBy);
-
-
-
-                //if dish is my dish, set owner = 'me'
+                    //set dish.status according to whether or not it's in activeMeals
+                    dish.orderByTime = timeService.formatDate(orderBy) + " " + timeService.formatAPMP(orderBy);
+                    dish.key = child.key;
+                    
+                //if dish is my dish, ignore
                 //else, give dish default of 'order' unless is in active meals
                 if ($scope.parentController.uid){
-                    console.log($scope.parentController.uid);
 
-                    
-                    console.log(dish.dishName);
-                    console.log(orderBy);
-                    console.log(timeNow);
-                    
-                    
-                    if (dish.ownerid === $scope.parentController.uid){
-                        dish.ownerName = "me";
-                        dish.status = "manage";
-                    } else if (!$scope.parentController.activeMeals && orderBy.getTime() >= timeNow.getTime()){
-                        dish.status = 'order';
-                    }else if ($scope.parentController.activeMeals  && orderBy.getTime() >= timeNow.getTime()) {
-                        if (!$scope.parentController.activeMeals[dish.key]){
-                            dish.status = "order";
-                        } else {
-                            dish.status = "ordered";
+                    console.log($scope.parentController.activeMeals);
+                    if ($scope.parentController.uid === dish.key){
+                        dish.status = "cannot order";
+                    } else if ($scope.parentController.activeMeals){
+                        if ($scope.parentController.activeMeals[dish.key]){
+                            dish.status = 'cannot order';
+                        }else {
+                            dish.status = 'order';    
+                            dishes.push(dish);
                         }
+                    }else {
+                        dish.status = 'order';
                     }
                 } //end if $scope.parentController.uid
-                dishes.push(dish);
+                
             }
         }); //end forEach iteration of snapshot
 
         $timeout(function() {
             $scope.dishes = dishes;
+            console.log($scope.dishes);
         });
         
     });
 
     //watch the $scope.parentController.uid
     $scope.$watchGroup(['parentController.uid', 'parentController.user'], function(newValues, oldValues){
-        if (!$scope.parentController.uid){
+        if (!$scope.parentController.uid && $scope.dishes){
             $timeout(function(){
                 $scope.dishes.forEach(function(dish){
                     dish.ownerName = dish.owner;
                 });    
             });
-        } else {
-            console.log("logged in!");
+        } else if ($scope.dishes){
+            
             
             $scope.dishes.forEach(function(dish){
                 dish.ownerName = dish.owner;
                 var orderBy = new Date(dish.orderBy);
-                if (dish.ownerid === $scope.parentController.uid){
-                    dish.ownerName = "me";
-                    dish.status = "manage";
-                } else if ($scope.parentController.activeMeals && orderBy.getTime() - timeNow.getTime() >= 0){
-                    if ($scope.parentController.activeMeals[dish.key]){
-                        dish.status = "ordered";
-                    }
-                } else {
-                    dish.status = "order";
-                }
+                
+                $timeout(function() {
+                    $scope.dishes.forEach(function(dish){
+                        if ($scope.parentController.uid === dish.key){
+                            dish.status = "manage";
+                        } else if (!$scope.parentController.activeMeals && orderBy.getTime() >= timeNow.getTime()){
+                            dish.status = 'order';
+                        } else if (!$scope.parentController.activeMeals[dish.key] && orderBy.getTime() >= timeNow.getTime()){
+                            dish.status = 'order';
+                        } else if ($scope.parentController.activeMeals[dish.key] && !$scope.parentController.activeMeals[dish.key].pickedUp){
+                            dish.status = 'ordered';
+                        }
+                    });
+                });
+                
             });
 
+        } else {
+    
+            $scope.dishes = undefined;
         }
     });
     
-    //watch dish.status 
+    //watch parentController.activeMeals
+    $scope.$watch('parentController', function(newValue, oldValue){
+        console.log($scope.parentController.activeMeals);
+        if (newValue.activeMeals && $scope.parentController.uid){
+            //go through $scope.dishes and remove the ones that the person has ordered
+            var activeMealsKeys = Object.keys(newValue.activeMeals);
+            $scope.dishes.forEach(function(dish) {
+                if (activeMealsKeys.indexOf(dish.key) !== -1){
+                    var index = activeMealsKeys.indexOf(dish.key);
+                    $timeout(function() {
+                        $scope.dishes.remove(index, 1);    
+                    });
+                    
+                }    
+            });
+        } else {
+            
+        }
+    });
 
     //depending on orderBy, order the dish
     $scope.order = function(dish){
@@ -158,4 +171,5 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
             });
         }
     };
+    
 };
