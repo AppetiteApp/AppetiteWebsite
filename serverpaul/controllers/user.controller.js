@@ -15,10 +15,10 @@ module.exports = function(app) {
 			console.log("No session");
 			return;
 		}
-		
+
 		var update = {};
 		var errors = [];
-		
+
 		if (!req.body.zip && !req.body.lat && !req.body.lng && !req.body.phone && !req.body.location && !req.body.firstName && !req.body.lastName && !req.body.description) {
 			res.send({
 				errorType: 'content',
@@ -26,16 +26,16 @@ module.exports = function(app) {
 			});
 			return;
 		}
-		
+
 		if (req.body.description) {
 		    update.description = req.body.description;
 		}
-		
-		//need to add a zipRegex	
+
+		//need to add a zipRegex
 		if (req.body.zip) {
 			update.zip = req.body.zip;
 		}
-		
+
 		if (req.body.firstName) {
 			if (!globals.individualNameRegex.test(req.body.fistName)){
 				errors.push({
@@ -46,7 +46,7 @@ module.exports = function(app) {
 				update.firstName = req.body.firstName;
 			}
 		}
-		
+
 		if (req.body.lastName) {
 			if (!globals.individualNameRegex.test(req.body.lastName)){
 				errors.push({
@@ -57,8 +57,8 @@ module.exports = function(app) {
 				update.lastName = req.body.lastName;
 			}
 		}
-		
-		//if there is lat and lng in the update object, 
+
+		//if there is lat and lng in the update object,
 			//check regex, then either push an error or an update
 		//if not lat/lng present, do nothing
 		if (req.body.lat & req.body.lng) {
@@ -71,7 +71,7 @@ module.exports = function(app) {
 			update.lat = req.body.lat;
 			update.lng = req.body.lng;
 		}
-		
+
 		//phone updates
 		if (req.body.phone) {
 			if (!globals.phoneRegex.test(req.body.phone)){
@@ -81,9 +81,9 @@ module.exports = function(app) {
 				});
 			} else {
 				update.phone = req.body.phone;
-			}	
+			}
 		}
-		
+
 		//address updates
 		if (req.body.location) {
 			//if (!globals.addressRegex.test(req.body.location)){
@@ -93,11 +93,11 @@ module.exports = function(app) {
 			//	});
 			//} else {
 				update.location = req.body.location;
-			//}	
+			//}
 		}
 		console.log("updates");
 		console.log(update);
-		
+
 		//updates stuff and sends info regarding success and errors in to browser
 		if (errors.length == 0 ) {
 			global.userRef.child(req.session.uid).update(update);
@@ -119,13 +119,13 @@ module.exports = function(app) {
 				error: errors
 			});
 		}
-		
+
 	});
 
 	app.post('/api/newaccount', function(req, res, next){
         console.log("Creating new user with email", req.body.signupemail, "at", Date());
-        	 
-            
+
+
             var photos = ["https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat2.jpg?alt=media&token=c2f11652-534e-408b-9bad-b3b16b18132a", "https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat3.jpg?alt=media&token=17ebcf03-93e9-4659-97f8-de8fc723d793", "https://firebasestorage.googleapis.com/v0/b/angular-project-31b5c.appspot.com/o/default%2Fchefhat4.jpg?alt=media&token=241c91ae-fc59-4cc3-bcd9-a19ec11b2247"];
         var randInt = Math.floor(Math.random(3));
         //console.log(randInt);
@@ -142,7 +142,7 @@ module.exports = function(app) {
                 phone: req.body.phone,
                 location: "Please update your address by clicking the edit icon!",
                 number: idNum
-            });      
+            });
             idNum = parseInt(idNum, 10);
             console.log(idNum);
             //generate idNum string
@@ -165,13 +165,13 @@ module.exports = function(app) {
             console.log(err);
             res.send("invalid request");
         });
-            
-        
-        
-        
-        
+
+
+
+
+
 	});
-	
+
 	app.post('/feedback', function(req, res){
 	    console.log(req.body);
 	    var newCommentRef = global.commentRef.push();
@@ -194,9 +194,9 @@ module.exports = function(app) {
 	    res.send({
 	        message: "Thank you for your feedback!"
 	    });
-	    
+
 	});
-	
+
 	app.post('/api/profileImg', function(req, res){
 	    console.log(req.body);
 	    if (!req.session){
@@ -206,16 +206,16 @@ module.exports = function(app) {
 	        res.send("invalid request");
 	        return;
 	    }
-	    
+
 	    //update the user's photoUrl
 	    global.userRef.child(req.session.uid).update({
 	        photoUrl: req.body.photoUrl
 	    });
-	    
+
 	    //update the user's dishes photoUrl
 	    global.userRef.child(req.session.uid).child('currentlyCooking').once("value", function(snapshot){
 	        //snapshot.val() is a list of meals that the user has made
-	        //NOTE TO SELF: maybe create a local copy of profile pic using 
+	        //NOTE TO SELF: maybe create a local copy of profile pic using
 	        console.log(snapshot.val());
 	        if (snapshot.val()){
 	            var dishes = snapshot.val();
@@ -225,12 +225,12 @@ module.exports = function(app) {
 	                });
 	            });
 	        }
-	        
+
 	    });
 	    res.send("success");
 	});
-	
-	
+
+
 	//upon login, authenticates and starts express-session
 	app.post('/api/customTokenAuth', function(req, res){
 	    if (!req.body.token){
@@ -241,7 +241,7 @@ module.exports = function(app) {
             var uid = decodedToken["user_id"];
             console.log(decodedToken);
             console.log("uid: " + uid);
-            
+
             if (!req.session.uid){
                 req.session.uid = uid;
                 req.session.emailVerified = decodedToken["email_verified"];
@@ -250,16 +250,17 @@ module.exports = function(app) {
                 res.send("success");
             } else if (req.session.uid === uid){
                 res.send("cookie-in-place");
+								//req.session.regenerate(function(err){});
             }
-            
-            
 
-            
+
+
+
         }).catch(function(error) {
             // Handle error
         });
 	});
-	
+
 	//remove express-session
 	app.post('/api/signout', function(req, res) {
 	    req.session.destroy(function(err){
@@ -271,7 +272,7 @@ module.exports = function(app) {
 	        }
 	        console.log(req.session);
 	    });
-	    
+
 	});
-	
+
 };

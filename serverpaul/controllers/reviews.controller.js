@@ -67,13 +67,17 @@ module.exports = function(app){
                 }
             }
             
+            var pastMeals = {};
+            if (snapshot.val().pastMeals) pastMeals = snapshot.val().pastMeals;
+            
+            
             //verify ratings are integers between 0 and 5
             if (verifyRating(req.body.rating) === -1){
                 errors.push({
                     errorType: "rating",
                     errorMessage: "ratings not valid numbers"
                 });
-            }    
+            }
             
             //if there is a review, verify that it's valid
             if (req.body.review){
@@ -164,12 +168,22 @@ module.exports = function(app){
                     reviewsForChef: reviewsForChef
                 });
                 
+                //remove the dishid from activeMeals and move it to a new node called pastMeals
+                var pastMeal = activeMeals[req.body.dishid];
+                var dishid = req.body.dishid;
+                pastMeal.reviewedChef = true;
+                pastMeal.reviewForChef = newChefReviewKey;
+                
+                pastMeals[dishid] = pastMeal;
+                
+                
+                
                 
                 //update the dish listings to reflect that person has reviewed the chef
-                global.userRef.child(req.session.uid).child("activeMeals").child(req.body.dishid).update({
-                    reviewedChef: true,
-                    reviewForChef: newChefReviewKey
-                });
+                global.userRef.child(req.session.uid).update(
+                    {pastMeals});
+                
+                global.userRef.child(req.session.uid).child("activeMeals").child(req.body.dishid).remove();
                 
                 purchases[req.session.uid].reviewedChef = true;
                 purchases[req.session.uid].reviewForChef = newChefReviewKey;
@@ -223,7 +237,7 @@ module.exports = function(app){
             });
         }
         
-        //verify that owner has cooked dish and the buyer has bought the dish
+        //verify that owner has cooked dish 
         global.userRef.child(req.session.uid).once("value").then(function(snapshot){
             //if snapshot.val() isn't null
             
@@ -254,7 +268,7 @@ module.exports = function(app){
             var reviewsForBuyer = [];
             if (snapshot.val().reviewsForBuyer) reviewsForBuyer = snapshot.val().reviewsForBuyer;
             
-            //verify that buyer bought the dish
+            //note that buyer doesn't necessarily have the dishid under activeMeals, because once buyer reviews chef, it moves to pastMeals
             global.dishRef.child(req.body.dishid).once("value").then(function(snapshot){
                 var purchases;
                 if (!snapshot.val()){
@@ -340,10 +354,20 @@ module.exports = function(app){
                         });
                         
                         var activeMeals = snapshot.val().activeMeals;
-                        activeMeals[req.body.dishid].reviewedBuyer = true;
-                        activeMeals[req.body.dishid].reviewForBuyer = newBuyerReviewKey;
-                        global.userRef.child(req.body.buyerid).child("activeMeals").update(activeMeals);
-                        res.send("success");
+                        var pastMeals = snapshot.val().pastMeals;
+                        //if buyer hasn't reviewed chef yet, meal still in buyer's activeMeals
+                        if (activeMeals[req.body.dishid]){
+                            activeMeals[req.body.dishid].reviewedBuyer = true;
+                            activeMeals[req.body.dishid].reviewForBuyer = newBuyerReviewKey;
+                            global.userRef.child(req.body.buyerid).child("activeMeals").update(activeMeals);
+                            res.send("success");    
+                        } else if (pastMeals[req.body.dishid]){
+                            pastMeals[req.body.dishid].reviewedBuyer = true;
+                            pastMeals[req.body.dishid].reviewForBuyer = newBuyerReviewKey;
+                            global.userRef.child(req.body.buyerid).child('pastMeals').update(pastMeals);
+                            res.send("success");
+                        }
+                        
                         
                     }    
                 }, function(err){

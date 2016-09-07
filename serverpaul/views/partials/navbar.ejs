@@ -23,7 +23,7 @@
   <a href="#/aboutus"><li class="navelements" id="aboutmargin">About Us</li></a>
   <a href="#/home"><li class="navelements">Home</li></a>
   <div class="signoutdrop">
-    <a href="#/account"><li class="navelements" ng-show="parentController.uid" id="profileid">Profile</li></a>
+  <a href="#/account"><li class="navelements" ng-show="parentController.uid" id="profileid">Profile</li></a>
     <!-- <div class="signoutdropbutton">
       <button href="#/home" id="logout" ng-click="signout()">Sign Out</button>
 
@@ -113,15 +113,18 @@
                 <label class="cardlabels">Postal Code: </label><input type="text" ng-model="stripeAddress.postal"><br>
               </div>
               <div id="DOBstripe">
-                <label class="cardlabels">Date of Birth </label>
-                <input id="stripeday"placeholder="DD"type="number" ng-model="accountInfo.day" min="1" max="31">
-
-              <input id="stripemonth" placeholder="MM" type="number" ng-model="accountInfo.month" min="1" max="12">
-
+                <label class="cardlabels" id="doblabel">Date of Birth </label>
+            <div id="dobbox">
+              <input id="stripeday"placeholder="DD"type="number" ng-model="accountInfo.day" min="1" max="31"> /
+              <input id="stripemonth" placeholder="MM" type="number" ng-model="accountInfo.month" min="1" max="12"> /
               <input id="stripeyear" placeholder="YYYY" type="number" ng-model="accountInfo.year" min="1900" max="2016"><br>
             </div>
+            </div>
+
+            <div id="agreeterms">
               <input id="termsagree" type="checkbox" ng-model="accountInfo.tos">
               <label id="Iagree" class="cardlabels">I agree to the <a href="#/terms">Terms of Service</a></label>
+            </div>
 
 
               <button id="createstripebutton" ng-click="createStripeAccount(accountInfo)">Create Stripe Account</button><br>
