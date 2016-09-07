@@ -522,11 +522,10 @@
   border: 1px solid orange;
   background-color: white;
   color: orange;
-  font-weight: bold;
   font-size: 16px;
   border-radius: 5px;
   margin-left: 100px;
-  margin-right: 5px;
+  margin-right: 10px;
   cursor: pointer;
   height: 30px;
 
@@ -550,12 +549,10 @@
 .reviewboxprofile{
   width: calc(100% - 20px);
   height: 75px;
-  margin: 10px;
   margin-left:5px;
   border: 1px solid orange;
-  border-radius: 5px;
+  border-radius: 0 0 5px 5px;
   outline: none;
-  padding-left:65px;
   margin-bottom: 5px;
   margin-right: 5px;
 }
@@ -580,16 +577,20 @@
 #reviewlabel{
     height: auto;
     margin-left: 5px;
-    margin-right: 5px;
+    margin-right: 10px;
     margin-top: 25px;
     outline: none;
-    margin-bottom: 5px;
+    margin-bottom: 0;
   padding:5px;
   font-family: 'Raleway', sans-serif;
-  color: white;
-  background-color: orange;
-  border-radius: 5px 5px 0 0px;
-  width: calc(100% - 20px);
+  color: orange;
+  background-color: white;
+  border-radius: 5px 5px 0 0;
+  width: calc(100% - 26px);
+  border:1px solid orange;
+  text-align: center;
+  font-size: 16px;
+  border-bottom: none;
 }
 
 
@@ -633,6 +634,7 @@
   background-color: white;
   border-radius: 0 10px 10px 0px;
   text-align: center;
+  margin-top: 5px;
 }
 
 .order {
