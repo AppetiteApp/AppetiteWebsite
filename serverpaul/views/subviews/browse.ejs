@@ -172,19 +172,40 @@
     <div id="itembox">
       <div id="dishtitle">{{dish.dishName}}</div>
       <div class="chefname">by {{dish.owner}}</div></br>
-      <div class="dishtime">Ready {{dish.pickupTime}}</div>
+      <div class="dishtime" ng-if="!dish.pickedUp">Ready {{dish.pickupTime}}</div>
       <!--<div id="boughtcode"><div id="codelabel">CODE:</div> H32-D34</div>-->
+      <button ng-click="parentController.pickedUp(dish)" ng-if="!dish.pickedUp">Picked Up</button>
     </div>
 
   <div id="boughtaddress">
     Dish address @ {{dish.address}}
   </div>
 
-  <div id="boughtphone">
+   <div id="boughtphone">
     {{dish.phone}}
-  </div>
+   </div>
+   <div ng-if="dish.pickedUp">
+   <div id="reviewbutton" >
+      <div id="ratelabel">Rate:</div>
+        <div id="ratebox">
+          <fieldset class="rating" id="totalratingfield">
+              <input type="radio" id="star5" name="rating" value="5" /><label for="star5" ng-click="dish.review.rating=5">5 stars</label>
+              <input type="radio" id="star4" name="rating" value="4" /><label for="star4"  ng-click="dish.review.rating=4">4 stars</label>
+              <input type="radio" id="star3" name="rating" value="3" /><label for="star3" ng-click="dish.review.rating=3">3 stars</label>
+              <input type="radio" id="star2" name="rating" value="2" /><label for="star2" ng-click="dish.review.rating=2">2 stars</label>
+              <input type="radio" id="star1" name="rating" value="1" /><label for="star1" ng-click="dish.review.rating=1">1 star</label>
+          </fieldset>
+        </div>
+      </div>
 
-</div>
+      <div id="reviewlabel">Review</div>
+
+      <textarea class="reviewboxprofile" ng-model="dish.review.review" ></textarea>
+      
+      <button id="submitreviewprofile" ng-click="parentController.submitChefReview(dish)">Submit</button>
+
+    </div>
+    </div>
 
 
 
@@ -216,14 +237,8 @@
                     <button id="orderconfirm" ng-click="order(dish)">Confirm</button>
                     <button id="ordercancel">Cancel</button>
                   </div>
-                  <!-- <div ng-repeat="purchase in dish.purchases track by $index" ng-if="dish.purchases && parentController.uid===dish.ownerid">
-                      {{purchase.buyerName}} has ordered your dish!<br>
-                  </div>
-
-                  <button ng-if="dish.status==='manage'">See more</button>
-                  <button ng-click="cancelOrder(dish)" ng-if="dish.status==='ordered'">Cancel Order</button>
-                  <button class="orderconfirm" ng-click="order(dish)" ng-if="dish.status==='order'">Confirm</button>
-                  <button class="ordercancel" ng-click="selection.selectedNode = null" ng-if="dish.status==='order'">Cancel</button> -->
+                  
+                      {{purchase.buyerName}}
 
               </div>
 

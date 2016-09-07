@@ -314,10 +314,12 @@ module.exports = function(app){
             res.send("invalid request");
             return;
         } else if (!req.session.uid || !req.body.dishid){
+            console.log(req.body);
+            console.log(req.session);
             res.send({
                 errors: [{
                     errorType: "api",
-                    errorMessage: "invalid user of api"
+                    errorMessage: "invalid user o api"
                 }]
             });
             return;

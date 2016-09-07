@@ -193,4 +193,50 @@ var parentController = ['$timeout', '$scope', 'sessionService', 'timeService', '
         
     });
     
+    $scope.parentController.pickedUp = function(dish){
+        if ($scope.parentController.uid){
+            $http.post('/api/pickedUp', {
+                dishid: dish.key
+            }).then(function(res){
+                console.log(res);
+                if (res.data === 'success'){
+                    $timeout(function() {
+                        dish.pickedUp = true;
+                    });
+                    
+                }
+            }, function(err){
+                console.log(err);
+            });
+        }    
+    };
+    
+    $scope.parentController.submitChefReview = function(meal){
+        if (meal.review.rating){
+            var rating = parseInt(meal.review.rating, 10);
+            if (rating > 0 && rating <= 5){
+                var reviewObj = {
+                    rating: rating
+                };
+                
+                reviewObj.dishid = meal.key;
+                if (meal.review.review) reviewObj.review = meal.review.review;
+                
+                $http.post('/api/reviewChef', reviewObj).then(function(res) {
+                    if (res.data=="success"){
+                        $timeout(function(){
+                            meal.systemMessage = "Thank you for reviewing " + meal.ownerName + "!";
+                            meal.reviewedChef = true;
+                        });
+                        $timeout(function(){
+                            meal.systemMessage = undefined;
+                        }, 10000);
+                    }
+                }, function(err){
+                    console.log(err); 
+                });
+            } // end if rating in range
+        }
+    };
+    
 }];
