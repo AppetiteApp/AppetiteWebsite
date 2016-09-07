@@ -26,11 +26,11 @@ var parentController = ['$timeout', '$scope', 'sessionService', 'timeService', '
                 // ...
             }).catch(function(error) {
                 console.log(error);
-            });    
+            });
             }
         }
-        
-        
+
+
         if (user) {
 
 
@@ -46,7 +46,7 @@ var parentController = ['$timeout', '$scope', 'sessionService', 'timeService', '
                 $scope.dish.phone = user.phone;
                 $scope.parentController.uid = user.uid;
             });
-     
+
 
             //retrieve person's info, autoreferesh if anything changes
             firebase.database().ref('users/' + user.uid).on('value', function(snapshot){
@@ -89,9 +89,9 @@ var parentController = ['$timeout', '$scope', 'sessionService', 'timeService', '
         }
     }); //end auth function
 
-    var startSession = function(token, user){
+    var startSession = function(token){
         $http.post('/api/customTokenAuth', {token: token}).then(function(res){
-            
+          console.log(res);
             if (res.data==="success"){
                 $scope.parentController.hasSession = true;
                 //document.location.reload(true);
@@ -111,56 +111,56 @@ var parentController = ['$timeout', '$scope', 'sessionService', 'timeService', '
                 var meals = [];
                 var timeNow = new Date();
                 newValue.currentlyCooking.forEach(function(mealKey){
-                    
+
                     firebase.database().ref('/dish/' + mealKey).on("value", function(snapshot){
                         if (snapshot.val()){
                             console.log(snapshot.val());
                             if (snapshot.val().ownerid === newValue.uid){
                                 var dish = snapshot.val();
                                 dish.key = mealKey;
-                                
+
                                 var pickupTime = new Date(snapshot.val().time.pickupTime);
                                 var orderBy = new Date(snapshot.val().orderBy);
-                                
-                                
-                                
+
+
+
                                 if (orderBy.getTime() >= timeNow.getTime()){
                                     dish.editable = true;
                                 } else {
                                     dish.editable = false;
                                 }
-                                
+
                                 dish.time.pickupTimeFormatted = timeService.formatDate(pickupTime) + " " + timeService.formatAPMP(pickupTime);
-                                
-                                
+
+
                                 dish.orderByFormatted = timeService.formatDate(orderBy) + " " + timeService.formatAPMP(orderBy);
-                                
+
                                 dish.time.pickupTime = pickupTime;
-                                
-                                
+
+
                                 dish.orderBy = orderBy;
-                                
+
                                 if (snapshot.val().purchases){
                                     dish.purchases = snapshot.val().purchases;
-                                    
+
                                 } else {
                                     dish.purchases = undefined;
                                 }
-                                
-                                meals.push(dish);    
+
+                                meals.push(dish);
                             }
                         }
                         $timeout(function() {
                             $scope.parentController.currentlyCooking = meals;
                         });
                     }); //end firebase fetch data
-                    
+
                 });
-                
+
             } else {
                 $scope.parentController.currentlyCooking = undefined;
             }
-            
+
             if(newValue.activeMeals){
                 var activeMeals = {};
                 for (var mealKey in newValue.activeMeals){
@@ -186,7 +186,7 @@ var parentController = ['$timeout', '$scope', 'sessionService', 'timeService', '
                             
                             activeMeals[data.key] = data;
                         }
-                        
+
                     });
                     console.log(mealKey);
                 }
@@ -196,14 +196,14 @@ var parentController = ['$timeout', '$scope', 'sessionService', 'timeService', '
             } else {
                 $scope.parentController.activeMeals = undefined;
             }
-            
+
         } else {
             $scope.parentController.activeMeals = undefined;
             $scope.parentController.currentlyCooking = undefined;
         }
-        
+
     });
-    
+
     $scope.parentController.pickedUp = function(dish){
         if ($scope.parentController.uid){
             $http.post('/api/pickedUp', {
@@ -214,14 +214,14 @@ var parentController = ['$timeout', '$scope', 'sessionService', 'timeService', '
                     $timeout(function() {
                         dish.pickedUp = true;
                     });
-                    
+
                 }
             }, function(err){
                 console.log(err);
             });
-        }    
+        }
     };
-    
+
     $scope.parentController.submitChefReview = function(meal){
         if (meal.review.rating){
             var rating = parseInt(meal.review.rating, 10);
@@ -229,10 +229,10 @@ var parentController = ['$timeout', '$scope', 'sessionService', 'timeService', '
                 var reviewObj = {
                     rating: rating
                 };
-                
+
                 reviewObj.dishid = meal.key;
                 if (meal.review.review) reviewObj.review = meal.review.review;
-                
+
                 $http.post('/api/reviewChef', reviewObj).then(function(res) {
                     if (res.data=="success"){
                         $timeout(function(){
@@ -244,10 +244,10 @@ var parentController = ['$timeout', '$scope', 'sessionService', 'timeService', '
                         }, 10000);
                     }
                 }, function(err){
-                    console.log(err); 
+                    console.log(err);
                 });
             } // end if rating in range
         }
     };
-    
+
 }];
