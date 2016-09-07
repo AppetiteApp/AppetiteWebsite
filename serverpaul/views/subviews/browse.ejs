@@ -19,9 +19,8 @@
 
             </br>
             </br>
-
-
-            </br></br>
+            </br>
+            </br>
           </div>
 
           <!--<div class="chefnameactive">My Dish</div>-->
@@ -128,39 +127,6 @@
         </div>
   </div>
 
-
-
-
-    <div id="dishbannerbought">
-        <div class="dishthumbnail">
-          <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
-        </div>
-        <div id="dishprice">$7</div>
-
-        <div id="dishtitle">dish.dishName}}</div>
-        <div class="chefname">by dish.ownerName}}</div></br>
-
-      <div id="reviewbutton">
-        <div id="ratelabel">Rate:</div>
-            <fieldset class="rating" id="totalratingfield">
-              <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
-              <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
-              <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3 stars</label>
-              <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
-              <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
-            </fieldset>
-        </div>
-
-        <div id="reviewlabel">
-          Please write a Review!
-        </div>
-
-        <textarea class="reviewboxprofile">
-        </textarea>
-        <button id="submitreviewprofile">Submit
-        </button>
-  </div>
-
   <div id="dishbannerbought" ng-if="parentController.activeMeals" ng-repeat="(key, dish) in parentController.activeMeals">
       <div class="dishthumbnail">
         <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
@@ -233,8 +199,8 @@
                   <div class="confirmdeats"><label class="confirmdeatslabel">Time:</label>{{dish.time}}</div>
                   <div id="areyousure">Are you sure you want to buy this dish?</div>
                   <div id="confirmbuttons">
-                    <button id="orderconfirm" ng-click="order(dish)">Confirm</button>
-                    <button id="ordercancel">Cancel</button>
+                    <button id="orderconfirm" ng-click="order(dish); selection.selectedNode = null">Confirm</button>
+                    <button id="ordercancel" ng-click="order(dish); selection.selectedNode = null">Cancel</button>
                   </div>
 
                       {{purchase.buyerName}}
