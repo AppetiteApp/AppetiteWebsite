@@ -165,14 +165,22 @@ var parentController = ['$timeout', '$scope', 'sessionService', 'timeService', '
                     firebase.database().ref('/dish/' + mealKey).on("value", function(snapshot){
                         if (snapshot.val()){
                             var pickupTime = new Date(snapshot.val().time.pickupTime);
+                            var orderByTime = new Date(snapshot.val().orderBy);
                             data.price = snapshot.val().price;
                             data.ownerPic = snapshot.val().ownerPic;
                             data.owner = snapshot.val().owner;
                             data.dishName = snapshot.val().dishName;
                             data.description = snapshot.val().description;
                             data.key = mealKey;
-                            data.pickupTime = timeService.formatDate(pickupTime) + " " + timeService.formatAPMP(pickupTime);
+                            data.formattedPickupTime = timeService.formatDate(pickupTime) + " " + timeService.formatAPMP(pickupTime);
+                            data.formattedOrderByTime = timeService.formatDate(orderByTime) + " " + timeService.formatAPMP(orderByTime);
                             data.address = snapshot.val().location;
+                            if (!data.purchases){
+                                data.order = 0;
+                            } else {
+                                data.order = Object.keys(data.purchases).length;
+                            }
+                            
                             activeMeals[data.key] = data;
                         }
                         

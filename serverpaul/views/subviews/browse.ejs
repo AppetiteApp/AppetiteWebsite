@@ -31,7 +31,7 @@
 
 
           <div ng-show="!dish.edit" ng-if="dish.editable" id="logisticssubmitactive">
-              <label>Order By:</label>
+              <label>Order By: </label>
               <input class="logistictextbox" id="submitdate" type="date" ng-model="dish.orderBy" />
              <input class="logistictextbox" type="time" ng-model="dish.orderBy" step="600"/><br>
              <label id="fromlabelactive">Ready at:</label>
@@ -39,8 +39,8 @@
              <input class="logistictextbox" type="time" ng-model="dish.time.pickupTime" step="600"/>
           </div>
           <div id="profilesubmitteddate" ng-show="dish.edit">
-             Order By: {{dish.orderByFormatted}}<br>
-             Ready Around: {{dish.time.pickupTimeFormatted}}
+             Order By: {{dish.formattedOrderByTime}}<br>
+             Ready Around: {{dish.formattedPickupTime}}
           </div>
 
           <div ng-show="!dish.edit" ng-if="dish.editable" class="activeaddresssearch">
@@ -107,7 +107,7 @@
         <div id="dishprice">${{dish.price}}</div>
 
         <div id="dishtitle">{{dish.dishName}}</div>
-        <div class="dishtime">Ready at {{dish.orderByTime}}</div>
+        <div class="dishtime">Ready at {{dish.formattedOrderByTime}}</div>
         <div id="ordersnumber">{{dish.order}} orders</div>
 
         <div class="orderedbox" ng-repeat="(key, buyer) in dish.purchases">
