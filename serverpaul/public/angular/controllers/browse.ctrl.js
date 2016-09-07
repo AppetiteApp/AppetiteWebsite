@@ -34,7 +34,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
 
                     console.log($scope.parentController.activeMeals);
                     if ($scope.parentController.uid === dish.ownerid){
-                        dish.status = "cannot order";
+                        dish.status = "manage";
                     } else if ($scope.parentController.activeMeals){
                         if ($scope.parentController.activeMeals[dish.key]){
                             dish.status = 'cannot order';
@@ -83,7 +83,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
                 
                 $timeout(function() {
                     $scope.dishes.forEach(function(dish){
-                        if ($scope.parentController.uid === dish.key){
+                        if ($scope.parentController.uid === dish.ownerid){
                             dish.status = "manage";
                         } else if (!$scope.parentController.activeMeals && orderBy.getTime() >= timeNow.getTime()){
                             dish.status = 'order';
@@ -103,25 +103,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
         }
     });
     
-    //watch parentController.activeMeals
-    $scope.$watch('parentController', function(newValue, oldValue){
-        console.log($scope.parentController.activeMeals);
-        if (newValue.activeMeals && $scope.parentController.uid){
-            //go through $scope.dishes and remove the ones that the person has ordered
-            var activeMealsKeys = Object.keys(newValue.activeMeals);
-            $scope.dishes.forEach(function(dish) {
-                if (activeMealsKeys.indexOf(dish.key) !== -1){
-                    var index = activeMealsKeys.indexOf(dish.key);
-                    $timeout(function() {
-                        $scope.dishes.remove(index, 1);    
-                    });
-                    
-                }    
-            });
-        } else {
-            
-        }
-    });
+
 
     //depending on orderBy, order the dish
     $scope.order = function(dish){
