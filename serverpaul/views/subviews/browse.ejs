@@ -121,7 +121,7 @@
           <!--  Code:-->
           <!--<input type="textbox" class="orderedtextboxinput"></input>-->
           <!--<button class="codesubmit">Submit</button>-->
-          <button class="codesubmit" >Picked Up</button>
+          <button class="codesubmit">Picked Up</button>
           </div>
 
 
@@ -142,7 +142,6 @@
 
       <div id="reviewbutton">
         <div id="ratelabel">Rate:</div>
-            <div id="ratebox">
             <fieldset class="rating" id="totalratingfield">
               <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5 stars</label>
               <input type="radio" id="star4" name="rating" value="4" /><label for="star4" >4 stars</label>
@@ -150,11 +149,10 @@
               <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2 stars</label>
               <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1 star</label>
             </fieldset>
-          </div>
         </div>
 
         <div id="reviewlabel">
-          Review
+          Please write a Review!
         </div>
 
         <textarea class="reviewboxprofile">
@@ -175,10 +173,11 @@
       <div class="dishtime" ng-if="!dish.pickedUp">Ready {{dish.pickupTime}}</div>
       <!--<div id="boughtcode"><div id="codelabel">CODE:</div> H32-D34</div>-->
       <button ng-click="parentController.pickedUp(dish)" ng-if="!dish.pickedUp">Picked Up</button>
+
     </div>
 
   <div id="boughtaddress">
-    Dish address @ {{dish.address}}
+    {{dish.address}}
   </div>
 
    <div id="boughtphone">

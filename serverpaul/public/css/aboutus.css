@@ -1,3 +1,117 @@
+.faqheader {
+  text-align: center;
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:60px;
+  padding-bottom:50px;
+  color:black;
+  font-family: 'Raleway';
+  font-size:25px;
+  vertical-align: top;
+  background-color:white;
+  margin-top:0;
+  margin-bottom:0;
+}
+
+.faqsubhead {
+  text-align: center;;
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:0px;
+  padding-bottom:20px;
+  color:#75d0f4;
+  font-family: 'Raleway';
+  font-size:20px;
+  vertical-align: top;
+  background-color:white;
+  margin-top:0;
+  margin-bottom:0;
+  font-weight:bold;
+}
+
+.faqques {
+  text-align: left;
+  padding-left:40px;
+  padding-right:40px;
+  padding-top:20px;
+  padding-bottom:5px;
+  color:#1f1f1f;
+  font-family: 'Raleway';
+  font-size:18px;
+  vertical-align: top;
+  background-color:white;
+  margin-top:0;
+  margin-bottom:0;
+}
+
+.faqans {
+  text-align: left;
+  padding-left:50px;
+  padding-right:40px;
+  padding-top:0px;
+  padding-bottom:0px;
+  color:#7f7f7f;
+  font-family: 'Raleway';
+  font-size:15px;
+  vertical-align: middle;
+  background-color:white;
+  margin-top:0;
+  margin-bottom:0;
+}
+
+.faqgen {
+  display:inline-block;
+  vertical-align: top;
+  width:33%;
+  min-width: 200px;
+  text-align: center;
+  height:auto;
+}
+
+.faqcook {
+  display:inline-block;
+  vertical-align: top;
+  width:33%;
+  min-width: 200px;
+  text-align:center;
+  height:auto;
+
+}
+
+.faqbuy {
+  display:inline-block;
+  vertical-align: top;
+  width:33%;
+  min-width: 200px;
+  text-align:center;
+  height:auto;
+}
+
+.faqcolumn {
+  display: inline-block;
+  float:inherit;
+  padding-top: 20px;
+  padding-bottom:60px;
+  width:100%;
+}
+
+.faqtext {
+  text-align: center;
+  padding-left:50px;
+  padding-right:50px;
+  padding-top:0px;
+  padding-bottom:80px;
+  margin-top:0px;
+  margin-bottom:0px;
+  color:#a5a5a5;
+  font-family: 'Raleway';
+  font-size:20px;
+  background-color:white;
+  font-style:italic;
+}
+
+
+
 .aboutus {
   padding:3%;
   margin-top: 60px;
