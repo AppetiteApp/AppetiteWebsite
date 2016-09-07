@@ -310,6 +310,8 @@ module.exports = function(app){
     //buyer confirms that s/he has picked up the dish
     //buyer's uid, dish's id, chef's name
     app.post('/api/pickedUp', function(req, res){
+        console.log(req.body);
+        console.log(req.session);
         if (!req.session){
             res.send("invalid request");
             return;
@@ -319,7 +321,7 @@ module.exports = function(app){
             res.send({
                 errors: [{
                     errorType: "api",
-                    errorMessage: "invalid user o api"
+                    errorMessage: "invalid user or api"
                 }]
             });
             return;
