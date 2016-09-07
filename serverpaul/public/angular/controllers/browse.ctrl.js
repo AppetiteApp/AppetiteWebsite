@@ -28,10 +28,12 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
                     
                 //if dish is my dish, ignore
                 //else, give dish default of 'order' unless is in active meals
+                console.log(dish);
+                console.log($scope.parentController.activeMeals);
                 if ($scope.parentController.uid){
 
                     console.log($scope.parentController.activeMeals);
-                    if ($scope.parentController.uid === dish.key){
+                    if ($scope.parentController.uid === dish.ownerid){
                         dish.status = "cannot order";
                     } else if ($scope.parentController.activeMeals){
                         if ($scope.parentController.activeMeals[dish.key]){
@@ -40,8 +42,17 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
                             dish.status = 'order';    
                             dishes.push(dish);
                         }
-                    }else {
+                    }else if ($scope.parentController.pastMeals){
+                        if ($scope.parentController.pastMeals[dish.key]){
+                            dish.status = 'cannot order';
+                        } else {
+                            dish.status = 'order';
+                            dishes.push(dish);
+                        }
+                        
+                    }{
                         dish.status = 'order';
+                        dishes.push(dish);
                     }
                 } //end if $scope.parentController.uid
                 
