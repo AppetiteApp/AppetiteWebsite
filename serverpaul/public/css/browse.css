@@ -511,6 +511,7 @@
   font-size: 16px;
   border-radius: 5px;
   margin-left: 5px;
+
 }
 
 #reviewbutton{
@@ -519,8 +520,8 @@
   font-family: 'Raleway', sans-serif;
   margin-top: 5px;
   border: 1px solid orange;
-  background-color: orange;
-  color: white;
+  background-color: white;
+  color: orange;
   font-weight: bold;
   font-size: 16px;
   border-radius: 5px;
@@ -528,6 +529,7 @@
   margin-right: 5px;
   cursor: pointer;
   height: 30px;
+
 }
 
 #totalratingfield{
@@ -544,15 +546,9 @@
   margin-bottom:6px;
 }
 
-#ratebox{
-  position:relative;
-  height: auto;
-  width: auto;
-  margin-left: 40px;
-}
 
 .reviewboxprofile{
-  width: calc(100% - 80px);
+  width: calc(100% - 20px);
   height: 75px;
   margin: 10px;
   margin-left:5px;
@@ -561,6 +557,7 @@
   outline: none;
   padding-left:65px;
   margin-bottom: 5px;
+  margin-right: 5px;
 }
 
 #submitreviewprofile{
@@ -581,14 +578,18 @@
 
 
 #reviewlabel{
-  position: absolute;
-  top:105px;
-  left:5px;
+    height: auto;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 25px;
+    outline: none;
+    margin-bottom: 5px;
   padding:5px;
   font-family: 'Raleway', sans-serif;
   color: white;
   background-color: orange;
-  border-radius: 5px 0 0 0;
+  border-radius: 5px 5px 0 0px;
+  width: calc(100% - 20px);
 }
 
 

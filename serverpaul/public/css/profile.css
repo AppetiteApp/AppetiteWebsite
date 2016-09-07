@@ -316,12 +316,10 @@ label {
 
 #infocontainer{
     position: fixed;
-
     top: 280px;
     left:0;
     width: 300px;
-    overflow: auto;
-    overflow-y:scroll;
+    height: 325px;
     bottom: 0px;
 }
 
@@ -403,7 +401,7 @@ label {
 }
 
 
-input[type="checkbox"]:checked + label {
+#infocontainer input[type="checkbox"]:checked + label {
     background:url(/imgs/edit.png) left top no-repeat;
 
 }
