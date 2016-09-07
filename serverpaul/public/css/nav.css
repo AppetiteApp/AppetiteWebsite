@@ -18,6 +18,14 @@
   margin-right: 50px;
 }
 
+.cookwarning{
+  width: calc(100% - 100px);
+  text-align: center;
+  opacity: .4;
+  background-color: red;
+
+}
+
 .registererror{
   background-color: red;
   text-align: center;
@@ -331,19 +339,38 @@ transition: top 1s;
 #stripeday{
   position: relative;
   display: inline-block;
-  width: 13% !important;
+  width: 40px !important;
 }
 
 #stripeyear{
   position: relative;
   display: inline-block;
-  width: 25% !important;
+  width: 60px !important;
 }
 
 #stripemonth{
   position: relative;
   display: inline-block;
-  width: 13% !important;
+  width: 40px !important;
+}
+
+#doblabel{
+  margin-left: 71.5px;
+}
+
+#agreeterms{
+  width: 229px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+
+}
+
+#dobbox{
+  width: 177px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 #termsagree{
@@ -387,6 +414,8 @@ transition: top 1s;
     height: 30px;
     border-radius: 5px;
     font-family: 'Raleway', sans-serif;
+    display: block;
+    margin: 0 auto;
 }
 
 #stripearrow{
