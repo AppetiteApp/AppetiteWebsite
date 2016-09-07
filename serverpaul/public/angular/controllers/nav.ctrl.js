@@ -139,8 +139,9 @@ var navController = function($scope, $location, $http, $timeout, regexService, s
                     $scope.message = res.data.message;
 
                 //close the text box
-                var modal = document.getElementById('myModal3');
-                modal.style.display = "none";
+                var modal3 = document.getElementById('myModal3');
+                modal3.style.display = "none";
+                alert("executed!");
 
 
             } else {
