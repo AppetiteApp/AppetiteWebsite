@@ -19,9 +19,8 @@
 
             </br>
             </br>
-
-
-            </br></br>
+            </br>
+            </br>
           </div>
 
           <!--<div class="chefnameactive">My Dish</div>-->
@@ -128,7 +127,6 @@
         </div>
   </div>
 
-
   <div id="dishbannerbought" ng-if="parentController.activeMeals" ng-repeat="(key, dish) in parentController.activeMeals">
       <div class="dishthumbnail">
         <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
@@ -201,8 +199,8 @@
                   <div class="confirmdeats"><label class="confirmdeatslabel">Time:</label>{{dish.time}}</div>
                   <div id="areyousure">Are you sure you want to buy this dish?</div>
                   <div id="confirmbuttons">
-                    <button id="orderconfirm" ng-click="order(dish)">Confirm</button>
-                    <button id="ordercancel">Cancel</button>
+                    <button id="orderconfirm" ng-click="order(dish); selection.selectedNode = null">Confirm</button>
+                    <button id="ordercancel" ng-click="order(dish); selection.selectedNode = null">Cancel</button>
                   </div>
 
                       {{purchase.buyerName}}
