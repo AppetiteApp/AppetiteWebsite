@@ -39,8 +39,11 @@ var parentController = ['$timeout', '$scope', 'sessionService', 'timeService', '
                 $scope.parentController.user = {
                     uid             : user.uid,
                     emailVerified   : user.emailVerified,
-                    email           : user.email
+                    email           : user.email,
+                    phone           : user.phone
                 };
+                $scope.dish = {};
+                $scope.dish.phone = user.phone;
                 $scope.parentController.uid = user.uid;
             });
 

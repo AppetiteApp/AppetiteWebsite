@@ -177,7 +177,7 @@
   </div>
   <div id="innercontainer" ng-init="selection = { selectedNode:  null }">
   <div id="browseseparate">Browse</div>
-  <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak ng-if="dish.status==='order'">
+  <div ng-repeat="dish in dishes" id="repeateditem" ng-id="{{dish.key}}" ng-cloak ng-if="parentController.activeMeals.indexOf(dish.key)!==-1||dish.ownerid!==parentController.uid">
         <div id="dishbanner" ng-class="{'expandcollapse-heading-collapsed': active, 'expandcollapse-heading-expanded': !active}" >
             <div class="dishthumbnail">
               <img class="img-thumbnail" ng-src="{{dish.ownerPic}}"></img>
