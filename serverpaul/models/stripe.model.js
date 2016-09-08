@@ -1,5 +1,5 @@
 var cfg = require('../configs/config.json');
-var stripe = require('stripe')(cfg.stripeTestPlatformSecretKey);
+var stripe = require('stripe')(cfg.stripeLivePlatformSecretKey);
 
 stripe.createNewStripeAccount= function(uid, dob, firstName, lastName, tosIp, callback){
     if (uid){
@@ -10,6 +10,7 @@ stripe.createNewStripeAccount= function(uid, dob, firstName, lastName, tosIp, ca
                 //if user already has a stripe account, return 0
                 if (user.stripe){
                     callback(0);
+                    return;
                 }
             }
             //if user doesn't have a stripe account, create stripe account with country

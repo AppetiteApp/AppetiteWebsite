@@ -47,6 +47,7 @@ module.exports = function(app){
             if (req.session.uid){
                 if (!req.session.emailVerified ){
                     res.send("Email not verified");
+                    return;
                 } else {
                     console.log("create Stripe account");
                     stripe.createNewStripeAccount(req.session.uid, dob, req.body.firstName, req.body.lastName, tosIp, function(account){

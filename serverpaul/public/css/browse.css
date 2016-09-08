@@ -349,6 +349,7 @@
   border: 1px solid #ebd3bd;
   height: auto;
   font-size:13px;
+  margin-top: 30px;
 }
 
 #boughtphone{
@@ -411,6 +412,12 @@
     padding-left:5px;
     min-width: 0;
     font-size: 13px;
+}
+
+#activetime{
+    position: relative;
+    left: 5px;
+    
 }
 
 .chefname{
@@ -528,7 +535,6 @@
   margin-right: 10px;
   cursor: pointer;
   height: 30px;
-
 }
 
 #totalratingfield{
@@ -578,7 +584,7 @@
     height: auto;
     margin-left: 5px;
     margin-right: 10px;
-    margin-top: 25px;
+    margin-top: 10px;
     outline: none;
     margin-bottom: 0;
   padding:5px;
@@ -676,7 +682,7 @@
 #itembox{
 padding-right:60px;
 width:auto;
-height:95px;
+height:auto;
 display: block;
 overflow-y: hidden;
 }

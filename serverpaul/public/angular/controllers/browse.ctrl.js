@@ -131,7 +131,7 @@ var browseController = function($scope, $log, $location, $http, $timeout, regexS
         if (dish.status === 'manage'){
             console.log("this is your own dish");
             $scope.dish.warningMessage = "Cannot order your own dish!";
-            //do something else
+            //do something else2
         } else if (dish.status === 'order'){
             console.log("let's order this sick dish");
             $http.post('/api/orderdish', {

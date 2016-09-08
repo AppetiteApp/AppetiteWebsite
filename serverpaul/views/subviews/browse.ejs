@@ -65,11 +65,7 @@
       <button ng-show="!dish.edit" ng-if="dish.editable" class="activecancelbutton" ng-click="dish.edit=!dish.edit">Cancel</button>
 
 
-          </div>
-
-
-
-
+    </div>
 
        <div ng-if="dish.purchases">
             Orders:
@@ -107,7 +103,7 @@
         <div id="dishprice">${{dish.price}}</div>
 
         <div id="dishtitle">{{dish.dishName}}</div>
-        <div class="dishtime">Ready at {{dish.formattedOrderByTime}}</div>
+        <div class="dishtime" id="activetime">Ready at {{dish.formattedOrderByTime}}</div>
         <div id="ordersnumber">{{dish.order}} orders</div>
 
         <div class="orderedbox" ng-repeat="(key, buyer) in dish.purchases">
@@ -138,17 +134,17 @@
     <div id="itembox">
       <div id="dishtitle">{{dish.dishName}}</div>
       <div class="chefname">by {{dish.owner}}</div></br>
-      <div class="dishtime" ng-if="!dish.pickedUp">Ready {{dish.pickupTime}}</div>
+      <div class="dishtime" ng-if="dish.pickedUp">Ready {{dish.pickupTime}}</div>
       <!--<div id="boughtcode"><div id="codelabel">CODE:</div> H32-D34</div>-->
       <button ng-click="parentController.pickedUp(dish)" ng-if="!dish.pickedUp">Picked Up</button>
 
     </div>
 
-  <div id="boughtaddress">
+  <div ng-if="!dish.pickedUp" id="boughtaddress">
     {{dish.address}}
   </div>
 
-   <div id="boughtphone">
+   <div ng-if="!dish.pickedUp" id="boughtphone">
     {{dish.phone}}
    </div>
    <div ng-if="dish.pickedUp">
@@ -202,7 +198,7 @@
                   <div id="areyousure">Are you sure you want to buy this dish?</div>
                   <div id="confirmbuttons">
                     <button id="orderconfirm" ng-click="order(dish)">Confirm</button>
-                    <button id="ordercancel">Cancel</button>
+                    <button id="ordercancel" ng-click="selection.selectedNode = null">Cancel</button>
                   </div>
 
                       {{purchase.buyerName}}
